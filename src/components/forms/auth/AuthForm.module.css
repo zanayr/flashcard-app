@@ -1,0 +1,16 @@
+form {
+    width: 17.5vw;
+    height: 17.5vw;
+}
+form.form_open {
+
+}
+form.form_fail {
+
+}
+form > div.form_inner {
+    height: 100%;
+}
+form > div.form_inner > div > div > div.flex_grow {
+    flex-grow: 1;
+}

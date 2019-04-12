@@ -1,0 +1,14 @@
+div.form_field {
+    width: 100%;
+}
+
+div.form_field > label.form_label {
+    font-weight: bold;
+}
+div.form_field input.form_input {
+    display: block;
+    width: 100%;
+}
+div.form_field input.invalid {
+    border: solid 1px red;
+}

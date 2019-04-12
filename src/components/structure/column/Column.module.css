@@ -1,0 +1,15 @@
+div.column {
+    height: 100%;
+}
+div.column > div.column_inner {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+div.column.start > div.column_inner {
+    justify-content: flex-start;
+}
+div.column.between > div.column_inner {
+    justify-content: space-between;
+}
