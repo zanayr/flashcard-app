@@ -3,13 +3,14 @@ import {Link} from 'react-router-dom';
 
 import AuthForm from '../../../components/forms/auth/AuthForm';
 
-import CSS from './Auth.module.css';
+import GlobalCSS from '../../../Global.module.css';
+import AuthCSS from './Auth.module.css';
 
 class Auth extends Component {
     render() {
         return (
-            <main className={CSS.auth_open}>
-                <div className={CSS.auth_inner}>
+            <main className={AuthCSS.Open}>
+                <div className={GlobalCSS.Inner}>
                     <AuthForm/>
                 </div>
             </main>

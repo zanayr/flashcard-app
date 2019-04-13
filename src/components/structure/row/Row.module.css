@@ -1,15 +1,14 @@
-div.row {
+div.Row {
     width: 100%;
 }
-div.row > div.row_inner {
+div.Row > div {
     align-items: center;
     display: flex;
     flex-direction: row;
-    height: 100%;
 }
-div.row.start > div.row_inner {
+div.Row.Start > div {
     justify-content: flex-start;
 }
-div.row.between > div.row_inner {
+div.Row.Between > div {
     justify-content: space-between;
 }

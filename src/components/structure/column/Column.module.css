@@ -1,15 +1,14 @@
-div.column {
+div.Column {
     height: 100%;
 }
-div.column > div.column_inner {
+div.Column > div {
     align-items: center;
     display: flex;
     flex-direction: column;
-    height: 100%;
 }
-div.column.start > div.column_inner {
+div.Column.Start > div {
     justify-content: flex-start;
 }
-div.column.between > div.column_inner {
+div.Column.Between > div {
     justify-content: space-between;
 }

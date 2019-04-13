@@ -6,7 +6,8 @@ import Row from '../../structure/row/Row';
 import Input from '../../ui/input/Input';
 import Button from '../../ui/button/Button';
 
-import CSS from './AuthForm.module.css';
+import GlobalCSS from '../../../Global.module.css';
+import AuthFormCSS from './AuthForm.module.css';
 
 class AuthForm extends Component {
     state = {
@@ -94,24 +95,24 @@ class AuthForm extends Component {
             });
         }
         return (
-            <form className={CSS.form_open}
+            <form className={AuthFormCSS.Auth_Form}
                 onSubmit={this.handle_submit}>
-                <div className={CSS.form_inner}>
-                    <Column>
-                        {
-                            formArray.map(input => (
-                                <Input
-                                    changed={(e) => this.handle_change(e, input.id)}
-                                    config={input.config.config}
-                                    label={input.config.label}
-                                    key={input.id}
-                                    touched={input.config.touched}
-                                    validate={input.config.validation}
-                                    valid={input.config.valid}
-                                    value={input.config.value}/>
-                            ))
-                        }
-                        <div className={CSS.flex_grow}>
+                <div className={GlobalCSS.Inner}>
+                    <Column just="Between">
+                        <div className={AuthFormCSS.Top}>
+                            {
+                                formArray.map(input => (
+                                    <Input
+                                        changed={(e) => this.handle_change(e, input.id)}
+                                        config={input.config.config}
+                                        label={input.config.label}
+                                        key={input.id}
+                                        touched={input.config.touched}
+                                        validate={input.config.validation}
+                                        valid={input.config.valid}
+                                        value={input.config.value}/>
+                                ))
+                            }
                         </div>
                         <Row>
                             <Link to="/">Forget Something?</Link>

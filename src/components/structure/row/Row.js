@@ -1,12 +1,13 @@
 import React from 'react';
 
-import CSS from './Row.module.css';
+import GlobalCSS from '../../../Global.module.css';
+import RowCSS from './Row.module.css';
 
 const row = (props) => {
-    let justification = props.just ? props.just : CSS.between; 
+    let justification = props.just ? RowCSS[props.just] : RowCSS.Between; 
     return (
-        <div className={CSS.row + " " + justification}>
-            <div className={CSS.row_inner}>
+        <div className={RowCSS.Row + " " + justification}>
+            <div className={GlobalCSS.Inner}>
                 {props.children}
             </div>
         </div>

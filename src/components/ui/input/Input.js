@@ -1,27 +1,27 @@
 import React from 'react';
 
-import CSS from './Input.module.css';
+import InputCSS from './Input.module.css';
 
 const input = (props) => {
     let element;
-    let cssClasses = [CSS.form_input];
+    let inputClasses = [InputCSS.Input];
     console.log(!props.valid, props.validate, props.touched);
     if (!props.valid && props.validate && props.touched) {
         console.log("invalid!");
-        cssClasses.push(CSS.invalid);
+        inputClasses.push(CSS.Invalid);
     }
     switch (props.config.type) {
         case ('textarea'):
             element = <textarea
                 {...props.config}
-                className={cssClasses.join(' ')}
+                className={inputClasses.join(' ')}
                 value={props.value}
                 onChange={props.changed}/>;
             break;
         case ('select'):
             element = <select
                 {...props.config}
-                className={cssClasses.join(' ')}
+                className={inputClasses.join(' ')}
                 value={props.value}
                 onChange={props.changed}>
                 {props.config.options.map(option => (
@@ -38,14 +38,14 @@ const input = (props) => {
         default:
             element = <input
                 {...props.config}
-                className={cssClasses.join(' ')}
+                className={inputClasses.join(' ')}
                 value={props.value}
                 onChange={props.changed}/>;
             break;
     }
     return (
-        <div className={CSS.form_field}>
-            <label className={CSS.form_label}>{props.label}</label>
+        <div className={InputCSS.Field}>
+            <label className={InputCSS.Label}>{props.label}</label>
             {element}
         </div>
     )

@@ -1,22 +1,22 @@
 import React from 'react';
 
-import CSS from './Button.module.css';
+import ButtonCSS from './Button.module.css';
 
 const button = (props) => {
-    let cssClass;
+    let buttonClass;
     switch (props.type) {
         case ('submit'):
-            cssClass = "submit_button";
+            buttonClass = "Submit";
             break;
         default:
-            cssClass = "button";
+            buttonClass = "Button";
             break;
     }
     console.log(props);
     return (
         <button
             {...props}
-            className={CSS[cssClass]}
+            className={ButtonCSS[buttonClass]}
             onClick={props.clicked}>
             {props.children}
         </button>

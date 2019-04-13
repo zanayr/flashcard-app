@@ -1,12 +1,13 @@
 import React from 'react';
 
-import CSS from './Column.module.css';
+import GlobalCSS from '../../../Global.module.css';
+import ColumnCSS from './Column.module.css';
 
 const column = (props) => {
-    let justification = props.just ? props.just : CSS.start;
+    let justification = props.just ? ColumnCSS[props.just] : ColumnCSS.Start;
     return (
-        <div className={CSS.column + " " + justification}>
-            <div className={CSS.column_inner}>
+        <div className={ColumnCSS.Column + " " + justification}>
+            <div className={GlobalCSS.Inner}>
                 {props.children}
             </div>
         </div>
