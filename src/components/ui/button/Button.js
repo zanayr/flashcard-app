@@ -4,6 +4,7 @@ import ButtonCSS from './Button.module.css';
 
 const button = (props) => {
     let buttonClass;
+
     switch (props.type) {
         case ('submit'):
             buttonClass = "Submit";
@@ -12,12 +13,11 @@ const button = (props) => {
             buttonClass = "Button";
             break;
     }
-    console.log(props);
     return (
         <button
             {...props}
             className={ButtonCSS[buttonClass]}
-            onClick={props.clicked}>
+            onClick={props.onClick}>
             {props.children}
         </button>
     );

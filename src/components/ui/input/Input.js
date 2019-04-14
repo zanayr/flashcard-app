@@ -5,10 +5,8 @@ import InputCSS from './Input.module.css';
 const input = (props) => {
     let element;
     let inputClasses = [InputCSS.Input];
-    console.log(!props.valid, props.validate, props.touched);
     if (!props.valid && props.validate && props.touched) {
-        console.log("invalid!");
-        inputClasses.push(CSS.Invalid);
+        inputClasses.push(InputCSS.Invalid);
     }
     switch (props.config.type) {
         case ('textarea'):
@@ -16,14 +14,14 @@ const input = (props) => {
                 {...props.config}
                 className={inputClasses.join(' ')}
                 value={props.value}
-                onChange={props.changed}/>;
+                onChange={props.onChange}/>;
             break;
         case ('select'):
             element = <select
                 {...props.config}
                 className={inputClasses.join(' ')}
                 value={props.value}
-                onChange={props.changed}>
+                onChange={props.onChange}>
                 {props.config.options.map(option => (
                     <option
                         key={option.value}
@@ -40,7 +38,7 @@ const input = (props) => {
                 {...props.config}
                 className={inputClasses.join(' ')}
                 value={props.value}
-                onChange={props.changed}/>;
+                onChange={props.onChange}/>;
             break;
     }
     return (

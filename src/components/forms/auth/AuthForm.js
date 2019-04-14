@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
 
 import Column from '../../structure/column/Column';
 import Row from '../../structure/row/Row';
 import Input from '../../ui/input/Input';
 import Button from '../../ui/button/Button';
+
+import * as actions from '../../../store/actions/index';
 
 import GlobalCSS from '../../../Global.module.css';
 import AuthFormCSS from './AuthForm.module.css';
@@ -21,11 +24,12 @@ class AuthForm extends Component {
                 touched: false,
                 valid: false,
                 validation: {
-                    required: true
+                    required: true,
+                    isEmail: true
                 },
                 value: ''
             },
-            pass: {
+            password: {
                 config: {
                     placeholder: 'Password',
                     type: 'password'
@@ -34,12 +38,14 @@ class AuthForm extends Component {
                 touched: false,
                 valid: false,
                 validation: {
-                    required: true
+                    required: true,
+                    minLength: 6
                 },
                 value: ''
             }
         },
-        valid: false
+        valid: false,
+        isSignUp: true
     }
 
     validate(value, rules) {
@@ -47,25 +53,26 @@ class AuthForm extends Component {
         if (rules.required) {
             isValid = value.trim() !== '' && isValid;
         }
-        console.log(isValid);
         if (rules.minLength) {
             isValid = value.length >= rules.minLength && isValid;
         }
-        console.log(isValid);
+        if (rules.isEmail) {
+            const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            isValid = pattern.test(value) && isValid;
+        }
         return isValid;
     }
 
     handle_change = (e, id) => {
         const updatedForm = {
-            ...this.state.form
+            ...this.state.form,
+            [id]: {
+                ...this.state.form[id],
+                value: e.target.value,
+                valid: this.validate(e.target.value, this.state.form[id].validation),
+                touched: true
+            }
         };
-        const updatedInput = {
-            ...updatedForm[id]
-        };
-        updatedInput.value = e.target.value;
-        updatedInput.valid = this.validate(updatedInput.value, updatedInput.validation);
-        updatedInput.touched = true;
-        updatedForm[id]  = updatedInput;
 
         let isFormValid = true;
         for (let id in updatedForm) {
@@ -74,16 +81,21 @@ class AuthForm extends Component {
 
         this.setState({form: updatedForm, valid: isFormValid});
     }
+
     handle_submit = (e) => {
         e.preventDefault();
-        const data = {};
-        for (let id in this.state.form) {
-            data[id] = this.state.form[id].value;
-        }
-        const auth = {
-            data: data
-        };
-        // post to server here
+        this.props.onAuth(
+            this.state.form.email.value,
+            this.state.form.password.value,
+            this.state.isSignUp
+        );
+    }
+
+    handle_mode = (e) => {
+        e.preventDefault();
+        this.setState(prevState => {
+            return {isSignUp: !prevState.isSignUp}
+        });
     }
 
     render() {
@@ -103,7 +115,7 @@ class AuthForm extends Component {
                             {
                                 formArray.map(input => (
                                     <Input
-                                        changed={(e) => this.handle_change(e, input.id)}
+                                        onChange={(e) => this.handle_change(e, input.id)}
                                         config={input.config.config}
                                         label={input.config.label}
                                         key={input.id}
@@ -114,12 +126,20 @@ class AuthForm extends Component {
                                 ))
                             }
                         </div>
+                        {this.props.error ? <p>{this.props.error.message}</p> : <p>Please enter credintials</p>}
                         <Row>
                             <Link to="/">Forget Something?</Link>
                             <Button
-                                type="submit"
-                                disabled={!this.state.valid}>
-                                Login
+                                disabled={!this.state.valid}
+                                key="submit"
+                                type="submit">
+                                Sign Up
+                            </Button>
+                            <Button
+                                onClick={this.handle_mode}
+                                key="mode"
+                                type="button">
+                                Switch to {this.state.isSignUp ? 'Login' : 'Sign Up'}
                             </Button>
                         </Row>
                     </Column>
@@ -129,4 +149,15 @@ class AuthForm extends Component {
     }
 }
 
-export default AuthForm;
+const mapStateToProps = state => {
+    return {
+        error: state.auth.error
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        onAuth: (email, password, isSignUp) => dispatch(actions.auth_async(email, password, isSignUp))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthForm);
