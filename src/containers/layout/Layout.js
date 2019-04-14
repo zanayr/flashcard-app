@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Route, withRouter} from 'react-router-dom';
+import {Route, Switch, withRouter} from 'react-router-dom';
 
 import Aux from '../../hoc/aux/aux';
 import Auth from './auth/Auth';
+import Logout from './auth/logout/Logout';
 import Main from './main/Main';
 
 class Layout extends Component {
@@ -12,8 +13,11 @@ class Layout extends Component {
     render() {
         return (
             <Aux>
-                <Route path="/" exact component={Auth}/>
-                <Route path={"/" + this.state.user_name} exact component={Main}/>
+                <Switch>
+                    <Route path={"/" + this.state.user_name} exact component={Main}/>
+                    <Route path="/logout" exact component={Logout}/>
+                    <Route path="/" exact component={Auth}/>
+                </Switch>
             </Aux>
         );
     }

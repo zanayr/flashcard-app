@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-//import {Link} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import AuthForm from '../../../components/forms/auth/AuthForm';
@@ -13,17 +13,21 @@ class Auth extends Component {
     }
 
     render() {
-        let form = (<AuthForm/>);
+        let markup = (<AuthForm/>);
         if (this.props.loading) {
-            form = (
+            markup = (
                 <h1>Loading...</h1>
             );
         }
-
+        if (this.props.authenticated) {
+            markup = (
+                <Redirect to="/u"/>
+            );
+        }
         return (
             <main className={AuthCSS.Open}>
                 <div className={GlobalCSS.Inner}>
-                    {form}
+                    {markup}
                 </div>
             </main>
         );
@@ -32,7 +36,8 @@ class Auth extends Component {
 
 const mapStateToProps = state => {
     return {
-        loading: state.auth.loading
+        loading: state.auth.loading,
+        authenticated: state.auth.token !== null
     };
 }
 

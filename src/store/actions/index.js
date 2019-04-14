@@ -1,3 +1,4 @@
 export {
-    auth_async
+    auth_async,
+    logout
 } from './auth';
