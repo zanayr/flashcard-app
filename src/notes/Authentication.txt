@@ -84,3 +84,14 @@ Log out link
 We want to clear the token, redirect to starting page and dispatch logout action
 
 we redirect from a logout page that calls the logout action that clears the token.
+
+
+auth != null
+{
+    "rules": {
+        "database node": {
+            ".read": "auth != null",
+            ".write": "auth != null"
+        }
+    }
+}
