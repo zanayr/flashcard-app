@@ -9,9 +9,10 @@ import './index.css';
 
 import App from './App';
 import authReducer from './store/reducers/auth';
+import modalReducer from './store/reducers/modal';
 
 import * as serviceWorker from './serviceWorker';
-
+/*
 const logger = store => {
     return next => {
         return action => {
@@ -22,13 +23,15 @@ const logger = store => {
         }
     }
 }
+*/
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = combineReducers({
-    auth: authReducer
+    auth: authReducer,
+    modal: modalReducer
 });
 const store = createStore(rootReducer, composeEnhancers(
-    applyMiddleware(logger, thunk)
+    applyMiddleware(/*logger, */thunk)
 ));
 
 const app = (

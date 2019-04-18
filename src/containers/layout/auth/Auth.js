@@ -8,10 +8,6 @@ import GlobalCSS from '../../../Global.module.css';
 import AuthCSS from './Auth.module.css';
 
 class Auth extends Component {
-    state = {
-
-    }
-
     render() {
         let markup = (<AuthForm/>);
         if (this.props.loading) {
@@ -19,7 +15,7 @@ class Auth extends Component {
                 <h1>Loading...</h1>
             );
         }
-        if (this.props.authenticated) {
+        if (this.props.isAuthenticated) {
             markup = (
                 <Redirect to="/u"/>
             );
@@ -37,11 +33,11 @@ class Auth extends Component {
 const mapStateToProps = state => {
     return {
         loading: state.auth.loading,
-        authenticated: state.auth.token !== null
+        isAuthenticated: state.auth.token !== null
     };
 }
 
-export default connect(mapStateToProps)(Auth);
+export default connect(mapStateToProps, null)(Auth);
 
 /*
 const mapStateToProps = state => {

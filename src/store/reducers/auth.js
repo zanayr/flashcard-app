@@ -31,9 +31,8 @@ const authSuccess = (state, action) => {
     return updateObject(state, {
         error: null,
         loading: false,
-        refeshToken: action.payload.refeshToken,
-        token: action.payload.idToken,
-        userId: action.payload.localId
+        token: action.payload.token,
+        userId: action.payload.userId
     });
 };
 
