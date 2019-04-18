@@ -3,7 +3,6 @@ import axios from 'axios';
 import * as actionTypes from './actionTypes';
 
 export const authFail = (data) => {
-    console.log(data);
     return {
         type: actionTypes.AUTH_FAIL,
         payload: data.response.data.error
@@ -14,10 +13,13 @@ export const authStart = () => {
         type: actionTypes.AUTH_START
     };
 };
-export const authSuccess = (data) => {
+export const authSuccess = (token, userId) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
-        payload: data
+        payload: {
+            token: token,
+            userId: userId
+        }
     };
 };
 export const authLogout = () => {
@@ -73,7 +75,7 @@ export const auth_async = (email, password, isSignUp) => {
                 localStorage.setItem('token', response.data.idToken);
                 localStorage.setItem('expirationDate', expirationDate);
                 localStorage.setItem('userId', response.data.localId);
-                dispatch(authSuccess(response.data));
+                dispatch(authSuccess(response.data.idToken, response.data.localId));
                 dispatch(authCheckTimeout_async(response.data.expiresIn));
             })
             .catch(error => {
