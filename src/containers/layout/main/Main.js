@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import * as actions from '../../../store/actions/index';
+import Header from '../../../components/ui/header/Header';
+import Aside from '../../../components/ui/asides/Aside';
 
 import '../../../style.css';
 import MainCSS from './Main.module.css';
@@ -16,6 +18,8 @@ class Main extends Component {
     render() {
         return (
             <main className={MainCSS.Default}>
+                <Header/>
+                <Aside active/>
                 <Link to="/logout">Logout</Link>
             </main>
         )

@@ -1,0 +1,19 @@
+.Header {
+    background-color: lightblue;
+    left: 0px;
+    height: 64px;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+}
+
+.Header > div {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0px -4px;
+}
+.Header > div > div {
+    margin: 0px 4px;
+}

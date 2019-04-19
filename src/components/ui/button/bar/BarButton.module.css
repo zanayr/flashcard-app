@@ -1,0 +1,9 @@
+.Bar_Button {
+    background-color: paleturquoise;
+    flex-grow: 1;
+    height: 48px;
+    text-align: center;
+}
+.Right {
+    text-align: right;
+}

@@ -2,5 +2,18 @@ button.Submit {
     width: auto;
 }
 button.Button {
-    width: auto;
+    border: none;
+    cursor: pointer;
+}
+button.Button:focus {
+    outline: none;
+    border: none;
+}
+button.Round_Icon {
+    width: 32px;
+    height: 32px;
+}
+button.Bar {
+    width: 100%;
+    height: 100%;
 }

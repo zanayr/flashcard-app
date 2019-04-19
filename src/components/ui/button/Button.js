@@ -9,6 +9,12 @@ const button = (props) => {
         case ('submit'):
             buttonClass = "Submit";
             break;
+        case ("round-icon"):
+            buttonClass = "Round_Icon";
+            break;
+        case ("bar"):
+            buttonClass = "Bar";
+            break;
         default:
             buttonClass = "Button";
             break;

@@ -1,0 +1,17 @@
+.Search {
+    flex-grow: 1;
+}
+.Search > div {
+    display: flex;
+    flex-direction: row;
+}
+.Search input {
+    border: none;
+    border-radius: 16px;
+    flex-grow: 1;
+    height: 32px;
+    padding-left: 8px;
+}
+.Search input:focus {
+    outline: none;
+}

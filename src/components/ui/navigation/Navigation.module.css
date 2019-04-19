@@ -1,0 +1,14 @@
+.Navigation {
+    height: 100%;
+    max-width: 256px;
+    width: 66vw;
+}
+.Navigation > div {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+.Navigation > div > button {
+    margin-right: 8px;
+}

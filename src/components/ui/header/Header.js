@@ -1,22 +1,23 @@
 import React, {Component} from 'react';
 
-import Row from '../../structure/row/Row';
+//import HorizontalSpace from '../../structure/space/Horizontal';
 import Logo from '../../ui/button/logo/Logo';
-import Search from '../../ui/bars/search/Search';
-import Toolbar from '../../ui/bars/toolbar/Toolbar';
-import Navigation from '../../ui/button/navigation/Navigation';
+import Search from '../../ui/search/Search';
+import Toolbar from '../../ui/toolbar/Toolbar';
+import Navigation from '../navigation/Navigation';
+
+import globalCSS from '../../../Global.module.css';
+import headerCSS from './Header.module.css';
 
 class Header extends Component {
     render() {
         return (
-            <header>
-                <div className={AppCSS.Inner}>
-                    <Row>
-                        <Logo/>
-                        <Search/>
-                        <Toolbar/>
-                        <Navigation/>
-                    </Row>
+            <header className={headerCSS.Header}>
+                <div className={globalCSS.Inner}>
+                    <Logo/>
+                    <Search/>
+                    <Toolbar/>
+                    <Navigation/>
                 </div>
             </header>
         );
