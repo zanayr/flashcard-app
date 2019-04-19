@@ -19,8 +19,16 @@ class Main extends Component {
         this.props.onModalCreate("Foobar!");
     }
 
+    closeAside() {
+        console.log("main clicked");
+        this.setState((prevState) => ({
+            ...prevState,
+            asideActive: false
+        }));
+    }
     toggleAside() {
         if (!this.state.asideActive) {
+            console.log("aside toggled");
             this.setState((prevState) => ({
                 ...prevState,
                 asideActive: !prevState.asideActive
@@ -28,6 +36,7 @@ class Main extends Component {
         }
     }
     updateAside(c) {
+        console.log("aside updated");
         this.setState((prevState) => ({
             ...prevState,
             asideState: c
@@ -36,7 +45,9 @@ class Main extends Component {
 
     render() {
         return (
-            <main className={MainCSS.Default}>
+            <main
+                className={MainCSS.Default}
+                onClick={this.closeAside.bind(this)}>
                 <Header toggleAside={this.toggleAside.bind(this)} updateAside={this.updateAside.bind(this)}/>
                 <Aside active={this.state.asideActive} current={this.state.asideState}/>
                 <Link to="/logout">Logout</Link>

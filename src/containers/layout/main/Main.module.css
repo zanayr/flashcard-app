@@ -1,3 +1,4 @@
 main.Default {
     background-color: pink;
+    z-index: 0;
 }

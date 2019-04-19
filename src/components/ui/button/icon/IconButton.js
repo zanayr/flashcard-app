@@ -7,7 +7,7 @@ const iconButton = (props) => {
     return (
         <button
             className={[buttonCSS.Button, iconButtonCSS.Icon_Button].join(" ")}
-            onClick={props.onClick}>
+            onClick={(e) => {props.onClick(e)}}>
             {props.children}
         </button>
     );

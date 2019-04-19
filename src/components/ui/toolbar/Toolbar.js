@@ -6,11 +6,13 @@ import globalCSS from '../../../Global.module.css';
 import toolbarCSS from './Toolbar.module.css';
 
 const toolbar = (props) => {
-    function onX() {
+    function onX(e) {
+        e.stopPropagation();
         props.toggleAside();
         props.updateAside(0);
     }
-    function onY() {
+    function onY(e) {
+        e.stopPropagation();
         props.toggleAside();
         props.updateAside(1);
     }
