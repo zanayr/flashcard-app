@@ -14,7 +14,7 @@ class Main extends Component {
     state = {
         asideActive: false,
         asideState: 0,
-        quickActionState: 1
+        quickActionState: 0
     }
     componentDidMount() {
         //this.props.onModalCreate("Hello world!");

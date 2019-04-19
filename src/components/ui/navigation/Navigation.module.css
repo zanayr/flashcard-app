@@ -9,6 +9,14 @@
     flex-direction: row;
     height: 100%;
 }
-.Navigation > div > button {
+.Navigation > div > * {
     margin-right: 8px;
+}
+.Navigation div.Account {
+    background-color: lightcoral;
+    flex-grow: 1;
+    height: 100%;
+}
+.Navigation h6.Account_Name {
+    text-align: right;
 }

@@ -17,7 +17,7 @@ class Header extends Component {
                     <Logo/>
                     <Search/>
                     <Toolbar toggleAside={this.props.toggleAside} updateAside={this.props.updateAside}/>
-                    <Navigation/>
+                    <Navigation toggleAside={this.props.toggleAside} updateAside={this.props.updateAside}/>
                 </div>
             </header>
         );
