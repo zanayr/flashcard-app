@@ -1,0 +1,6 @@
+.Navigation_Button > a {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}

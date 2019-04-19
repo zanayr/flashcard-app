@@ -13,3 +13,10 @@
 aside.Active {
     right: 0px;
 }
+aside .Aside_Button {
+    height: 64px;
+    width: 100%;
+}
+aside .Aside_Button > div {
+    padding: 8px;
+}

@@ -48,7 +48,7 @@ class Main extends Component {
                 className={MainCSS.Default}
                 onClick={this.closeAside.bind(this)}>
                 <Header toggleAside={this.toggleAside.bind(this)} updateAside={this.updateAside.bind(this)}/>
-                <Aside active={this.state.asideActive} current={this.state.asideState}/>
+                <Aside active={this.state.asideActive} asideState={this.state.asideState}/>
                 <QuickAction quickActionState={this.state.quickActionState}/>
                 <Link to="/logout">Logout</Link>
             </main>

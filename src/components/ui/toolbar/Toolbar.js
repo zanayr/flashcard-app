@@ -19,8 +19,8 @@ const toolbar = (props) => {
     return (
         <div className={toolbarCSS.Toolbar}>
             <div className={globalCSS.Inner}>
-                <IconButton onClick={onX}>D</IconButton>
-                <IconButton onClick={onY}>S</IconButton>
+                <IconButton onClick={onX}>X</IconButton>
+                <IconButton onClick={onY}>Y</IconButton>
             </div>
         </div>
     );
