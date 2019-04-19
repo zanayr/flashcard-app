@@ -47,7 +47,8 @@ class ListItem extends Component {
                     </QuickButton>
                     <QuickButton
                         active={this.state.selected&& this.props.canQuickEdit}
-                        delete>
+                        delete
+                        onClick={() => {this.props.deleteItem(this.state.id)}}>
                         Delete
                     </QuickButton>
                 </div>

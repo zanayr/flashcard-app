@@ -38,7 +38,7 @@ class Main extends Component {
                 {
                     title: "Lorem Ipsum",
                     detail: "Dolor set ahmet exequitor serim fa.",
-                    id: prevState.collections.length
+                    id: Math.floor(((Date.now() + Math.random()) * 10)).toString(36).substr(2, 9)
                 }
             ]
         }));
@@ -128,6 +128,21 @@ class Main extends Component {
         }
     }
 
+    deleteCollection(id) {
+        if (this.state.collections.length) {
+            this.setState(prevState => ({
+                ...prevState,
+                collections: [
+                    ...prevState.collections.filter(item => item.id !== id)
+                ],
+                selectedCollections: [
+                    ...prevState.selectedCollections.filter(i => i !== id)
+                ],
+                quickActionState: 0
+            }));
+        }
+    }
+
     onQuickAction_Clicked() {
         if (this.state.quickActionState) {
             this.startSession();
@@ -143,6 +158,7 @@ class Main extends Component {
                     asideActive={this.state.asideActive}
                     asideState={this.state.asideState}
                     canQuickEdit={this.state.canQuickEdit}
+                    deleteItem={this.deleteCollection.bind(this)}
                     detail={item.detail}
                     key={item.id}
                     listItemId={item.id}
