@@ -18,7 +18,9 @@ class Main extends Component {
         asideState: 0,
         quickActionState: 0,
         collections: [],
-        selectedCollections: []
+        selectedCollections: [],
+        selectedTop: 0,
+        canQuickEdit: true
     }
 
     
@@ -75,7 +77,9 @@ class Main extends Component {
                 ...prevState.selectedCollections,
                 id
             ]
-        }));
+        }), () => {
+            this.toggleCanQuickEdit();
+        });
         this.setState(prevState => ({
             ...prevState,
             quickActionState: 1
@@ -85,9 +89,11 @@ class Main extends Component {
         this.setState(prevState => ({
             ...prevState,
             selectedCollections: [
-                ...prevState.selectedCollections.filter(item => item.id !== id)
+                ...prevState.selectedCollections.filter(i => i !== id)
             ]
-        }));
+        }), () => {
+            this.toggleCanQuickEdit();
+        });
         this.setState(prevState => ({
             ...prevState,
             quickActionState: 0
@@ -102,6 +108,22 @@ class Main extends Component {
             }
         }
     }
+
+    toggleCanQuickEdit() {
+        console.log(this.state.selectedCollections.length);
+        if (this.state.selectedCollections.length === 1) {
+            this.setState(prevState => ({
+                ...prevState,
+                canQuickEdit: true
+            }));
+        } else {
+            this.setState(prevState => ({
+                ...prevState,
+                canQuickEdit: false
+            }));
+        }
+    }
+
     onQuickAction_Clicked() {
         if (this.state.quickActionState) {
             this.startSession();
@@ -114,6 +136,7 @@ class Main extends Component {
         const collections = this.state.collections.map(item => {
             return (
                 <ListItem
+                    canQuickEdit={this.state.canQuickEdit}
                     detail={item.detail}
                     key={item.id}
                     listItemId={item.id}

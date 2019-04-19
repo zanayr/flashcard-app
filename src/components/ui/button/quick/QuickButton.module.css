@@ -1,0 +1,19 @@
+.Quick_Button {
+    background-color: lightcoral;
+    height: 64px;
+    right: -72px;
+    position: absolute;
+    transition: right 0.33s ease;
+    width: 64px;
+}
+.Delete {
+    background-color: coral;
+    color: white;
+    right: -136px;
+}
+.Active {
+    right: 56px;
+}
+.Delete.Active {
+    right: -8px;
+}

@@ -1,16 +1,17 @@
 .List_Item {
     background-color: white;
     height: 64px;
+    overflow: hidden;
     width: 100%;
 }
 .Selected {
     background-color: pink;
 }
 .List_Item > div {
-    align-items: flex-start;
+    align-items: center;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
     padding: 0px 8px;
 }
 .List_Item h3 {

@@ -1,4 +1,5 @@
 div.Column {
+    flex-grow: 1;
     height: 100%;
 }
 div.Column > div {
@@ -11,4 +12,11 @@ div.Column.Start > div {
 }
 div.Column.Between > div {
     justify-content: space-between;
+}
+div.Column.Center > div {
+    justify-content: center;
+}
+div.Column.Center_Left > div {
+    align-items: flex-start;
+    justify-content: center;
 }

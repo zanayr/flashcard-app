@@ -1,7 +1,10 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 
-import globalCSS from '../../../../Global.module.css';
-import listItemCSS from './ListItem.module.css';
+import Column from "../../../structure/column/Column";
+import QuickButton from "../../button/quick/QuickButton";
+
+import globalCSS from "../../../../Global.module.css";
+import listItemCSS from "./ListItem.module.css";
 
 class ListItem extends Component {
     state = {
@@ -24,14 +27,24 @@ class ListItem extends Component {
         if (this.state.selected) {
             cssClasses = [listItemCSS.List_Item, listItemCSS.Selected];
         }
-
         return (
             <div
                 className={cssClasses.join(' ')}
                 onClick={this.handle_itemClicked.bind(this)}>
                 <div className={globalCSS.Inner}>
-                    <h3>{this.state.title}</h3>
-                    <p>{this.state.detail}</p>
+                    <Column just="Center_Left">
+                        <h3>{this.state.title}</h3>
+                        <p>{this.state.detail}</p>
+                    </Column>
+                    <QuickButton
+                        active={this.state.selected && this.props.canQuickEdit}>
+                        Edit
+                    </QuickButton>
+                    <QuickButton
+                        active={this.state.selected&& this.props.canQuickEdit}
+                        delete>
+                        Delete
+                    </QuickButton>
                 </div>
             </div>
         );
