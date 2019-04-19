@@ -14,8 +14,11 @@
 }
 .Navigation div.Account {
     background-color: lightcoral;
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
     height: 100%;
+    justify-content: center;
 }
 .Navigation h6.Account_Name {
     text-align: right;

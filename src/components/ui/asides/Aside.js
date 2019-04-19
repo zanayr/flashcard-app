@@ -13,10 +13,12 @@ class Aside extends Component {
         }]
     }
     render() {
-        let content = this.state.navigation.map(link => {
+        let content = this.state.navigation.map(button => {
             return (
-                <NavigationButton path={link.path}>
-                    {link.value}
+                <NavigationButton
+                    key={this.state.navigation.indexOf(button)}
+                    path={button.path}>
+                    {button.value}
                 </NavigationButton>
             );
         });

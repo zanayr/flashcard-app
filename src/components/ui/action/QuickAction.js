@@ -5,20 +5,6 @@ import PillButton from '../button/pill/PillButton';
 import quickActionCSS from './QuickAction.module.css';
 
 const quickAction = (props) => {
-    function onStudy() {
-        console.log("Study Clicked");
-    }
-    function onCreate() {
-        console.log("Create Clicked")
-    }
-    function onQucikActionClicked() {
-        if (props.quickActionState) {
-            onStudy();
-        } else {
-            onCreate();
-        }
-    }
-
     let value = "Create";
     if (props.quickActionState) {
         value = "Study"
@@ -27,7 +13,7 @@ const quickAction = (props) => {
     return (
         <PillButton
             className={quickActionCSS.Quick_Action}
-            onClick={onQucikActionClicked}>
+            onClick={props.onClick}>
             {value}
         </PillButton>
     );
