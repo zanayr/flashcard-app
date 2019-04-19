@@ -9,12 +9,10 @@ const toolbar = (props) => {
     function onX(e) {
         e.stopPropagation();
         props.toggleAside(0);
-        props.updateAside(0);
     }
     function onY(e) {
         e.stopPropagation();
         props.toggleAside(1);
-        props.updateAside(1);
     }
     return (
         <div className={toolbarCSS.Toolbar}>

@@ -43,6 +43,7 @@ class Main extends Component {
             ]
         }));
     }
+
     startSession() {
         console.log("Starting Session...");
     }
@@ -59,7 +60,11 @@ class Main extends Component {
             this.setState(prevState => ({
                 ...prevState,
                 asideActive: !prevState.asideActive
-            }));
+            }), () => {
+                this.updateAside(s);
+            });
+        } else {
+            this.updateAside(s);
         }
     }
     updateAside(s) {
@@ -110,7 +115,6 @@ class Main extends Component {
     }
 
     toggleCanQuickEdit() {
-        console.log(this.state.selectedCollections.length);
         if (this.state.selectedCollections.length === 1) {
             this.setState(prevState => ({
                 ...prevState,
@@ -136,11 +140,14 @@ class Main extends Component {
         const collections = this.state.collections.map(item => {
             return (
                 <ListItem
+                    asideActive={this.state.asideActive}
+                    asideState={this.state.asideState}
                     canQuickEdit={this.state.canQuickEdit}
                     detail={item.detail}
                     key={item.id}
                     listItemId={item.id}
                     title={item.title}
+                    toggleAside={this.toggleAside.bind(this)}
                     toggleSelection={this.toggleListItem.bind(this)}/>
             );
         });
@@ -150,7 +157,7 @@ class Main extends Component {
                 className={MainCSS.Default}
                 onClick={this.closeAside.bind(this)}>
                 <div className={globalCSS.Inner}>
-                    <Header toggleAside={this.toggleAside.bind(this)} updateAside={this.updateAside.bind(this)}/>
+                    <Header toggleAside={this.toggleAside.bind(this)}/>
                     <Aside active={this.state.asideActive} asideState={this.state.asideState}/>
                     <QuickAction
                         onClick={this.onQuickAction_Clicked.bind(this)}

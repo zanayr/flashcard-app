@@ -21,8 +21,8 @@ class Header extends Component {
                 <div className={globalCSS.Inner}>
                     <Logo/>
                     <Search/>
-                    <Toolbar toggleAside={this.props.toggleAside} updateAside={this.props.updateAside}/>
-                    <Navigation toggleAside={this.props.toggleAside} updateAside={this.props.updateAside}/>
+                    <Toolbar toggleAside={this.props.toggleAside}/>
+                    <Navigation toggleAside={this.props.toggleAside}/>
                 </div>
             </header>
         );

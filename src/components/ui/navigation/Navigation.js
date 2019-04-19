@@ -13,8 +13,7 @@ const navigation = (props) => {
     }
     function onY(e) {
         e.stopPropagation();
-        props.toggleAside();
-        props.updateAside(2);
+        props.toggleAside(2);
     }
     return (
         <div className={navCSS.Navigation}>

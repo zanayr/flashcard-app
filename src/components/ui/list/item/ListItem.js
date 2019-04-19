@@ -13,6 +13,10 @@ class ListItem extends Component {
         title: this.props.title,
         selected: false
     }
+    onEditClicked(e) {
+        e.stopPropagation();
+        this.props.toggleAside(3);
+    }
     handle_itemClicked () {
         this.setState(prevState => ({
             ...prevState,
@@ -37,7 +41,8 @@ class ListItem extends Component {
                         <p>{this.state.detail}</p>
                     </Column>
                     <QuickButton
-                        active={this.state.selected && this.props.canQuickEdit}>
+                        active={this.state.selected && this.props.canQuickEdit}
+                        onClick={this.onEditClicked.bind(this)}>
                         Edit
                     </QuickButton>
                     <QuickButton
