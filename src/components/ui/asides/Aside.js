@@ -7,7 +7,7 @@ class Aside extends Component {
         return (
             <aside className={this.props.active ? asideCSS.Active : ""}>
                 <div>
-                    <h3>Aside</h3>
+                    <h3>Aside #{this.props.current}</h3>
                 </div>
             </aside>
         );
