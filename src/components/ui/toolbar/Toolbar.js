@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import IconButton from '../button/icon/IconButton';
 
@@ -8,12 +8,12 @@ import toolbarCSS from './Toolbar.module.css';
 const toolbar = (props) => {
     function onX(e) {
         e.stopPropagation();
-        props.toggleAside();
+        props.toggleAside(0);
         props.updateAside(0);
     }
     function onY(e) {
         e.stopPropagation();
-        props.toggleAside();
+        props.toggleAside(1);
         props.updateAside(1);
     }
     return (

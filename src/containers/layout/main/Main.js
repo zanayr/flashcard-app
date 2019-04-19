@@ -17,7 +17,8 @@ class Main extends Component {
         asideActive: false,
         asideState: 0,
         quickActionState: 0,
-        collections: []
+        collections: [],
+        selectedCollections: []
     }
 
     
@@ -28,13 +29,14 @@ class Main extends Component {
     }*/
 
     createDeck() {
-        this.setState((prevState) => ({
+        this.setState(prevState => ({
             ...prevState,
             collections: [
                 ...prevState.collections,
                 {
                     title: "Lorem Ipsum",
-                    detail: "Dolor set ahmet exequitor serim fa."
+                    detail: "Dolor set ahmet exequitor serim fa.",
+                    id: prevState.collections.length
                 }
             ]
         }));
@@ -44,25 +46,60 @@ class Main extends Component {
     }
 
     closeAside() {
-        this.setState((prevState) => ({
+        this.setState(prevState => ({
             ...prevState,
             asideActive: false
         }));
     }
-    toggleAside() {
-        if (!this.state.asideActive) {
-            this.setState((prevState) => ({
+    toggleAside(s) {
+        console.log(this.state.asideState === s);
+        if (!this.state.asideActive || this.state.asideState === s) {
+            this.setState(prevState => ({
                 ...prevState,
                 asideActive: !prevState.asideActive
             }));
         }
     }
-    updateAside(c) {
-        if (c !== this.state.asideState) {
-            this.setState((prevState) => ({
+    updateAside(s) {
+        if (s !== this.state.asideState) {
+            this.setState(prevState => ({
                 ...prevState,
-                asideState: c
+                asideState: s
             }));
+        }
+    }
+    addListItem(id) {
+        this.setState(prevState => ({
+            ...prevState,
+            selectedCollections: [
+                ...prevState.selectedCollections,
+                id
+            ]
+        }));
+        this.setState(prevState => ({
+            ...prevState,
+            quickActionState: 1
+        }));
+    }
+    removeListItem(id) {
+        this.setState(prevState => ({
+            ...prevState,
+            selectedCollections: [
+                ...prevState.selectedCollections.filter(item => item.id !== id)
+            ]
+        }));
+        this.setState(prevState => ({
+            ...prevState,
+            quickActionState: 0
+        }));
+    }
+    toggleListItem(id, isSelected) {
+        if (isSelected) {
+            this.addListItem(id);
+        } else {
+            if (this.state.selectedCollections.length) {
+                this.removeListItem(id);
+            }
         }
     }
     onQuickAction_Clicked() {
@@ -74,15 +111,14 @@ class Main extends Component {
     }
 
     render() {
-        console.log("rendering the main...");
-        
         const collections = this.state.collections.map(item => {
             return (
                 <ListItem
                     detail={item.detail}
-                    key={this.state.collections.indexOf(item)}
-                    listItemId={this.state.collections.indexOf(item)}
-                    title={item.title}/>
+                    key={item.id}
+                    listItemId={item.id}
+                    title={item.title}
+                    toggleSelection={this.toggleListItem.bind(this)}/>
             );
         });
 

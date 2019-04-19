@@ -1,7 +1,5 @@
 import React from 'react';
 
-import Input from "../input/Input";
-
 import searchCSS from './Search.module.css';
 import globalCSS from '../../../Global.module.css';
 

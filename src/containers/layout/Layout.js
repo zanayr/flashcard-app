@@ -6,7 +6,7 @@ import Aux from '../../hoc/aux/Aux';
 import Auth from './auth/Auth';
 import Logout from './auth/logout/Logout';
 import Main from './main/Main';
-import Modal from '../../components/ui/modal/Modal';
+//import Modal from '../../components/ui/modal/Modal';
 import * as actions from '../../store/actions/index';
 
 class Layout extends Component {
@@ -14,6 +14,7 @@ class Layout extends Component {
         this.props.onAutoLogin();
     }
     render() {
+        /*
         const modals = Object.keys(this.props.modals).map(k => {
             if (this.props.modals[k].active) {
                 return (
@@ -24,6 +25,7 @@ class Layout extends Component {
                 );
             }
         });
+        */
         let routes = (
             <Switch>
                 <Route path="/auth" exact component={Auth}/>
@@ -43,7 +45,7 @@ class Layout extends Component {
         return (
             <Aux>
                 {routes}
-                {modals}
+                {/*modals*/}
             </Aux>
         );
     }

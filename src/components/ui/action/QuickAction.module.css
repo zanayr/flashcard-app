@@ -1,5 +1,6 @@
 button.Quick_Action {
     bottom: 16px;
-    position: absolute;
+    position: fixed;
     right: 16px;
+    z-index: 98;
 }
