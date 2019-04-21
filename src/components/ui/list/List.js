@@ -59,9 +59,6 @@ class List extends Component {
         //  <-- wrap in a confirm box promise here
         this._itemDelete(id);
     }
-    handle_onEditClicked = () => {
-        this.props.onEdit();
-    }
     handle_onItemSelected = (id) => {
         this._itemSelect(id);
     }
@@ -78,7 +75,7 @@ class List extends Component {
                     }}
                     key={itemKey}
                     onDelete={this.handle_onDeleteClicked}
-                    onEdit={this.handle_onEditClicked}
+                    onEdit={this.props.onEdit}
                     onSelect={this.handle_onItemSelected}
                     single={this.state.isSingle}/>
             );

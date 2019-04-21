@@ -9,7 +9,11 @@
     display: block;
     width: 100%;
 }
+.Field input.Input:focus,
+.Field textarea.Input:focus {
+    outline: none;
+}
 .Field input.Invalid,
-.Field textarea.Input {
+.Field textarea.Invalid {
     border: solid 1px red;
 }

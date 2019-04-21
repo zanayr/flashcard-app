@@ -17,6 +17,7 @@ import MainCSS from "./Main.module.css";
 class Main extends Component {
     state = {
         aside: {
+            data: {},
             isActive: false,
             state: 0
         },
@@ -39,16 +40,6 @@ class Main extends Component {
             },
             selectedCollectionID: ''
         }));
-    }
-    _collectionSelect = (id) => {
-        this.setState(prev => ({
-            ...prev,
-            selectedCollectionID: id
-        }), () => {
-            if (this.state.aside.state === 3 && this.state.aside.isActive && !this.state.selectedCollectionID) {
-                this._asideToggle(3);
-            }
-        });
     }
     _collectionUpdate = (id, prop, value) => {
         this.setState(prev => ({
@@ -87,9 +78,27 @@ class Main extends Component {
                 ...prev,
                 aside: {
                     ...prev.aside,
+                    data: {
+                        details: '',
+                        id: '',
+                        title: ''
+                    },
                     isActive: false
                 }
             }));
+        }
+    }
+    _selectedIDUpdate = (id) => {
+        this.setState(prev => ({
+            ...prev,
+            selectedCollectionID: id
+        }), () => {
+            this._asideToggle(3);
+        });
+    }
+    _asideCheck = () => {
+        if (this.state.aside.state === 3 && this.state.aside.isActive && !this.state.data) {
+            this._asideToggle(3);
         }
     }
     _asideUpdate = (value) => {
@@ -135,14 +144,14 @@ class Main extends Component {
         e.stopPropagation();
         this._asideClose();
     }
-    handle_onCollectionSelected = (id) => {
-        this._collectionSelect(id);
+    handle_onCollectionSelected = () => {
+        this._asideCheck();
     }
     handle_onDeleteClicked = (id) => {
         this._collectionDelete(id);
     }
-    handle_onEditClicked = () => {
-        this._asideToggle(3);
+    handle_onEditClicked = (id) => {
+        this._selectedIDUpdate(id);
     }
 
     //  Action Button Event Handler
@@ -185,17 +194,24 @@ class Main extends Component {
                                 active={this.state.action.isActive}
                                 onClick={this.handle_onActionClicked}
                                 state={this.state.action.state}
-                                values={["Create", "Study"]}/>
+                                values={[
+                                    "Create",
+                                    "Study"
+                                    ]}/>
                         </List>
                     </div>
                 </main>
                 <Aside
                     active={this.state.aside.isActive}
-                    data={this.state.selectedCollectionID ? {
+                    data={this.state.collections[this.state.selectedCollectionID] ? {
                         details: this.state.collections[this.state.selectedCollectionID].details,
                         id: this.state.selectedCollectionID,
-                        title: this.state.collections[this.state.selectedCollectionID].title,
-                    } : {}}
+                        title: this.state.collections[this.state.selectedCollectionID].title
+                    } : {
+                        details: '',
+                        id: '',
+                        title: ''
+                    }}
                     onChange={this.handle_onEditChange}
                     onX={this.handle_onXClicked}
                     state={this.state.aside.state}/>

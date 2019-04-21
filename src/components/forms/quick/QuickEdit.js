@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 
 import Column from "../../structure/column/Column";
-import Row from "../../structure/row/Row";
 import Input from "../../ui/input/Input";
 
 import globalCSS from "../../../Global.module.css";
@@ -22,8 +21,7 @@ class QuickEdit extends Component {
                     required: true,
                     minLength: 6,
                     maxLength: 48
-                },
-                value: this.props.data.title
+                }
             },
             details: {
                 config: {
@@ -36,11 +34,9 @@ class QuickEdit extends Component {
                 validation: {
                     required: true,
                     maxLength: 64
-                },
-                value: this.props.data.details
+                }
             }
         },
-        id: this.props.data.id,
         valid: true
     }
 
@@ -53,7 +49,6 @@ class QuickEdit extends Component {
             isValid = value.length >= rules.minLength && isValid;
         }
         if (rules.maxLength) {
-            console.log("here");
             isValid = value.length <= rules.maxLength && isValid;
         }
         return isValid;
@@ -64,7 +59,7 @@ class QuickEdit extends Component {
             form: form,
             valid: valid
         }), () => {
-            this.props.onChange(this.state.id, label, value);
+            this.props.onChange(this.props.data.id, label, value);
         });
     }
 
@@ -89,7 +84,6 @@ class QuickEdit extends Component {
 
     render() {
         const form = [];
-        console.log(this.state.id);
         for (let formKey in this.state.form) {
             form.push({
                 config: this.state.form[formKey],
@@ -110,7 +104,7 @@ class QuickEdit extends Component {
                                         touched={input.config.touched}
                                         validate={input.config.validation}
                                         valid={input.config.valid}
-                                        value={input.config.value}/>
+                                        value={this.props.data[input.id]}/>
                             ))
                         }
                     </Column>

@@ -5,6 +5,7 @@ import InputCSS from './Input.module.css';
 const input = (props) => {
     let element;
     let inputClasses = [InputCSS.Input];
+    console.log(!props.valid && props.validate && props.touched);
     if (!props.valid && props.validate && props.touched) {
         inputClasses.push(InputCSS.Invalid);
     }
