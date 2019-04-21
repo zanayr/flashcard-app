@@ -36,7 +36,8 @@ class Main extends Component {
             ...prev,
             collections: {
                 ...collections,
-            }
+            },
+            selectedCollectionID: ''
         }));
     }
     _collectionSelect = (id) => {
@@ -154,8 +155,8 @@ class Main extends Component {
     }
 
     //  Aside Event Handlers
-    handle_onEditChange = (e, id, prop) => {
-        this._collectionUpdate(id, prop, e.target.value);
+    handle_onEditChange = (id, prop, value) => {
+        this._collectionUpdate(id, prop, value);
     }
     handle_onXClicked = () => {
         this._asideClose();

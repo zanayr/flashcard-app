@@ -1,13 +1,15 @@
-div.Field {
+.Field {
     width: 100%;
 }
-div.Field > label.Label {
+.Field > label.Label {
     font-weight: bold;
 }
-div.Field input.Input {
+.Field input.Input,
+.Field textarea.Input {
     display: block;
     width: 100%;
 }
-div.Field input.Invalid {
+.Field input.Invalid,
+.Field textarea.Input {
     border: solid 1px red;
 }
