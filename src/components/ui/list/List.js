@@ -1,10 +1,7 @@
 import React, {Component} from "react";
 
-import _hashIDCreate from "../../../helper/id";
-
 import Aux from "../../../hoc/aux/Aux";
 //import Refresh from "../../ui/refresh/Refresh";
-import Search from "../../ui/search/Search";
 import ListItem from "../list/item/ListItem";
 
 import globalCSS from "../../../Global.module.css";
