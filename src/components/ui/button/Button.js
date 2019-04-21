@@ -3,6 +3,11 @@ import React from 'react';
 import ButtonCSS from './Button.module.css';
 
 const button = (props) => {
+    const handle_onClicked = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        props.onClick();
+    }
     let buttonClass;
 
     switch (props.type) {
@@ -23,7 +28,7 @@ const button = (props) => {
         <button
             {...props}
             className={ButtonCSS[buttonClass]}
-            onClick={props.onClick}>
+            onClick={(e) => handle_onClicked(e)}>
             {props.children}
         </button>
     );

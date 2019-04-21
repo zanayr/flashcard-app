@@ -1,15 +1,18 @@
 .Search {
     flex-grow: 1;
+    height: 64px;
 }
 .Search > div {
     display: flex;
     flex-direction: row;
 }
 .Search input {
+    background-color: white;
     border: none;
     border-radius: 16px;
     flex-grow: 1;
     height: 32px;
+    margin: 16px;
     padding-left: 8px;
 }
 .Search input:focus {

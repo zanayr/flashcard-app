@@ -63,6 +63,13 @@ class AuthForm extends Component {
         return isValid;
     }
 
+    _modeToggle = () => {
+        this.setState(prev => ({
+            ...prev,
+            isSignUp: !prev.isSignUp
+        }));
+    }
+
     handle_change = (e, id) => {
         const updatedForm = {
             ...this.state.form,
@@ -82,20 +89,15 @@ class AuthForm extends Component {
         this.setState({form: updatedForm, valid: isFormValid});
     }
 
-    handle_submit = (e) => {
-        e.preventDefault();
+    handle_onSubmitClicked = () => {
         this.props.onAuth(
             this.state.form.email.value,
             this.state.form.password.value,
             this.state.isSignUp
         );
     }
-
-    handle_mode = (e) => {
-        e.preventDefault();
-        this.setState(prevState => {
-            return {isSignUp: !prevState.isSignUp}
-        });
+    handle_onModeClicked = () => {
+        this._modeToggle();
     }
 
     render() {
@@ -107,8 +109,7 @@ class AuthForm extends Component {
             });
         }
         return (
-            <form className={AuthFormCSS.Auth_Form}
-                onSubmit={this.handle_submit}>
+            <form className={AuthFormCSS.Auth_Form}>
                 <div className={GlobalCSS.Inner}>
                     <Column just="Between">
                         <div className={AuthFormCSS.Top}>
@@ -132,11 +133,12 @@ class AuthForm extends Component {
                             <Button
                                 disabled={!this.state.valid}
                                 key="submit"
+                                onClick={this.handle_onSubmitClicked}
                                 type="submit">
                                 Sign Up
                             </Button>
                             <Button
-                                onClick={this.handle_mode}
+                                onClick={this.handle_onModeClicked}
                                 key="mode"
                                 type="button">
                                 Switch to {this.state.isSignUp ? 'Login' : 'Sign Up'}

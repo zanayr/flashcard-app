@@ -1,5 +1,10 @@
 import React, {Component} from "react";
 
+import _hashIDCreate from "../../../helper/id";
+
+import Aux from "../../../hoc/aux/Aux";
+//import Refresh from "../../ui/refresh/Refresh";
+import Search from "../../ui/search/Search";
 import ListItem from "../list/item/ListItem";
 
 import globalCSS from "../../../Global.module.css";
@@ -66,27 +71,36 @@ class List extends Component {
     render() {
         let items = Object.keys(this.props.listItems).map(itemKey => {
             const item = {...this.props.listItems[itemKey]};
+            const isSelected = this.state.selectedItemIDs.indexOf(itemKey) > -1;
             return (
                 <ListItem
-                    content={{
-                        details: item.details,
-                        id: itemKey,
-                        title: item.title
+                    data={{
+                        ...item,
+                        id: itemKey
                     }}
                     key={itemKey}
                     onDelete={this.handle_onDeleteClicked}
                     onEdit={this.props.onEdit}
                     onSelect={this.handle_onItemSelected}
+                    selected={isSelected}
                     single={this.state.isSingle}/>
             );
         });
         return (
-            <div className={listCSS.List}>
-                <div className={globalCSS.Inner}>
-                    {items}
-                    {this.props.children}
+            <Aux>
+                <div className={listCSS.List_Header}>
+                    <div className={globalCSS.Inner}>
+                        {/*<Refresh/>*/}
+                        <h1>{this.props.header}</h1>
+                    </div>
                 </div>
-            </div>
+                <div className={listCSS.List}>
+                    <div className={globalCSS.Inner}>
+                        {items}
+                        {this.props.children}
+                    </div>
+                </div>
+            </Aux>
         );
     }
 }

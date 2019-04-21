@@ -2,6 +2,7 @@ import React from 'react';
 
 import searchCSS from './Search.module.css';
 import globalCSS from '../../../Global.module.css';
+import IconButton from '../button/icon/IconButton';
 
 const searchBar = (props) => {
     return (

@@ -1,10 +1,22 @@
 .Modal {
-    position: fixed;
-    z-index: 500;
     background-color: blue;
-    width: 70%;
-    padding: 16px;
-    left: 15%;
-    top: 30%;
-    box-sizing: border-box;
+    border-radius: 8px;
+    color: white;
+    left: 50%;
+    max-width: 256px;
+    position: fixed;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99;
+}
+.Modal h3 {
+    margin-top: 16px;
+    padding: 0px 16px;
+}
+.Modal p {
+    margin-bottom: 16px;
+    padding: 0px 16px;
+}
+.Modal > div > div {
+    padding: 0 16px;
 }

@@ -1,27 +1,34 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React from "react";
 
-import Button from '../button/Button';
-import * as actions from '../../../store/actions/index';
+import _hashIDCreate from "../../../helper/id";
 
-import ModalCSS from './Modal.module.css';
+import Row from "../../structure/row/Row";
+import Button from "../button/Button";
 
-class Modal extends Component {
-    render() {
-        console.log(this.props.modalId);
-        return (
-            <div className={ModalCSS.Modal}>
-                <p>{this.props.message}</p>
-                <Button onClick={() => {this.props.onConfirm(this.props.modalId)}}>OK</Button>
+import globalCSS from "../../../Global.module.css";
+import modalCSS from "./Modal.module.css";
+
+const modal = (props) => {
+    const details = props.data.details.map(detail => {
+        return (<li key={_hashIDCreate()}>{detail}</li>);
+    });
+    if (!props.active) {
+        return null;
+    }
+    return (
+        <div className={modalCSS.Modal}
+            key={_hashIDCreate()}>
+            <div className={globalCSS.Inner}>
+                <h3>{props.data.title ? props.data.title : "Alert!"}</h3>
+                <p>{props.data.message}</p>
+                {props.data.details.length ? (<ul>{details}</ul>) : null}
+                <Row just={props.data.cancel ? "Between" : "End"}>
+                    {props.data.cancel ? (<Button onClick={props.onCancel}>{props.data.cancel}</Button>) : null}
+                    <Button onClick={props.onConfirm}>{props.data.confirm ? props.data.confirm : "OK"}</Button>
+                </Row>
             </div>
-        );
-    }
+        </div>
+    );
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onConfirm: (id) => dispatch(actions.modalConfirm(id))
-    }
-}
-
-export default connect(null, mapDispatchToProps)(Modal);
+export default modal;
