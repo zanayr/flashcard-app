@@ -3,6 +3,7 @@
     height: 64px;
 }
 .Search > div {
+    align-items: center;
     display: flex;
     flex-direction: row;
 }
@@ -12,8 +13,8 @@
     border-radius: 16px;
     flex-grow: 1;
     height: 32px;
-    margin: 16px;
-    padding-left: 8px;
+    margin: 0px 4px;
+    padding-left: 6px;
 }
 .Search input:focus {
     outline: none;

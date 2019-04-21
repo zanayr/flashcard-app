@@ -14,7 +14,7 @@ import Modal from "../../../components/ui/modal/Modal";
 
 import "../../../style.css";
 import globalCSS from "../../../Global.module.css";
-import MainCSS from "./Main.module.css";
+import mainCSS from "./Main.module.css";
 
 class Main extends Component {
     state = {
@@ -278,9 +278,9 @@ class Main extends Component {
                     onB={this.handle_onBClicked}
                     onNavigation={this.handle_onNavigationClicked}/>
                 <main
-                    className={MainCSS.Default}
+                    className={mainCSS.Main}
                     onClick={(e) => this.handle_onClicked(e)}>
-                    <div className={globalCSS.Inner}>
+                    <div className={[globalCSS.Inner, globalCSS.With_Padding].join(' ')}>
                         <List
                             header="Collections"
                             listItems={this.state.collections}

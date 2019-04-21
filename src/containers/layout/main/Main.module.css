@@ -1,4 +1,7 @@
-main.Default {
+.Main {
     background-color: pink;
     z-index: 0;
+}
+.Main > div {
+    padding-top: 64px;
 }

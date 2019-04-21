@@ -85,13 +85,13 @@ class List extends Component {
         });
         return (
             <Aux>
-                <div className={listCSS.List_Header}>
+                <div className={[globalCSS.With_Margin, listCSS.List_Header].join(' ')}>
                     <div className={globalCSS.Inner}>
                         {/*<Refresh/>*/}
                         <h1>{this.props.header}</h1>
                     </div>
                 </div>
-                <div className={listCSS.List}>
+                <div className={[globalCSS.With_Margin, listCSS.List].join(' ')}>
                     <div className={globalCSS.Inner}>
                         {items}
                         {this.props.children}

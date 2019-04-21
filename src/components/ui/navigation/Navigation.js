@@ -13,7 +13,7 @@ const navigation = (props) => {
     }
     return (
         <div className={navigationCSS.Navigation}>
-            <div className={globalCSS.Inner}>
+            <div className={[globalCSS.Inner, navigationCSS.Inner].join(' ')}>
                 <div className={navigationCSS.Account}>
                     <h6 className={navigationCSS.Account_Name}>Ryan Fickencher</h6>
                 </div>

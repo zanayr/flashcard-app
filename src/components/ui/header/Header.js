@@ -17,7 +17,7 @@ const header = (props) => {
         <header
             className={headerCSS.Header}
             onClick={(e) => handle_onClicked(e)}>
-            <div className={globalCSS.Inner}>
+            <div className={[globalCSS.Inner, globalCSS.With_Padding].join(' ')}>
                 <Logo/>
                 <Search/>
                 <Toolbar

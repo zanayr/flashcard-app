@@ -1,16 +1,18 @@
 .Navigation {
     height: 100%;
     max-width: 256px;
+    margin-right: -16px;
     width: 66vw;
 }
-.Navigation > div {
+.Navigation > .Inner {
     align-items: center;
     display: flex;
     flex-direction: row;
     height: 100%;
+    padding-right: 16px;
 }
 .Navigation > div > * {
-    margin-right: 8px;
+    margin: 0px 4px;
 }
 .Navigation div.Account {
     background-color: lightcoral;

@@ -1,6 +1,13 @@
+.Logo {
+    margin-left: -16px;
+}
+.Inner {
+    padding-left: 16px;
+}
 .Logo span {
     background-color: turquoise;
     display: block;
     height: 64px;
+    margin: 0px 4px;
     width: 64px;
 }

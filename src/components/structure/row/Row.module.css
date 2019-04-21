@@ -25,7 +25,7 @@ div.Row > div {
 .Align_End > div {
     align-items: flex-end;
 }
-.Align_Center {
+.Align_Center > div {
     align-items: center;
 }
 

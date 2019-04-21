@@ -19,7 +19,10 @@ const modal = (props) => {
         <div className={modalCSS.Modal}
             key={_hashIDCreate()}>
             <div className={globalCSS.Inner}>
-                <h3>{props.data.title ? props.data.title : "Alert!"}</h3>
+                <Row just="Start" align="Center">
+                    <span></span>
+                    <h3>{props.data.title ? props.data.title : "Alert!"}</h3>
+                </Row>
                 <p>{props.data.message}</p>
                 {props.data.details.length ? (<ul>{details}</ul>) : null}
                 <Row just={props.data.cancel ? "Between" : "End"}>

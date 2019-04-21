@@ -5,7 +5,7 @@ import logoCSS from './Logo.module.css';
 const logo = (props) => {
     return (
         <div className={logoCSS.Logo}>
-            <div>
+            <div className={logoCSS.Inner}>
                 <a href="/"><span></span></a>
             </div>           
         </div>

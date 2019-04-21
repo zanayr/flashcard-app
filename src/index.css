@@ -2,11 +2,13 @@ html, body, div, header, main, nav, aside, footer,
 input, textarea, button, img, ul, ol,
 h1, h2, h3, h4, h5, h6, label, span, p, a, li {
   box-sizing: border-box;
+  font-family: "Montserrat", "Arial", sans-serif;
   margin: 0px;
   padding: 0px;
   position: relative;
 }
 
-html, body {
+html, body, body > div {
   height: 100%;
 }
+

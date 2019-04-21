@@ -1,11 +1,12 @@
 .List_Header {
     background-color: #efefef;
-    padding-top: 64px;
+}
+.List_Header > div {
+    padding-top: 108px;
 }
 .List_Header h1 {
     border-bottom: 1px solid black;
-    margin: 0px 16px 16px 16px;
-    padding-top: 64px;
+    padding: 0px 16px;
 }
 .List {
 
