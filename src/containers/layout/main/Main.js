@@ -1,188 +1,172 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, {Component} from "react";
+import {connect} from "react-redux";
 
-import * as actions from '../../../store/actions/index';
-import Header from '../../../components/ui/header/Header';
-import Aside from '../../../components/ui/asides/Aside';
-import QuickAction from '../../../components/ui/action/QuickAction';
-import List from '../../../components/ui/list/List';
-import ListItem from '../../../components/ui/list/item/ListItem';
+import * as actions from "../../../store/actions/index";
+import _hashIdCreate from "../../../helper/id";
 
-import '../../../style.css';
-import globalCSS from '../../../Global.module.css';
-import MainCSS from './Main.module.css';
+import Aux from "../../../hoc/aux/Aux";
+import Header from "../../../components/ui/header/Header";
+import Aside from "../../../components/ui/asides/Aside";
+import ActionButton from "../../../components/ui/button/action/ActionButton";
+import List from "../../../components/ui/list/List";
+
+import "../../../style.css";
+import globalCSS from "../../../Global.module.css";
+import MainCSS from "./Main.module.css";
 
 class Main extends Component {
     state = {
-        asideActive: false,
-        asideState: 0,
-        quickActionState: 0,
+        aside: {
+            isActive: false,
+            state: 0
+        },
+        action: {
+            isActive: true,
+            state: 0
+        },
         collections: [],
-        selectedCollections: [],
-        selectedTop: 0,
-        canQuickEdit: true
+        connectedCollection: {}
     }
 
-    
-    /*
-    componentDidMount() {
-        //this.props.onModalCreate("Hello world!");
-        //this.props.onModalCreate("Foobar!");
-    }*/
 
-    createDeck() {
-        this.setState(prevState => ({
-            ...prevState,
-            collections: [
-                ...prevState.collections,
-                {
-                    title: "Lorem Ipsum",
-                    detail: "Dolor set ahmet exequitor serim fa.",
-                    id: Math.floor(((Date.now() + Math.random()) * 10)).toString(36).substr(2, 9)
+    //  Page Methods
+    _asideClose = () => {
+        if (this.state.aside.isActive) {
+            this.setState(prev => ({
+                ...prev,
+                aside: {
+                    ...prev.aside,
+                    isActive: false
                 }
-            ]
+            }));
+        }
+    }
+    _asideUpdate = (value) => {
+        if (this.state.aside.state !== value) {
+            this.setState(prev => ({
+                ...prev,
+                aside: {
+                    ...prev.aside,
+                    state: value
+                }
+            }));
+        }
+    }
+    _asideToggle = (value) => {
+        if (!this.state.aside.isActive || this.state.aside.state === value) {
+            this.setState(prev => ({
+                ...prev,
+                aside: {
+                    ...prev.aside,
+                    isActive: !prev.aside.isActive
+                }
+            }), () => {
+                this._asideUpdate(value);
+            });
+        } else {
+            this._asideUpdate(value);
+        }
+    }
+    _collectionConnect = (collection) => {
+        this.setState(prev => ({
+            ...prev,
+            connectedCollection: {
+                details: collection.detail,
+                id: collection.id,
+                title: collection.title,
+                isSelected: collection.isSelected
+            }
+        }), () => {
+            if (this.state.aside.state === 3 && this.state.aside.isActive && !this.state.connectedCollection.isSelected) {
+                this._asideToggle(3);
+            }
+        });
+    }
+    _collectionCreate = () => {
+        this.setState(prev => ({
+            ...prev,
+            collections: [...prev.collections, {
+                details: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaq",
+                id: _hashIdCreate(),
+                title: "Lorem Ipsum Dolor Set"
+            }]
         }));
     }
-
-    startSession() {
+    startSession = () => {
         console.log("Starting Session...");
     }
 
-    closeAside() {
-        this.setState(prevState => ({
-            ...prevState,
-            asideActive: false
+
+    // Event Handlers
+    handle_onAClicked = () => {
+        this._asideToggle(0);
+    }
+    handle_onActionClicked = () => {
+        if (this.state.action.state) {
+            this._sessionStart();
+        } else {
+            this._collectionCreate();
+        }
+    }
+    handle_onBClicked = () => {
+        this._asideToggle(1);
+    }
+    handle_onClicked = (e) => {
+        e.stopPropagation();
+        this._asideClose();
+    }
+    handle_onCollectionSelected = (collection) => {
+        this._collectionConnect(collection);
+    }
+    handle_onDeleteClicked = (collection) => {
+        this.setState(prev => ({
+            ...prev,
+            collections: prev.collections.filter(c => c.id !== collection.id)
         }));
     }
-    toggleAside(s) {
-        console.log(this.state.asideState === s);
-        if (!this.state.asideActive || this.state.asideState === s) {
-            this.setState(prevState => ({
-                ...prevState,
-                asideActive: !prevState.asideActive
-            }), () => {
-                this.updateAside(s);
-            });
-        } else {
-            this.updateAside(s);
-        }
+    handle_onEditClicked = () => {
+        this._asideToggle(3);
     }
-    updateAside(s) {
-        if (s !== this.state.asideState) {
-            this.setState(prevState => ({
-                ...prevState,
-                asideState: s
-            }));
-        }
+    handle_onNavigationClicked = () => {
+        this._asideToggle(2);
     }
-    addListItem(id) {
-        this.setState(prevState => ({
-            ...prevState,
-            selectedCollections: [
-                ...prevState.selectedCollections,
-                id
-            ]
-        }), () => {
-            this.toggleCanQuickEdit();
-        });
-        this.setState(prevState => ({
-            ...prevState,
-            quickActionState: 1
-        }));
+    handle_onXClicked = () => {
+        this._asideClose();
     }
-    removeListItem(id) {
-        this.setState(prevState => ({
-            ...prevState,
-            selectedCollections: [
-                ...prevState.selectedCollections.filter(i => i !== id)
-            ]
-        }), () => {
-            this.toggleCanQuickEdit();
-        });
-        this.setState(prevState => ({
-            ...prevState,
-            quickActionState: 0
-        }));
-    }
-    toggleListItem(id, isSelected) {
-        if (isSelected) {
-            this.addListItem(id);
-        } else {
-            if (this.state.selectedCollections.length) {
-                this.removeListItem(id);
-            }
-        }
-    }
+    
 
-    toggleCanQuickEdit() {
-        if (this.state.selectedCollections.length === 1) {
-            this.setState(prevState => ({
-                ...prevState,
-                canQuickEdit: true
-            }));
-        } else {
-            this.setState(prevState => ({
-                ...prevState,
-                canQuickEdit: false
-            }));
-        }
-    }
 
-    deleteCollection(id) {
-        if (this.state.collections.length) {
-            this.setState(prevState => ({
-                ...prevState,
-                collections: [
-                    ...prevState.collections.filter(item => item.id !== id)
-                ],
-                selectedCollections: [
-                    ...prevState.selectedCollections.filter(i => i !== id)
-                ],
-                quickActionState: 0
-            }));
-        }
-    }
-
-    onQuickAction_Clicked() {
-        if (this.state.quickActionState) {
-            this.startSession();
-        } else {
-            this.createDeck();
-        }
-    }
-
+    //  Render Method
     render() {
-        const collections = this.state.collections.map(item => {
-            return (
-                <ListItem
-                    asideActive={this.state.asideActive}
-                    asideState={this.state.asideState}
-                    canQuickEdit={this.state.canQuickEdit}
-                    deleteItem={this.deleteCollection.bind(this)}
-                    detail={item.detail}
-                    key={item.id}
-                    listItemId={item.id}
-                    title={item.title}
-                    toggleAside={this.toggleAside.bind(this)}
-                    toggleSelection={this.toggleListItem.bind(this)}/>
-            );
-        });
-
         return (
-            <main
-                className={MainCSS.Default}
-                onClick={this.closeAside.bind(this)}>
-                <div className={globalCSS.Inner}>
-                    <Header toggleAside={this.toggleAside.bind(this)}/>
-                    <Aside active={this.state.asideActive} asideState={this.state.asideState}/>
-                    <QuickAction
-                        onClick={this.onQuickAction_Clicked.bind(this)}
-                        quickActionState={this.state.quickActionState}/>
-                    <List>
-                        {collections}
-                    </List>
-                </div>
-            </main>
+            <Aux>
+                <Header
+                    onA={this.handle_onAClicked}
+                    onB={this.handle_onBClicked}
+                    onNavigation={this.handle_onNavigationClicked}/>
+                <main
+                    className={MainCSS.Default}
+                    onClick={(e) => this.handle_onClicked(e)}>
+                    <div className={globalCSS.Inner}>
+                        <List
+                            listItems={this.state.collections}
+                            onDelete={this.handle_onDeleteClicked}
+                            onEdit={this.handle_onEditClicked}
+                            onSelect={this.handle_onCollectionSelected}>
+                            <ActionButton
+                                active={this.state.action.isActive}
+                                onClick={this.handle_onActionClicked}
+                                state={this.state.action.state}
+                                values={["Create", "Study"]}/>
+                        </List>
+                    </div>
+                </main>
+                <Aside
+                    active={this.state.aside.isActive}
+                    data={this.state.connectedCollection}
+                    onX={this.handle_onXClicked}
+                    state={this.state.aside.state}/>
+            </Aux>
         )
     }
 }
@@ -193,4 +177,3 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(null, mapDispatchToProps)(Main);
-//export default Main;

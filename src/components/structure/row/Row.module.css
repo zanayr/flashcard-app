@@ -1,15 +1,35 @@
 div.Row {
-    height: 100%;
+    height: auto;
     width: 100%;
 }
 div.Row > div {
-    align-items: center;
     display: flex;
     flex-direction: row;
 }
-div.Row.Start > div {
+
+
+.Just_Start > div {
     justify-content: flex-start;
 }
-div.Row.Between > div {
+.Just_Between > div {
     justify-content: space-between;
+}
+.Just_Center > div {
+    justify-content: center;
+}
+
+
+.Align_Start > div {
+    align-items: flex-start;
+}
+.Align_End > div {
+    align-items: flex-end;
+}
+.Align_Center {
+    align-items: center;
+}
+
+
+.Fill {
+    height: 100%;
 }

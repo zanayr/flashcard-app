@@ -1,32 +1,33 @@
-import React, {Component} from 'react';
+import React from "react";
 
-//import HorizontalSpace from '../../structure/space/Horizontal';
-import Logo from '../../ui/button/logo/Logo';
-import Search from '../../ui/search/Search';
-import Toolbar from '../../ui/toolbar/Toolbar';
-import Navigation from '../navigation/Navigation';
+import Logo from "../../ui/button/logo/Logo";
+import Search from "../../ui/search/Search";
+import Toolbar from "../../ui/toolbar/Toolbar";
+import Navigation from "../../ui/navigation/Navigation";
 
-import globalCSS from '../../../Global.module.css';
-import headerCSS from './Header.module.css';
+import globalCSS from "../../../Global.module.css";
+import headerCSS from "./Header.module.css";
 
-class Header extends Component {
-    handle_headerClicked (e) {
+const header = (props) => {
+    const handle_onClicked = (e) => {
         e.stopPropagation();
     }
-    render() {
-        return (
-            <header
-                className={headerCSS.Header}
-                onClick={(e) => {this.handle_headerClicked(e)}}>
-                <div className={globalCSS.Inner}>
-                    <Logo/>
-                    <Search/>
-                    <Toolbar toggleAside={this.props.toggleAside}/>
-                    <Navigation toggleAside={this.props.toggleAside}/>
-                </div>
-            </header>
-        );
-    }
+
+    return (
+        <header
+            className={headerCSS.Header}
+            onClick={(e) => handle_onClicked(e)}>
+            <div className={globalCSS.Inner}>
+                <Logo/>
+                <Search/>
+                <Toolbar
+                    onA={props.onA}
+                    onB={props.onB}/>
+                <Navigation
+                    onNavigation={props.onNavigation}/>
+            </div>
+        </header>
+    );
 }
 
-export default Header;
+export default header;

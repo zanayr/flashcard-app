@@ -1,34 +1,62 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 
-import NavigationButton from '../../ui/button/navigation/NavigationButton';
+import NavigationAiside from "./navigation/NavigationAside";
+import QuickEditAside from "./quick/QuickEditAside";
 
-import globalCSS from '../../../Global.module.css';
-import asideCSS from './Aside.module.css';
+import globalCSS from "../../../Global.module.css";
+import asideCSS from "./Aside.module.css";
 
 class Aside extends Component {
-    state = {
-        navigation: [{
-            value: "Sign Out",
-            path: "/logout"
-        }]
+    handle_onClick = (e) => {
+        e.stopPropagation();
     }
+    handle_onXClicked = () => {
+        this.props.onX();
+    }
+
     render() {
-        let content = this.state.navigation.map(button => {
-            return (
-                <NavigationButton
-                    key={this.state.navigation.indexOf(button)}
-                    path={button.path}>
-                    {button.value}
-                </NavigationButton>
-            );
-        });
-        if (this.props.asideState !== 2) {
-            content = (<h3>Aside #{this.props.asideState}</h3>);
+        let asideContent;
+        let cssClasses = [asideCSS.Aside];
+        if (this.props.active) {
+            cssClasses = [...cssClasses, asideCSS.Active];
         }
+
+        switch (this.props.state) {
+            case 0:
+                asideContent = (
+                    <h3>Aside #{this.props.state}</h3>
+                );
+                break;
+            case 1:
+                asideContent = (
+                    <h3>Aside #{this.props.state}</h3>
+                );
+                break;
+            case 2:
+                asideContent = (
+                    <NavigationAiside onX={this.handle_onXClicked}/>
+                );
+                break;
+            case 3:
+                asideContent = (
+                    <QuickEditAside
+                        data={this.props.data}
+                        onX={this.handle_onXClicked}/>
+                );
+                break;
+            default:
+                asideContent = (
+                    <NavigationAiside onX={this.handle_onXClicked}/>
+                );
+                break;
+        }
+
         return (
-            <aside className={[asideCSS.Aside, this.props.active ? asideCSS.Active : ''].join(' ')}>
+            <aside
+                className={cssClasses.join(' ')}
+                onClick={(e) => this.handle_onClick(e)}>
                 <div className={globalCSS.Inner}>
-                    {content}
+                    {asideContent}
                 </div>
             </aside>
         );

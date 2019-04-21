@@ -8,47 +8,55 @@ import listItemCSS from "./ListItem.module.css";
 
 class ListItem extends Component {
     state = {
-        detail: this.props.detail,
-        id: this.props.listItemId,
-        title: this.props.title,
-        selected: false
+        details: this.props.content.details,
+        id: this.props.content.id,
+        title: this.props.content.title,
+        isSelected: false
     }
-    onEditClicked(e) {
-        e.stopPropagation();
-        this.props.toggleAside(3);
-    }
-    handle_itemClicked () {
-        this.setState(prevState => ({
-            ...prevState,
-            selected: !prevState.selected
+
+    _itemSelect = () => {
+        this.setState(prev => ({
+            ...prev,
+            isSelected: !prev.isSelected
         }), () => {
-            this.props.toggleSelection(this.state.id, this.state.selected);
+            this.props.onSelect({...this.state});
         });
+    }
+
+    handle_onClicked = (e) => {
+        e.stopPropagation();
+        this._itemSelect();
+    }
+    handle_onEditClicked = () => {
+        this.props.onEdit({...this.state});
+    }
+    handle_onDeleteClicked = () => {
+        this.props.onDelete({...this.state});
     }
 
     render() {
         let cssClasses = [listItemCSS.List_Item];
-        if (this.state.selected) {
+        if (this.state.isSelected) {
             cssClasses = [listItemCSS.List_Item, listItemCSS.Selected];
         }
         return (
             <div
                 className={cssClasses.join(' ')}
-                onClick={this.handle_itemClicked.bind(this)}>
+                onClick={(e) => this.handle_onClicked(e)}>
                 <div className={globalCSS.Inner}>
-                    <Column just="Center_Left">
-                        <h3>{this.state.title}</h3>
-                        <p>{this.state.detail}</p>
+                    <Column just="Center" align="Start">
+                        <h3>{this.state.id + " " + this.state.title}</h3>
+                        <p>{this.state.details}</p>
                     </Column>
                     <QuickButton
-                        active={this.state.selected && this.props.canQuickEdit}
-                        onClick={this.onEditClicked.bind(this)}>
+                        active={this.state.isSelected && this.props.single}
+                        onClick={this.handle_onEditClicked}>
                         Edit
                     </QuickButton>
                     <QuickButton
-                        active={this.state.selected&& this.props.canQuickEdit}
+                        active={this.state.isSelected && this.props.single}
                         delete
-                        onClick={() => {this.props.deleteItem(this.state.id)}}>
+                        onClick={this.handle_onDeleteClicked}>
                         Delete
                     </QuickButton>
                 </div>

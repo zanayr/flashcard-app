@@ -10,13 +10,13 @@
     width: 66vw;
     z-index: 97;
 }
-aside.Active {
+.Active {
     right: 0px;
 }
-aside .Aside_Button {
+.Aside_Button {
     height: 64px;
     width: 100%;
 }
-aside .Aside_Button > div {
+.Aside_Button > div {
     padding: 8px;
 }

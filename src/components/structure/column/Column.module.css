@@ -1,22 +1,35 @@
-div.Column {
+.Column {
     flex-grow: 1;
     height: 100%;
 }
-div.Column > div {
-    align-items: center;
+.Column > div {
     display: flex;
     flex-direction: column;
 }
-div.Column.Start > div {
+
+
+.Just_Start > div {
     justify-content: flex-start;
 }
-div.Column.Between > div {
+.Just_Between > div {
     justify-content: space-between;
 }
-div.Column.Center > div {
+.Just_Center > div {
     justify-content: center;
 }
-div.Column.Center_Left > div {
+
+
+.Align_Start > div {
     align-items: flex-start;
-    justify-content: center;
+}
+.Align_End > div {
+    align-items: flex-end;
+}
+.Align_Center {
+    align-items: center;
+}
+
+
+.Fill {
+    width: 100%;
 }

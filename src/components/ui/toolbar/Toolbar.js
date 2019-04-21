@@ -1,24 +1,28 @@
-import React from 'react';
+import React from "react";
 
-import IconButton from '../button/icon/IconButton';
+import IconButton from "../button/icon/IconButton";
 
-import globalCSS from '../../../Global.module.css';
-import toolbarCSS from './Toolbar.module.css';
+import globalCSS from "../../../Global.module.css";
+import toolbarCSS from "./Toolbar.module.css";
 
 const toolbar = (props) => {
-    function onX(e) {
-        e.stopPropagation();
-        props.toggleAside(0);
+    const handle_onAClicked = () => {
+        props.onA();
     }
-    function onY(e) {
-        e.stopPropagation();
-        props.toggleAside(1);
+    const handle_onBClicked = () => {
+        props.onB();
     }
+    const handle_onClicked = (e) => {
+        e.stopPropagation();
+    }
+
     return (
-        <div className={toolbarCSS.Toolbar}>
+        <div
+            className={toolbarCSS.Toolbar}
+            onClick={(e) => handle_onClicked(e)}>
             <div className={globalCSS.Inner}>
-                <IconButton onClick={onX}>X</IconButton>
-                <IconButton onClick={onY}>Y</IconButton>
+                <IconButton onClick={handle_onAClicked}>A</IconButton>
+                <IconButton onClick={handle_onBClicked}>B</IconButton>
             </div>
         </div>
     );

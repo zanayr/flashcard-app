@@ -11,10 +11,16 @@ const quickButton = (props) => {
     if (props.delete) {
         cssClasses = [...cssClasses, quickButtonCSS.Delete];
     }
+
+    const handle_onClick = (e) => {
+        e.stopPropagation();
+        props.onClick();
+    }
+
     return (
         <button
             className={cssClasses.join(' ')}
-            onClick={(e) => {props.onClick(e)}}>
+            onClick={(e) => handle_onClick(e)}>
             {props.children}
         </button>
     );
