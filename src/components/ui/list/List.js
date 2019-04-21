@@ -8,68 +8,75 @@ import listCSS from "./List.module.css";
 class List extends Component {
     state = {
         isSingle: false,
-        selectedItems: [],
         selectedItemIDs: []
     }
 
-    handle_onDeleteClicked = (item) => {
-        //  <-- wrap in a confirm box promise here
+    _isSingleUpdate = (id) => {
         this.setState(prev => ({
             ...prev,
-            selectedItems: prev.selectedItems.filter(i => i.id !== item.id),
-            selectedItemIDs: prev.selectedItemIDs.filter(i => i !== item.id)
+            isSingle: prev.selectedItemIDs.length === 1
         }), () => {
-            this.props.onDelete(item);
+            if (this.state.isSingle) {
+                this.props.onSelect(id);
+            } else {
+                this.props.onSelect('');
+            }
         });
     }
-    handle_onEditClicked = () => {
-        this.props.onEdit();
-    }
-    handle_onItemSelected = (item) => {
-        if (this.state.selectedItemIDs.indexOf(item.id) > -1) {
+    _itemSelect = (id) => {
+        if (this.state.selectedItemIDs.indexOf(id) > -1) {
             this.setState(prev => ({
                 ...prev,
-                selectedItems: prev.selectedItems.filter(i => i.id !== item.id),
-                selectedItemIDs: prev.selectedItemIDs.filter(i => i !== item.id)   
+                selectedItemIDs: prev.selectedItemIDs.filter(i => i !== id)
             }), () => {
-                this.setState(prev => ({
-                    ...prev,
-                    isSingle: prev.selectedItemIDs.length === 1
-                }), () => {
-                    if (this.state.isSingle) {
-                        this.props.onSelect(item);
-                    } else {
-                        this.props.onSelect({});
-                    }
-                });
+              this._isSingleUpdate(id);
             });
         } else {
             this.setState(prev => ({
                 ...prev,
-                selectedItems: [...prev.selectedItems, item],
-                selectedItemIDs: [...prev.selectedItemIDs, item.id]   
+                selectedItemIDs: [...prev.selectedItemIDs, id]
             }), () => {
-                this.setState(prev => ({
-                    ...prev,
-                    isSingle: prev.selectedItemIDs.length === 1
-                }), () => {
-                    if (this.state.isSingle) {
-                        this.props.onSelect(item);
-                    } else {
-                        this.props.onEdit();
-                        this.props.onSelect({});
-                    }
-                });
+              this._isSingleUpdate(id);
             });
         }
     }
+    _itemDelete = (id) => {
+        this.setState(prev => ({
+            ...prev,
+            selectedItemIDs: prev.selectedItemIDs.filter(i => i !== id)
+        }), () => {
+            this.setState(prev => ({
+                ...prev,
+                isSingle: prev.selectedItemIDs.length === 1
+            }), () => {
+                this.props.onDelete(id);
+            });
+        });
+    }
+
+
+    handle_onDeleteClicked = (id) => {
+        //  <-- wrap in a confirm box promise here
+        this._itemDelete(id);
+    }
+    handle_onEditClicked = () => {
+        this.props.onEdit();
+    }
+    handle_onItemSelected = (id) => {
+        this._itemSelect(id);
+    }
 
     render() {
-        let items = this.props.listItems.map(item => {
+        let items = Object.keys(this.props.listItems).map(itemKey => {
+            const item = {...this.props.listItems[itemKey]};
             return (
                 <ListItem
-                    content={item}
-                    key={item.id}
+                    content={{
+                        details: item.details,
+                        id: itemKey,
+                        title: item.title
+                    }}
+                    key={itemKey}
                     onDelete={this.handle_onDeleteClicked}
                     onEdit={this.handle_onEditClicked}
                     onSelect={this.handle_onItemSelected}

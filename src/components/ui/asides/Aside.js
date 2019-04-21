@@ -41,6 +41,7 @@ class Aside extends Component {
                 asideContent = (
                     <QuickEditAside
                         data={this.props.data}
+                        onChange={this.props.onChange}
                         onX={this.handle_onXClicked}/>
                 );
                 break;

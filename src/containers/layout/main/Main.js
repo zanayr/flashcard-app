@@ -24,12 +24,62 @@ class Main extends Component {
             isActive: true,
             state: 0
         },
-        collections: [],
-        connectedCollection: {}
+        collections: {},
+        selectedCollectionID: ''
     }
 
+    //  List Methods
+    _collectionDelete = (id) => {
+        let collections = {...this.state.collections};
+        delete collections[id];
+        this.setState(prev => ({
+            ...prev,
+            collections: {
+                ...collections,
+            }
+        }));
+    }
+    _collectionSelect = (id) => {
+        this.setState(prev => ({
+            ...prev,
+            selectedCollectionID: id
+        }), () => {
+            if (this.state.aside.state === 3 && this.state.aside.isActive && !this.state.selectedCollectionID) {
+                this._asideToggle(3);
+            }
+        });
+    }
+    _collectionUpdate = (id, prop, value) => {
+        this.setState(prev => ({
+            ...prev,
+            collections: {
+                ...prev.collections,
+                [id]: {
+                    ...prev.collections[id],
+                    [prop]: value
+                }
+            }
+        }));
+    }
 
-    //  Page Methods
+    //  Action Button Methods
+    _collectionCreate = () => {
+        this.setState(prev => ({
+            ...prev,
+            collections: {
+                ...prev.collections,
+                [_hashIdCreate()]: {
+                    details: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaq",
+                    title: "Lorem Ipsum Dolor Set"
+                }
+            }
+        }));
+    }
+    _sessionStart = () => {
+        console.log("Starting Session...");
+    }
+
+    //  Aside Methods
     _asideClose = () => {
         if (this.state.aside.isActive) {
             this.setState(prev => ({
@@ -67,40 +117,34 @@ class Main extends Component {
             this._asideUpdate(value);
         }
     }
-    _collectionConnect = (collection) => {
-        this.setState(prev => ({
-            ...prev,
-            connectedCollection: {
-                details: collection.detail,
-                id: collection.id,
-                title: collection.title,
-                isSelected: collection.isSelected
-            }
-        }), () => {
-            if (this.state.aside.state === 3 && this.state.aside.isActive && !this.state.connectedCollection.isSelected) {
-                this._asideToggle(3);
-            }
-        });
-    }
-    _collectionCreate = () => {
-        this.setState(prev => ({
-            ...prev,
-            collections: [...prev.collections, {
-                details: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaq",
-                id: _hashIdCreate(),
-                title: "Lorem Ipsum Dolor Set"
-            }]
-        }));
-    }
-    startSession = () => {
-        console.log("Starting Session...");
-    }
 
-
-    // Event Handlers
+    // Header Event Handlers
     handle_onAClicked = () => {
         this._asideToggle(0);
     }
+    handle_onBClicked = () => {
+        this._asideToggle(1);
+    }
+    handle_onNavigationClicked = () => {
+        this._asideToggle(2);
+    }
+    
+    //  List Event Handlers
+    handle_onClicked = (e) => {
+        e.stopPropagation();
+        this._asideClose();
+    }
+    handle_onCollectionSelected = (id) => {
+        this._collectionSelect(id);
+    }
+    handle_onDeleteClicked = (id) => {
+        this._collectionDelete(id);
+    }
+    handle_onEditClicked = () => {
+        this._asideToggle(3);
+    }
+
+    //  Action Button Event Handler
     handle_onActionClicked = () => {
         if (this.state.action.state) {
             this._sessionStart();
@@ -108,27 +152,10 @@ class Main extends Component {
             this._collectionCreate();
         }
     }
-    handle_onBClicked = () => {
-        this._asideToggle(1);
-    }
-    handle_onClicked = (e) => {
-        e.stopPropagation();
-        this._asideClose();
-    }
-    handle_onCollectionSelected = (collection) => {
-        this._collectionConnect(collection);
-    }
-    handle_onDeleteClicked = (collection) => {
-        this.setState(prev => ({
-            ...prev,
-            collections: prev.collections.filter(c => c.id !== collection.id)
-        }));
-    }
-    handle_onEditClicked = () => {
-        this._asideToggle(3);
-    }
-    handle_onNavigationClicked = () => {
-        this._asideToggle(2);
+
+    //  Aside Event Handlers
+    handle_onEditChange = (e, id, prop) => {
+        this._collectionUpdate(id, prop, e.target.value);
     }
     handle_onXClicked = () => {
         this._asideClose();
@@ -163,7 +190,12 @@ class Main extends Component {
                 </main>
                 <Aside
                     active={this.state.aside.isActive}
-                    data={this.state.connectedCollection}
+                    data={this.state.selectedCollectionID ? {
+                        details: this.state.collections[this.state.selectedCollectionID].details,
+                        id: this.state.selectedCollectionID,
+                        title: this.state.collections[this.state.selectedCollectionID].title,
+                    } : {}}
+                    onChange={this.handle_onEditChange}
                     onX={this.handle_onXClicked}
                     state={this.state.aside.state}/>
             </Aux>

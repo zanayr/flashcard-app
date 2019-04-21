@@ -7,28 +7,22 @@ import globalCSS from "../../../../Global.module.css";
 import listItemCSS from "./ListItem.module.css";
 
 const listItem = (props) => {
-    const values = {
-        details: props.details,
-        id: props.id,
-        isSelected: false,
-        title: props.title
-    }
+    const _id = props.content.id;
     
     let cssClasses = [listItemCSS.List_Item];
-    if (values.isSelected) {
+    if (props.content.isSelected) {
         cssClasses = [listItemCSS.List_Item, listItemCSS.Selected];
     }
 
     const handle_editClicked = () => {
-        props.onEdit({...values});
+        props.onEdit(_id);
     }
     const handle_deleteClicked = () => {
-        props.onDelete({...values});
+        props.onDelete(_id);
     }
     const handle_itemSelected = (e) => {
         e.stopPropagation();
-        values.isSelected = !values.isSelected;
-        props.onSelect({...values});
+        props.onSelect(_id);
     }
 
     return (
@@ -37,16 +31,16 @@ const listItem = (props) => {
             onClick={(e) => handle_itemSelected(e)}>
             <div className={globalCSS.Inner}>
                 <Column just="Center" align="Start">
-                    <h3>{values.id + " " + values.title}</h3>
-                    <p>{values.details}</p>
+                    <h3>{_id + " " + props.content.title}</h3>
+                    <p>{props.content.details}</p>
                 </Column>
                 <QuickButton
-                    active={values.isSelected && props.single}
+                    active={props.content.isSelected && props.single}
                     onClick={handle_editClicked}>
                     Edit
                 </QuickButton>
                 <QuickButton
-                    active={values.isSelected && props.single}
+                    active={props.content.isSelected && props.single}
                     delete
                     onClick={handle_deleteClicked}>
                     Delete

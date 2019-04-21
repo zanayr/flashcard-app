@@ -11,6 +11,10 @@ import asideCSS from "../Aside.module.css";
 import quickEditAsideCSS from "./QuickEditAside.module.css";
 
 const quickEditAside = (props) => {
+    const _id = props.data.id;
+    const handle_onChangeInput = (e, label) => {
+        props.onChange(e, _id, label);
+    }
     const handle_onCloseClicked = () => {
         //  Save data to server
         props.onX();
@@ -29,8 +33,8 @@ const quickEditAside = (props) => {
                     }}
                     label="Collection Title"
                     key="0"
-                    onChange={() => {}}
-                    value={props.title}/>
+                    onChange={(e) => handle_onChangeInput(e, "title")}
+                    value={props.data.title}/>
                 <Input
                     config={{
                         placeholder: "Details",
@@ -38,8 +42,8 @@ const quickEditAside = (props) => {
                     }}
                     label="Collection Details"
                     key="1"
-                    onChange={() => {}}
-                    value={props.detail}/>
+                    onChange={(e) => handle_onChangeInput(e, "details")}
+                    value={props.data.details}/>
             </Column>
         </Aux>
     );

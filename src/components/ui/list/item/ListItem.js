@@ -8,9 +8,7 @@ import listItemCSS from "./ListItem.module.css";
 
 class ListItem extends Component {
     state = {
-        details: this.props.content.details,
         id: this.props.content.id,
-        title: this.props.content.title,
         isSelected: false
     }
 
@@ -19,19 +17,20 @@ class ListItem extends Component {
             ...prev,
             isSelected: !prev.isSelected
         }), () => {
-            this.props.onSelect({...this.state});
+            this.props.onSelect(this.state.id);
         });
     }
 
     handle_onClicked = (e) => {
         e.stopPropagation();
+
         this._itemSelect();
     }
     handle_onEditClicked = () => {
-        this.props.onEdit({...this.state});
+        this.props.onEdit(this.state.id);
     }
     handle_onDeleteClicked = () => {
-        this.props.onDelete({...this.state});
+        this.props.onDelete(this.state.id);
     }
 
     render() {
@@ -45,8 +44,8 @@ class ListItem extends Component {
                 onClick={(e) => this.handle_onClicked(e)}>
                 <div className={globalCSS.Inner}>
                     <Column just="Center" align="Start">
-                        <h3>{this.state.id + " " + this.state.title}</h3>
-                        <p>{this.state.details}</p>
+                        <h3>{this.props.content.id + " " + this.props.content.title}</h3>
+                        <p>{this.props.content.details}</p>
                     </Column>
                     <QuickButton
                         active={this.state.isSelected && this.props.single}
