@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
+import _deckConnection from "../../../database/deck";
+import withErrorModal from "../../../hoc/withErrorModal/withErrorModal";
 
 import * as actions from "../../../store/actions/index";
 import _hashIdCreate from "../../../helper/id";
@@ -9,7 +11,6 @@ import Header from "../../../components/ui/header/Header";
 import List from "../../../components/ui/list/List";
 import ActionButton from "../../../components/ui/button/action/ActionButton";
 import Aside from "../../../components/ui/asides/Aside";
-import Overlay from "../../../components/ui/overlay/Overlay";
 import Modal from "../../../components/ui/modal/Modal";
 
 import "../../../style.css";
@@ -51,6 +52,11 @@ class Main extends Component {
         selectedCollectionID: ''
     }
 
+    componentDidMount () {
+        console.log(this.props.token);
+        this.props.handle_onDeckLoaded(this.props.token, this.props.userId);
+    }
+
     //  List Methods
     _collectionDelete = () => {
         let collections = {...this.state.collections};
@@ -78,6 +84,7 @@ class Main extends Component {
 
     //  Action Button Methods
     _collectionCreate = () => {
+        /*
         this.setState(prev => ({
             ...prev,
             collections: {
@@ -88,6 +95,13 @@ class Main extends Component {
                 }
             }
         }));
+        */
+        const deck = {
+            details: "Sed ut perspiciatis unde omnis iste natus error sit",
+            userId: this.props.userId,
+            title: "New Flashcard Deck"
+        }
+        this.props.handle_onDeckCreated(this.props.token, deck);
     }
     _sessionStart = () => {
         console.log("Starting Session...");
@@ -283,10 +297,11 @@ class Main extends Component {
                     <div className={[globalCSS.Inner, globalCSS.With_Padding].join(' ')}>
                         <List
                             header="Collections"
-                            listItems={this.state.collections}
+                            listItems={this.props.decks}
                             onDelete={this.handle_onDeleteClicked}
                             onEdit={this.handle_onEditClicked}
-                            onSelect={this.handle_onCollectionSelected}>
+                            onSelect={this.handle_onCollectionSelected}
+                            refreshing={this.props.loading}>
                             <ActionButton
                                 active={this.state.action.isActive}
                                 onClick={this.handle_onActionClicked}
@@ -312,7 +327,6 @@ class Main extends Component {
                     onChange={this.handle_onEditChange}
                     onX={this.handle_onXClicked}
                     state={this.state.aside.state}/>
-                <Overlay active={this.state.modal.isActive}/>
                 <Modal
                     active={this.state.modal.isActive}
                     data={this.state.modal.data}
@@ -323,10 +337,19 @@ class Main extends Component {
         )
     }
 }
+const mapStateToProps = state => {
+    return {
+        decks: state.deck.decks,
+        loading: state.deck.isLoading,
+        token: state.auth.token,
+        userId: state.auth.userId
+    }
+}
 const mapDispatchToProps = dispatch => {
     return {
-        onModalCreate: (m) => dispatch(actions.modalCreate(m))
+        handle_onDeckLoaded: (token, userId) => dispatch(actions.deckGet_async(token, userId)),
+        handle_onDeckCreated: (token, data) => dispatch(actions.deckPost_async(token, data))
     };
 };
 
-export default connect(null, mapDispatchToProps)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorModal(Main, _deckConnection));

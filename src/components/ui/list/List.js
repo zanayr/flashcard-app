@@ -3,6 +3,7 @@ import React, {Component} from "react";
 import Aux from "../../../hoc/aux/Aux";
 //import Refresh from "../../ui/refresh/Refresh";
 import ListItem from "../list/item/ListItem";
+import Throbber from "../../ui/throbber/Throbber";
 
 import globalCSS from "../../../Global.module.css";
 import listCSS from "./List.module.css";
@@ -66,16 +67,15 @@ class List extends Component {
     }
 
     render() {
-        let items = Object.keys(this.props.listItems).map(itemKey => {
-            const item = {...this.props.listItems[itemKey]};
-            const isSelected = this.state.selectedItemIDs.indexOf(itemKey) > -1;
+        let items = this.props.listItems.map(item => {
+            const isSelected = this.state.selectedItemIDs.indexOf(item.id) > -1;
             return (
                 <ListItem
                     data={{
                         ...item,
-                        id: itemKey
+                        id: item.id
                     }}
-                    key={itemKey}
+                    key={item.id}
                     onDelete={this.handle_onDeleteClicked}
                     onEdit={this.props.onEdit}
                     onSelect={this.handle_onItemSelected}
@@ -83,6 +83,20 @@ class List extends Component {
                     single={this.state.isSingle}/>
             );
         });
+        let listContent = (
+            <div className={globalCSS.Inner}>
+                {items}
+                {this.props.children}
+            </div>
+        );
+
+        if (this.props.refreshing) {
+            listContent = (
+                <div className={globalCSS.Inner}>
+                    <Throbber/>
+                </div>
+            );
+        }
         return (
             <Aux>
                 <div className={[globalCSS.With_Margin, listCSS.List_Header].join(' ')}>
@@ -92,10 +106,7 @@ class List extends Component {
                     </div>
                 </div>
                 <div className={[globalCSS.With_Margin, listCSS.List].join(' ')}>
-                    <div className={globalCSS.Inner}>
-                        {items}
-                        {this.props.children}
-                    </div>
+                    {listContent}
                 </div>
             </Aux>
         );
