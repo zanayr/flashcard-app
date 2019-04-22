@@ -25,12 +25,16 @@ const navigationAside = (props) => {
             </NavigationButton>
         );
     });
+
+    const handle_onClick = () => {
+        props.onClose();
+    }
     
     return (
         <Aux>
             <Row just='Between'>
                 <h3>Navigation</h3>
-                <IconButton onClick={props.onClose}>X</IconButton>
+                <IconButton onClick={handle_onClick}>X</IconButton>
             </Row>
             <nav className={navigationAsideCSS.Navigation}>
                 <div className={globalCSS.Inner}>
