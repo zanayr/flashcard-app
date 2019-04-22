@@ -20,7 +20,6 @@ const deckGetStart = (state, action) => {
     };
 };
 const deckGetSuccess = (state, action) => {
-    console.log(action);
     return {
         ...state,
         decks: action.payload,

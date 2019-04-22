@@ -1,29 +1,31 @@
-import React from "react";
+import React from 'react';
 
-import Logo from "../../ui/button/logo/Logo";
-import Search from "../../ui/search/Search";
-import Toolbar from "../../ui/toolbar/Toolbar";
-import Navigation from "../../ui/navigation/Navigation";
+import Logo from './Logo/Logo';
+import Search from '../search/Search';
+import Toolbar from './Toolbar/Toolbar';
+import Dashboard from './Dashboard/Dashboard';
 
-import globalCSS from "../../../Global.module.css";
-import headerCSS from "./Header.module.css";
+import GlobalCSS from '../../../Global.module.css';
+import HeaderCSS from './Header.module.css';
 
 const header = (props) => {
-    const handle_onClicked = (e) => {
-        e.stopPropagation();
+    const handle_onClick = (event) => {
+        event.stopPropagation();
+
+        props.onClick();
     }
 
     return (
         <header
-            className={headerCSS.Header}
-            onClick={(e) => handle_onClicked(e)}>
-            <div className={[globalCSS.Inner, globalCSS.With_Padding].join(' ')}>
+            className={HeaderCSS.Header}
+            onClick={(e) => handle_onClick(e)}>
+            <div className={[GlobalCSS.Inner, GlobalCSS.With_Padding].join(' ')}>
                 <Logo/>
                 <Search/>
                 <Toolbar
                     onA={props.onA}
                     onB={props.onB}/>
-                <Navigation
+                <Dashboard
                     onNavigation={props.onNavigation}/>
             </div>
         </header>

@@ -1,13 +1,15 @@
-import React from "react";
+import React from 'react';
 
-import buttonCSS from "../Button.module.css";
-import iconButtonCSS from "./IconButton.module.css";
+import buttonCSS from '../Button.module.css';
+import iconButtonCSS from './IconButton.module.css';
 
 const iconButton = (props) => {
     const handle_onClicked = (e) => {
         e.stopPropagation();
+
         props.onClick();
-    } 
+    }
+
     return (
         <button
             className={[buttonCSS.Button, iconButtonCSS.Icon_Button].join(' ')}

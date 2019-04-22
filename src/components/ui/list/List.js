@@ -11,7 +11,8 @@ import listCSS from "./List.module.css";
 class List extends Component {
     state = {
         isSingle: false,
-        selectedItemIDs: []
+        selectedItemIDs: [],
+        items: this.props.listItems
     }
 
     _isSingleUpdate = (id) => {
@@ -68,35 +69,17 @@ class List extends Component {
 
     render() {
         let items = this.props.listItems.map(item => {
-            const isSelected = this.state.selectedItemIDs.indexOf(item.id) > -1;
             return (
                 <ListItem
-                    data={{
-                        ...item,
-                        id: item.id
-                    }}
+                    data={{...item}}
                     key={item.id}
                     onDelete={this.handle_onDeleteClicked}
                     onEdit={this.props.onEdit}
                     onSelect={this.handle_onItemSelected}
-                    selected={isSelected}
+                    selected={this.state.selectedItemIDs.indexOf(item.id) > -1}
                     single={this.state.isSingle}/>
             );
         });
-        let listContent = (
-            <div className={globalCSS.Inner}>
-                {items}
-                {this.props.children}
-            </div>
-        );
-
-        if (this.props.refreshing) {
-            listContent = (
-                <div className={globalCSS.Inner}>
-                    <Throbber/>
-                </div>
-            );
-        }
         return (
             <Aux>
                 <div className={[globalCSS.With_Margin, listCSS.List_Header].join(' ')}>
@@ -106,7 +89,10 @@ class List extends Component {
                     </div>
                 </div>
                 <div className={[globalCSS.With_Margin, listCSS.List].join(' ')}>
-                    {listContent}
+                    <div className={globalCSS.Inner}>
+                        {items}
+                        {this.props.children}
+                    </div>
                 </div>
             </Aux>
         );

@@ -1,40 +1,36 @@
-import React from "react"
+import React from 'react';
+import _createHashID from '../../../../helper/id';
 
-import Aux from "../../../../hoc/aux/Aux";
-import Row from "../../../structure/row/Row";
-import IconButton from "../../button/icon/IconButton";
-import NavigationButton from "../../button/navigation/NavigationButton";
+import Aux from '../../../../hoc/aux/Aux';
+import Row from '../../../structure/row/Row';
+import IconButton from '../../button/icon/IconButton';
+import NavigationButton from '../../button/navigation/NavigationButton';
 
-import globalCSS from "../../../../Global.module.css";
-import navigationAsideCSS from "./NavigationAside.module.css";
+import globalCSS from '../../../../Global.module.css';
+import navigationAsideCSS from './NavigationAside.module.css';
 
 const navigationAside = (props) => {
     const navigationLinks = [
         {
-            path: "/logout",
-            value: "Sign Out"
+            path: '/logout',
+            value: 'Sign Out'
         }
     ];
     const navigationButtons = navigationLinks.map(link => {
         return (
             <NavigationButton
-                key={navigationLinks.indexOf(link)}
+                key={_createHashID()}
                 path={link.path}>
                 {link.value}
             </NavigationButton>
         );
     });
-
-    const handle_onCloseClicked = () => {
-        //  Save data to server
-        props.onX();
-    }
     
     return (
         <Aux>
-            <Row just="Between">
+            <Row just='Between'>
                 <h3>Navigation</h3>
-                <IconButton onClick={handle_onCloseClicked}>X</IconButton>
+                <IconButton onClick={props.onClose}>X</IconButton>
             </Row>
             <nav className={navigationAsideCSS.Navigation}>
                 <div className={globalCSS.Inner}>

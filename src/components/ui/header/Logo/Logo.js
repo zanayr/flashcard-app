@@ -1,11 +1,11 @@
 import React from 'react';
 
-import logoCSS from './Logo.module.css';
+import LogoCSS from './Logo.module.css';
 
 const logo = (props) => {
     return (
-        <div className={logoCSS.Logo}>
-            <div className={logoCSS.Inner}>
+        <div className={LogoCSS.Logo}>
+            <div className={LogoCSS.Inner}>
                 <a href="/"><span></span></a>
             </div>           
         </div>
