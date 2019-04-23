@@ -42,12 +42,26 @@ class Collections extends Component {
     getCollection () {
         this.props.getCollection_async(this.props.token, this.props.userId);
     }
+    insertCollection (payload) {
+        this.props.insertCollection_async(this.props.token, payload);
+    }
     updateCollection (payload) {
         this.props.updateCollection_async(this.props.token, this.props.userId, payload);
     }
 
     componentDidMount () {
         this.getCollection();
+    }
+
+    startSession () {
+        console.log('Start a session...');
+    }
+    createCollection () {
+        this.insertCollection({
+            userId: this.props.userId,
+            title: 'New Flashcard Deck',
+            details: 'This is a new flashcard deck'
+        });
     }
 
     //  Toggle Aside
@@ -117,9 +131,7 @@ class Collections extends Component {
                 ...previousState.collections,
                 deleted: [...previousState.collections.deleted, payload.data.id]
             }
-        }), () => {
-            console.log(this.state.collections.deleted);
-        });
+        }));
     }
     addSelected (payload) {
         this.setState(previousState => ({
@@ -145,6 +157,7 @@ class Collections extends Component {
             actions: {
                 onConfirm: () => {
                     this.addDeleted(payload);
+                    this.removeSelected(payload.data.id);
                     this.deleteCollection(payload);
                 },
                 onCancel: () => {
@@ -187,13 +200,17 @@ class Collections extends Component {
 
     //  ACTION BUTTON EVENT HANDLERS  //
     handle_onQuickActionClick = (payload) => {
-        return;
+        if (this.state.action.state) {
+            this.startSession();
+        } else {
+            this.createCollection();
+        }
     }
 
 
     //  RENDER METHOD  //
     render () {
-        console.log('Deleted Items:', this.state.collections.deleted);
+        console.log('Selected Items:', this.state.collections.selected);
         let list = (<Throbber/>);
         if (!this.props.loading) {
             let collection = {...this.props.collection};
@@ -201,6 +218,7 @@ class Collections extends Component {
                 <List
                     backingCollection={collection}
                     deletedItems={this.state.collections.deleted}
+                    selectedItems={this.state.collections.selected}
                     onChange={this.handle_onListItemChange}
                     onDelete={this.handle_onListDeleteClick}
                     onEdit={this.handle_onListEditClick}

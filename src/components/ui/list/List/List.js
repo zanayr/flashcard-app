@@ -8,9 +8,7 @@ import ListCSS from './List.module.css';
 
 class List extends Component {
     state = {
-        isSingle: false,
-        collection: {},
-        selectedIds: []
+        collection: {}
     }
 
     componentDidMount () {
@@ -18,30 +16,6 @@ class List extends Component {
             ...previousState,
             collection: this.props.backingCollection
         }));
-    }
-
-    toggleIsSingle () {
-        this.setState(previousState => ({
-            ...previousState,
-            isSingle: previousState.selectedIds.length === 1
-        }));
-    }
-    removeSelectedId (payload) {
-        const selected = this.state.selectedIds.filter(id => id !== payload);
-        this.setState(previousState => ({
-            ...previousState,
-            selectedIds: [...selected]
-        }), () => {
-            this.toggleIsSingle();
-        });
-    }
-    addSelectedId (payload) {
-        this.setState(previousState => ({
-            ...previousState,
-            selectedIds: [...previousState.selectedIds, payload]
-        }), () => {
-            this.toggleIsSingle();
-        });
     }
 
     handle_onDeleteClick = (payload) => {
@@ -67,11 +41,6 @@ class List extends Component {
         });
     }
     handle_onItemSelect = (payload) => {
-        if (this.state.selectedIds.indexOf(payload) > -1) {
-            this.removeSelectedId(payload);
-        } else {
-            this.addSelectedId(payload);
-        }
         this.props.onSelect(payload);
     }
     handle_onListItemChange = (payload) => {
@@ -97,17 +66,17 @@ class List extends Component {
         let listItems = Object.keys(this.state.collection).map(key => {
             return (
                 <ListItem
+                    key={key}
                     data={{
                         ...this.state.collection[key],
                         id: key
                     }}
                     deleted={this.props.deletedItems.indexOf(key) > -1}
-                    key={key}
+                    selected={this.props.selectedItems.indexOf(key) > -1}
+                    single={this.props.selectedItems.length === 1}
                     onDelete={this.handle_onDeleteClick}
                     onEdit={this.handle_onEditClick}
-                    onSelect={this.handle_onItemSelect}
-                    selected={this.state.selectedIds.indexOf(key) > -1}
-                    single={this.state.isSingle}/>
+                    onSelect={this.handle_onItemSelect}/>
             );
         });
         return (
