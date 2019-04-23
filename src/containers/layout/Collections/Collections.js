@@ -150,6 +150,17 @@ class Collections extends Component {
             }
         }));
     }
+    removeAllSelected () {
+        this.setState(previousState => ({
+            ...previousState,
+            collections: {
+                ...previousState.collections,
+                selected: []
+            }
+        }));
+    }
+
+
     handle_onListDeleteClick = (payload) => {
         this.props.createModal_async({
             actions: {
@@ -205,6 +216,16 @@ class Collections extends Component {
         }
     }
 
+    //  MAIN EVENT HANDLER  //
+    handle_onMainClick = (payload) => {
+        if (this.state.collections.selected.length) {
+            this.removeAllSelected();
+        }
+        if (this.state.aside.isActive) {
+            this.toggleAside();
+        }
+    }
+
 
     //  RENDER METHOD  //
     render () {
@@ -238,7 +259,7 @@ class Collections extends Component {
                     onNavigation={this.handle_onAsideToggle}/>
                 <main
                     className={CollectionsCSS.Main}
-                    onClick={this.handle_onAsideClose}>
+                    onClick={this.handle_onMainClick}>
                     <div className={[globalCSS.Inner, globalCSS.With_Padding].join(' ')}>
                         {list}
                     </div>
