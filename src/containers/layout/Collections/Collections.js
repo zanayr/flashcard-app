@@ -1,25 +1,21 @@
-import React, {Component} from "react";
-import {connect} from "react-redux";
-import _deckConnection from "../../../database/deck";
-import withDatabaseLayer from "../../../hoc/database/withDatabaseLayer";
-import withErrorModal from "../../../hoc/withErrorModal/withErrorModal";
-import DeckViewModel from '../../../ViewModels/Deck';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import _deckConnection from '../../../database/deck';
 
-import * as actions from "../../../store/actions/index";
-import _hashIdCreate from "../../../helper/id";
+import * as actions from '../../../store/actions/index';
+import _hashIdCreate from '../../../helper/id';
 
-import Aux from "../../../hoc/aux/Aux";
-import Header from "../../../components/ui/Header/Header";
+import Aux from '../../../hoc/aux/Aux';
+import Header from '../../../components/ui/Header/Header';
 import Throbber from '../../../components/ui/throbber/Throbber';
-import List from "../../../components/ui/list/List/List";
+import List from '../../../components/ui/list/List/List';
 import ListHeader from '../../../components/ui/list/ListHeader/ListHeader';
-import ActionButton from "../../../components/ui/button/action/ActionButton";
-import Aside from "../../../components/ui/asides/Aside";
-import Modal from "../../../components/ui/modal/Modal";
+import ActionButton from '../../../components/ui/button/action/ActionButton';
+import Aside from '../../../components/ui/asides/Aside';
 
-import "../../../style.css";
-import globalCSS from "../../../Global.module.css";
-import CollectionsCSS from "./Collections.module.css";
+import '../../../style.css';
+import globalCSS from '../../../Global.module.css';
+import CollectionsCSS from './Collections.module.css';
 
 class Collections extends Component {
     state = {
@@ -128,7 +124,21 @@ class Collections extends Component {
         }));
     }
     handle_onListDeleteClick = (payload) => {
-        return;
+        console.log(payload);
+        this.props.createModal_async({
+            data: {
+                isActive: true,
+                type: 0,
+                title: 'Greetings',
+                message: 'Hello world!',
+                confirm: 'Good-bye'
+            },
+            actions: {
+                onConfirm: () => {
+                    console.log('Farewell');
+                }
+            }
+        });
     }
     handle_onListEditClick = (payload) => {
         this.updateAside({
@@ -218,7 +228,8 @@ const mapDispatchToProps = dispatch => {
     return {
         getCollection_async: (token, userId) => dispatch(actions.deckGet_async(token, userId)),
         insertCollection_async: (token, data) => dispatch(actions.deckPost_async(token, data)),
-        updateCollection_async: (token, user, payload) => dispatch(actions.deckUpdate_async(token, user, payload))
+        updateCollection_async: (token, user, payload) => dispatch(actions.deckUpdate_async(token, user, payload)),
+        createModal_async: (payload) => dispatch(actions.modalCreate(payload))
     };
 };
 

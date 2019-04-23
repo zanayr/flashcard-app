@@ -7,46 +7,51 @@ import Auth from './auth/Auth';
 import Logout from './auth/logout/Logout';
 import Main from './main/Main';
 import Collections from './Collections/Collections';
-//import Modal from '../../components/ui/modal/Modal';
+import Modal from '../../components/ui/modal/Modal';
 import * as actions from '../../store/actions/index';
 
 class Layout extends Component {
+    state = {
+        modals: []
+    }
     componentDidMount() {
         this.props.onAutoLogin();
+        this.setState(previousState => ({
+            ...previousState,
+            modals: [...this.props.modals]
+        }));
     }
     render() {
-        /*
-        const modals = Object.keys(this.props.modals).map(k => {
-            if (this.props.modals[k].active) {
-                return (
-                    <Modal 
-                        key={k}
-                        message={this.props.modals[k].message}
-                        modalId={k}/>
-                );
-            }
+        const modals = this.props.modals.map((modal, i) => {
+            console.log(modal.data.id);
+            modal.data.index = i;
+            return (
+                <Modal 
+                    key={modal.data.id}
+                    actions={modal.actions}
+                    data={modal.data}/>
+            );
         });
-        */
         let routes = (
             <Switch>
-                <Route path="/auth" exact component={Auth}/>
-                <Redirect to="/auth"/>
+                <Route path='/auth' exact component={Auth}/>
+                <Redirect to='/auth'/>
             </Switch>
         );
         if (this.props.isAuthenticated) {
             routes = (
                 <Switch>
-                    <Route path="/u" exact component={Collections}/>
-                    <Route path="/logout" exact component={Logout}/>
-                    <Route path="/auth" exact component={Auth}/>
-                    <Redirect to="/auth"/>
+                    <Route path='/u' exact component={Collections}/>
+                    <Route path='/logout' exact component={Logout}/>
+                    <Route path='/auth' exact component={Auth}/>
+                    <Redirect to='/auth'/>
                 </Switch>
             );
         }
         return (
             <Aux>
                 {routes}
-                {/*modals*/}
+                {modals}
             </Aux>
         );
     }

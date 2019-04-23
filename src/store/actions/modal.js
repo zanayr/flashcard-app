@@ -1,21 +1,17 @@
 import * as actionTypes from './actionTypes';
+import createHashId from '../../helper/id';
 
-export const modalCreate = (message) => {
+export const modalCreate = (payload) => {
+    payload.data.id = createHashId();
     return {
         type: actionTypes.MODAL_CREATE,
-        payload: {
-            message: message,
-            modalId: Math.floor(((Date.now() + Math.random()) * 10)).toString(36).substr(2, 9)
-        }
+        payload: payload
     };
 };
 
-export const modalConfirm = (id) => {
-    console.log(id);
+export const modalClear = (payload) => {
     return {
-        type: actionTypes.MODAL_CONFIRM,
-        payload: {
-            id: id
-        }
+        type: actionTypes.MODAL_CLEAR,
+        payload: payload
     };
 };

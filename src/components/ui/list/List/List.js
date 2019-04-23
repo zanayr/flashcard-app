@@ -45,7 +45,7 @@ class List extends Component {
     }
 
     handle_onDeleteClick = (payload) => {
-        return;
+        this.props.onDelete(payload);
     }
     handle_onEditClick = (payload) => {
         this.props.onEdit({

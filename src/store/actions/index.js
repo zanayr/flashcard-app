@@ -2,15 +2,15 @@ export {
     auth_async,
     authLogout,
     authCheckState_async
-} from "./auth";
+} from './auth';
 
 export {
     deckGet_async,
     deckPost_async,
     deckUpdate_async
-} from "./deck";
+} from './deck';
 
 export {
     modalCreate,
-    modalConfirm
-} from "./modal";
+    modalClear
+} from './modal';

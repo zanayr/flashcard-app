@@ -1,28 +1,25 @@
+import React, {Component} from 'react';
 
-import React from 'react';
-
-import Modal from '../../components/ui/modal/Modal';
 import Aux from '../aux/Aux';
+import Modal from '../../components/ui/modal/Modal';
 
 const withModals = (WrappedComponent) => {
-    /*
-    const modalStack = Object.keys(props.modals).map(k => {
-        return <Modal
-            key={k}
-            message={modals[k].message}
-            modalId={k}/>
-    });
-    */
-   console.log(props);
-    return (props) => {
-        return (
-            <Aux>
-                {/*{modalStack}*/}
-                <WrappedComponent {...props} />
-            </Aux>
-        );
+    const modals = [];
+
+    const handle_onModalRequest = (payload) => {
+        modals.push((
+            <Modal
+                actions={payload.actions}
+                data={payload.data}/>
+        ));
     }
-    
+
+    return (
+        <Aux>
+            <WrappedComponent requestModal={handle_onModalRequest} {...props}/>
+            {modals}
+        </Aux>
+    );
 }
 
 export default withModals;
