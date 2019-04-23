@@ -33,7 +33,6 @@ const aside = (props) => {
             asideContent = (
                 <QuickEditAside
                     data={props.data}
-                    onChange={props.onChange}
                     onClose={props.onClose}/>
             );
             break;
@@ -45,9 +44,7 @@ const aside = (props) => {
     }
 
     return (
-        <aside
-            className={cssClasses.join(' ')}
-            onClick={(e) => props.onClick({event: e})}>
+        <aside className={cssClasses.join(' ')}>
             <div className={GlobalCSS.Inner}>
                 {asideContent}
             </div>

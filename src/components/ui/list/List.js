@@ -1,46 +1,47 @@
-import React, {Component} from "react";
+import React, {Component} from 'react';
 
-import Aux from "../../../hoc/aux/Aux";
-//import Refresh from "../../ui/refresh/Refresh";
-import ListItem from "../list/item/ListItem";
-import Throbber from "../../ui/throbber/Throbber";
+import Aux from '../../../hoc/aux/Aux';
+import ListItem from '../list/item/ListItem';
 
-import globalCSS from "../../../Global.module.css";
-import listCSS from "./List.module.css";
+import globalCSS from '../../../Global.module.css';
+import listCSS from './List.module.css';
 
 class List extends Component {
     state = {
         isSingle: false,
-        selectedItemIDs: [],
-        items: this.props.listItems
+        selectedItemIDs: []
     }
 
-    _isSingleUpdate = (id) => {
+    updateIsSingle = () => {
         this.setState(prev => ({
             ...prev,
             isSingle: prev.selectedItemIDs.length === 1
-        }), () => {
-            if (this.state.isSingle) {
-                this.props.onSelect(id);
-            } else {
-                this.props.onSelect('');
-            }
-        });
+        }));
     }
-    _itemSelect = (id) => {
+    selectItem = (id) => {
         if (this.state.selectedItemIDs.indexOf(id) > -1) {
             this.setState(prev => ({
                 ...prev,
                 selectedItemIDs: prev.selectedItemIDs.filter(i => i !== id)
             }), () => {
-              this._isSingleUpdate(id);
+                this.updateIsSingle(id);
+                this.props.onSelect({
+                    data: {
+                        id: id
+                    }
+                });
             });
         } else {
             this.setState(prev => ({
                 ...prev,
                 selectedItemIDs: [...prev.selectedItemIDs, id]
             }), () => {
-              this._isSingleUpdate(id);
+                this.updateIsSingle();
+                this.props.onSelect({
+                    data: {
+                        id: id
+                    }
+                });
             });
         }
     }
@@ -58,25 +59,34 @@ class List extends Component {
         });
     }
 
-
-    handle_onDeleteClicked = (id) => {
-        //  <-- wrap in a confirm box promise here
-        this._itemDelete(id);
+    handle_onEditClick = (data) => {
+        this.props.onEdit({
+            data: {
+                id: data
+            },
+            state: 99
+        });
     }
-    handle_onItemSelected = (id) => {
-        this._itemSelect(id);
+    handle_onDeleteClick = (data) => {
+        this._itemDelete(data);
+    }
+    handle_onItemSelect = (data) => {
+        this.selectItem(data.id);
     }
 
     render() {
-        let items = this.props.listItems.map(item => {
+        let items = Object.keys(this.props.listItems).map(key => {
             return (
                 <ListItem
-                    data={{...item}}
-                    key={item.id}
+                    data={{
+                        ...this.props.listItems[key],
+                        id: key
+                    }}
+                    key={key}
                     onDelete={this.handle_onDeleteClicked}
-                    onEdit={this.props.onEdit}
-                    onSelect={this.handle_onItemSelected}
-                    selected={this.state.selectedItemIDs.indexOf(item.id) > -1}
+                    onEdit={this.handle_onEditClick}
+                    onSelect={this.handle_onItemSelect}
+                    selected={this.state.selectedItemIDs.indexOf(key) > -1}
                     single={this.state.isSingle}/>
             );
         });

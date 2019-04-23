@@ -8,14 +8,16 @@ import ToolbarCSS from './Toolbar.module.css';
 const toolbar = (props) => {
     const handle_onAClicked = () => {
         const data = {
-            asideState: 2
+            data: {},
+            state: 2
         }
 
         props.onA(data);
     }
     const handle_onBClicked = () => {
         const data = {
-            asideState: 3
+            data: {},
+            state: 3
         }
 
         props.onB(data);

@@ -1,7 +1,7 @@
 import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
-    decks: [],
+    decks: {},
     error: null,
     isLoading: false,
 };
@@ -41,9 +41,17 @@ const deckPostStart = (state, action) => {
     };
 };
 const deckPostSuccess = (state, action) => {
+    console.log(action.payload);
     return {
         ...state,
-        decks: state.decks.concat(action.payload),
+        decks: {
+            ...state.decks,
+            [action.payload.id]: {
+                userId: action.payload.userId,
+                title: action.payload.title,
+                details: action.payload.details
+            }
+        },
         isLoading: false,
     };
 };

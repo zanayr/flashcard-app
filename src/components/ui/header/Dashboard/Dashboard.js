@@ -13,7 +13,8 @@ const dashboard = (props) => {
     }
     const handle_onNavigationClicked = () => {
         const data = {
-            asideState: 1
+            data: {},
+            state: 1
         }
 
         props.onNavigation(data);

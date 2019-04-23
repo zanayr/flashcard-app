@@ -27,12 +27,9 @@ export const deckGet_async = (token, userId) => {
         const parameters = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
         axios.get("/decks.json" + parameters)
         .then(response => {
-            const decks = [];
+            const decks = {};
             for (let key in response.data) {
-                decks.push({
-                    ...response.data[key],
-                    id: key
-                });
+                decks[key] = {...response.data[key]}
             }
             dispatch(deckGetSuccess(decks));
         })

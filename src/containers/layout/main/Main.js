@@ -27,13 +27,10 @@ class Main extends Component {
         },
         action: {
             isActive: true,
-            state: 0
+            state: false
         },
-        decks: {
-            all: this.props.data,
-            isActive: true,
-            selected: [],
-        },
+        decks: this.props.data,
+        selectedIDs: [],
         modal: {
             data: {
                 cancel: '',
@@ -50,305 +47,154 @@ class Main extends Component {
         }
     }
 
-    // Methods...
-    _deckDelete = (id) => {
-        //  Delete a selected deck, replace with an async redux action
-        let decks = this.state.decks.all.filter(d => d.id !== id);
-        this.setState(prev => ({
-            ...prev,
-            decks: {
-                ...prev.decks,
-                all: decks
+    toggleAside = () => {
+        this.setState(previousState => ({
+            ...previousState,
+            aside: {
+                ...previousState.aside,
+                isActive: !previousState.aside.isActive
             }
         }));
     }
-    _deckUpdate = (id, prop, value) => {
-        let deck = this.state.decks.all.find(d => d.id === id);
-        deck[prop] = value;
-        
-        //  Update the state...
-        this.setState(prev => ({
-            ...prev,
-            decks: {
-                ...prev.decks,
-
+    updateAsideData = (asideData) => {
+        this.setState(previousState => ({
+            ...previousState,
+            aside: {
+                ...previousState.aside,
+                data: asideData
             }
-        }))
+        }));
     }
-
-    _collectionUpdate = (id, prop, value) => {
-        this.setState(prev => ({
-            ...prev,
-            collections: [
-                ...prev.collections
-            ]
+    updateAside = (asideData) => {
+        this.setState(previousState => ({
+            ...previousState,
+            aside: {
+                ...previousState.aside,
+                data: asideData.data,
+                state: asideData.state
+            }
         }));
     }
 
-    //  Action Button Methods
-    _collectionCreate = () => {
-        /*
-        this.setState(prev => ({
-            ...prev,
-            collections: {
-                ...prev.collections,
-                [_hashIdCreate()]: {
-                    details: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaq",
-                    title: "Lorem Ipsum Dolor Set"
-                }
-            }
-        }));
-        */
+    //  decks  //
+    createDeck = () => {
         const deck = {
             details: "Sed ut perspiciatis unde omnis iste natus error sit",
             userId: this.props.userId,
             title: "New Flashcard Deck"
         }
-        this.props.handle_onDeckCreated(this.props.token, deck);
+        this.props.deckPost_async(this.props.token, deck);
     }
-    _sessionStart = () => {
+    startSession = () => {
         console.log("Starting Session...");
     }
 
-    //  Aside Methods
-    _asideClose = () => {
+    //  Action  //
+    toggleAction = () => {
+        this.setState(previousState => ({
+            ...previousState,
+            action: {
+                ...previousState.action,
+                state: Object.keys(this.state.selectedIDs).length >= 1
+            }
+        }));
+    }
+
+    //  EVENT HANDLERS --------------------------------------------- EVENT HANDLERS  //
+    //  Aside //
+    handle_onAsideToggle = (data) => {
         if (this.state.aside.isActive) {
-            this.setState(prev => ({
-                ...prev,
+            if (this.state.aside.state === data.state) {
+                this.toggleAside();
+            } else {
+                this.updateAside(data);
+            }
+        } else {
+            this.updateAside(data);
+            this.toggleAside();
+        }
+    }
+    handle_onAsideClose = (data) => {
+        if (this.state.aside.isActive) {
+            this.setState(previousState => ({
+                ...previousState,
                 aside: {
-                    ...prev.aside,
-                    data: {
-                        details: '',
-                        id: '',
-                        title: ''
-                    },
+                    ...previousState.aside,
                     isActive: false
                 }
             }));
         }
     }
-    _selectedIDUpdate = (id) => {
-        this.setState(prev => ({
-            ...prev,
-            selectedCollectionID: id
-        }), () => {
-            this._asideToggle(3);
-        });
-    }
-    _asideCheck = () => {
-        if (this.state.aside.state === 3 && this.state.aside.isActive && !this.state.data) {
-            this._asideToggle(3);
+
+    //  Decks  //
+    handle_onDeckSelect = (passedData) => {
+        if (this.state.aside.state === 99 && this.state.aside.isActive) {
+            this.toggleAside();
         }
-    }
-    _asideUpdate = (value) => {
-        if (this.state.aside.state !== value) {
-            this.setState(prev => ({
-                ...prev,
-                aside: {
-                    ...prev.aside,
-                    state: value
-                }
-            }));
-        }
-    }
-    _asideToggle = (value) => {
-        if (!this.state.aside.isActive || this.state.aside.state === value) {
-            this.setState(prev => ({
-                ...prev,
-                aside: {
-                    ...prev.aside,
-                    isActive: !prev.aside.isActive
-                }
+        if (this.state.selectedIDs.indexOf(passedData.data.id) > -1) {
+            let selected = this.state.selectedIDs.filter(id => id !== passedData.data.id);
+            this.setState(previousState => ({
+                ...previousState,
+                selectedIDs: selected
             }), () => {
-                this._asideUpdate(value);
+                this.toggleAction();
             });
         } else {
-            this._asideUpdate(value);
+            this.setState(previousState => ({
+                ...previousState,
+                selectedIDs: [
+                    ...previousState.selectedIDs,
+                    passedData.data.id
+                ]
+            }), () => {
+                this.toggleAction();
+            });
         }
     }
-
-    //  Modal Methods
-    _selectedDataClear = () => {
-        return {
-            details: '',
-            id: '',
-            title: ''
-        }
+    handle_onEditClick = (data) => {
+        this.updateAside({
+            ...data,
+            data: {
+                id: data.data.id,
+                title: this.state.decks[data.data.id].title,
+                details: this.state.decks[data.data.id].details,
+                onChange: this.handle_onDeckChange
+            }
+        });
+        this.toggleAside();
     }
-    _collectionSelect(collection, callback) {
-        console.log(collection);
-        this.setState(prev => ({
-            ...prev,
-            selectedCollection: {
-                ...collection
+    handle_onDeckChange = (payload) => {
+        let decks = this.state.decks;
+        decks[payload.id][payload.updated.property] = payload.updated.value;
+        this.setState(previousState => ({
+            ...previousState,
+            decks: {
+                ...decks
             }
         }), () => {
-            if (callback) {
-                callback();
-            }
-        });
-    }
-    _modalDataClear = () => {
-        return {
-            data: {
-                cancel: '',
-                confirm: '',
-                details: [],
-                message: '',
-                title: '',
-                type: 0
-            },
-            onCancel: null,
-            onConfirm: null,
-            state: 0
-        }
-    }
-    _toggleModal = (data, callback) => {
-        this.setState(prev => ({
-            ...prev,
-            modal: {
-                ...prev.modal,
-                ...data,
-                isActive: !prev.modal.isActive
-            }
-        }), () => {
-            if (callback) {
-                callback();
-            }
+            this.setState(previousState => ({
+                ...previousState,
+                aside: {
+                    ...previousState.aside,
+                    data: {
+                        ...previousState.aside.data,
+                        [payload.updated.property]: this.state.decks[payload.id][payload.updated.property]
+                    }
+                }
+            }))
         });
     }
 
-    // Header Event Handlers
-    handle_onAClicked = () => {
-        //this._asideToggle(0);
-    }
-    handle_onBClicked = () => {
-        //this._asideToggle(1);
-    }
-    handle_onNavigationClicked = () => {
-        //this._asideToggle(2);
-    }
-    
-    //  List Event Handlers
-    handle_onClicked = (e) => {
-        e.stopPropagation();
-        //this._asideClose();
-    }
-    handle_onCollectionSelected = () => {
-        //this._asideCheck();
-    }
-    handle_onDeleteClicked = (id) => {
-        /*
-        const selected = {...this.state.collections[id], id: id};
-        const modal = {
-            data: {
-                cancel: "Cancel",
-                confirm: "Delete",
-                details: [selected.title],
-                message: "Are you sure you want to delete the following collections:",
-                title: "Are you sure?",
-                type: 0
-            },
-            onCancel: this.handle_onModalCancel,
-            onConfirm: this.handle_onModalConfirm,
-            state: 0
-        }
-        this._collectionSelect(selected, () => {
-            this._toggleModal(modal);
-        });
-        */
-    }
-    handle_onEditClicked = (id) => {
-        //this._selectedIDUpdate(id);
-        /*
-        this._collectionSelect(this.state.collections.find(i => i.id === id), () => {
-            this._asideToggle(3);
-        });
-        */
-    }
-
-    //  Action Button Event Handler
-    handle_onActionClicked = () => {
-        /*
+    //  Action Button  //
+    handle_onActionClicked = (data) => {
         if (this.state.action.state) {
-            this._sessionStart();
+            this.startSession();
         } else {
-            this._collectionCreate();
-        }
-        */
-    }
-
-    //  Aside Event Handlers
-    handle_onEditChange = (id, prop, value) => {
-        //this._collectionUpdate(id, prop, value);
-    }
-    handle_onXClicked = () => {
-        //this._asideClose();
-    }
-
-    //  Modal Event Handlers
-    handle_onModalConfirm = () => {
-        //this._toggleModal(this._modalDataClear(), this._collectionDelete);
-    }
-    handle_onModalCancel = () => {
-        /*
-        this._toggleModal(this._modalDataClear(), () => {
-            this._collectionSelect(this._selectedDataClear());
-        });
-        */
-    }
-
-    // --------------------------------------------
-    _asideUpdateState = (asideState) => {
-        this.setState(prevState => ({
-            ...prevState,
-            aside: {
-                ...prevState.aside,
-                state: asideState
-            }
-        }));
-    }
-    _asideToggle = (asideState) => {
-        this.setState(prevState => ({
-            ...prevState,
-            aside: {
-                ...prevState.aside,
-                isActive: !prevState.aside.isActive
-            }
-        }), () => {
-            this._asideUpdateState(asideState);
-        });
-    }
-    _asideClose = () => {
-        this.setState(prev => ({
-            ...prev,
-            aside: {
-                ...prev.aside,
-                data: {},
-                isActive: false
-            }
-        }));
-    }
-
-    //  EVENT HANDLERS ------------------------------------------------- EVENT HANDLERS
-    handle_onAsideToggle = (passedData) => {
-        if (this.state.aside.isActive && this.state.aside.state !== passedData.asideState) {
-            this._asideUpdateState(passedData.asideState);
-        } else {
-            this._asideToggle(passedData.asideState);
+            this.createDeck();
         }
     }
-    handle_onAsideClose = () => {
-        if (this.state.aside.isActive) {
-            this._asideClose();
-        }
-    }
-    handle_onDeckUpdate = (passedData) => {
-        return;
-    }
 
 
-    
     //  Render Method
     render() {
         return (
@@ -360,14 +206,14 @@ class Main extends Component {
                     onNavigation={this.handle_onAsideToggle}/>
                 <main
                     className={mainCSS.Main}
-                    onClick={(e) => this.handle_onAsideClose(e)}>
+                    onClick={this.handle_onAsideClose}>
                     <div className={[globalCSS.Inner, globalCSS.With_Padding].join(' ')}>
                         <List
                             header='Collections'
-                            listItems={this.state.decks.all}
-                            onDelete={this.handle_onDeleteClicked}
-                            onEdit={this.handle_onEditClicked}
-                            onSelect={this.handle_onCollectionSelected}>
+                            listItems={this.state.decks}
+                            onDelete={this.handle_onDeckDelete}
+                            onEdit={this.handle_onEditClick}
+                            onSelect={this.handle_onDeckSelect}>
                             <ActionButton
                                 active={this.state.action.isActive}
                                 onClick={this.handle_onActionClicked}
@@ -379,8 +225,7 @@ class Main extends Component {
                 <Aside
                     active={this.state.aside.isActive}
                     data={this.state.aside.data}
-                    onChange={this.handle_onDeckUpdate}
-                    onClose={this.handle_onAsideToggle}
+                    onClose={this.handle_onAsideClose}
                     state={this.state.aside.state}/>
                 <Modal
                     active={this.state.modal.isActive}
@@ -403,7 +248,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         handle_onDeckLoaded: (token, userId) => dispatch(actions.deckGet_async(token, userId)),
-        handle_onDeckCreated: (token, data) => dispatch(actions.deckPost_async(token, data))
+        deckPost_async: (token, data) => dispatch(actions.deckPost_async(token, data))
     };
 };
 

@@ -54,12 +54,19 @@ class QuickEdit extends Component {
         return isValid;
     }
     _formUpdate = (form, valid, label, value) => {
-        this.setState(prev => ({
-            ...prev,
+        const payload = {
+            id: this.props.data.id,
+            updated: {
+                property: label,
+                value: value
+            }
+        }
+        this.setState(previousState => ({
+            ...previousState,
             form: form,
             valid: valid
         }), () => {
-            this.props.onChange(this.props.data.id, label, value);
+            this.props.data.onChange(payload);
         });
     }
 
@@ -93,7 +100,7 @@ class QuickEdit extends Component {
         return (
             <form className={quickEditCSS.QucikEdit_Form}>
                 <div className={globalCSS.Inner}>
-                    <Column just="Between">
+                    <Column just='Between'>
                         {
                             form.map(input => (
                                     <Input

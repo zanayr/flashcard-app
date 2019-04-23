@@ -11,12 +11,10 @@ const quickEditAside = (props) => {
         <Aux>
             <Row just='Between'>
                 <h3>Quick Edit</h3>
-                <IconButton onClick={this.props.onClose}>X</IconButton>
+                <IconButton onClick={props.onClose}>X</IconButton>
             </Row>
             <Column>
-                <QuickEditForm
-                    data={props.data}
-                    onChange={props.onChange}/>
+                <QuickEditForm data={props.data}/>
             </Column>
         </Aux>
     );
