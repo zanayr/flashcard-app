@@ -14,23 +14,28 @@ import modalCSS from './Modal.module.css';
 
 const modal = (props) => {
     let details = [];
+    /*
     if (!props.data.isActive) {
         return null;
-    }
+    }*/
     if (props.data.details) {
         details = props.data.details.map(detail => {
             return (<li key={createHashId()}>{detail}</li>);
         });
     }
 
-    const handle_onConfirm = () => {
+    const handle_onCancel = () => {
+        props.actions.onCancel();
         props.clearModal_async(props);
-        props.actions.onConfirm({...props.data});
+    }
+    const handle_onConfirm = () => {
+        props.actions.onConfirm();
+        props.clearModal_async(props);
     }
 
     return (
         <Aux>
-            <Overlay active={props.data.isActive}/>
+            <Overlay active={true}/>
             <div className={modalCSS.Modal}
                 key={createHashId()}>
                 <div className={globalCSS.Inner}>
@@ -41,7 +46,7 @@ const modal = (props) => {
                     <p>{props.data.message}</p>
                     {details.length ? (<ul>{details}</ul>) : null}
                     <Row just={props.data.cancel ? 'Between' : 'End'}>
-                        {props.data.cancel ? (<Button onClick={props.actions.onCancel}>{props.data.cancel}</Button>) : null}
+                        {props.data.cancel ? (<Button onClick={handle_onCancel}>{props.data.cancel}</Button>) : null}
                         <Button onClick={handle_onConfirm}>{props.data.confirm ? props.data.confirm : 'OK'}</Button>
                     </Row>
                 </div>

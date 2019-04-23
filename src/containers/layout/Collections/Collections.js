@@ -16,6 +16,7 @@ import Aside from '../../../components/ui/asides/Aside';
 import '../../../style.css';
 import globalCSS from '../../../Global.module.css';
 import CollectionsCSS from './Collections.module.css';
+import { resolveNaptr } from 'dns';
 
 class Collections extends Component {
     state = {
@@ -124,19 +125,22 @@ class Collections extends Component {
         }));
     }
     handle_onListDeleteClick = (payload) => {
-        console.log(payload);
         this.props.createModal_async({
-            data: {
-                isActive: true,
-                type: 0,
-                title: 'Greetings',
-                message: 'Hello world!',
-                confirm: 'Good-bye'
-            },
             actions: {
                 onConfirm: () => {
-                    console.log('Farewell');
+                    console.log('Deleting...');
+                },
+                onCancel: () => {
+                    console.log('Never mind...');
                 }
+            },
+            data: {
+                type: 1,
+                title: 'Caution',
+                message: 'Once you delete a collection it cannot be recovered. Are you sure you want to delete the following collections: ',
+                details: [payload.data.title],
+                confirm: 'Delete',
+                cancel: 'Cancel'
             }
         });
     }
