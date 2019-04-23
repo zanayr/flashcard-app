@@ -6,6 +6,7 @@ import Aux from '../../hoc/aux/Aux';
 import Auth from './auth/Auth';
 import Logout from './auth/logout/Logout';
 import Main from './main/Main';
+import Collections from './Collections/Collections';
 //import Modal from '../../components/ui/modal/Modal';
 import * as actions from '../../store/actions/index';
 
@@ -35,7 +36,7 @@ class Layout extends Component {
         if (this.props.isAuthenticated) {
             routes = (
                 <Switch>
-                    <Route path="/u" exact component={Main}/>
+                    <Route path="/u" exact component={Collections}/>
                     <Route path="/logout" exact component={Logout}/>
                     <Route path="/auth" exact component={Auth}/>
                     <Redirect to="/auth"/>

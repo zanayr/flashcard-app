@@ -9,6 +9,7 @@ import _hashIdCreate from "../../../helper/id";
 
 import Aux from "../../../hoc/aux/Aux";
 import Header from "../../../components/ui/Header/Header";
+import Throbber from '../../../components/ui/throbber/Throbber';
 import List from "../../../components/ui/list/List";
 import ActionButton from "../../../components/ui/button/action/ActionButton";
 import Aside from "../../../components/ui/asides/Aside";
@@ -34,6 +35,7 @@ class Main extends Component {
         },
         decks: this.props.data,
         selectedIDs: [],
+        isLoading: true,
         modal: {
             data: {
                 cancel: '',
@@ -48,6 +50,14 @@ class Main extends Component {
             onCancel: null,
             state: 0
         }
+    }
+
+    componentDidMount () {
+        this.setState(previousState => ({
+            ...previousState,
+            decks: {...this.props.data},
+            isLoading: false,
+        }));
     }
 
     //  Aside  //
@@ -245,6 +255,23 @@ class Main extends Component {
 
     //  Render Method
     render() {
+        let list = (<Throbber/>);
+        if (!this.state.isLoading) {
+            list = (
+                <List
+                    header='Collections'
+                    listItems={this.state.decks}
+                    onDelete={this.handle_onDeckDelete}
+                    onEdit={this.handle_onEditClick}
+                    onSelect={this.handle_onDeckSelect}>
+                    <ActionButton
+                        active={this.state.action.isActive}
+                        onClick={this.handle_onActionClicked}
+                        state={this.state.action.state}
+                        values={['Create', 'Study']}/>
+                </List>
+            )
+        }
         return (
             <Aux>
                 <Header
@@ -256,18 +283,7 @@ class Main extends Component {
                     className={mainCSS.Main}
                     onClick={this.handle_onAsideClose}>
                     <div className={[globalCSS.Inner, globalCSS.With_Padding].join(' ')}>
-                        <List
-                            header='Collections'
-                            listItems={this.state.decks}
-                            onDelete={this.handle_onDeckDelete}
-                            onEdit={this.handle_onEditClick}
-                            onSelect={this.handle_onDeckSelect}>
-                            <ActionButton
-                                active={this.state.action.isActive}
-                                onClick={this.handle_onActionClicked}
-                                state={this.state.action.state}
-                                values={['Create', 'Study']}/>
-                        </List>
+                        {list}
                     </div>
                 </main>
                 <Aside

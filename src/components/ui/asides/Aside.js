@@ -16,7 +16,10 @@ const aside = (props) => {
     switch (props.state) {
         case 1:
             asideContent = (
-                <NavigationAiside onClose={props.onClose}/>
+                <NavigationAiside
+                    actions={props.actions}
+                    data={props.data}
+                    onClose={props.onClose}/>
             );
             break;
         case 2:
@@ -32,6 +35,7 @@ const aside = (props) => {
         case 99:
             asideContent = (
                 <QuickEditAside
+                    actions={props.actions}
                     data={props.data}
                     onClose={props.onClose}/>
             );

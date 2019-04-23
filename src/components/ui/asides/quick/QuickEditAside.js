@@ -14,7 +14,9 @@ const quickEditAside = (props) => {
                 <IconButton onClick={props.onClose}>X</IconButton>
             </Row>
             <Column>
-                <QuickEditForm data={props.data}/>
+                <QuickEditForm
+                    actions={props.actions}
+                    data={props.data}/>
             </Column>
         </Aux>
     );

@@ -17,9 +17,7 @@ const listItem = (props) => {
     const handle_onClicked = (e) => {
         e.stopPropagation();
 
-        props.onSelect({
-            id: _id
-        });
+        props.onSelect(_id);
     }
     const handle_onEditClicked = () => {
         props.onEdit(_id);

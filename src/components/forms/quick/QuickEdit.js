@@ -56,8 +56,8 @@ class QuickEdit extends Component {
     }
     _formUpdate = (form, valid, label, value) => {
         const payload = {
-            id: this.props.data.id,
-            updated: {
+            data: {
+                id: this.props.data.id,
                 property: label,
                 value: value
             }
@@ -67,7 +67,7 @@ class QuickEdit extends Component {
             form: form,
             valid: valid
         }), () => {
-            this.props.data.onChange(payload);
+            this.props.actions.onChange(payload);
         });
     }
 
@@ -91,13 +91,13 @@ class QuickEdit extends Component {
     }
     handle_onSubmit = () => {
         const payload = {
-            id: this.props.data.id,
             data: {
+                id: this.props.data.id,
                 title: this.props.data.title,
                 details: this.props.data.details
             }
         }
-        this.props.data.onSubmit(payload);
+        this.props.actions.onSubmit(payload);
     }
 
     render() {

@@ -1,5 +1,7 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../database/deck';
+import axios from '../Database';
+
+import DeckViewModel from '../../ViewModels/Deck';
 
 
 //  GET  //
@@ -26,12 +28,11 @@ export const deckGetStart = () => {
 export const deckGet_async = (token, userId) => {
     return dispatch => {
         dispatch(deckGetStart());
-        const parameters = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
-        axios.get('/decks.json' + parameters)
+        axios.get('/decks.json?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"')
         .then(response => {
             const decks = {};
             for (let key in response.data) {
-                decks[key] = {...response.data[key]}
+                decks[key] = {...response.data[key]};
             }
             dispatch(deckGetSuccess(decks));
         })
@@ -104,8 +105,13 @@ export const deckUpdateSuccess = (id, deck) => {
 //  Update Async  //
 export const deckUpdate_async = (token, user, payload) => {
     return dispatch => {
-        dispatch(deckUpdateStart());
-        axios.put('/decks/' + payload.id + '.json?auth=' + token, {...payload.data, userId: user})
+        console.log(payload.data.id);
+        //dispatch(deckUpdateStart());
+        axios.put('/decks/' + payload.data.id + '.json?auth=' + token, {
+            userId: user,
+            title: payload.data.title,
+            details: payload.data.details
+        })
         .then(response => {
             dispatch(deckUpdateSuccess(response.data.name, payload));
         })
