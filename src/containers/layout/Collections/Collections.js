@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import _deckConnection from '../../../database/deck';
 
 import * as actions from '../../../store/actions/index';
-import _hashIdCreate from '../../../helper/id';
+import createHashId from '../../../helper/id';
 
 import Aux from '../../../hoc/aux/Aux';
 import Header from '../../../components/ui/Header/Header';
@@ -16,7 +16,6 @@ import Aside from '../../../components/ui/asides/Aside';
 import '../../../style.css';
 import globalCSS from '../../../Global.module.css';
 import CollectionsCSS from './Collections.module.css';
-import { resolveNaptr } from 'dns';
 
 class Collections extends Component {
     state = {
@@ -30,7 +29,6 @@ class Collections extends Component {
             state: 0
         },
         collections: {
-            created: [],
             deleted: [],
             selected: []
         }
@@ -210,7 +208,6 @@ class Collections extends Component {
 
     //  RENDER METHOD  //
     render () {
-        console.log('Selected Items:', this.state.collections.selected);
         let list = (<Throbber/>);
         if (!this.props.loading) {
             let collection = {...this.props.collection};

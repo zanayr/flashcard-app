@@ -23,7 +23,6 @@ class Layout extends Component {
     }
     render() {
         const modals = this.props.modals.map((modal, i) => {
-            console.log(modal.data.id);
             modal.data.index = i;
             return (
                 <Modal 

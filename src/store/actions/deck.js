@@ -2,7 +2,7 @@ import * as actionTypes from './actionTypes';
 import axios from '../Database';
 
 
-//  UPDATE  //
+//  DELETE  //
 export const deckDeleteFail = (error) => {
     return {
         type: actionTypes.DECK_DELETE_FAIL,
@@ -19,10 +19,6 @@ export const deckDeleteSuccess = (id, deck) => {
         payload: data
     };
 };
-/*
-axios.delete(`${url}/${firebasePostId}.json`).then(response => {
-    console.log(response)
-})*/
 //  Delete Async  //
 export const deckDelete_async = (token, payload) => {
     return dispatch => {
