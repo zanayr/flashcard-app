@@ -3,7 +3,7 @@
     height: 64px;
     right: -72px;
     position: absolute;
-    transition: right 0.33s ease;
+    transition: right 0.333s ease;
     width: 64px;
 }
 .Delete {

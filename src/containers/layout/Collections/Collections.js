@@ -30,10 +30,15 @@ class Collections extends Component {
             state: 0
         },
         collections: {
+            created: [],
+            deleted: [],
             selected: []
         }
     }
 
+    deleteCollection (payload) {
+        this.props.deleteCollection_async(this.props.token, payload);
+    }
     getCollection () {
         this.props.getCollection_async(this.props.token, this.props.userId);
     }
@@ -105,6 +110,17 @@ class Collections extends Component {
     }
 
     //  LIST EVENT HANDLERS  //
+    addDeleted (payload) {
+        this.setState(previousState => ({
+            ...previousState,
+            collections: {
+                ...previousState.collections,
+                deleted: [...previousState.collections.deleted, payload.data.id]
+            }
+        }), () => {
+            console.log(this.state.collections.deleted);
+        });
+    }
     addSelected (payload) {
         this.setState(previousState => ({
             ...previousState,
@@ -128,7 +144,8 @@ class Collections extends Component {
         this.props.createModal_async({
             actions: {
                 onConfirm: () => {
-                    console.log('Deleting...');
+                    this.addDeleted(payload);
+                    this.deleteCollection(payload);
                 },
                 onCancel: () => {
                     console.log('Never mind...');
@@ -176,12 +193,14 @@ class Collections extends Component {
 
     //  RENDER METHOD  //
     render () {
+        console.log('Deleted Items:', this.state.collections.deleted);
         let list = (<Throbber/>);
         if (!this.props.loading) {
             let collection = {...this.props.collection};
             list = (
                 <List
                     backingCollection={collection}
+                    deletedItems={this.state.collections.deleted}
                     onChange={this.handle_onListItemChange}
                     onDelete={this.handle_onListDeleteClick}
                     onEdit={this.handle_onListEditClick}
@@ -230,6 +249,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
+        deleteCollection_async: (token, payload) => dispatch(actions.deckDelete_async(token, payload)),
         getCollection_async: (token, userId) => dispatch(actions.deckGet_async(token, userId)),
         insertCollection_async: (token, data) => dispatch(actions.deckPost_async(token, data)),
         updateCollection_async: (token, user, payload) => dispatch(actions.deckUpdate_async(token, user, payload)),

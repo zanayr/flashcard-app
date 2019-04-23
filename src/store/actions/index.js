@@ -5,6 +5,7 @@ export {
 } from './auth';
 
 export {
+    deckDelete_async,
     deckGet_async,
     deckPost_async,
     deckUpdate_async

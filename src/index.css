@@ -12,3 +12,7 @@ html, body, body > div {
   height: 100%;
 }
 
+html, body {
+  background-color: blue;
+}
+

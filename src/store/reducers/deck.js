@@ -6,6 +6,27 @@ const initialState = {
     isLoading: false,
 };
 
+
+//  UPDATE  //
+const deckDeleteFail = (state, action) => {
+    return {
+        ...state,
+        error: action.payload,
+        isLoading: false
+    };
+};
+const deckDeleteSuccess = (state, action) => {
+    let decks = state.decks;
+    delete decks[action.payload.data.id];
+    return {
+        ...state,
+        decks: {
+            ...decks
+        },
+        isLoading: false,
+    };
+};
+
 //  GET  //
 const deckGetFail = (state, action) => {
     return {
@@ -89,6 +110,10 @@ const deckUpdateSuccess = (state, action) => {
 //  REDUCER  //
 const reducer = (state=initialState, action) => {
     switch (action.type) {
+        case actionTypes.DECK_DELETE_FAIL:
+            return deckDeleteFail(state, action);
+        case actionTypes.DECK_DELETE_SUCCESS:
+            return deckDeleteSuccess(state, action);
         case actionTypes.DECK_GET_FAIL:
             return deckGetFail(state, action);
         case actionTypes.DECK_GET_START:

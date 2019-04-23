@@ -9,7 +9,8 @@ import listCSS from './List.module.css';
 class List extends Component {
     state = {
         isSingle: false,
-        selectedItemIDs: []
+        selectedItemIDs: [],
+        deletedItems: [...this.props.deletedITems]
     }
 
     updateIsSingle = () => {
@@ -73,6 +74,7 @@ class List extends Component {
     }
 
     render() {
+        console.log('***', this.state.deletedItems);
         let items = Object.keys(this.props.listItems).map(key => {
             return (
                 <ListItem
@@ -81,6 +83,7 @@ class List extends Component {
                         id: key
                     }}
                     key={key}
+                    deleted={this.state.deletedItems.indexOf(key) > -1}
                     onDelete={this.handle_onDeleteClicked}
                     onEdit={this.handle_onEditClick}
                     onSelect={this.handle_onItemSelect}

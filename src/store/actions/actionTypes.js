@@ -3,6 +3,8 @@ export const AUTH_LOGOUT = 'AUTH_LOGOUT';
 export const AUTH_START = 'AUTH_START';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 
+export const DECK_DELETE_FAIL = 'DECK_DELETE_FAIL';
+export const DECK_DELETE_SUCCESS = 'DECK_DELETE_SUCCESS';
 export const DECK_GET_FAIL = 'DECK_GET_FAIL';
 export const DECK_GET_START = 'DECK_GET_START';
 export const DECK_GET_SUCCESS = 'DECK_GET_SUCCESS';

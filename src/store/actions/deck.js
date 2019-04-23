@@ -1,7 +1,40 @@
 import * as actionTypes from './actionTypes';
 import axios from '../Database';
 
-import DeckViewModel from '../../ViewModels/Deck';
+
+//  UPDATE  //
+export const deckDeleteFail = (error) => {
+    return {
+        type: actionTypes.DECK_DELETE_FAIL,
+        payload: error
+    };
+};
+export const deckDeleteSuccess = (id, deck) => {
+    const data = {
+        ...deck,
+        id: id
+    }
+    return {
+        type: actionTypes.DECK_DELETE_SUCCESS,
+        payload: data
+    };
+};
+/*
+axios.delete(`${url}/${firebasePostId}.json`).then(response => {
+    console.log(response)
+})*/
+//  Delete Async  //
+export const deckDelete_async = (token, payload) => {
+    return dispatch => {
+        axios.delete('/decks/' + payload.data.id + '.json?auth=' + token)
+        .then(response => {
+            dispatch(deckDeleteSuccess(response.data.name, payload));
+        })
+        .catch(error => {
+            dispatch(deckDeleteFail(error));
+        });
+    };
+};
 
 
 //  GET  //
@@ -105,8 +138,6 @@ export const deckUpdateSuccess = (id, deck) => {
 //  Update Async  //
 export const deckUpdate_async = (token, user, payload) => {
     return dispatch => {
-        console.log(payload.data.id);
-        //dispatch(deckUpdateStart());
         axios.put('/decks/' + payload.data.id + '.json?auth=' + token, {
             userId: user,
             title: payload.data.title,

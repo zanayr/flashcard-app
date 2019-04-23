@@ -101,6 +101,7 @@ class List extends Component {
                         ...this.state.collection[key],
                         id: key
                     }}
+                    deleted={this.props.deletedItems.indexOf(key) > -1}
                     key={key}
                     onDelete={this.handle_onDeleteClick}
                     onEdit={this.handle_onEditClick}

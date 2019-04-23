@@ -2,10 +2,9 @@
     background-color: white;
     height: 64px;
     overflow: hidden;
+    top: auto;
+    transition: height 0.666s ease 0.333s;
     width: 100%;
-}
-.Selected {
-    background-color: pink;
 }
 .List_Item > div {
     align-items: center;
@@ -16,7 +15,23 @@
 }
 .List_Item h3 {
     margin-bottom: 2px;
+    opacity: 1;
+    transition: opacity 0.167s ease 0.333s;
 }
 .List_Item p {
     margin-top: 2px;
+    opacity: 1;
+    transition: opacity 0.167s ease 0.333s;
+}
+
+
+.Selected {
+    background-color: pink;
+}
+.Deleted {
+    height: 0px;
+}
+.Deleted h3,
+.Deleted p {
+    opacity: 0;
 }

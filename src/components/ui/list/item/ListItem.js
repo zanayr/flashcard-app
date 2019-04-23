@@ -3,45 +3,46 @@ import React from 'react';
 import Column from '../../../structure/column/Column';
 import QuickButton from '../../button/quick/QuickButton';
 
-import globalCSS from '../../../../Global.module.css';
-import listItemCSS from './ListItem.module.css';
+import GlobalCSS from '../../../../Global.module.css';
+import ListItemCSS from './ListItem.module.css';
 
 const listItem = (props) => {
-    const _id = props.data.id;
-    const _userId = props.data.userId;
-    let cssClasses = [listItemCSS.List_Item];
+    let cssClasses = [ListItemCSS.List_Item];
     if (props.selected) {
-        cssClasses = [...cssClasses, listItemCSS.Selected];
+        cssClasses = [...cssClasses, ListItemCSS.Selected];
+    }
+    if (props.deleted) {
+        cssClasses = [ListItemCSS.List_Item, ListItemCSS.Deleted];
     }
 
     const handle_onClicked = (e) => {
         e.stopPropagation();
 
-        props.onSelect(_id);
+        props.onSelect(props.data.id);
     }
     const handle_onEditClicked = () => {
-        props.onEdit(_id);
+        props.onEdit(props.data.id);
     }
     const handle_onDeleteClicked = () => {
-        props.onDelete(_id);
+        props.onDelete(props.data.id);
     }
 
     return (
         <div
             className={cssClasses.join(' ')}
             onClick={(e) => handle_onClicked(e)}>
-            <div className={globalCSS.Inner}>
+            <div className={GlobalCSS.Inner}>
                 <Column just='Center' align='Start'>
                     <h3>{props.data.title}</h3>
                     <p>{props.data.details}</p>
                 </Column>
                 <QuickButton
-                    active={props.selected && props.single}
+                    active={props.selected && props.single && !props.deleted}
                     onClick={handle_onEditClicked}>
                     Edit
                 </QuickButton>
                 <QuickButton
-                    active={props.selected && props.single}
+                    active={props.selected && props.single && !props.deleted}
                     delete
                     onClick={handle_onDeleteClicked}>
                     Delete
