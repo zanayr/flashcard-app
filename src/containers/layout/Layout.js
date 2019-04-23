@@ -7,6 +7,7 @@ import Auth from './auth/Auth';
 import Logout from './auth/logout/Logout';
 import Main from './main/Main';
 import Collections from './Collections/Collections';
+import Inspector from '../Inspector/Inspector';
 import Modal from '../../components/ui/modal/Modal';
 import * as actions from '../../store/actions/index';
 
@@ -41,6 +42,7 @@ class Layout extends Component {
             routes = (
                 <Switch>
                     <Route path='/u' exact component={Collections}/>
+                    <Route path='/u/inspect' exact component={Inspector}/>
                     <Route path='/logout' exact component={Logout}/>
                     <Route path='/auth' exact component={Auth}/>
                     <Redirect to='/auth'/>

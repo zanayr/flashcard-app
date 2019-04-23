@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import NavigationAiside from './navigation/NavigationAside';
-import QuickEditAside from './quick/QuickEditAside';
+import QuickInspectAside from './quick/QuickInspectAside';
 
 import GlobalCSS from '../../../Global.module.css';
 import AsideCSS from './Aside.module.css';
@@ -34,7 +34,7 @@ const aside = (props) => {
             break;
         case 99:
             asideContent = (
-                <QuickEditAside
+                <QuickInspectAside
                     actions={props.actions}
                     data={props.data}
                     onClose={props.onClose}/>
