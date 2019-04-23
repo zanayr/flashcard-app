@@ -29,6 +29,9 @@ class Main extends Component {
             isActive: true,
             state: false
         },
+        quick: {
+            original: {}
+        },
         decks: this.props.data,
         selectedIDs: [],
         modal: {
@@ -47,6 +50,7 @@ class Main extends Component {
         }
     }
 
+    //  Aside  //
     toggleAside = () => {
         this.setState(previousState => ({
             ...previousState,
@@ -56,37 +60,63 @@ class Main extends Component {
             }
         }));
     }
-    updateAsideData = (asideData) => {
+    closeAside = () => {
         this.setState(previousState => ({
             ...previousState,
             aside: {
                 ...previousState.aside,
-                data: asideData
+                isActive: false
             }
         }));
     }
-    updateAside = (asideData) => {
+    updateAside = (payload) => {
         this.setState(previousState => ({
             ...previousState,
             aside: {
                 ...previousState.aside,
-                data: asideData.data,
-                state: asideData.state
+                data: {
+                    id: payload.id,
+                    title: payload.data.title,
+                    details: payload.data.details,
+                    onChange: payload.action,
+                    onSubmit: this.handle_onDeckUpdate
+                },
+                state: payload.state
             }
         }));
     }
 
-    //  decks  //
-    createDeck = () => {
-        const deck = {
-            details: "Sed ut perspiciatis unde omnis iste natus error sit",
-            userId: this.props.userId,
-            title: "New Flashcard Deck"
-        }
-        this.props.deckPost_async(this.props.token, deck);
+    //  Quick Edit  //
+    updateQuick = (payload) => {
+        this.setState(previousState => ({
+            ...previousState,
+            quick: {
+                ...previousState.quick,
+                original: {
+                    title: payload.data.title,
+                    details: payload.data.details
+                }
+            }
+        }));
     }
-    startSession = () => {
-        console.log("Starting Session...");
+
+    //  Decks  //
+    resetDeck = (payload) => {
+        let deck = this.state.decks[payload.id];
+        Object.keys(this.state.quick.original).map(key => {
+            deck[key] = this.state.quick.original[key];
+        });
+
+        this.setState(previousState => ({
+            ...previousState,
+            decks: {
+                ...previousState.decks,
+                [payload.id]: deck
+            }
+        }));
+    }
+    updateDeck_async = (payload) => {
+        this.props.deckUpdate_async(this.props.token, this.props.userId, payload);
     }
 
     //  Action  //
@@ -98,6 +128,17 @@ class Main extends Component {
                 state: Object.keys(this.state.selectedIDs).length >= 1
             }
         }));
+    }
+    createDeck = () => {
+        const deck = {
+            details: "Sed ut perspiciatis unde omnis iste natus error sit",
+            userId: this.props.userId,
+            title: "New Flashcard Deck"
+        }
+        this.props.deckPost_async(this.props.token, deck);
+    }
+    startSession = () => {
+        console.log("Starting Session...");
     }
 
     //  EVENT HANDLERS --------------------------------------------- EVENT HANDLERS  //
@@ -114,15 +155,16 @@ class Main extends Component {
             this.toggleAside();
         }
     }
-    handle_onAsideClose = (data) => {
+    handle_onAsideClose = () => {
         if (this.state.aside.isActive) {
-            this.setState(previousState => ({
-                ...previousState,
-                aside: {
-                    ...previousState.aside,
-                    isActive: false
-                }
-            }));
+            this.closeAside();
+            switch (this.state.aside.state) {
+                case 99:
+                    this.resetDeck({id: this.state.aside.data.id});
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -130,6 +172,7 @@ class Main extends Component {
     handle_onDeckSelect = (passedData) => {
         if (this.state.aside.state === 99 && this.state.aside.isActive) {
             this.toggleAside();
+            this.resetDeck({id: this.state.aside.data.id});
         }
         if (this.state.selectedIDs.indexOf(passedData.data.id) > -1) {
             let selected = this.state.selectedIDs.filter(id => id !== passedData.data.id);
@@ -151,16 +194,18 @@ class Main extends Component {
             });
         }
     }
-    handle_onEditClick = (data) => {
-        this.updateAside({
-            ...data,
+    handle_onEditClick = (payload) => {
+        const data = {
+            id: payload.id,
             data: {
-                id: data.data.id,
-                title: this.state.decks[data.data.id].title,
-                details: this.state.decks[data.data.id].details,
-                onChange: this.handle_onDeckChange
-            }
-        });
+                title: this.state.decks[payload.id].title,
+                details: this.state.decks[payload.id].details
+            },
+            state: payload.state,
+            action: this.handle_onDeckChange
+        }
+        this.updateAside(data);
+        this.updateQuick(data);
         this.toggleAside();
     }
     handle_onDeckChange = (payload) => {
@@ -183,6 +228,9 @@ class Main extends Component {
                 }
             }))
         });
+    }
+    handle_onDeckUpdate = (payload) => {
+        this.updateDeck_async(payload);
     }
 
     //  Action Button  //
@@ -248,7 +296,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         handle_onDeckLoaded: (token, userId) => dispatch(actions.deckGet_async(token, userId)),
-        deckPost_async: (token, data) => dispatch(actions.deckPost_async(token, data))
+        deckPost_async: (token, data) => dispatch(actions.deckPost_async(token, data)),
+        deckUpdate_async: (token, user, payload) => dispatch(actions.deckUpdate_async(token, user, payload))
     };
 };
 

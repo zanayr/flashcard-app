@@ -6,10 +6,8 @@ export {
 
 export {
     deckGet_async,
-    deckGetFail,
-    deckGetStart,
-    deckGetSuccess,
-    deckPost_async
+    deckPost_async,
+    deckUpdate_async
 } from "./deck";
 
 export {

@@ -1,10 +1,11 @@
-import React, {Component} from "react";
+import React, {Component} from 'react';
 
-import Column from "../../structure/column/Column";
-import Input from "../../ui/input/Input";
+import Column from '../../structure/column/Column';
+import Input from '../../ui/input/Input';
+import Button from '../../ui/button/Button';
 
-import globalCSS from "../../../Global.module.css";
-import quickEditCSS from "./QuickEdit.module.css";
+import globalCSS from '../../../Global.module.css';
+import quickEditCSS from './QuickEdit.module.css';
 
 class QuickEdit extends Component {
     state = {
@@ -88,6 +89,16 @@ class QuickEdit extends Component {
 
         this._formUpdate(form, isValid, label, e.target.value);
     }
+    handle_onSubmit = () => {
+        const payload = {
+            id: this.props.data.id,
+            data: {
+                title: this.props.data.title,
+                details: this.props.data.details
+            }
+        }
+        this.props.data.onSubmit(payload);
+    }
 
     render() {
         const form = [];
@@ -114,6 +125,13 @@ class QuickEdit extends Component {
                                         value={this.props.data[input.id]}/>
                             ))
                         }
+                        <Button
+                            disabled={!this.state.valid}
+                            key="submit"
+                            onClick={this.handle_onSubmit}
+                            type="submit">
+                            Save
+                        </Button>
                     </Column>
                 </div>
             </form>

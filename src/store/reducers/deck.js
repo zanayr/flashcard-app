@@ -6,6 +6,7 @@ const initialState = {
     isLoading: false,
 };
 
+//  GET  //
 const deckGetFail = (state, action) => {
     return {
         ...state,
@@ -27,6 +28,7 @@ const deckGetSuccess = (state, action) => {
     };
 };
 
+//  POST  ///
 const deckPostFail = (state, action) => {
     return {
         ...state,
@@ -41,7 +43,6 @@ const deckPostStart = (state, action) => {
     };
 };
 const deckPostSuccess = (state, action) => {
-    console.log(action.payload);
     return {
         ...state,
         decks: {
@@ -56,6 +57,36 @@ const deckPostSuccess = (state, action) => {
     };
 };
 
+//  UPDATE  //
+const deckUpdateFail = (state, action) => {
+    return {
+        ...state,
+        error: action.payload,
+        isLoading: false
+    };
+};
+const deckUpdateStart = (state, action) => {
+    return {
+        ...state,
+        isLoading: true
+    };
+};
+const deckUpdateSuccess = (state, action) => {
+    return {
+        ...state,
+        decks: {
+            ...state.decks,
+            [action.payload.id]: {
+                userId: action.payload.userId,
+                title: action.payload.title,
+                details: action.payload.details
+            }
+        },
+        isLoading: false,
+    };
+};
+
+//  REDUCER  //
 const reducer = (state=initialState, action) => {
     switch (action.type) {
         case actionTypes.DECK_GET_FAIL:
@@ -70,6 +101,12 @@ const reducer = (state=initialState, action) => {
             return deckPostStart(state, action);
         case actionTypes.DECK_POST_SUCCESS:
             return deckPostSuccess(state, action);
+        case actionTypes.DECK_UPDATE_FAIL:
+            return deckUpdateFail(state, action);
+        case actionTypes.DECK_UPDATE_START:
+            return deckUpdateStart(state, action);
+        case actionTypes.DECK_UPDATE_SUCCESS:
+            return deckUpdateSuccess(state, action);
         default:
             return state;
     }

@@ -59,11 +59,9 @@ class List extends Component {
         });
     }
 
-    handle_onEditClick = (data) => {
+    handle_onEditClick = (id) => {
         this.props.onEdit({
-            data: {
-                id: data
-            },
+            id: id,
             state: 99
         });
     }
