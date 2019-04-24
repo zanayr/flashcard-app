@@ -31,7 +31,8 @@ class Collections extends Component {
         collections: {
             deleted: [],
             selected: []
-        }
+        },
+        state: 'decks'
     }
 
     deleteCollection (payload) {
@@ -48,7 +49,8 @@ class Collections extends Component {
     }
 
     componentDidMount () {
-        this.getCollection();
+        //this.getCollection();
+        this.props.get_async(this.state.state, this.props.token, this.props.user);
     }
 
     startSession () {
@@ -230,8 +232,9 @@ class Collections extends Component {
     //  RENDER METHOD  //
     render () {
         let list = (<Throbber/>);
-        if (!this.props.loading) {
-            let collection = {...this.props.collection};
+        console.log(this.props.getLoading);
+        if (!this.props.getLoading) {
+            let collection = {...this.props.decks};
             list = (
                 <List
                     backingCollection={collection}
@@ -277,14 +280,19 @@ class Collections extends Component {
 
 const mapStateToProps = state => {
     return {
+        decks: state.collections.collections.decks,
+        cards: state.collections.collections.cards,
+        getLoading: state.collections.getIsLoading,
         collection: state.deck.decks,
         loading: state.deck.isLoading,
         token: state.auth.token,
-        userId: state.auth.userId
+        userId: state.auth.userId,
+        user: state.auth.userId
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
+        get_async: (url, token, user) => dispatch(actions.get_async(url, token, user)),
         deleteCollection_async: (token, payload) => dispatch(actions.deckDelete_async(token, payload)),
         getCollection_async: (token, userId) => dispatch(actions.deckGet_async(token, userId)),
         insertCollection_async: (token, data) => dispatch(actions.deckPost_async(token, data)),

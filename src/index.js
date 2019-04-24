@@ -1,18 +1,19 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import {BrowserRouter} from "react-router-dom";
-import {Provider} from "react-redux";
-import {createStore, combineReducers, applyMiddleware, compose} from "redux";
-import thunk from "redux-thunk";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {BrowserRouter} from 'react-router-dom';
+import {Provider} from 'react-redux';
+import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
+import thunk from 'redux-thunk';
 
-import "./index.css";
+import './index.css';
 
-import App from "./App";
-import authReducer from "./store/reducers/auth";
-import deckReducer from "./store/reducers/deck";
-import modalReducer from "./store/reducers/modal";
+import App from './App';
+import authReducer from './store/reducers/auth';
+import collectionsReducer from './store/reducers/collections';
+import deckReducer from './store/reducers/deck';
+import modalReducer from './store/reducers/modal';
 
-import * as serviceWorker from "./serviceWorker";
+import * as serviceWorker from './serviceWorker';
 
 /* Log all redux state changes --
 const logger = store => {
@@ -30,6 +31,7 @@ const logger = store => {
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = combineReducers({
     auth: authReducer,
+    collections: collectionsReducer,
     deck: deckReducer,
     modal: modalReducer
 });

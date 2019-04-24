@@ -12,6 +12,10 @@ export {
 } from './deck';
 
 export {
+    get_async
+} from './collections';
+
+export {
     modalCreate,
     modalClear
 } from './modal';

@@ -8,14 +8,15 @@ import ListCSS from './List.module.css';
 
 class List extends Component {
     state = {
-        collection: {}
+        collection: {...this.props.backingCollection}
     }
 
     componentDidMount () {
-        this.setState(previousState => ({
-            ...previousState,
-            collection: this.props.backingCollection
-        }));
+        // this.setState(previousState => ({
+        //     ...previousState,
+        //     collection: this.props.backingCollection
+        // }));
+        console.log(this.props.backingCollection);
     }
 
     handle_onDeleteClick = (payload) => {
