@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../Database';
+import axios from '../database';
 
 
 //  DELETE  //
