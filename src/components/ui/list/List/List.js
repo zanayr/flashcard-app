@@ -17,13 +17,13 @@ class List extends Component {
 
     handle_onDeleteClick = (payload) => {
         this.props.onDelete({
+            key: payload,
             data: {
-                id: payload,
-                title: this.state.collection[payload].title,
-                details: this.state.collection[payload].details
+                title: this.state.collection[payload].title
             }
         });
     }
+
     handle_onEditClick = (payload) => {
         this.props.onEdit({
             actions: {
@@ -66,7 +66,7 @@ class List extends Component {
                     key={key}
                     data={{
                         ...this.state.collection[key],
-                        id: key
+                        key: key
                     }}
                     deleted={this.props.deletedItems.indexOf(key) > -1}
                     selected={this.props.selectedItems.indexOf(key) > -1}

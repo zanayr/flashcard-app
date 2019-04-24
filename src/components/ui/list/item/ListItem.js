@@ -18,13 +18,13 @@ const listItem = (props) => {
     const handle_onClicked = (e) => {
         e.stopPropagation();
 
-        props.onSelect(props.data.id);
+        props.onSelect(props.data.key);
     }
     const handle_onEditClicked = () => {
-        props.onEdit(props.data.id);
+        props.onEdit(props.data.key);
     }
-    const handle_onDeleteClicked = () => {
-        props.onDelete(props.data.id);
+    const handle_onDeleteClick = () => {
+        props.onDelete(props.data.key);
     }
 
     return (
@@ -44,7 +44,7 @@ const listItem = (props) => {
                 <QuickButton
                     active={props.selected && props.single && !props.deleted}
                     delete
-                    onClick={handle_onDeleteClicked}>
+                    onClick={handle_onDeleteClick}>
                     Delete
                 </QuickButton>
             </div>

@@ -12,6 +12,7 @@ export {
 } from './deck';
 
 export {
+    delete_async,
     get_async,
     post_async
 } from './collections';

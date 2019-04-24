@@ -46,16 +46,16 @@ class List extends Component {
             });
         }
     }
-    _itemDelete = (id) => {
+    _itemDelete = (payload) => {
         this.setState(prev => ({
             ...prev,
-            selectedItemIDs: prev.selectedItemIDs.filter(i => i !== id)
+            selectedItemIDs: prev.selectedItemIDs.filter(i => i !== payload.key)
         }), () => {
             this.setState(prev => ({
                 ...prev,
                 isSingle: prev.selectedItemIDs.length === 1
             }), () => {
-                this.props.onDelete(id);
+                this.props.onDelete(payload);
             });
         });
     }
@@ -67,14 +67,18 @@ class List extends Component {
         });
     }
     handle_onDeleteClick = (data) => {
-        this._itemDelete(data);
+        this._itemDelete({
+            key: data,
+            data: {
+                title: this.props.listItems[data].title
+            }
+        });
     }
     handle_onItemSelect = (data) => {
         this.selectItem(data.id);
     }
 
     render() {
-        console.log('***', this.state.deletedItems);
         let items = Object.keys(this.props.listItems).map(key => {
             return (
                 <ListItem
@@ -84,7 +88,7 @@ class List extends Component {
                     }}
                     key={key}
                     deleted={this.state.deletedItems.indexOf(key) > -1}
-                    onDelete={this.handle_onDeleteClicked}
+                    onDelete={this.handle_onDeleteClick}
                     onEdit={this.handle_onEditClick}
                     onSelect={this.handle_onItemSelect}
                     selected={this.state.selectedItemIDs.indexOf(key) > -1}

@@ -2,6 +2,34 @@ import * as actionTypes from './actionTypes';
 import axios from '../database';
 
 
+//  DELETE  //
+export const deleteFail = (error) => {
+    return {
+        type: actionTypes.DELETE_FAIL,
+        payload: error
+    };
+};
+export const deleteSuccess = (store, key) => {
+    return {
+        type: actionTypes.DELETE_SUCC,
+        payload: {
+            key: key,
+            store: store
+        }
+    };
+};
+export const delete_async = (url, token, key) => {
+    return dispatch => {
+        axios.delete('/' + url + '/' + key + '.json?auth=' + token)
+        .then(response => {
+            dispatch(deleteSuccess(url, response.data.name));
+        })
+        .catch(error => {
+            dispatch(deleteFail(error));
+        });
+    };
+};
+
 //  GET  //
 export const getFail = (error) => {
     return {
@@ -20,8 +48,6 @@ export const getSuccess = (data) => {
         payload: data
     }
 }
-
-//  GET ASYNC  //
 export const get_async = (url, token, user) => {
     return dispatch => {
         dispatch(getInit());

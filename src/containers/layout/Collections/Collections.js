@@ -128,7 +128,10 @@ class Collections extends Component {
             ...previousState,
             collections: {
                 ...previousState.collections,
-                deleted: [...previousState.collections.deleted, payload.data.id]
+                deleted: [
+                    ...previousState.collections.deleted,
+                    payload
+                ]
             }
         }));
     }
@@ -166,9 +169,10 @@ class Collections extends Component {
         this.props.createModal_async({
             actions: {
                 onConfirm: () => {
-                    this.addDeleted(payload);
-                    this.removeSelected(payload.data.id);
-                    this.deleteCollection(payload);
+                    this.addDeleted(payload.key);
+                    this.removeSelected(payload.key);
+                    //this.deleteCollection(payload);
+                    this.props.delete_async(this.state.state, this.props.token, payload.key);
                 },
                 onCancel: () => {
                     console.log('Never mind...');
@@ -231,7 +235,6 @@ class Collections extends Component {
     //  RENDER METHOD  //
     render () {
         let list = (<Throbber/>);
-        console.log(this.props.getLoading);
         if (!this.props.getLoading) {
             let collection = {...this.props.decks};
             list = (
@@ -291,6 +294,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
+        delete_async: (url, token, key) => dispatch(actions.delete_async(url, token, key)), 
         get_async: (url, token, user) => dispatch(actions.get_async(url, token, user)),
         post_async: (url, token, data) => dispatch(actions.post_async(url, token, data)),
         deleteCollection_async: (token, payload) => dispatch(actions.deckDelete_async(token, payload)),

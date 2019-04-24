@@ -15,12 +15,16 @@ export const DECK_UPDATE_FAIL = 'DECK_UPDATE_FAIL';
 export const DECK_UPDATE_START = 'DECK_UPDATE_START';
 export const DECK_UPDATE_SUCCESS = 'DECK_UPDATE_SUCCESS';
 
+export const DELETE_FAIL = 'GET_DELETE';
+export const DELETE_SUCC = 'DELETE_SUCC';
 export const GET_FAIL = 'GET_FAIL';
 export const GET_INIT = 'GET_INIT';
 export const GET_SUCC = 'GET_SUCC';
 export const POST_FAIL = 'POST_FAIL';
 export const POST_INIT = 'POST_INIT';
 export const POST_SUCC = 'POST_SUCC';
+export const PUT_FAIL = 'PUT_FAIL';
+export const PUT_SUCC = 'PUT_SUCC';
 
 export const MODAL_CREATE = 'MODAL_CREATE';
 export const MODAL_CLEAR = 'MODAL_CLEAR';
