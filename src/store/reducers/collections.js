@@ -2,8 +2,8 @@ import * as actionTypes from "../actions/actionTypes";
 
 const initialState = {
     collections: {
-        decks: {},
-        cards: {}
+        decks: [],
+        cards: []
     },
     postMap: {},
     error: null,
@@ -21,28 +21,20 @@ const serviceFailed = (state, action) => {
 
 //  DELETE  //
 const deleteSucceeded = (state, action) => {
-    const store = action.payload.store;
-    const collection = state.collections[store];
-    delete collection[action.payload.key];
-    return {
-        ...state,
-        collections: {
-            ...state.collections,
-            [store]: {
-                ...collection
-            }
-        }
-    };
+    // const store = action.payload.store;
+    // const collection = state.collections[store];
+    // delete collection[action.payload.key];
+    // return {
+    //     ...state,
+    //     collections: {
+    //         ...state.collections,
+    //         [store]: [...collection]
+    //     }
+    // };
+    return state;
 }
 
 //  GET  //
-const getFailed = (state, action) => {
-    return {
-        ...state,
-        error: action.payload,
-        isLoading: false
-    };
-};
 const getInitiated = (state, action) => {
     return {
         ...state,
@@ -55,22 +47,15 @@ const getSucceeded = (state, action) => {
         ...state,
         collections: {
             ...state.collections,
-            [store]: {
+            [store]: [
                 ...action.payload.data
-            }
+            ]
         },
         isLoading: false
     };
 };
 
 //  POST  //
-const postFailed = (state, action) => {
-    return {
-        ...state,
-        error: action.payload,
-        isLoading: false,
-    };
-};
 const postInitiated = (state, action) => {
     return {
         ...state,
@@ -83,10 +68,7 @@ const postSucceeded = (state, action) => {
         ...state,
         collections: {
             ...state.collections,
-            [store]: {
-                ...state.collections[store],
-                [action.payload.key]: action.payload.data
-            }
+            [store]: state.collections[store].concat(action.payload.data)
         },
         isLoading: false
     };
@@ -94,18 +76,19 @@ const postSucceeded = (state, action) => {
 
 //  PUT  //
 const putSucceeded = (state, action) => {
-    const store = action.payload.store;
-    return {
-        ...state,
-        collections: {
-            ...state.collections,
-            [store]: {
-                ...state.collections[store],
-                [action.payload.key]: action.payload.data
-            }
-        },
-        isLoading: false
-    };
+    //const store = action.payload.store;
+    // return {
+    //     ...state,
+    //     collections: {
+    //         ...state.collections,
+    //         [store]: [
+    //             ...state.collections[store],
+    //             [action.payload.key]: action.payload.data
+    //         ]
+    //     },
+    //     isLoading: false
+    // };
+    return state;
 };
 
 //  REDUCER  //
@@ -134,6 +117,13 @@ const reducer = (state=initialState, action) => {
         default:
             return state;
     }
+}
+
+export function getDecks (state) {
+    return state.collections.decks;
+}
+export function getLoading (state) {
+    return state.isLoading;
 }
 
 export default reducer;

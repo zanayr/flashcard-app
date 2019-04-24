@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-
 import * as actions from '../../store/actions/index';
+import {getIsLoading} from '../../store/reducers/root';
 
 import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
@@ -29,19 +29,6 @@ class Collections extends Component {
             selected: []
         },
         state: 'decks'
-    }
-
-    deleteCollection (payload) {
-        this.props.deleteCollection_async(this.props.token, payload);
-    }
-    getCollection () {
-        this.props.getCollection_async(this.props.token, this.props.userId);
-    }
-    insertCollection (payload) {
-        this.props.insertCollection_async(this.props.token, payload);
-    }
-    updateCollection (payload) {
-        this.props.updateCollection_async(this.props.token, this.props.userId, payload);
     }
 
     componentDidMount () {
@@ -233,10 +220,10 @@ class Collections extends Component {
     render () {
         let list = (<Throbber/>);
         if (!this.props.loading) {
-            let collection = {...this.props.decks};
+            //let collection = {...this.props.decks};
             list = (
                 <List
-                    backingCollection={collection}
+                    backingCollection={this.state.state}
                     deletedItems={this.state.collections.deleted}
                     selectedItems={this.state.collections.selected}
                     onChange={this.handle_onListItemChange}
@@ -277,9 +264,9 @@ class Collections extends Component {
 
 const mapStateToProps = state => {
     return {
-        decks: state.collections.collections.decks,
-        cards: state.collections.collections.cards,
-        loading: state.collections.isLoading,
+        //decks: state.collections.collections.decks,
+        //cards: state.collections.collections.cards,
+        loading: getIsLoading(state),
         token: state.auth.token,
         userId: state.auth.userId,
         user: state.auth.userId

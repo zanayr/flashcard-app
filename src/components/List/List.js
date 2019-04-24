@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {getDeckCollection} from '../../store/reducers/root';
 
 import Aux from '../../hoc/Aux/Aux';
 import ListItem from '../ui/ListItem/ListItem';
@@ -8,11 +10,12 @@ import ListCSS from './List.module.css';
 
 class List extends Component {
     state = {
-        collection: {...this.props.backingCollection}
+        //collection: {...this.props.backingCollection}
+        collection: {}
     }
 
     componentDidMount () {
-        console.log(this.props.backingCollection);
+        console.log(this.props.decks);
     }
 
     handle_onDeleteClick = (payload) => {
@@ -59,16 +62,13 @@ class List extends Component {
     }
 
     render() {
-        let listItems = Object.keys(this.state.collection).map(key => {
+        let listItems = this.props.decks.map(deck => {
             return (
                 <ListItem
-                    key={key}
-                    data={{
-                        ...this.state.collection[key],
-                        key: key
-                    }}
-                    deleted={this.props.deletedItems.indexOf(key) > -1}
-                    selected={this.props.selectedItems.indexOf(key) > -1}
+                    key={deck.key}
+                    data={deck.data}
+                    deleted={this.props.deletedItems.indexOf(deck.key) > -1}
+                    selected={this.props.selectedItems.indexOf(deck.key) > -1}
                     single={this.props.selectedItems.length === 1}
                     onDelete={this.handle_onDeleteClick}
                     onEdit={this.handle_onEditClick}
@@ -85,10 +85,13 @@ class List extends Component {
                 </section>
             </Aux>
         );
-        // return (
-        //     null
-        // );
     }
 }
 
-export default List;
+const mapStateToProps = state => {
+    return {
+        decks: getDeckCollection(state)
+    }
+}
+
+export default connect(mapStateToProps)(List);

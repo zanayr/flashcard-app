@@ -53,9 +53,12 @@ export const get_async = (url, token, user) => {
         dispatch(getInit());
         axios.get('/' + url + '.json?auth=' + token + '&orderBy="userId"&equalTo="' + user + '"')
         .then(response => {
-            const models = {};
+            const models = [];
             for (let key in response.data) {
-                models[key] = {...response.data[key]};
+                models.push({
+                    key: key,
+                    data: response.data[key]
+                });
             }
             dispatch(getSuccess({
                 data: models,
