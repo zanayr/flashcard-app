@@ -4,7 +4,7 @@ import Aux from '../../../hoc/Aux/Aux';
 import Row from '../../../hoc/Row/Row';
 import Column from '../../../hoc/Column/Column';
 import IconButton from '../../ui/button/Icon/IconButton';
-import BarLink from '../../ui/Link/Bar/BarLink';
+import BarLink from '../../ui/link/Bar/BarLink';
 import QuickForm from '../../form/Quick/QuickForm';
 
 const quickAside = (props) => {

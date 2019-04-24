@@ -12,16 +12,16 @@ const button = (props) => {
 
     switch (props.type) {
         case ('submit'):
-            buttonClass = "Submit";
+            buttonClass = 'Submit';
             break;
-        case ("round-icon"):
-            buttonClass = "Round_Icon";
+        case ('round-icon'):
+            buttonClass = 'Round_Icon';
             break;
-        case ("bar"):
-            buttonClass = "Bar";
+        case ('bar'):
+            buttonClass = 'Bar';
             break;
         default:
-            buttonClass = "Button";
+            buttonClass = 'Button';
             break;
     }
     return (

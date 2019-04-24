@@ -16,4 +16,3 @@ const overlay = (props) => {
 }
 
 export default overlay;
-

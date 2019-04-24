@@ -4,7 +4,7 @@ import {createHashId} from '../../../utility';
 import Aux from '../../../hoc/Aux/Aux';
 import Row from '../../../hoc/Row/Row';
 import IconButton from '../../ui/button/Icon/IconButton';
-import NavigationButton from '../../ui/button/Nav/NavButton';
+import BarLink from '../../ui/link/Bar/BarLink';
 
 import AppCSS from '../../../App.module.css';
 import NavAsideCSS from './NavAside.module.css';
@@ -18,11 +18,15 @@ const navigationAside = (props) => {
     ];
     const navigationButtons = navigationLinks.map(link => {
         return (
-            <NavigationButton
+            // <NavigationButton
+            //     key={createHashId()}
+            //     path={link.path}>
+            //     {link.value}
+            // </NavigationButton>
+            <BarLink
                 key={createHashId()}
-                path={link.path}>
-                {link.value}
-            </NavigationButton>
+                path={link.path}>{link.value}
+            </BarLink>
         );
     });
 

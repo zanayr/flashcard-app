@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import CircleButtonCSS from "./CircleButton.module.css";
+import CircleButtonCSS from './CircleButton.module.css';
 
 const circleButton = (props) => {
     const handle_onClicked = (e) => {
