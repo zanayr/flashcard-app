@@ -5,8 +5,9 @@ const initialState = {
         decks: {},
         cards: {}
     },
+    postMap: {},
     error: null,
-    getIsLoading: false,
+    isLoading: false
 };
 
 //  GET  //
@@ -14,13 +15,13 @@ const getFailed = (state, action) => {
     return {
         ...state,
         error: action.payload,
-        getIsLoading: false
+        isLoading: false
     };
 };
 const getInitiated = (state, action) => {
     return {
         ...state,
-        getIsLoading: true
+        isLoading: true
     };
 };
 const getSucceeded = (state, action) => {
@@ -33,19 +34,54 @@ const getSucceeded = (state, action) => {
                 ...action.payload.data
             }
         },
-        getIsLoading: false
+        isLoading: false
+    };
+};
+
+//  POST  //
+const postFailed = (state, action) => {
+    return {
+        ...state,
+        error: action.payload,
+        isLoading: false,
+    };
+};
+const postInitiated = (state, action) => {
+    return {
+        ...state,
+        isLoading: true
+    };
+};
+const postSucceeded = (state, action) => {
+    const store = action.payload.store;
+    return {
+        ...state,
+        collections: {
+            ...state.collections,
+            [store]: {
+                ...state.collections[store],
+                [action.payload.key]: action.payload.data
+            }
+        },
+        isLoading: false
     };
 };
 
 //  REDUCER  //
 const reducer = (state=initialState, action) => {
     switch (action.type) {
-        case actionTypes.GET_FAIL_ASYNC:
+        case actionTypes.GET_FAIL:
             return getFailed(state, action);
-        case actionTypes.GET_INIT_ASYNC:
+        case actionTypes.GET_INIT:
             return getInitiated(state, action);
-        case actionTypes.GET_SUCC_ASYNC:
+        case actionTypes.GET_SUCC:
             return getSucceeded(state, action);
+        case actionTypes.POST_FAIL:
+            return postFailed(state, action);
+        case actionTypes.POST_INIT:
+            return postInitiated(state, action);
+        case actionTypes.POST_SUCC:
+            return postSucceeded(state, action);
         default:
             return state;
     }

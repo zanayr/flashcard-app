@@ -49,7 +49,6 @@ class Collections extends Component {
     }
 
     componentDidMount () {
-        //this.getCollection();
         this.props.get_async(this.state.state, this.props.token, this.props.user);
     }
 
@@ -57,10 +56,10 @@ class Collections extends Component {
         console.log('Start a session...');
     }
     createCollection () {
-        this.insertCollection({
-            userId: this.props.userId,
+        this.props.post_async(this.state.state, this.props.token, {
+            details: 'This is a new flashcard deck',
             title: 'New Flashcard Deck',
-            details: 'This is a new flashcard deck'
+            userId: this.props.user
         });
     }
 
@@ -282,7 +281,7 @@ const mapStateToProps = state => {
     return {
         decks: state.collections.collections.decks,
         cards: state.collections.collections.cards,
-        getLoading: state.collections.getIsLoading,
+        getLoading: state.collections.isLoading,
         collection: state.deck.decks,
         loading: state.deck.isLoading,
         token: state.auth.token,
@@ -293,6 +292,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         get_async: (url, token, user) => dispatch(actions.get_async(url, token, user)),
+        post_async: (url, token, data) => dispatch(actions.post_async(url, token, data)),
         deleteCollection_async: (token, payload) => dispatch(actions.deckDelete_async(token, payload)),
         getCollection_async: (token, userId) => dispatch(actions.deckGet_async(token, userId)),
         insertCollection_async: (token, data) => dispatch(actions.deckPost_async(token, data)),

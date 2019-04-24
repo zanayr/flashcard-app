@@ -12,10 +12,6 @@ class List extends Component {
     }
 
     componentDidMount () {
-        // this.setState(previousState => ({
-        //     ...previousState,
-        //     collection: this.props.backingCollection
-        // }));
         console.log(this.props.backingCollection);
     }
 

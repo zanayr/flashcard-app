@@ -15,9 +15,12 @@ export const DECK_UPDATE_FAIL = 'DECK_UPDATE_FAIL';
 export const DECK_UPDATE_START = 'DECK_UPDATE_START';
 export const DECK_UPDATE_SUCCESS = 'DECK_UPDATE_SUCCESS';
 
-export const GET_FAIL_ASYNC = 'GET_FAIL_ASYNC';
-export const GET_INIT_ASYNC = 'GET_INIT_ASYNC';
-export const GET_SUCC_ASYNC = 'GET_SUCC_ASYNC';
+export const GET_FAIL = 'GET_FAIL';
+export const GET_INIT = 'GET_INIT';
+export const GET_SUCC = 'GET_SUCC';
+export const POST_FAIL = 'POST_FAIL';
+export const POST_INIT = 'POST_INIT';
+export const POST_SUCC = 'POST_SUCC';
 
 export const MODAL_CREATE = 'MODAL_CREATE';
 export const MODAL_CLEAR = 'MODAL_CLEAR';
