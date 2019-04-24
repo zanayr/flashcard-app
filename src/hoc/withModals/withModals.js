@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
-import Aux from '../aux/Aux';
-import Modal from '../../components/ui/modal/Modal';
+import Aux from '../Aux/Aux';
+import Modal from '../../components/Modal/Modal/Modal';
 
 const withModals = (WrappedComponent) => {
     const modals = [];

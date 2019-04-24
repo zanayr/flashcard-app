@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Aux from '../../../hoc/aux/Aux';
-import Row from '../../structure/row/Row';
-import Column from '../../structure/column/Column';
+import Aux from '../../../hoc/Aux/Aux';
+import Row from '../../../hoc/Row/Row';
+import Column from '../../../hoc/Column/Column';
 import IconButton from '../../ui/button/icon/IconButton';
 import BarLink from '../../ui/Link/Bar/BarLink';
 import QuickForm from '../../Form/Quick/QuickForm';

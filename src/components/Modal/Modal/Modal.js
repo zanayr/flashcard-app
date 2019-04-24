@@ -4,12 +4,12 @@ import * as actions from '../../../store/actions/index';
 
 import {createHashId} from '../../../utility';
 
-import Aux from '../../../hoc/aux/Aux';
-import Overlay from '../overlay/Overlay';
-import Row from '../../structure/row/Row';
-import Button from '../button/Button';
+import Aux from '../../../hoc/Aux/Aux';
+import Overlay from '../Overlay/Overlay';
+import Row from '../../../hoc/Row/Row';
+import Button from '../../ui/button/Button';
 
-import globalCSS from '../../../Global.module.css';
+import AppCSS from '../../../App.module.css';
 import modalCSS from './Modal.module.css';
 
 const modal = (props) => {
@@ -38,7 +38,7 @@ const modal = (props) => {
             <Overlay active={true}/>
             <div className={modalCSS.Modal}
                 key={createHashId()}>
-                <div className={globalCSS.Inner}>
+                <div className={AppCSS.Inner}>
                     <Row just='Start' align='Center'>
                         <span></span>
                         <h3>{props.data.title ? props.data.title : 'Alert!'}</h3>

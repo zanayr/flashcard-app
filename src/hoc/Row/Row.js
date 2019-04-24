@@ -1,6 +1,6 @@
 import React from "react";
 
-import globalCSS from "../../../Global.module.css";
+import AppCSS from "../../App.module.css";
 import rowCSS from "./Row.module.css";
 
 const row = (props) => {
@@ -17,7 +17,7 @@ const row = (props) => {
     }
     return (
         <div className={cssClasses.join(' ')}>
-            <div className={globalCSS.Inner}>
+            <div className={AppCSS.Inner}>
                 {props.children}
             </div>
         </div>

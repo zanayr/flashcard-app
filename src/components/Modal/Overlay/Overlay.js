@@ -1,6 +1,6 @@
 import React from "react";
 
-import globalCSS from "../../../Global.module.css";
+import AppCSS from "../../../App.module.css";
 import overlayCSS from "./Overlay.module.css";
 
 const overlay = (props) => {
@@ -9,7 +9,7 @@ const overlay = (props) => {
     }
     return (
         <div className={overlayCSS.Overlay}>
-            <div className={globalCSS.Inner}>
+            <div className={AppCSS.Inner}>
             </div>
         </div>
     )

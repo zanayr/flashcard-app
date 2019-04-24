@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Column from '../../../structure/column/Column';
-import QuickButton from '../../button/quick/QuickButton';
+import Column from '../../../hoc/Column/Column';
+import QuickButton from '../../ui/button/quick/QuickButton';
 
-import GlobalCSS from '../../../../Global.module.css';
+import AppCSS from '../../../App.module.css';
 import ListItemCSS from './ListItem.module.css';
 
 const listItem = (props) => {
@@ -31,7 +31,7 @@ const listItem = (props) => {
         <div
             className={cssClasses.join(' ')}
             onClick={(e) => handle_onClicked(e)}>
-            <div className={GlobalCSS.Inner}>
+            <div className={AppCSS.Inner}>
                 <Column just='Center' align='Start'>
                     <h3>{props.data.title}</h3>
                     <p>{props.data.details}</p>

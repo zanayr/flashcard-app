@@ -3,11 +3,10 @@ import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
 
-import Aux from '../../hoc/aux/Aux';
+import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/ui/Header/Header';
 import Throbber from '../../components/ui/throbber/Throbber';
-import List from '../../components/ui/list/List/List';
-import ListHeader from '../../components/ui/list/ListHeader/ListHeader';
+import List from '../../components/List/List';
 import ActionButton from '../../components/ui/button/action/ActionButton';
 import Aside from '../../components/Aside/Aside/Aside';
 
@@ -244,7 +243,6 @@ class Collections extends Component {
                     onDelete={this.handle_onListDeleteClick}
                     onEdit={this.handle_onListEditClick}
                     onSelect={this.handle_onListItemSelect}>
-                    <ListHeader>Your Flashcards</ListHeader>
                     <ActionButton
                         onClick={this.handle_onQuickActionClick}
                         state={this.state.action.state}
@@ -252,7 +250,6 @@ class Collections extends Component {
                 </List>
             );
         }
-
         return (
             <Aux>
                 <Header

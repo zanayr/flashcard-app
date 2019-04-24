@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import {Route, Switch, withRouter, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 
-import Aux from '../../hoc/aux/Aux';
+import Aux from '../../hoc/Aux/Aux';
 import Auth from '../Auth/Auth';
 import Logout from '../Out/Out';
 import Collections from '../Collections/Collections';
 import Inspector from '../Inspector/Inspector';
-import Modal from '../../components/ui/modal/Modal';
+import Modal from '../../components/Modal/Modal/Modal';
 import * as actions from '../../store/actions/index';
 
 class Layout extends Component {

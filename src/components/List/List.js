@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 
-import Aux from '../../../../hoc/aux/Aux';
-import ListItem from '../item/ListItem';
+import Aux from '../../hoc/Aux/Aux';
+import ListItem from '../ui/ListItem/ListItem';
 
-import globalCSS from '../../../../Global.module.css';
+import AppCSS from '../../App.module.css';
 import ListCSS from './List.module.css';
 
 class List extends Component {
@@ -78,13 +78,16 @@ class List extends Component {
         return (
             <Aux>
                 {this.props.children}
-                <section className={[globalCSS.With_Margin, ListCSS.List].join(' ')}>
-                    <div className={globalCSS.Inner}>
+                <section className={[AppCSS.With_Margin, ListCSS.List].join(' ')}>
+                    <div className={AppCSS.Inner}>
                         {listItems}
                     </div>
                 </section>
             </Aux>
         );
+        // return (
+        //     null
+        // );
     }
 }
 

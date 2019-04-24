@@ -1,8 +1,8 @@
 import React from 'react';
 import {createHashId} from '../../../utility';
 
-import Aux from '../../../hoc/aux/Aux';
-import Row from '../../structure/row/Row';
+import Aux from '../../../hoc/Aux/Aux';
+import Row from '../../../hoc/Row/Row';
 import IconButton from '../../ui/button/icon/IconButton';
 import NavigationButton from '../../ui/button/navigation/NavigationButton';
 

@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 
-import Column from '../../structure/column/Column';
-import Row from '../../structure/row/Row';
+import Column from '../../../hoc/Column/Column';
+import Row from '../../../hoc/Row/Row';
 import Input from '../../ui/input/Input';
 import Button from '../../ui/button/Button';
 
