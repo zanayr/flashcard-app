@@ -57,7 +57,7 @@ class QuickInspectForm extends Component {
     _formUpdate = (form, valid, label, value) => {
         const payload = {
             data: {
-                id: this.props.data.id,
+                id: this.props.data.key,
                 property: label,
                 value: value
             }
@@ -86,7 +86,7 @@ class QuickInspectForm extends Component {
         for (let key in form) {
             isValid = form[key].valid && isValid;
         }
-
+        //console.log(form, isValid, label, e.target.value);
         this._formUpdate(form, isValid, label, e.target.value);
     }
     handle_onSubmit = () => {
