@@ -9,7 +9,7 @@ import Button from '../../ui/button/Button/Button';
 
 import * as actions from '../../../store/actions/index';
 
-import GlobalCSS from '../../../Global.module.css';
+import AppCSS from '../../../App.module.css';
 import AuthFormCSS from './AuthForm.module.css';
 
 class AuthForm extends Component {
@@ -110,7 +110,7 @@ class AuthForm extends Component {
         }
         return (
             <form className={AuthFormCSS.Auth_Form}>
-                <div className={GlobalCSS.Inner}>
+                <div className={AppCSS.Inner}>
                     <Column just="Between">
                         <div className={AuthFormCSS.Top}>
                             {

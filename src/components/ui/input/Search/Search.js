@@ -1,13 +1,13 @@
 import React from 'react';
 
 import searchCSS from './Search.module.css';
-import globalCSS from '../../../Global.module.css';
+import AppCSS from '../../../../App.module.css';
 
 const searchBar = (props) => {
     return (
         <div className={searchCSS.Search}>
-            <div className={globalCSS.Inner}>
-                <input className={[searchCSS.Search_Bar, searchCSS[props.className]].join(' ')} type="text" placeholder="Search"/>
+            <div className={AppCSS.Inner}>
+                <input className={searchCSS.Search_Bar} type="text" placeholder="Search"/>
             </div>
         </div>
     );

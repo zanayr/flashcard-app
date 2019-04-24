@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import AppCSS from "../../../App.module.css";
-import overlayCSS from "./Overlay.module.css";
+import AppCSS from '../../../App.module.css';
+import overlayCSS from './Overlay.module.css';
 
 const overlay = (props) => {
     if (!props.active) {

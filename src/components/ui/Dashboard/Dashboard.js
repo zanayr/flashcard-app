@@ -1,9 +1,9 @@
 import React from 'react';
 
-import CircleButton from '../../button/Circle/CircleButton';
-import IconButton from '../../button/Icon/IconButton';
+import CircleButton from '../button/Circle/CircleButton';
+import IconButton from '../button/Icon/IconButton';
 
-import GlobalCSS from '../../../../Global.module.css';
+import AppCSS from '../../../App.module.css';
 import DashboardCSS from './Dashboard.module.css';
 
 const dashboard = (props) => {
@@ -21,7 +21,7 @@ const dashboard = (props) => {
     }
     return (
         <div className={DashboardCSS.Dashboard}>
-            <div className={[GlobalCSS.Inner, DashboardCSS.Inner].join(' ')}>
+            <div className={[AppCSS.Inner, DashboardCSS.Inner].join(' ')}>
                 <div className={DashboardCSS.Account}>
                     <h6 className={DashboardCSS.Account_Name}>Ryan Fickencher</h6>
                 </div>

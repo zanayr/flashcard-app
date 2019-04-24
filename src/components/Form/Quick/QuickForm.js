@@ -4,7 +4,7 @@ import Column from '../../../hoc/Column/Column';
 import Input from '../../ui/input/Input';
 import Button from '../../ui/button/Button/Button';
 
-import GlobalCSS from '../../../Global.module.css';
+import AppCSS from '../../../App.module.css';
 import QuickInspectFormCSS from './QuickForm.module.css';
 
 class QuickInspectForm extends Component {
@@ -110,7 +110,7 @@ class QuickInspectForm extends Component {
         }
         return (
             <form className={QuickInspectFormCSS.Quick_Inspect_Form}>
-                <div className={GlobalCSS.Inner}>
+                <div className={AppCSS.Inner}>
                     <Column just='Between'>
                         {
                             form.map(input => (

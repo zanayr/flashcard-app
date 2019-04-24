@@ -1,10 +1,10 @@
-.Logo {
+.Return_Link {
     margin-left: -16px;
 }
 .Inner {
     padding-left: 16px;
 }
-.Logo span {
+.Return_Link span {
     background-color: turquoise;
     display: block;
     height: 64px;

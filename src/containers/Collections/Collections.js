@@ -4,11 +4,11 @@ import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
 
 import Aux from '../../hoc/Aux/Aux';
-import Header from '../../components/ui/Header/Header';
+import Header from '../../components/Header/Header';
 import Throbber from '../../components/ui/throbber/Throbber';
 import List from '../../components/List/List';
 import ActionButton from '../../components/ui/button/Action/ActionButton';
-import Aside from '../../components/Aside/Aside/Aside';
+import Aside from '../../components/aside/Aside/Aside';
 
 import AppCSS from '../../App.module.css';
 import CollectionsCSS from './Collections.module.css';

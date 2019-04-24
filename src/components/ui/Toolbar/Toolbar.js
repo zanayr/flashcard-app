@@ -1,8 +1,8 @@
 import React from 'react';
 
-import IconButton from '../../button/Icon/IconButton';
+import IconButton from '../button/Icon/IconButton';
 
-import GlobalCSS from '../../../../Global.module.css';
+import AppCSS from '../../../App.module.css';
 import ToolbarCSS from './Toolbar.module.css';
 
 const toolbar = (props) => {
@@ -25,7 +25,7 @@ const toolbar = (props) => {
 
     return (
         <div className={ToolbarCSS.Toolbar}>
-            <div className={GlobalCSS.Inner}>
+            <div className={AppCSS.Inner}>
                 <IconButton onClick={handle_onAClicked}>A</IconButton>
                 <IconButton onClick={handle_onBClicked}>B</IconButton>
             </div>

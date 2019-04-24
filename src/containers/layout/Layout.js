@@ -7,7 +7,7 @@ import Auth from '../Auth/Auth';
 import Logout from '../Out/Out';
 import Collections from '../Collections/Collections';
 import Inspector from '../Inspector/Inspector';
-import Modal from '../../components/Modal/Modal/Modal';
+import Modal from '../../components/modal/Modal/Modal';
 import * as actions from '../../store/actions/index';
 
 class Layout extends Component {

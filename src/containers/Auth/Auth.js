@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 
-import AuthForm from '../../components/Form/Auth/AuthForm';
+import AuthForm from '../../components/form/Auth/AuthForm';
 
 import AppCSS from '../../App.module.css';
 import AuthCSS from './Auth.module.css';
