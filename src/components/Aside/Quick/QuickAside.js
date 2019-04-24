@@ -5,9 +5,9 @@ import Row from '../../structure/row/Row';
 import Column from '../../structure/column/Column';
 import IconButton from '../../ui/button/icon/IconButton';
 import BarLink from '../../ui/Link/Bar/BarLink';
-import QuickInspectForm from '../../Form/Quick/QuickInspectForm';
+import QuickForm from '../../Form/Quick/QuickForm';
 
-const quickInspectAside = (props) => {
+const quickAside = (props) => {
     return (
         <Aux>
             <Column just='Between'>
@@ -16,7 +16,7 @@ const quickInspectAside = (props) => {
                     <h3>Quick Inspect</h3>
                     <IconButton onClick={props.onClose}>X</IconButton>
                 </Row>
-                <QuickInspectForm
+                <QuickForm
                     actions={props.actions}
                     data={props.data}/>
                 </section>
@@ -28,4 +28,4 @@ const quickInspectAside = (props) => {
     );
 }
 
-export default quickInspectAside;
+export default quickAside;

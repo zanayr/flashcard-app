@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
-import NavigationAiside from '../navigation/NavigationAside';
-import QuickInspectAside from '../Quick/QuickForm';
+import NavigationAiside from '../Nav/NavAside';
+import QuickInspectAside from '../Quick/QuickAside';
 
 import AppCSS from '../../../App.module.css';
 import AsideCSS from './Aside.module.css';

@@ -7,7 +7,7 @@ import IconButton from '../../ui/button/icon/IconButton';
 import NavigationButton from '../../ui/button/navigation/NavigationButton';
 
 import AppCSS from '../../../App.module.css';
-import navigationAsideCSS from './NavigationAside.module.css';
+import NavAsideCSS from './NavAside.module.css';
 
 const navigationAside = (props) => {
     const navigationLinks = [
@@ -36,7 +36,7 @@ const navigationAside = (props) => {
                 <h3>Navigation</h3>
                 <IconButton onClick={handle_onClick}>X</IconButton>
             </Row>
-            <nav className={navigationAsideCSS.Navigation}>
+            <nav className={NavAsideCSS.Navigation}>
                 <div className={AppCSS.Inner}>
                     {navigationButtons}
                 </div>

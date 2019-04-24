@@ -4,10 +4,10 @@ import Column from '../../structure/column/Column';
 import Input from '../../ui/input/Input';
 import Button from '../../ui/button/Button';
 
-import globalCSS from '../../../Global.module.css';
-import quickEditCSS from './QuickEdit.module.css';
+import GlobalCSS from '../../../Global.module.css';
+import QuickInspectFormCSS from './QuickForm.module.css';
 
-class QuickEdit extends Component {
+class QuickInspectForm extends Component {
     state = {
         form: {
             title: {
@@ -57,7 +57,7 @@ class QuickEdit extends Component {
     _formUpdate = (form, valid, label, value) => {
         const payload = {
             data: {
-                id: this.props.data.id,
+                id: this.props.data.key,
                 property: label,
                 value: value
             }
@@ -86,18 +86,18 @@ class QuickEdit extends Component {
         for (let key in form) {
             isValid = form[key].valid && isValid;
         }
-
+        //console.log(form, isValid, label, e.target.value);
         this._formUpdate(form, isValid, label, e.target.value);
     }
     handle_onSubmit = () => {
-        const payload = {
+        this.props.actions.onSubmit({
             data: {
-                id: this.props.data.id,
+                details: this.props.data.details,
                 title: this.props.data.title,
-                details: this.props.data.details
-            }
-        }
-        this.props.actions.onSubmit(payload);
+                userId: this.props.data.userId
+            },
+            key: this.props.data.key
+        });
     }
 
     render() {
@@ -109,8 +109,8 @@ class QuickEdit extends Component {
             });
         }
         return (
-            <form className={quickEditCSS.QucikEdit_Form}>
-                <div className={globalCSS.Inner}>
+            <form className={QuickInspectFormCSS.Quick_Inspect_Form}>
+                <div className={GlobalCSS.Inner}>
                     <Column just='Between'>
                         {
                             form.map(input => (
@@ -139,4 +139,4 @@ class QuickEdit extends Component {
     }
 }
 
-export default QuickEdit;
+export default QuickInspectForm;
