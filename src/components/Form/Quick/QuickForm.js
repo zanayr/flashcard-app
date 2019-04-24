@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import Column from '../../../hoc/Column/Column';
-import Input from '../../ui/input/Input';
+import Input from '../../ui/input/Input/Input';
 import Button from '../../ui/button/Button/Button';
 
 import AppCSS from '../../../App.module.css';

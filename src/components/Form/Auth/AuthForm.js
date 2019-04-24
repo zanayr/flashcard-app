@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import Column from '../../../hoc/Column/Column';
 import Row from '../../../hoc/Row/Row';
-import Input from '../../ui/input/Input';
+import Input from '../../ui/input/Input/Input';
 import Button from '../../ui/button/Button/Button';
 
 import * as actions from '../../../store/actions/index';

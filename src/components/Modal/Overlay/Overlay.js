@@ -12,7 +12,8 @@ const overlay = (props) => {
             <div className={AppCSS.Inner}>
             </div>
         </div>
-    )
+    );
 }
 
 export default overlay;
+

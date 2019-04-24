@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import throbberCSS from "./Throbber.module.css";
+import ThrobberCSS from './Throbber.module.css';
 
 const throbber = (props) => {
     return (
-        <div className={throbberCSS.Throbber}>Loading...</div>
+        <div className={ThrobberCSS.Throbber}>Loading...</div>
     );
 }
 

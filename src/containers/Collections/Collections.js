@@ -5,7 +5,7 @@ import * as actions from '../../store/actions/index';
 
 import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
-import Throbber from '../../components/ui/throbber/Throbber';
+import Throbber from '../../components/ui/Throbber/Throbber';
 import List from '../../components/List/List';
 import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside from '../../components/aside/Aside/Aside';
