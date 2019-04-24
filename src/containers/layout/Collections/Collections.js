@@ -118,7 +118,8 @@ class Collections extends Component {
 
     //  QUICK EDIT  //
     handle_onQucikEditSubmit = (payload) => {
-        this.updateCollection(payload);
+        //this.updateCollection(payload);
+        this.props.put_async(this.state.state, this.props.token, payload.key, payload.data);
         this.toggleAside();
     }
 
@@ -297,10 +298,11 @@ const mapDispatchToProps = dispatch => {
         delete_async: (url, token, key) => dispatch(actions.delete_async(url, token, key)), 
         get_async: (url, token, user) => dispatch(actions.get_async(url, token, user)),
         post_async: (url, token, data) => dispatch(actions.post_async(url, token, data)),
-        deleteCollection_async: (token, payload) => dispatch(actions.deckDelete_async(token, payload)),
-        getCollection_async: (token, userId) => dispatch(actions.deckGet_async(token, userId)),
-        insertCollection_async: (token, data) => dispatch(actions.deckPost_async(token, data)),
-        updateCollection_async: (token, user, payload) => dispatch(actions.deckUpdate_async(token, user, payload)),
+        put_async: (url, token, key, data) => dispatch(actions.put_async(url, token, key, data)),
+        //deleteCollection_async: (token, payload) => dispatch(actions.deckDelete_async(token, payload)),
+        //getCollection_async: (token, userId) => dispatch(actions.deckGet_async(token, userId)),
+        //insertCollection_async: (token, data) => dispatch(actions.deckPost_async(token, data)),
+        //updateCollection_async: (token, user, payload) => dispatch(actions.deckUpdate_async(token, user, payload)),
         createModal_async: (payload) => dispatch(actions.modalCreate(payload))
     };
 };

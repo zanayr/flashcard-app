@@ -90,14 +90,14 @@ class QuickInspectForm extends Component {
         this._formUpdate(form, isValid, label, e.target.value);
     }
     handle_onSubmit = () => {
-        const payload = {
+        this.props.actions.onSubmit({
             data: {
-                id: this.props.data.id,
+                details: this.props.data.details,
                 title: this.props.data.title,
-                details: this.props.data.details
-            }
-        }
-        this.props.actions.onSubmit(payload);
+                userId: this.props.data.userId
+            },
+            key: this.props.data.key
+        });
     }
 
     render() {

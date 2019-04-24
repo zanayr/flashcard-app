@@ -14,7 +14,8 @@ export {
 export {
     delete_async,
     get_async,
-    post_async
+    post_async,
+    put_async
 } from './collections';
 
 export {

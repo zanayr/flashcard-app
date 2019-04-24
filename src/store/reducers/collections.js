@@ -92,6 +92,22 @@ const postSucceeded = (state, action) => {
     };
 };
 
+//  PUT  //
+const putSucceeded = (state, action) => {
+    const store = action.payload.store;
+    return {
+        ...state,
+        collections: {
+            ...state.collections,
+            [store]: {
+                ...state.collections[store],
+                [action.payload.key]: action.payload.data
+            }
+        },
+        isLoading: false
+    };
+};
+
 //  REDUCER  //
 const reducer = (state=initialState, action) => {
     switch (action.type) {
@@ -111,6 +127,10 @@ const reducer = (state=initialState, action) => {
             return postInitiated(state, action);
         case actionTypes.POST_SUCC:
             return postSucceeded(state, action);
+        case actionTypes.PUT_FAIL:
+            return serviceFailed(state, action);
+        case actionTypes.PUT_SUCC:
+            return putSucceeded(state, action);
         default:
             return state;
     }

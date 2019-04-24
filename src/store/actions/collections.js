@@ -91,8 +91,6 @@ export const postSuccess = (store, key, data) => {
         }
     }
 }
-
-//  POST ASYNC  //
 export const post_async = (url, token, data) => {
     return dispatch => {
         dispatch(postInit());
@@ -102,6 +100,35 @@ export const post_async = (url, token, data) => {
         })
         .catch(error => {
             dispatch(postFail(error));
+        });
+    };
+};
+
+//  PUT  //
+export const putFail = (error) => {
+    return {
+        type: actionTypes.DECK_UPDATE_FAIL,
+        payload: error
+    };
+};
+export const putSuccess = (store, key, data) => {
+    return {
+        type: actionTypes.DECK_UPDATE_SUCCESS,
+        payload: {
+            data: data,
+            key: key,
+            store: store
+        }
+    };
+};
+export const put_async = (url, token, key, data) => {
+    return dispatch => {
+        axios.put('/' + url + '/' + key + '.json?auth=' + token, data)
+        .then(response => {
+            dispatch(putSuccess(url, response.data.name, data));
+        })
+        .catch(error => {
+            dispatch(putFail(error));
         });
     };
 };

@@ -30,9 +30,8 @@ class List extends Component {
                 onChange: this.handle_onListItemChange
             },
             data: {
-                id: payload,
-                title: this.state.collection[payload].title,
-                details: this.state.collection[payload].details
+                ...this.state.collection[payload],
+                key: payload
             },
             state: 99
         });
