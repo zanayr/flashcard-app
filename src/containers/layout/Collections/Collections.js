@@ -236,7 +236,7 @@ class Collections extends Component {
     //  RENDER METHOD  //
     render () {
         let list = (<Throbber/>);
-        if (!this.props.getLoading) {
+        if (!this.props.loading) {
             let collection = {...this.props.decks};
             list = (
                 <List
@@ -285,9 +285,7 @@ const mapStateToProps = state => {
     return {
         decks: state.collections.collections.decks,
         cards: state.collections.collections.cards,
-        getLoading: state.collections.isLoading,
-        collection: state.deck.decks,
-        loading: state.deck.isLoading,
+        loading: state.collections.isLoading,
         token: state.auth.token,
         userId: state.auth.userId,
         user: state.auth.userId
@@ -299,10 +297,6 @@ const mapDispatchToProps = dispatch => {
         get_async: (url, token, user) => dispatch(actions.get_async(url, token, user)),
         post_async: (url, token, data) => dispatch(actions.post_async(url, token, data)),
         put_async: (url, token, key, data) => dispatch(actions.put_async(url, token, key, data)),
-        //deleteCollection_async: (token, payload) => dispatch(actions.deckDelete_async(token, payload)),
-        //getCollection_async: (token, userId) => dispatch(actions.deckGet_async(token, userId)),
-        //insertCollection_async: (token, data) => dispatch(actions.deckPost_async(token, data)),
-        //updateCollection_async: (token, user, payload) => dispatch(actions.deckUpdate_async(token, user, payload)),
         createModal_async: (payload) => dispatch(actions.modalCreate(payload))
     };
 };

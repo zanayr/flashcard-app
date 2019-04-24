@@ -107,13 +107,13 @@ export const post_async = (url, token, data) => {
 //  PUT  //
 export const putFail = (error) => {
     return {
-        type: actionTypes.DECK_UPDATE_FAIL,
+        type: actionTypes.PUT_FAIL,
         payload: error
     };
 };
 export const putSuccess = (store, key, data) => {
     return {
-        type: actionTypes.DECK_UPDATE_SUCCESS,
+        type: actionTypes.PUT_SUCC,
         payload: {
             data: data,
             key: key,

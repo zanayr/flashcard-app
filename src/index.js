@@ -10,7 +10,6 @@ import './index.css';
 import App from './App';
 import authReducer from './store/reducers/auth';
 import collectionsReducer from './store/reducers/collections';
-import deckReducer from './store/reducers/deck';
 import modalReducer from './store/reducers/modal';
 
 import * as serviceWorker from './serviceWorker';
@@ -32,7 +31,6 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = combineReducers({
     auth: authReducer,
     collections: collectionsReducer,
-    deck: deckReducer,
     modal: modalReducer
 });
 const store = createStore(rootReducer, composeEnhancers(
