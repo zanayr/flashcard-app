@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../../store/actions/index';
 
-import createHashId from '../../../helper/id';
+import {createHashId} from '../../../utility';
 
 import Aux from '../../../hoc/aux/Aux';
 import Overlay from '../overlay/Overlay';
