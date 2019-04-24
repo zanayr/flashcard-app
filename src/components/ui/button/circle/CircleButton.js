@@ -1,7 +1,6 @@
 import React from "react";
 
-import buttonCSS from "../Button.module.css";
-import circleButtonCSS from "./CircleButton.module.css";
+import CircleButtonCSS from "./CircleButton.module.css";
 
 const circleButton = (props) => {
     const handle_onClicked = (e) => {
@@ -10,7 +9,7 @@ const circleButton = (props) => {
     }
     return (
         <button
-            className={[buttonCSS.Button, circleButtonCSS.Circle_Button].join(" ")}
+            className={CircleButtonCSS.Circle_Button}
             onClick={handle_onClicked}>
             {props.children}
         </button>

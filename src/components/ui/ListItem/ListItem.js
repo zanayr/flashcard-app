@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Column from '../../../hoc/Column/Column';
-import QuickButton from '../../ui/button/quick/QuickButton';
+import QuickButton from '../button/Context/ContextButton';
 
 import AppCSS from '../../../App.module.css';
 import ListItemCSS from './ListItem.module.css';

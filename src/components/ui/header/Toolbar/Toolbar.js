@@ -1,6 +1,6 @@
 import React from 'react';
 
-import IconButton from '../../button/icon/IconButton';
+import IconButton from '../../button/Icon/IconButton';
 
 import GlobalCSS from '../../../../Global.module.css';
 import ToolbarCSS from './Toolbar.module.css';

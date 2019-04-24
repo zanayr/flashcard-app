@@ -3,8 +3,8 @@ import {createHashId} from '../../../utility';
 
 import Aux from '../../../hoc/Aux/Aux';
 import Row from '../../../hoc/Row/Row';
-import IconButton from '../../ui/button/icon/IconButton';
-import NavigationButton from '../../ui/button/navigation/NavigationButton';
+import IconButton from '../../ui/button/Icon/IconButton';
+import NavigationButton from '../../ui/button/Nav/NavButton';
 
 import AppCSS from '../../../App.module.css';
 import NavAsideCSS from './NavAside.module.css';

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import Column from '../../../hoc/Column/Column';
 import Input from '../../ui/input/Input';
-import Button from '../../ui/button/Button';
+import Button from '../../ui/button/Button/Button';
 
 import GlobalCSS from '../../../Global.module.css';
 import QuickInspectFormCSS from './QuickForm.module.css';

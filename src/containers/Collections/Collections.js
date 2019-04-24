@@ -7,7 +7,7 @@ import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/ui/Header/Header';
 import Throbber from '../../components/ui/throbber/Throbber';
 import List from '../../components/List/List';
-import ActionButton from '../../components/ui/button/action/ActionButton';
+import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside from '../../components/Aside/Aside/Aside';
 
 import AppCSS from '../../App.module.css';

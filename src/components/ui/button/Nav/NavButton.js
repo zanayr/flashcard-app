@@ -1,11 +1,11 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import BarLinkCSS from './BarLink.module.css';
+import NavButtonCSS from './NavButton.module.css';
 
-const barLink = (props) => {
+const navButton = (props) => {
     return (
-        <div className={BarLinkCSS.Bar_Link}>
+        <div className={NavButtonCSS.Navigation_Button}>
             <Link to={props.path}>
                 <span>{props.children}</span>
             </Link>
@@ -13,4 +13,4 @@ const barLink = (props) => {
     );
 }
 
-export default barLink;
+export default navButton;

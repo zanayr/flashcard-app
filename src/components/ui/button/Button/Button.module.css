@@ -1,0 +1,16 @@
+button.Submit {
+    width: auto;
+}
+button.Button {
+    border: none;
+    cursor: pointer;
+}
+button.Button:focus {
+    outline: none;
+    border: none;
+}
+.Aside_Button {
+    height: 64px;
+    padding: 0px 8px;
+    width: auto;
+}

@@ -16,3 +16,11 @@ html, body {
   background-color: blue;
 }
 
+button {
+  border: none;
+  cursor: pointer;
+}
+button:focus {
+  outline: none;
+  border: none;
+}

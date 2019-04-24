@@ -1,7 +1,7 @@
 import React from 'react';
 
-import CircleButton from '../../button/circle/CircleButton';
-import IconButton from '../../button/icon/IconButton';
+import CircleButton from '../../button/Circle/CircleButton';
+import IconButton from '../../button/Icon/IconButton';
 
 import GlobalCSS from '../../../../Global.module.css';
 import DashboardCSS from './Dashboard.module.css';

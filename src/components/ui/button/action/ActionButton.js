@@ -1,6 +1,6 @@
 import React from 'react';
 
-import PillButton from '../pill/PillButton';
+import PillButton from '../Pill/PillButton';
 
 import actionButtonCSS from './ActionButton.module.css';
 

@@ -7,7 +7,7 @@ import {createHashId} from '../../../utility';
 import Aux from '../../../hoc/Aux/Aux';
 import Overlay from '../Overlay/Overlay';
 import Row from '../../../hoc/Row/Row';
-import Button from '../../ui/button/Button';
+import Button from '../../ui/button/Button/Button';
 
 import AppCSS from '../../../App.module.css';
 import modalCSS from './Modal.module.css';

@@ -3,7 +3,7 @@ import React from 'react';
 import Aux from '../../../hoc/Aux/Aux';
 import Row from '../../../hoc/Row/Row';
 import Column from '../../../hoc/Column/Column';
-import IconButton from '../../ui/button/icon/IconButton';
+import IconButton from '../../ui/button/Icon/IconButton';
 import BarLink from '../../ui/Link/Bar/BarLink';
 import QuickForm from '../../Form/Quick/QuickForm';
 

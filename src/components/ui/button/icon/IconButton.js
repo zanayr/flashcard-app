@@ -1,6 +1,5 @@
 import React from 'react';
 
-import buttonCSS from '../Button.module.css';
 import iconButtonCSS from './IconButton.module.css';
 
 const iconButton = (props) => {
@@ -12,7 +11,7 @@ const iconButton = (props) => {
 
     return (
         <button
-            className={[buttonCSS.Button, iconButtonCSS.Icon_Button].join(' ')}
+            className={iconButtonCSS.Icon_Button}
             onClick={(e) => handle_onClicked(e)}>
             {props.children}
         </button>
