@@ -3,10 +3,9 @@ import {Route, Switch, withRouter, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import Aux from '../../hoc/aux/Aux';
-import Auth from './auth/Auth';
-import Logout from './auth/logout/Logout';
-import Main from './main/Main';
-import Collections from './Collections/Collections';
+import Auth from '../Auth/Auth';
+import Logout from '../Out/Out';
+import Collections from '../Collections/Collections';
 import Inspector from '../Inspector/Inspector';
 import Modal from '../../components/ui/modal/Modal';
 import * as actions from '../../store/actions/index';

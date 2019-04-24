@@ -1,11 +1,11 @@
 import React from 'react';
 
-import Aux from '../../../../hoc/aux/Aux';
-import Row from '../../../structure/row/Row';
-import Column from '../../../structure/column/Column';
-import IconButton from '../../button/icon/IconButton';
-import BarLink from '../../Link/Bar/BarLink';
-import QuickInspectForm from '../../../forms/quick/QuickInspectForm';
+import Aux from '../../../hoc/aux/Aux';
+import Row from '../../structure/row/Row';
+import Column from '../../structure/column/Column';
+import IconButton from '../../ui/button/icon/IconButton';
+import BarLink from '../../ui/Link/Bar/BarLink';
+import QuickInspectForm from '../../Form/Quick/QuickInspectForm';
 
 const quickInspectAside = (props) => {
     return (

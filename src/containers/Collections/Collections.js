@@ -1,20 +1,17 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import _deckConnection from '../../../database/deck';
 
-import * as actions from '../../../store/actions/index';
-import createHashId from '../../../helper/id';
+import * as actions from '../../store/actions/index';
 
-import Aux from '../../../hoc/aux/Aux';
-import Header from '../../../components/ui/Header/Header';
-import Throbber from '../../../components/ui/throbber/Throbber';
-import List from '../../../components/ui/list/List/List';
-import ListHeader from '../../../components/ui/list/ListHeader/ListHeader';
-import ActionButton from '../../../components/ui/button/action/ActionButton';
-import Aside from '../../../components/ui/asides/Aside';
+import Aux from '../../hoc/aux/Aux';
+import Header from '../../components/ui/Header/Header';
+import Throbber from '../../components/ui/throbber/Throbber';
+import List from '../../components/ui/list/List/List';
+import ListHeader from '../../components/ui/list/ListHeader/ListHeader';
+import ActionButton from '../../components/ui/button/action/ActionButton';
+import Aside from '../../components/Aside/Aside/Aside';
 
-import '../../../style.css';
-import globalCSS from '../../../Global.module.css';
+import AppCSS from '../../App.module.css';
 import CollectionsCSS from './Collections.module.css';
 
 class Collections extends Component {
@@ -266,7 +263,7 @@ class Collections extends Component {
                 <main
                     className={CollectionsCSS.Main}
                     onClick={this.handle_onMainClick}>
-                    <div className={[globalCSS.Inner, globalCSS.With_Padding].join(' ')}>
+                    <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
                         {list}
                     </div>
                 </main>

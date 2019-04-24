@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 
-import NavigationAiside from './navigation/NavigationAside';
-import QuickInspectAside from './quick/QuickInspectAside';
+import NavigationAiside from '../navigation/NavigationAside';
+import QuickInspectAside from '../Quick/QuickForm';
 
-import GlobalCSS from '../../../Global.module.css';
+import AppCSS from '../../../App.module.css';
 import AsideCSS from './Aside.module.css';
 
 const aside = (props) => {
@@ -49,7 +49,7 @@ const aside = (props) => {
 
     return (
         <aside className={cssClasses.join(' ')}>
-            <div className={GlobalCSS.Inner}>
+            <div className={AppCSS.Inner}>
                 {asideContent}
             </div>
         </aside>

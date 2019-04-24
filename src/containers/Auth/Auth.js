@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 
-import AuthForm from '../../../components/forms/Auth/AuthForm';
+import AuthForm from '../../components/Form/Auth/AuthForm';
 
-import GlobalCSS from '../../../Global.module.css';
+import AppCSS from '../../App.module.css';
 import AuthCSS from './Auth.module.css';
 
 class Auth extends Component {
@@ -22,7 +22,7 @@ class Auth extends Component {
         }
         return (
             <main className={AuthCSS.Open}>
-                <div className={GlobalCSS.Inner}>
+                <div className={AppCSS.Inner}>
                     {markup}
                 </div>
             </main>

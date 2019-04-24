@@ -1,12 +1,12 @@
 import React from 'react';
-import _createHashID from '../../../../helper/id';
+import {createHashId} from '../../../utility';
 
-import Aux from '../../../../hoc/aux/Aux';
-import Row from '../../../structure/row/Row';
-import IconButton from '../../button/icon/IconButton';
-import NavigationButton from '../../button/navigation/NavigationButton';
+import Aux from '../../../hoc/aux/Aux';
+import Row from '../../structure/row/Row';
+import IconButton from '../../ui/button/icon/IconButton';
+import NavigationButton from '../../ui/button/navigation/NavigationButton';
 
-import globalCSS from '../../../../Global.module.css';
+import AppCSS from '../../../App.module.css';
 import navigationAsideCSS from './NavigationAside.module.css';
 
 const navigationAside = (props) => {
@@ -19,7 +19,7 @@ const navigationAside = (props) => {
     const navigationButtons = navigationLinks.map(link => {
         return (
             <NavigationButton
-                key={_createHashID()}
+                key={createHashId()}
                 path={link.path}>
                 {link.value}
             </NavigationButton>
@@ -37,7 +37,7 @@ const navigationAside = (props) => {
                 <IconButton onClick={handle_onClick}>X</IconButton>
             </Row>
             <nav className={navigationAsideCSS.Navigation}>
-                <div className={globalCSS.Inner}>
+                <div className={AppCSS.Inner}>
                     {navigationButtons}
                 </div>
             </nav>

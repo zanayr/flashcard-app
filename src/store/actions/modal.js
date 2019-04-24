@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import createHashId from '../../helper/id';
+import {createHashId} from '../../utility';
 
 export const modalCreate = (payload) => {
     payload.data.id = createHashId();
