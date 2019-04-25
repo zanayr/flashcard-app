@@ -61,7 +61,7 @@ class ListItem extends PureComponent {
         this.props.onDelete({
             key: this.props.item.id,
             data: {
-                title: this.item.title,
+                title: this.props.item.title,
             },
             actions: {
                 callback: this.onDelete
