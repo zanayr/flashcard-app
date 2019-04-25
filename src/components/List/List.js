@@ -20,12 +20,7 @@ class List extends Component {
     }
 
     handle_onDeleteClick = (payload) => {
-        this.props.onDelete({
-            key: payload,
-            data: {
-                title: this.state.collection[payload].title
-            }
-        });
+        this.props.onDelete(payload);
     }
 
     handle_onEditClick = (payload) => {

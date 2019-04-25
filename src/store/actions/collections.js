@@ -22,7 +22,7 @@ export const delete_async = (url, token, key) => {
     return dispatch => {
         axios.delete('/' + url + '/' + key + '.json?auth=' + token)
         .then(response => {
-            dispatch(deleteSuccess(url, response.data.name));
+            dispatch(deleteSuccess(url, key));
         })
         .catch(error => {
             dispatch(deleteFail(error));
@@ -76,11 +76,6 @@ export const get_async = (url, token, user) => {
 
 
 //  POST  //
-export const postComplete = () => {
-    return {
-        type: actionTypes.POST_COMP
-    }
-}
 export const postFail = (error) => {
     return {
         type: actionTypes.POST_FAIL,

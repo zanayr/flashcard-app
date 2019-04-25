@@ -24,17 +24,20 @@ const serviceFailed = (state, action) => {
 
 //  DELETE  //
 const deleteSucceeded = (state, action) => {
-    // const store = action.payload.store;
-    // const collection = state.collections[store];
-    // delete collection[action.payload.key];
-    // return {
-    //     ...state,
-    //     collections: {
-    //         ...state.collections,
-    //         [store]: [...collection]
-    //     }
-    // };
-    return state;
+    const store = action.payload.store;
+    const collection = state.collections[store].map(item => {
+        if (item.key === action.payload.key) {
+            item.isDeleted = true;
+        }
+        return item;
+    });
+    return {
+        ...state,
+        collections: {
+            ...state.collections,
+            [store]: [...collection]
+        }
+    };
 }
 
 //  GET  //
@@ -78,12 +81,6 @@ const postSucceeded = (state, action) => {
         }
     };
 };
-const postComplete = (state, action) => {
-    return {
-        ...state,
-        isPosting: false
-    };
-};
 
 //  PUT  //
 const putSucceeded = (state, action) => {
@@ -115,8 +112,6 @@ const reducer = (state=initialState, action) => {
             return getInitiated(state, action);
         case actionTypes.GET_SUCC:
             return getSucceeded(state, action);
-        case actionTypes.POST_COMP:
-            return postComplete(state, action);
         case actionTypes.POST_FAIL:
             return serviceFailed(state, action);
         case actionTypes.POST_INIT:

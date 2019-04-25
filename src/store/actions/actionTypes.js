@@ -3,12 +3,11 @@ export const AUTH_LOGOUT = 'AUTH_LOGOUT';
 export const AUTH_START = 'AUTH_START';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
 
-export const DELETE_FAIL = 'GET_DELETE';
+export const DELETE_FAIL = 'DELETE_FAIL';
 export const DELETE_SUCC = 'DELETE_SUCC';
 export const GET_FAIL = 'GET_FAIL';
 export const GET_INIT = 'GET_INIT';
 export const GET_SUCC = 'GET_SUCC';
-export const POST_COMP = 'POST_COMP';
 export const POST_FAIL = 'POST_FAIL';
 export const POST_INIT = 'POST_INIT';
 export const POST_SUCC = 'POST_SUCC';

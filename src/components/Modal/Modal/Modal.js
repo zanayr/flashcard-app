@@ -29,6 +29,9 @@ const modal = (props) => {
         props.clearModal_async(props);
     }
     const handle_onConfirm = () => {
+        if (props.actions.callback) {
+            props.actions.callback();
+        }
         props.actions.onConfirm();
         props.clearModal_async(props);
     }

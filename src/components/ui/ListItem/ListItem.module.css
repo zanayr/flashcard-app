@@ -1,5 +1,6 @@
 .List_Item {
     background-color: white;
+    height: 64px;
     overflow: hidden;
     top: auto;
     transition: height 0.666s ease 0.333s;
@@ -15,16 +16,16 @@
 .List_Item h3 {
     margin-bottom: 2px;
     opacity: 1;
-    transition: opacity 0.167s ease 0.333s;
+    /*transition: opacity 0.167s ease 0.333s;*/
 }
 .List_Item p {
     margin-top: 2px;
     opacity: 1;
-    transition: opacity 0.167s ease 0.333s;
+    /*transition: opacity 0.167s ease 0.333s;*/
 }
 
 /*  ANIMATIONS & EFFECTS  */
-@keyframes FADE {
+@keyframes FADE-IN {
     0% {
         opacity: 0;
     }
@@ -40,25 +41,40 @@
         height: 64px;
     }
 }
+@keyframes FADE-OUT {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes SHRINK {
+    0% {
+        height: 64px;
+    }
+    100% {
+        height: 0px;
+    }
+}
 .List_Item.New {
     animation: GROW 0.333s ease;
     height: 64px;
 }
 .List_Item.New h3,
 .List_Item.New p {
-    animation: FADE 0.333s ease;
+    animation: FADE-IN 0.497s ease;
     opacity: 1;
-}
-.Existing {
-    height: 64px;
 }
 .Selected {
     background-color: pink;
 }
-.Deleted {
+.List_Item.Deleted {
+    animation: SHRINK 0.333s ease;
     height: 0px;
 }
-.Deleted h3,
-.Deleted p {
+.List_Item.Deleted h3,
+.List_Item.Deleted p {
+    animation: FADE-OUT 0.167s ease;
     opacity: 0;
 }

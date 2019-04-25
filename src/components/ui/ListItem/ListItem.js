@@ -12,14 +12,20 @@ import {getDeckById} from '../../../store/reducers/root';
 
 class ListItem extends PureComponent {
     state = {
-        selected: false,
-        deleted: false
+        isSelected: false,
+        isDeleted: false,
     }
     
+    toggleDelete = () => {
+        this.setState(previousState => ({
+            ...previousState,
+            isDeleted: !previousState.isDeleted
+        }));
+    }
     toggleSelect () {
         this.setState(previousState => ({
             ...previousState,
-            selected: !previousState.selected
+            isSelected: !previousState.isSelected
         }));
     }
 
@@ -34,17 +40,26 @@ class ListItem extends PureComponent {
         if (this.props.data.isNew) {
             cssClasses = [...cssClasses, ListItemCSS.New];
         }
-        if (this.state.selected) {
+        if (this.state.isSelected) {
             cssClasses = [...cssClasses, ListItemCSS.Selected];
         }
-        if (this.state.deleted) {
-            cssClasses = [ListItemCSS.List_Item, ListItemCSS.Deleted];
+        if (this.state.isDeleted) {
+            console.log('here');
+            cssClasses = [ListItemCSS.List_Item, ListItemCSS.Selected, ListItemCSS.Deleted];
         }
         const handle_onEditClicked = () => {
             this.props.onEdit(this.props.data.id);
         }
         const handle_onDeleteClick = () => {
-            this.props.onDelete(this.props.data.id);
+            this.props.onDelete({
+                key: this.props.data.id,
+                data: {
+                    title: this.props.data.title,
+                },
+                actions: {
+                    callback: this.toggleDelete
+                }
+            });
         }
 
         return (
@@ -57,12 +72,12 @@ class ListItem extends PureComponent {
                         <p>{this.props.data.details}</p>
                     </Column>
                     <QuickButton
-                        active={this.state.selected && true && !this.state.deleted}
+                        active={this.state.isSelected && true && !this.state.deleted}
                         onClick={handle_onEditClicked}>
                         Edit
                     </QuickButton>
                     <QuickButton
-                        active={this.state.selected && true && !this.state.deleted}
+                        active={this.state.isSelected && true && !this.state.deleted}
                         delete
                         onClick={handle_onDeleteClick}>
                         Delete

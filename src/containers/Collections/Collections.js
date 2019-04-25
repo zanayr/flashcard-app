@@ -154,10 +154,8 @@ class Collections extends Component {
     handle_onListDeleteClick = (payload) => {
         this.props.createModal_async({
             actions: {
+                ...payload.actions,
                 onConfirm: () => {
-                    this.addDeleted(payload.key);
-                    this.removeSelected(payload.key);
-                    //this.deleteCollection(payload);
                     this.props.delete_async(this.state.state, this.props.token, payload.key);
                 },
                 onCancel: () => {
@@ -273,7 +271,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        delete_async: (url, token, key) => dispatch(actions.delete_async(url, token, key)), 
+        delete_async: (url, token, key) => dispatch(actions.delete_async(url, token, key)),
         get_async: (url, token, user) => dispatch(actions.get_async(url, token, user)),
         post_async: (url, token, data) => dispatch(actions.post_async(url, token, data)),
         put_async: (url, token, key, data) => dispatch(actions.put_async(url, token, key, data)),
