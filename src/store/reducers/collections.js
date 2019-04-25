@@ -1,4 +1,5 @@
-import * as actionTypes from "../actions/actionTypes";
+import * as actionTypes from '../actions/actionTypes';
+import * as sortTypes from './sortTypes';
 
 const initialState = {
     collections: {
@@ -7,7 +8,8 @@ const initialState = {
     },
     postMap: {},
     error: null,
-    isLoading: false
+    isLoading: false,
+    isPosting: false,
 };
 
 //  FAILURE  //
@@ -15,7 +17,8 @@ const serviceFailed = (state, action) => {
     return {
         ...state,
         error: action.payload,
-        isLoading: false
+        isLoading: false,
+        isPosting: false
     };
 }
 
@@ -59,7 +62,7 @@ const getSucceeded = (state, action) => {
 const postInitiated = (state, action) => {
     return {
         ...state,
-        isLoading: true
+        isPosting: true
     };
 };
 const postSucceeded = (state, action) => {
@@ -68,9 +71,17 @@ const postSucceeded = (state, action) => {
         ...state,
         collections: {
             ...state.collections,
-            [store]: state.collections[store].concat(action.payload.data)
-        },
-        isLoading: false
+            [store]: state.collections[store].concat({
+                key: action.payload.key,
+                data: action.payload.data
+            })
+        }
+    };
+};
+const postComplete = (state, action) => {
+    return {
+        ...state,
+        isPosting: false
     };
 };
 
@@ -104,6 +115,8 @@ const reducer = (state=initialState, action) => {
             return getInitiated(state, action);
         case actionTypes.GET_SUCC:
             return getSucceeded(state, action);
+        case actionTypes.POST_COMP:
+            return postComplete(state, action);
         case actionTypes.POST_FAIL:
             return serviceFailed(state, action);
         case actionTypes.POST_INIT:
@@ -119,8 +132,33 @@ const reducer = (state=initialState, action) => {
     }
 }
 
+//  SELECTORS  //
 export function getDecks (state) {
     return state.collections.decks;
+}
+export function getDecksBy (state, method) {
+    switch (method) {
+        case sortTypes.ALPHA_DEC:
+            return state.collections.decks.sort((a, b) => {
+                const A = a.data.title.toUpperCase();
+                const B = b.data.title.toUpperCase();
+                let comparison = 0;
+                if (A > B) {
+                    comparison = 1;
+                } else if (A < B) {
+                    comparison = -1;
+                }
+                return comparison;
+            });
+        default:
+            break;
+    }
+}
+export function getIsPosting (state) {
+    return state.isPosting;
+}
+export function getDeckById (state, id) {
+    return state.collections.decks.find(deck => deck.id === id);
 }
 export function getLoading (state) {
     return state.isLoading;

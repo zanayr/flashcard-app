@@ -8,6 +8,7 @@ export {
     delete_async,
     get_async,
     post_async,
+    postComplete,
     put_async
 } from './collections';
 

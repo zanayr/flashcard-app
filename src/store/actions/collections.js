@@ -57,7 +57,10 @@ export const get_async = (url, token, user) => {
             for (let key in response.data) {
                 models.push({
                     key: key,
-                    data: response.data[key]
+                    data: {
+                        ...response.data[key],
+                        id: key
+                    }
                 });
             }
             dispatch(getSuccess({
@@ -73,6 +76,11 @@ export const get_async = (url, token, user) => {
 
 
 //  POST  //
+export const postComplete = () => {
+    return {
+        type: actionTypes.POST_COMP
+    }
+}
 export const postFail = (error) => {
     return {
         type: actionTypes.POST_FAIL,
@@ -88,7 +96,10 @@ export const postSuccess = (store, key, data) => {
     return {
         type: actionTypes.POST_SUCC,
         payload: {
-            data: data,
+            data: {
+                ...data,
+                isNew: true
+            },
             key: key,
             store: store
         }

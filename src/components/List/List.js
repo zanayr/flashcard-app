@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {getDeckCollection} from '../../store/reducers/root';
+import {getDecksBy} from '../../store/reducers/root';
+import * as sortType from '../../store/reducers/sortTypes';
 
 import Aux from '../../hoc/Aux/Aux';
 import ListItem from '../ui/ListItem/ListItem';
@@ -62,14 +63,16 @@ class List extends Component {
     }
 
     render() {
+        //const decks = this.props.decks;
         let listItems = this.props.decks.map(deck => {
             return (
                 <ListItem
                     key={deck.key}
                     data={deck.data}
-                    deleted={this.props.deletedItems.indexOf(deck.key) > -1}
-                    selected={this.props.selectedItems.indexOf(deck.key) > -1}
-                    single={this.props.selectedItems.length === 1}
+                    uniqueId={deck.key}
+                    //deleted={this.props.deletedItems.indexOf(deck.key) > -1}
+                    //selected={this.props.selectedItems.indexOf(deck.key) > -1}
+                    //single={this.props.selectedItems.length === 1}
                     onDelete={this.handle_onDeleteClick}
                     onEdit={this.handle_onEditClick}
                     onSelect={this.handle_onItemSelect}/>
@@ -90,7 +93,8 @@ class List extends Component {
 
 const mapStateToProps = state => {
     return {
-        decks: getDeckCollection(state)
+        decks: getDecksBy(state, sortType.ALPHA_DEC),
+        posting: state.collection.isPosting,
     }
 }
 

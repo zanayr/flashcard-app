@@ -1,0 +1,1 @@
+export const ALPHA_DEC = 'ALPHA_DEC';

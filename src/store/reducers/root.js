@@ -12,10 +12,19 @@ const rootReducer = combineReducers({
     modal: modalReducer
 });
 
-export function getDeckCollection(store) {
+export function getDeckCollection (store) {
     return FromCollection.getDecks(store[COLLECTION]);
 }
-export function getIsLoading(store) {
+export function getDecksBy (store, method) {
+    return FromCollection.getDecksBy(store[COLLECTION], method);
+}
+export function getDeckById (store, id) {
+    return FromCollection.getDeckById(store[COLLECTION], id);
+}
+export function getIsPosting (store) {
+    return FromCollection.getIsPosting(store[COLLECTION]);
+}
+export function getIsLoading (store) {
     return FromCollection.getLoading(store[COLLECTION]);
 }
 

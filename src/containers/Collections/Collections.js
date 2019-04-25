@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
 import {getIsLoading} from '../../store/reducers/root';
+import * as utility from '../../utility';
 
 import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
@@ -28,7 +29,8 @@ class Collections extends Component {
             deleted: [],
             selected: []
         },
-        state: 'decks'
+        state: 'decks',
+        isPosting: false,
     }
 
     componentDidMount () {
@@ -41,7 +43,7 @@ class Collections extends Component {
     createCollection () {
         this.props.post_async(this.state.state, this.props.token, {
             details: 'This is a new flashcard deck',
-            title: 'New Flashcard Deck',
+            title: utility.createHashId() + ' New Flashcard Deck',
             userId: this.props.user
         });
     }
@@ -224,12 +226,9 @@ class Collections extends Component {
             list = (
                 <List
                     backingCollection={this.state.state}
-                    deletedItems={this.state.collections.deleted}
-                    selectedItems={this.state.collections.selected}
                     onChange={this.handle_onListItemChange}
                     onDelete={this.handle_onListDeleteClick}
-                    onEdit={this.handle_onListEditClick}
-                    onSelect={this.handle_onListItemSelect}>
+                    onEdit={this.handle_onListEditClick}>
                     <ActionButton
                         onClick={this.handle_onQuickActionClick}
                         state={this.state.action.state}
