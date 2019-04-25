@@ -12,7 +12,6 @@ const aside = (props) => {
     if (props.active) {
         cssClasses = [...cssClasses, AsideCSS.Active];
     }
-    console.log(props.data);
     switch (props.state) {
         case 1:
             asideContent = (

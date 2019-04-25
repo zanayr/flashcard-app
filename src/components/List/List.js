@@ -11,7 +11,21 @@ import ListCSS from './List.module.css';
 
 class List extends Component {
     state = {
-        collection: {}
+        selected: []
+    }
+
+    toogleSelectedItem (id) {
+        if (this.state.selected.indexOf(id) > -1) {
+            this.setState(previousState => ({
+                ...previousState,
+                selected: previousState.selected.filter(i => i !== id)
+            }));
+        } else {
+            this.setState(previousState => ({
+                ...previousState,
+                selected: previousState.selected.concat(id)
+            }));
+        }
     }
 
     handle_onDeleteClick = (payload) => {
@@ -24,19 +38,24 @@ class List extends Component {
         });
     }
     handle_onItemSelect = (payload) => {
-        this.props.onSelect(payload);
+        this.toogleSelectedItem(payload.key);
     }
 
     render() {
         let listItems = this.props.decks.map(deck => {
+            let isSingle = false;
+            if (this.state.selected.length === 1 && this.state.selected[0] === deck.key) {
+                isSingle = true;
+            }
             return (
                 <ListItem
                     key={deck.key}
                     data={deck.data}
-                    uniqueId={deck.key}
                     onDelete={this.handle_onDeleteClick}
                     onEdit={this.handle_onEditClick}
-                    onSelect={this.handle_onItemSelect}/>
+                    onSelect={this.handle_onItemSelect}
+                    single={isSingle}
+                    uniqueId={deck.key}/>
             );
         });
         return (

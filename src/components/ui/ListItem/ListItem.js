@@ -1,28 +1,30 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
-import * as actions from '../../../store/actions/index';
+import {getItemDataById} from '../../../store/reducers/root';
 
+import withContextActions from '../../../hoc/withContextActions/withContextActions.js';
 import Column from '../../../hoc/Column/Column';
 import QuickButton from '../button/Context/ContextButton';
-import Throbber from '../../ui/Throbber/Throbber';
 
 import AppCSS from '../../../App.module.css';
 import ListItemCSS from './ListItem.module.css';
-import {getItemDataById} from '../../../store/reducers/root';
 
 class ListItem extends PureComponent {
     state = {
-        isSelected: false,
+        data: this.props.item,
         isDeleted: false,
-        data: this.props.item
+        isSelected: false,
     }
 
+    //  Methods  //
     toggleSelect () {
         this.setState(previousState => ({
             ...previousState,
             isSelected: !previousState.isSelected
         }));
     }
+
+    //  Event Handlers  //
     onDelete = () => {
         this.setState(previousState => ({
             ...previousState,
@@ -41,16 +43,18 @@ class ListItem extends PureComponent {
 
     handle_onClick (e) {
         e.stopPropagation();
-
         this.toggleSelect();
+        this.props.onSelect({
+            key: this.props.item.id
+        });
     }
 
     handle_onEditClicked = () => {
         this.props.onEdit({
             key: this.props.item.id,
             data: {
-                title: this.props.item.title,
-                details: this.props.item.details
+                title: this.state.data.title,
+                details: this.state.data.details
             },
             actions: {
                 onChange: this.onChange
@@ -61,7 +65,7 @@ class ListItem extends PureComponent {
         this.props.onDelete({
             key: this.props.item.id,
             data: {
-                title: this.props.item.title,
+                title: this.state.data.title,
             },
             actions: {
                 callback: this.onDelete
@@ -70,6 +74,7 @@ class ListItem extends PureComponent {
     }
 
     render () {
+        console.log('Rendering list item:', this.props.item.id);
         let cssClasses = [ListItemCSS.List_Item];
         if (this.props.data.isNew) {
             cssClasses = [...cssClasses, ListItemCSS.New];
@@ -80,7 +85,6 @@ class ListItem extends PureComponent {
         if (this.state.isDeleted) {
             cssClasses = [ListItemCSS.List_Item, ListItemCSS.Selected, ListItemCSS.Deleted];
         }
-        console.log('list item is rendering');
         return (
             <div
                 className={cssClasses.join(' ')}
@@ -91,12 +95,12 @@ class ListItem extends PureComponent {
                         <p>{this.state.data.details}</p>
                     </Column>
                     <QuickButton
-                        active={this.state.isSelected && true && !this.state.deleted}
+                        active={this.state.isSelected && this.props.single && !this.state.deleted}
                         onClick={this.handle_onEditClicked}>
                         Edit
                     </QuickButton>
                     <QuickButton
-                        active={this.state.isSelected && true && !this.state.deleted}
+                        active={this.state.isSelected && this.props.single && !this.state.deleted}
                         delete
                         onClick={this.handle_onDeleteClick}>
                         Delete
