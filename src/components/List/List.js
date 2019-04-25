@@ -11,12 +11,7 @@ import ListCSS from './List.module.css';
 
 class List extends Component {
     state = {
-        //collection: {...this.props.backingCollection}
         collection: {}
-    }
-
-    componentDidMount () {
-        console.log(this.props.decks);
     }
 
     handle_onDeleteClick = (payload) => {

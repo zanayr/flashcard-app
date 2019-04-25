@@ -58,19 +58,19 @@ class Collections extends Component {
             }
         }));
     }
-    updateAsideData (payload) {
-        this.setState(previousState => ({
-            ...previousState,
-            aside: {
-                ...previousState.aside,
-                data: {
-                    ...previousState.aside.data,
-                    title: payload.data.title,
-                    details: payload.data.details
-                }
-            }
-        }));
-    }
+    // updateAsideData (payload) {
+    //     this.setState(previousState => ({
+    //         ...previousState,
+    //         aside: {
+    //             ...previousState.aside,
+    //             data: {
+    //                 ...previousState.aside.data,
+    //                 title: payload.data.title,
+    //                 details: payload.data.details
+    //             }
+    //         }
+    //     }));
+    // }
     updateAside (payload) {
         this.setState(previousState => ({
             ...previousState,
@@ -103,7 +103,7 @@ class Collections extends Component {
 
     //  QUICK EDIT  //
     handle_onQucikEditSubmit = (payload) => {
-        //this.updateCollection(payload);
+        console.log(payload.data.title);
         this.props.put_async(this.state.state, this.props.token, payload.key, payload.data);
         this.toggleAside();
     }
@@ -173,12 +173,18 @@ class Collections extends Component {
         });
     }
     handle_onListEditClick = (payload) => {
+        console.log(payload);
         this.updateAside({
-            ...payload,
             actions: {
                 ...payload.actions,
                 onSubmit: this.handle_onQucikEditSubmit
-            }
+            },
+            data: {
+                ...payload.data,
+                key: payload.key,
+                userId: this.props.user
+            },
+            state: 99
         });
         this.toggleAside();
     }
@@ -192,9 +198,6 @@ class Collections extends Component {
             this.toggleAside();
         }
     }
-    // handle_onListItemChange = (payload) => {
-    //     this.updateAsideData(payload)
-    // }
 
     //  ACTION BUTTON EVENT HANDLERS  //
     handle_onQuickActionClick = (payload) => {

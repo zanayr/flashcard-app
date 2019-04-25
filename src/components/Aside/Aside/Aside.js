@@ -12,7 +12,7 @@ const aside = (props) => {
     if (props.active) {
         cssClasses = [...cssClasses, AsideCSS.Active];
     }
-
+    console.log(props.data);
     switch (props.state) {
         case 1:
             asideContent = (
@@ -33,6 +33,7 @@ const aside = (props) => {
             );
             break;
         case 99:
+        console.log('here');
             asideContent = (
                 <QuickInspectAside
                     actions={props.actions}

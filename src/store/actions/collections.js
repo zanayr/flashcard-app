@@ -131,9 +131,11 @@ export const putSuccess = (store, key, data) => {
     };
 };
 export const put_async = (url, token, key, data) => {
+    console.log(key);
     return dispatch => {
         axios.put('/' + url + '/' + key + '.json?auth=' + token, data)
         .then(response => {
+            console.log(data.title);
             dispatch(putSuccess(url, response.data.name, data));
         })
         .catch(error => {

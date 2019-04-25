@@ -86,8 +86,8 @@ class QuickInspectForm extends Component {
     handle_onSubmit = () => {
         this.props.actions.onSubmit({
             data: {
-                details: this.props.data.details,
-                title: this.props.data.title,
+                details: this.state.form.details.value,
+                title: this.state.form.title.value,
                 userId: this.props.data.userId
             },
             key: this.props.data.key
@@ -102,6 +102,7 @@ class QuickInspectForm extends Component {
                 id: label
             });
         }
+        console.log(this.props.data);
         console.log('form is rerendering...');
         return (
             <form className={QuickInspectFormCSS.Quick_Inspect_Form}>

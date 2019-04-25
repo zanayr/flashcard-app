@@ -8,8 +8,7 @@ const initialState = {
     },
     postMap: {},
     error: null,
-    isLoading: false,
-    isPosting: false,
+    isLoading: false
 };
 
 //  FAILURE  //
@@ -17,8 +16,7 @@ const serviceFailed = (state, action) => {
     return {
         ...state,
         error: action.payload,
-        isLoading: false,
-        isPosting: false
+        isLoading: false
     };
 }
 
@@ -62,12 +60,6 @@ const getSucceeded = (state, action) => {
 };
 
 //  POST  //
-const postInitiated = (state, action) => {
-    return {
-        ...state,
-        isPosting: true
-    };
-};
 const postSucceeded = (state, action) => {
     const store = action.payload.store;
     return {
@@ -84,19 +76,24 @@ const postSucceeded = (state, action) => {
 
 //  PUT  //
 const putSucceeded = (state, action) => {
-    //const store = action.payload.store;
-    // return {
-    //     ...state,
-    //     collections: {
-    //         ...state.collections,
-    //         [store]: [
-    //             ...state.collections[store],
-    //             [action.payload.key]: action.payload.data
-    //         ]
-    //     },
-    //     isLoading: false
-    // };
-    return state;
+    const store = action.payload.store;
+    const collection = state.collections[store].map(item => {
+        if (item.key === action.payload.key) {
+            item.data = {
+                ...action.payload.data
+            }
+        }
+        return item;
+    });
+    console.log(collection);
+    return {
+        ...state,
+        collections: {
+            ...state.collections,
+            [store]: [...collection]
+        },
+        isLoading: false
+    };
 };
 
 //  REDUCER  //
@@ -114,8 +111,6 @@ const reducer = (state=initialState, action) => {
             return getSucceeded(state, action);
         case actionTypes.POST_FAIL:
             return serviceFailed(state, action);
-        case actionTypes.POST_INIT:
-            return postInitiated(state, action);
         case actionTypes.POST_SUCC:
             return postSucceeded(state, action);
         case actionTypes.PUT_FAIL:

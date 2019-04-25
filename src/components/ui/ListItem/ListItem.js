@@ -36,12 +36,7 @@ class ListItem extends PureComponent {
                 ...previousState.data,
                 [target]: value
             }
-        }), () => {
-            console.log(this.state.data.title);
-        });
-    }
-    getTargetValue = (target) => {
-        return this.state.data[target];
+        }));
     }
 
     handle_onClick (e) {
@@ -58,8 +53,7 @@ class ListItem extends PureComponent {
                 details: this.props.item.details
             },
             actions: {
-                onChange: this.onChange,
-                getValue: this.getTargetValue
+                onChange: this.onChange
             }
         });
     }
@@ -84,12 +78,9 @@ class ListItem extends PureComponent {
             cssClasses = [...cssClasses, ListItemCSS.Selected];
         }
         if (this.state.isDeleted) {
-            console.log('here');
             cssClasses = [ListItemCSS.List_Item, ListItemCSS.Selected, ListItemCSS.Deleted];
         }
-
-        console.log('rendering list item:', this.props.item.id);
-
+        console.log('list item is rendering');
         return (
             <div
                 className={cssClasses.join(' ')}
