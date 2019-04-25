@@ -8,31 +8,71 @@ import Throbber from '../../ui/Throbber/Throbber';
 
 import AppCSS from '../../../App.module.css';
 import ListItemCSS from './ListItem.module.css';
-import {getDeckById} from '../../../store/reducers/root';
+import {getItemDataById} from '../../../store/reducers/root';
 
 class ListItem extends PureComponent {
     state = {
         isSelected: false,
         isDeleted: false,
+        data: this.props.item
     }
-    
-    toggleDelete = () => {
-        this.setState(previousState => ({
-            ...previousState,
-            isDeleted: !previousState.isDeleted
-        }));
-    }
+
     toggleSelect () {
         this.setState(previousState => ({
             ...previousState,
             isSelected: !previousState.isSelected
         }));
     }
+    onDelete = () => {
+        this.setState(previousState => ({
+            ...previousState,
+            isDeleted: true
+        }));
+    }
+    onChange = (target, value) => {
+        this.setState(previousState => ({
+            ...previousState,
+            data: {
+                ...previousState.data,
+                [target]: value
+            }
+        }), () => {
+            console.log(this.state.data.title);
+        });
+    }
+    getTargetValue = (target) => {
+        return this.state.data[target];
+    }
 
     handle_onClick (e) {
         e.stopPropagation();
 
         this.toggleSelect();
+    }
+
+    handle_onEditClicked = () => {
+        this.props.onEdit({
+            key: this.props.item.id,
+            data: {
+                title: this.props.item.title,
+                details: this.props.item.details
+            },
+            actions: {
+                onChange: this.onChange,
+                getValue: this.getTargetValue
+            }
+        });
+    }
+    handle_onDeleteClick = () => {
+        this.props.onDelete({
+            key: this.props.item.id,
+            data: {
+                title: this.item.title,
+            },
+            actions: {
+                callback: this.onDelete
+            }
+        });
     }
 
     render () {
@@ -47,20 +87,8 @@ class ListItem extends PureComponent {
             console.log('here');
             cssClasses = [ListItemCSS.List_Item, ListItemCSS.Selected, ListItemCSS.Deleted];
         }
-        const handle_onEditClicked = () => {
-            this.props.onEdit(this.props.data.id);
-        }
-        const handle_onDeleteClick = () => {
-            this.props.onDelete({
-                key: this.props.data.id,
-                data: {
-                    title: this.props.data.title,
-                },
-                actions: {
-                    callback: this.toggleDelete
-                }
-            });
-        }
+
+        console.log('rendering list item:', this.props.item.id);
 
         return (
             <div
@@ -68,18 +96,18 @@ class ListItem extends PureComponent {
                 onClick={(e) => this.handle_onClick(e)}>
                 <div className={AppCSS.Inner}>
                     <Column just='Center' align='Start'>
-                        <h3>{this.props.data.title}</h3>
-                        <p>{this.props.data.details}</p>
+                        <h3>{this.state.data.title}</h3>
+                        <p>{this.state.data.details}</p>
                     </Column>
                     <QuickButton
                         active={this.state.isSelected && true && !this.state.deleted}
-                        onClick={handle_onEditClicked}>
+                        onClick={this.handle_onEditClicked}>
                         Edit
                     </QuickButton>
                     <QuickButton
                         active={this.state.isSelected && true && !this.state.deleted}
                         delete
-                        onClick={handle_onDeleteClick}>
+                        onClick={this.handle_onDeleteClick}>
                         Delete
                     </QuickButton>
                 </div>
@@ -90,7 +118,7 @@ class ListItem extends PureComponent {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        item: getDeckById(state, ownProps.id)
+        item: getItemDataById(state, ownProps.uniqueId)
     }
 }
 

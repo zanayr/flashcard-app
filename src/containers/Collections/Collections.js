@@ -192,9 +192,9 @@ class Collections extends Component {
             this.toggleAside();
         }
     }
-    handle_onListItemChange = (payload) => {
-        this.updateAsideData(payload)
-    }
+    // handle_onListItemChange = (payload) => {
+    //     this.updateAsideData(payload)
+    // }
 
     //  ACTION BUTTON EVENT HANDLERS  //
     handle_onQuickActionClick = (payload) => {
@@ -220,11 +220,9 @@ class Collections extends Component {
     render () {
         let list = (<Throbber/>);
         if (!this.props.loading) {
-            //let collection = {...this.props.decks};
             list = (
                 <List
                     backingCollection={this.state.state}
-                    onChange={this.handle_onListItemChange}
                     onDelete={this.handle_onListDeleteClick}
                     onEdit={this.handle_onListEditClick}>
                     <ActionButton
@@ -261,8 +259,6 @@ class Collections extends Component {
 
 const mapStateToProps = state => {
     return {
-        //decks: state.collections.collections.decks,
-        //cards: state.collections.collections.cards,
         loading: getIsLoading(state),
         token: state.auth.token,
         userId: state.auth.userId,

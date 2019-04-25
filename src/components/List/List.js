@@ -22,52 +22,23 @@ class List extends Component {
     handle_onDeleteClick = (payload) => {
         this.props.onDelete(payload);
     }
-
     handle_onEditClick = (payload) => {
         this.props.onEdit({
-            actions: {
-                onChange: this.handle_onListItemChange
-            },
-            data: {
-                ...this.state.collection[payload],
-                key: payload
-            },
+            ...payload,
             state: 99
         });
     }
     handle_onItemSelect = (payload) => {
         this.props.onSelect(payload);
     }
-    handle_onListItemChange = (payload) => {
-        let collection = this.state.collection;
-        collection[payload.data.id][payload.data.property] = payload.data.value;
-
-        this.setState(previousState => ({
-            ...previousState,
-            collection: {
-                ...collection
-            }
-        }), () => {
-            this.props.onChange({
-                data: {
-                    title: this.state.collection[payload.data.id].title,
-                    details: this.state.collection[payload.data.id].details
-                }
-            });
-        });
-    }
 
     render() {
-        //const decks = this.props.decks;
         let listItems = this.props.decks.map(deck => {
             return (
                 <ListItem
                     key={deck.key}
                     data={deck.data}
                     uniqueId={deck.key}
-                    //deleted={this.props.deletedItems.indexOf(deck.key) > -1}
-                    //selected={this.props.selectedItems.indexOf(deck.key) > -1}
-                    //single={this.props.selectedItems.length === 1}
                     onDelete={this.handle_onDeleteClick}
                     onEdit={this.handle_onEditClick}
                     onSelect={this.handle_onItemSelect}/>

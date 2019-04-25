@@ -152,8 +152,11 @@ export function getDecksBy (state, method) {
 export function getIsPosting (state) {
     return state.isPosting;
 }
-export function getDeckById (state, id) {
+export function getItemById (state, id) {
     return state.collections.decks.find(deck => deck.id === id);
+}
+export function getItemDataById (state, id) {
+    return state.collections.decks.find(deck => deck.key === id).data;
 }
 export function getLoading (state) {
     return state.isLoading;

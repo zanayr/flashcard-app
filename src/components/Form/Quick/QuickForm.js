@@ -22,7 +22,8 @@ class QuickInspectForm extends Component {
                     required: true,
                     minLength: 6,
                     maxLength: 48
-                }
+                },
+                value: this.props.data.title
             },
             details: {
                 config: {
@@ -35,7 +36,8 @@ class QuickInspectForm extends Component {
                 validation: {
                     required: true,
                     maxLength: 64
-                }
+                },
+                value: this.props.data.details
             }
         },
         valid: true
@@ -54,31 +56,24 @@ class QuickInspectForm extends Component {
         }
         return isValid;
     }
-    _formUpdate = (form, valid, label, value) => {
-        const payload = {
-            data: {
-                id: this.props.data.key,
-                property: label,
-                value: value
-            }
-        }
+    _formUpdate = (form, valid, target, value) => {
         this.setState(previousState => ({
             ...previousState,
             form: form,
             valid: valid
         }), () => {
-            this.props.actions.onChange(payload);
+            this.props.actions.onChange(target, value);
         });
     }
 
-    handle_onChange = (e, label) => {
+    handle_onChange = (e, target) => {
         const form = {
             ...this.state.form,
-            [label]: {
-                ...this.state.form[label],
+            [target]: {
+                ...this.state.form[target],
                 touched: true,
                 value: e.target.value,
-                valid: this._formValidate(e.target.value, this.state.form[label].validation)
+                valid: this._formValidate(e.target.value, this.state.form[target].validation)
             }
         };
 
@@ -86,8 +81,7 @@ class QuickInspectForm extends Component {
         for (let key in form) {
             isValid = form[key].valid && isValid;
         }
-        //console.log(form, isValid, label, e.target.value);
-        this._formUpdate(form, isValid, label, e.target.value);
+        this._formUpdate(form, isValid, target, e.target.value);
     }
     handle_onSubmit = () => {
         this.props.actions.onSubmit({
@@ -102,12 +96,13 @@ class QuickInspectForm extends Component {
 
     render() {
         const form = [];
-        for (let formKey in this.state.form) {
+        for (let label in this.state.form) {
             form.push({
-                config: this.state.form[formKey],
-                id: formKey
+                config: this.state.form[label],
+                id: label
             });
         }
+        console.log('form is rerendering...');
         return (
             <form className={QuickInspectFormCSS.Quick_Inspect_Form}>
                 <div className={AppCSS.Inner}>
@@ -122,7 +117,7 @@ class QuickInspectForm extends Component {
                                         touched={input.config.touched}
                                         validate={input.config.validation}
                                         valid={input.config.valid}
-                                        value={this.props.data[input.id]}/>
+                                        value={input.config.value}/>
                             ))
                         }
                         <Button
