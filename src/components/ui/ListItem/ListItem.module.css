@@ -3,7 +3,7 @@
     height: 64px;
     overflow: hidden;
     top: auto;
-    transition: height 0.666s ease 0.333s;
+    /* transition: height 0.666s ease 0.333s; */
     width: 100%;
 }
 .List_Item > div {
