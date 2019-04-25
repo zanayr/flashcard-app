@@ -74,7 +74,6 @@ class ListItem extends PureComponent {
     }
 
     render () {
-        console.log('Rendering list item:', this.props.item.id);
         let cssClasses = [ListItemCSS.List_Item];
         if (this.props.data.isNew) {
             cssClasses = [...cssClasses, ListItemCSS.New];

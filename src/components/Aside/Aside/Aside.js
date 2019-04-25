@@ -32,7 +32,6 @@ const aside = (props) => {
             );
             break;
         case 99:
-        console.log('here');
             asideContent = (
                 <QuickInspectAside
                     actions={props.actions}

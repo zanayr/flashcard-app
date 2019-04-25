@@ -103,9 +103,9 @@ class Collections extends Component {
 
     //  QUICK EDIT  //
     handle_onQucikEditSubmit = (payload) => {
-        console.log(payload.data.title);
         this.props.put_async(this.state.state, this.props.token, payload.key, payload.data);
         this.toggleAside();
+        this.updateAside({});
     }
 
     //  LIST EVENT HANDLERS  //
@@ -173,7 +173,6 @@ class Collections extends Component {
         });
     }
     handle_onListEditClick = (payload) => {
-        console.log(payload);
         this.updateAside({
             actions: {
                 ...payload.actions,

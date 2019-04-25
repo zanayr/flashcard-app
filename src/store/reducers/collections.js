@@ -85,7 +85,6 @@ const putSucceeded = (state, action) => {
         }
         return item;
     });
-    console.log(collection);
     return {
         ...state,
         collections: {

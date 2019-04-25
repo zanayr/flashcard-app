@@ -8,7 +8,6 @@ import BarLink from '../../ui/link/Bar/BarLink';
 import QuickForm from '../../form/Quick/QuickForm';
 
 const quickAside = (props) => {
-    console.log(props.data);
     return (
         <Aux>
             <Column just='Between'>

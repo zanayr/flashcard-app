@@ -102,8 +102,6 @@ class QuickInspectForm extends Component {
                 id: label
             });
         }
-        console.log(this.props.data);
-        console.log('form is rerendering...');
         return (
             <form className={QuickInspectFormCSS.Quick_Inspect_Form}>
                 <div className={AppCSS.Inner}>
