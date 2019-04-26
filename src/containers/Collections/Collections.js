@@ -13,7 +13,6 @@ import Aside from '../../components/aside/Aside/Aside';
 
 import AppCSS from '../../App.module.css';
 import CollectionsCSS from './Collections.module.css';
-import { timeout } from 'q';
 
 class Collections extends Component {
     state = {
