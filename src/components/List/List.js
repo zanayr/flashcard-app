@@ -11,6 +11,26 @@ import ListCSS from './List.module.css';
 
 
 class List extends Component {
+    state = {
+        deleted: [],
+        selected: []
+    }
+
+
+    //  STATE SETTERS  ---------------------------------------------  STATE SETTERS  //
+    set_onItemSelect (payload) {
+        if (this.state.selected.indexOf(payload.key) > -1) {
+            this.setState(previous => ({
+                ...previous,
+                selected: previous.selected.filter(key => key !== payload.key)
+            }));
+        } else {
+            this.setState(previous => ({
+                ...previous,
+                selected: previous.selected.concat(payload.key)
+            }));
+        }
+    }
 
 
     //  EVENT HANDLERS  -------------------------------------------  EVENT HANDLERS  //
@@ -21,15 +41,16 @@ class List extends Component {
 
     //  Item  -----------------------------------------------------------  Item EHs  //
     handle_onItemSelect = (payload) => {
-        this.props.onSelect(payload);
+        this.set_onItemSelect(payload);
+        //this.props.onSelect(payload);
     }
 
     render () {
         let listItems = this.props.backingCollection.map(item => {
-            // let isSingle = false;
-            // if (this.props.selected.length === 1 && this.props.selected[0] === deck.key) {
-            //     isSingle = true;
-            // }
+            let isSingle = false;
+            if (this.state.selected.length === 1 && this.state.selected[0] === item.key) {
+                isSingle = true;
+            }
 
             return (
                 <ListItem
@@ -38,8 +59,8 @@ class List extends Component {
                     // deleted={deck.data.isDeleted}
                     // onDelete={this.handle_onDeleteClick}
                     // onEdit={this.props.onEdit}
-                    // onSelect={this.handle_onItemSelect}
-                    // single={isSingle}
+                    onSelect={this.handle_onItemSelect}
+                    single={isSingle}
                     uniqueId={item.key}/>
             );
         });
