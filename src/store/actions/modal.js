@@ -2,11 +2,13 @@ import * as actionTypes from './actionTypes';
 import {createHashId} from '../../utility';
 
 
-export const displayModal = (payload) => {
-    payload.key = createHashId();
+export const displayModal = (type, payload) => {
     return {
         type: actionTypes.DISPLAY_MODAL,
-        payload: payload
+        payload: {
+            ...payload,
+            type: type
+        }
     };
 };
 export const clearModal = (payload) => {

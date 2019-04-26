@@ -18,14 +18,48 @@ const failure = (state, action) => {
     };
 }
 
-//  Delete Success  //
-const deleteSuccess = (state, action) => {
-    const decks = {...state.decks};
-    delete decks[action.payload.key];
-
+const deleteFail = (state, action) => {
+    const key = action.payload.key;
     return {
         ...state,
-        decks: {...decks},
+        decks: {
+            ...state.decks,
+            [key]: {
+                ...state.decks[key],
+                isLoading: false
+            }
+        },
+        error: action.payload.error,
+    };
+}
+//  Delete Init  //
+const deleteInit = (state, action) => {
+    const key = action.payload.key;
+    return {
+        ...state,
+        decks: {
+            ...state.decks,
+            [key]: {
+                ...state.decks[key],
+                isLoading: true
+            }
+        },
+        error: null,
+    };
+}
+//  Delete Success  //
+const deleteSuccess = (state, action) => {
+    const key = action.payload.key;
+    return {
+        ...state,
+        decks: {
+            ...state.decks,
+            [key]: {
+                ...state.decks[key],
+                isDeleted: true,
+                isLoading: false
+            }
+        },
         error: null,
     };
 }
@@ -76,7 +110,9 @@ const putSuccess = (state, action) => {
 const reducer = (state=initialState, action) => {
     switch (action.type) {
         case actionTypes.DECKS_DELETE_FAIL:
-            return failure(state, action);
+            return deleteFail(state, action);
+        case actionTypes.DECKS_DELETE_INIT:
+            return deleteInit(state, action);
         case actionTypes.DECKS_DELETE_SUCC:
             return deleteSuccess(state, action);
         case actionTypes.DECKS_GET_FAIL:

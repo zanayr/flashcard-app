@@ -17,15 +17,16 @@ export const AUTH_SUCC = 'AUTH_SUCC';
 // export const PUT_SUCC = 'PUT_SUCC';
 
 //  Deck Store  //
-export const DECKS_DELETE_FAIL = 'DECKS_DELETE_FAIL'
-export const DECKS_DELETE_SUCC = 'DECKS_DELETE_SUCC'
-export const DECKS_GET_FAIL = 'DECKS_GET_FAIL'
-export const DECKS_GET_INIT = 'DECKS_GET_INIT'
-export const DECKS_GET_SUCC = 'DECKS_GET_SUCC'
-export const DECKS_POST_FAIL = 'DECKS_POST_FAIL'
-export const DECKS_POST_SUCC = 'DECKS_POST_SUCC'
-export const DECKS_PUT_FAIL = 'DECKS_PUT_FAIL'
-export const DECKS_PUT_SUCC = 'DECKS_PUT_SUCC'
+export const DECKS_DELETE_FAIL = 'DECKS_DELETE_FAIL';
+export const DECKS_DELETE_INIT = 'DECKS_DELETE_INIT';
+export const DECKS_DELETE_SUCC = 'DECKS_DELETE_SUCC';
+export const DECKS_GET_FAIL = 'DECKS_GET_FAIL';
+export const DECKS_GET_INIT = 'DECKS_GET_INIT';
+export const DECKS_GET_SUCC = 'DECKS_GET_SUCC';
+export const DECKS_POST_FAIL = 'DECKS_POST_FAIL';
+export const DECKS_POST_SUCC = 'DECKS_POST_SUCC';
+export const DECKS_PUT_FAIL = 'DECKS_PUT_FAIL';
+export const DECKS_PUT_SUCC = 'DECKS_PUT_SUCC';
 
 
 //  Card Store  //

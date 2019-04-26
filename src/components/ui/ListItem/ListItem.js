@@ -4,14 +4,14 @@ import * as select from '../../../store/reducers/root';
 
 import Column from '../../../hoc/Column/Column';
 import QuickButton from '../button/Context/ContextButton';
+import Throbber from '../../ui/Throbber/Throbber';
 
 import AppCSS from '../../../App.module.css';
 import ListItemCSS from './ListItem.module.css';
 
 class ListItem extends PureComponent {
     state = {
-        data: this.props.select_deck,
-        isDeleted: false,
+        ...this.props.data,
         isSelected: false
     }
 
@@ -40,10 +40,16 @@ class ListItem extends PureComponent {
             }
         }));
     }
-    set_onItemToggle () {
+    set_onItemSelectToggle () {
         this.setState(previousState => ({
             ...previousState,
             isSelected: !previousState.isSelected
+        }));
+    }
+    set_onItemVisibleToggle () {
+        this.setState(previous => ({
+            ...previous,
+            isVisible: !previous.isVisible
         }));
     }
 
@@ -65,7 +71,7 @@ class ListItem extends PureComponent {
     handle_onItemSelect (e) {
         e.stopPropagation();
         
-        this.set_onItemToggle();
+        this.set_onItemSelectToggle();
         this.props.onSelect({
             key: this.props.uniqueId
         });
@@ -90,7 +96,7 @@ class ListItem extends PureComponent {
         //         callback: this.handle_onItemDelete
         //     }
         // });
-        this.set_onItemDelete();
+        //this.set_onItemHidden();
         this.props.onDelete({
             key: this.props.uniqueId
         });
@@ -99,34 +105,37 @@ class ListItem extends PureComponent {
 
     //  RENDER METHOD  ----------------------------------------------- RENDER METHOD //
     render () {
-        console.log('rendering list item:', this.props.uniqueId);
         let cssClasses = [ListItemCSS.List_Item];
-        if (this.state.data.isNew) {
-            cssClasses = [...cssClasses, ListItemCSS.New];
+        if (this.props.new) {
+            cssClasses = [...cssClasses, this.props.select_deck.isNew];
+        }
+        if (this.props.single) {
+            cssClasses = [...cssClasses, ListItemCSS.Single];
         }
         if (this.state.isSelected) {
             cssClasses = [...cssClasses, ListItemCSS.Selected];
         }
-        if (this.state.isDeleted) {
-            cssClasses = [ListItemCSS.List_Item, ListItemCSS.Selected, ListItemCSS.Deleted];
+        if (!this.props.visible || this.props.select_deck.isDeleted) {
+            cssClasses = [ListItemCSS.List_Item, ListItemCSS.Selected, ListItemCSS.Hidden];
         }
 
+        console.log('rendering item:', this.props.uniqueId);
         return (
             <div
                 className={cssClasses.join(' ')}
                 onClick={(e) => this.handle_onItemSelect(e)}>
                 <div className={AppCSS.Inner}>
                     <Column just='Center' align='Start'>
-                        <h3>{this.state.data.title}</h3>
-                        <p>{this.state.data.details}</p>
+                        <h3>{this.state.title}</h3>
+                        <p>{this.state.details}</p>
                     </Column>
                     <QuickButton
-                        active={this.state.isSelected && this.props.single && !this.state.data.isDeleted}
+                        active={this.state.isSelected && this.props.visible && this.props.single}
                         onClick={this.handle_onEditClick}>
                         Edit
                     </QuickButton>
                     <QuickButton
-                        active={this.state.isSelected && this.props.single && !this.state.data.isDeleted}
+                        active={this.state.isSelected && this.props.visible && this.props.single}
                         delete
                         onClick={this.handle_onDeleteClick}>
                         Delete

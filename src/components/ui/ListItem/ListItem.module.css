@@ -3,7 +3,7 @@
     height: 64px;
     overflow: hidden;
     top: auto;
-    /* transition: height 0.666s ease 0.333s; */
+    transition: background-color 0.167s ease 0.0s;
     width: 100%;
 }
 .List_Item > div {
@@ -25,7 +25,7 @@
 }
 
 /*  ANIMATIONS & EFFECTS  */
-@keyframes FADE-IN {
+@keyframes fade-in {
     0% {
         opacity: 0;
     }
@@ -33,7 +33,7 @@
         opacity: 1;
     }
 }
-@keyframes GROW {
+@keyframes grow {
     0% {
         height: 0px;
     }
@@ -41,7 +41,7 @@
         height: 64px;
     }
 }
-@keyframes FADE-OUT {
+@keyframes fade-out {
     0% {
         opacity: 1;
     }
@@ -49,7 +49,7 @@
         opacity: 0;
     }
 }
-@keyframes SHRINK {
+@keyframes shrink {
     0% {
         height: 64px;
     }
@@ -58,23 +58,23 @@
     }
 }
 .List_Item.New {
-    animation: GROW 0.333s ease;
+    animation: grow 0.333s ease;
     height: 64px;
 }
 .List_Item.New h3,
 .List_Item.New p {
-    animation: FADE-IN 0.497s ease;
+    animation: fade-in 0.497s ease;
     opacity: 1;
 }
 .Selected {
     background-color: pink;
 }
-.List_Item.Deleted {
-    animation: SHRINK 0.333s ease;
+.List_Item.Hidden {
+    animation: shrink 0.333s ease;
     height: 0px;
 }
-.List_Item.Deleted h3,
-.List_Item.Deleted p {
-    animation: FADE-OUT 0.167s ease;
+.List_Item.Hidden h3,
+.List_Item.Hidden p {
+    animation: fade-out 0.167s ease;
     opacity: 0;
 }

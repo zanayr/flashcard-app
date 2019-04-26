@@ -12,11 +12,20 @@
 .Modal > div {
     padding: 16px;
 }
+
+
 .Modal span {
-    background-color: gold;
     height: 32px;
     width: 32px;
 }
+.Modal span.Default_Icon {
+    background-color: blue;
+}
+.Modal span.Delete_Icon {
+    background-color: coral;
+}
+
+
 .Modal h3 {
     font-size: 15px;
     margin: 16px 0px 16px 16px;

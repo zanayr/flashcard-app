@@ -4,10 +4,13 @@ import axios from '../database';
 
 //  ACTION CREATORS  ---------------------------------------------  ACTION CREATORS  //
 //  Delete  ----------------------------------------------------------  Delete ACs.  //
-const delete_fail = (error) => {
+const delete_fail = (error, key) => {
     return {
         type: actionTypes.DECKS_DELETE_FAIL,
-        payload: error
+        payload: {
+            error: error,
+            key: key
+        }
     };
 };
 const delete_success = (key) => {
@@ -101,8 +104,12 @@ export const getAllDecks_async = (token, user) => {
         .then(response => {
             const models = {};
             Object.keys(response.data).map(key => {
-                models[key] = response.data[key];
-            })
+                models[key] = {
+                    ...response.data[key],
+                    isDeleted: false,
+                    isNew: false
+                }
+            });
             dispatch(getAll_success({
                 data: models
             }));
@@ -116,7 +123,11 @@ export const getAllDecks_async = (token, user) => {
 //  Post  --------------------------------------------------------------  Post Async //
 export const postDeck_async = (token, data) => {
     return dispatch => {
-        axios.post('/decks.json?auth=' + token, data)
+        axios.post('/decks.json?auth=' + token, {
+            ...data,
+            isDeleted: false,
+            isNew: true
+        })
         .then(response => {
             dispatch(post_success(response.data.name, data));
         })

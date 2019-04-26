@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import {Route, Switch, withRouter, Redirect} from 'react-router-dom';
-import * as select from './store/reducers/root';
 import {connect} from 'react-redux';
+
+import * as select from './store/reducers/root';
+import * as actions from './store/actions/index';
+
+import Auth from './containers/Auth/Auth';
+import Collections from './containers/Collections/Collections';
+import In from './containers/In/In';
+import Inspector from './containers/Inspector/Inspector';
+import Modal from './components/modal/Modal/Modal';
+import Out from './containers/Out/Out';
 
 import AppCSS from './App.module.css';
 
-import Auth from './containers/Auth/Auth';
-import In from './containers/In/In';
-import Out from './containers/Out/Out';
-import Collections from './containers/Collections/Collections';
-import Inspector from './containers/Inspector/Inspector';
-import * as actions from './store/actions/index';
 
 
 class App extends Component {
@@ -19,6 +22,14 @@ class App extends Component {
   }
   
   render () {
+    const modals = this.props.select_modals.map((modal, i) => {
+      return (
+        <Modal 
+          key={i}
+          data={modal}
+          uniqueId={i}/>
+      );
+    });
     let routes = (
       <Switch>
         <Route path='/auth' exact component={Auth}/>
@@ -41,6 +52,7 @@ class App extends Component {
     return (
       <div className={AppCSS.App}>
           {routes}
+          {modals}
       </div>
     );
   }
@@ -49,7 +61,9 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: select.authToken(state) !== null
+    isAuthenticated: select.authToken(state) !== null,
+    select_modals: select.modals(state),
+
   }
 };
 const mapDispatchToProps = dispatch => {

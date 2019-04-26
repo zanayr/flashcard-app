@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+
 import * as actions from '../../store/actions/index';
+import * as modalTypes from '../../components/modal/Modal/modalTypes';
 import * as select from '../../store/reducers/root';
 import * as sortType from '../../store/reducers/sortTypes';
 import * as utility from '../../utility';
 
-import Aux from '../../hoc/Aux/Aux';
-import Header from '../../components/Header/Header';
-import Throbber from '../../components/ui/Throbber/Throbber';
-import List from '../../components/List/List';
 import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside from '../../components/aside/Aside/Aside';
+import Aux from '../../hoc/Aux/Aux';
+import Header from '../../components/Header/Header';
+import List from '../../components/List/List';
 
 import AppCSS from '../../App.module.css';
 import CollectionsCSS from './Collections.module.css';
@@ -159,25 +160,27 @@ class Collections extends Component {
 
     //  List  -----------------------------------------------------------  List EHs  //
     handle_onItemDelete = (payload) => {
-        const modal = {
-            actions: {
-                ...payload.actions,
-                onConfirm: (deletePayload) => {
-                    this.set_onItemDeselect(deletePayload);
-                    this.props.deleteDeck_async(this.state.state, this.props.select_token, payload.key);
-                }
-            },
-            data: {
-                cancel: 'Cancel',
-                confirm: 'Delete',
-                details: [payload.data.details],
-                key: payload.key,
-                message: 'Once you delete a item it cannot be recovered. Are you sure you wish to delete the following items?',
-                title: 'Warning',
-                type: 1,
-            }
-        }
-        this.props.createDeleteModal_sync(modal);
+        this.props.displayModal(modalTypes.DELETE, {...this.state.decks.find(deck => deck.key === payload.key)});
+        // });
+        // const modal = {
+        //     actions: {
+        //         ...payload.actions,
+        //         onConfirm: (deletePayload) => {
+        //             //this.set_onItemDeselect(deletePayload);
+        //             this.props.deleteDeck_async(this.state.state, this.props.select_token, payload.key);
+        //         }
+        //     },
+        //     data: {
+        //         cancel: 'Cancel',
+        //         confirm: 'Delete',
+        //         details: [payload.data.details],
+        //         key: payload.key,
+        //         message: 'Once you delete a item it cannot be recovered. Are you sure you wish to delete the following items?',
+        //         title: 'Warning',
+        //         type: 1,
+        //     }
+        // }
+        // this.props.displayModal(modal);
     }
     handle_onItemEdit = (payload) => {
         const aside = {
@@ -234,7 +237,7 @@ class Collections extends Component {
         console.log('Start a session...');
     }
     handle_onItemCreate = () => {
-        this.props.postDeck_async(this.state.state, this.props.select_token, {
+        this.props.postDeck_async(this.props.select_token, {
             details: 'This is a new flashcard deck',
             title: utility.createHashId() + ' New Flashcard Deck',
             userId: this.props.select_user
@@ -283,23 +286,6 @@ class Collections extends Component {
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
-        // let list = (<Throbber/>);
-        // if (!this.props.select_deckIsLoading) {
-        //     list = (
-        //         <List
-        //             backingCollection={this.state.decks}>
-        //             {/*deleted={this.state.deleted}
-        //             onDelete={this.handle_onItemDelete}
-        //             onEdit={this.handle_onItemEdit}
-        //             onSelect={this.handle_onItemSelect}
-        //             selected={this.state.selected}> */}
-        //             <ActionButton
-        //                 onClick={this.handle_onActionClick}
-        //                 state={this.state.action.state}
-        //                 values={['Create', 'Study']}/>
-        //         </List>
-        //     );
-        // }
         return (
             <Aux>
                 <Header
@@ -313,12 +299,8 @@ class Collections extends Component {
                     onClick={this.handle_onListOut}>
                     <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
                     <List
-                        backingCollection={this.state.decks}>
-                        {/*deleted={this.state.deleted}
-                        onDelete={this.handle_onItemDelete}
-                        onEdit={this.handle_onItemEdit}
-                        onSelect={this.handle_onItemSelect}
-                        selected={this.state.selected}> */}
+                        backingCollection={this.state.decks}
+                        onDelete={this.handle_onItemDelete}>
                         <ActionButton
                             onClick={this.handle_onActionClick}
                             state={this.state.action.state}
@@ -348,10 +330,11 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         deleteDeck_async: (token, key) => dispatch(actions.deleteDeck_async(token, key)),
+        displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
         getAllDecks_async: (token, user) => dispatch(actions.getAllDecks_async(token, user)),
         postDeck_async: (token, data) => dispatch(actions.postDeck_async(token, data)),
         putDeck_async: (token, key, data) => dispatch(actions.putDeck_async(token, key, data)),
-        displayModal: (data) => dispatch(actions.displayModal(data))
+
     };
 };
 

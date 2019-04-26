@@ -15,7 +15,7 @@ const displayModal = (state, action) => {
 const clearModal = (state, action) => {
     return {
         ...state,
-        modals: state.modals.filter(modal => modal.key !== action.payload.key)
+        modals: state.modals.filter(modal => modal !== state.modals[action.payload.key])
     };
 };
 

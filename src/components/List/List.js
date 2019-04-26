@@ -13,6 +13,7 @@ import ListCSS from './List.module.css';
 class List extends Component {
     state = {
         deleted: [],
+        hidden: [],
         selected: []
     }
 
@@ -49,30 +50,23 @@ class List extends Component {
 
     //  Context Actions  --------------------------------------------------- CA EHs  //
     handle_onItemDelete = (payload) => {
-        this.set_onItemDelete(payload);
-        //this.props.onDelete(payload);
+        // this.set_onItemDelete(payload);
+        this.props.onDelete(payload);
     }
 
     render () {
         let listItems = this.props.backingCollection.map(item => {
-            let isSingle = false;
-            let isDeleted = false;
-            if (this.state.selected.length === 1 && this.state.selected[0] === item.key) {
-                isSingle = true;
-            }
-            if (this.state.deleted.length === 1 && this.state.deleted[0] === item.key) {
-                isDeleted = true;
-            }
-
             return (
                 <ListItem
                     key={item.key}
                     data={item}
-                    deleted={isDeleted}
                     onDelete={this.handle_onItemDelete}
+                    deleted={item.isDeleted}
+                    loading={item.isLoading}
                     // onEdit={this.props.onEdit}
                     onSelect={this.handle_onItemSelect}
-                    single={isSingle}
+                    single={this.state.selected.length === 1 && this.state.selected[0] === item.key}
+                    visible={!(this.state.hidden.indexOf(item.key) > -1)}
                     uniqueId={item.key}/>
             );
         });
