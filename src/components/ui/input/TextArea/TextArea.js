@@ -2,6 +2,7 @@ import React from 'react';
 
 import InputCSS from '../Input/Input.module.css';
 
+
 const textArea = (props) => {
     const handle_onChange = (e) => {
         props.onChange(props.target, e.target.value);
@@ -29,5 +30,6 @@ const textArea = (props) => {
         </div>
     );
 }
+
 
 export default textArea;

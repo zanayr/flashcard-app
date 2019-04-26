@@ -2,6 +2,7 @@ import React from 'react';
 
 import InputCSS from '../Input/Input.module.css';
 
+
 const textField = (props) => {
     const handle_onChange = (e) => {
         props.onChange(props.target, e.target.value);
@@ -24,6 +25,7 @@ const textField = (props) => {
                 {...props.config}/>
         );
     }
+
     return (
         <div className={InputCSS.Field}>
             <label>{props.config.label}</label>
@@ -31,5 +33,6 @@ const textField = (props) => {
         </div>
     );
 }
+
 
 export default textField;
