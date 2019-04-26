@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {select_itemByKey} from '../../../store/reducers/root';
 
@@ -8,12 +8,10 @@ import QuickButton from '../button/Context/ContextButton';
 import AppCSS from '../../../App.module.css';
 import ListItemCSS from './ListItem.module.css';
 
-class ListItem extends PureComponent {
+class ListItem extends Component {
     state = {
         data: this.props.select_item.data,
-        isDeleted: false,
-        isSelected: false,
-        key: this.props.select_item.key,
+        isSelected: false
     }
 
     //  STATE SETTERS  ----------------------------------------------  STATE SETTERS  //
@@ -65,14 +63,14 @@ class ListItem extends PureComponent {
         
         this.set_onSelectedToggle();
         this.props.onSelect({
-            key: this.state.key
+            key: this.props.uniqueId
         });
     }
 
     //  Context Actions -------------------------------------------------  C.A. HEs  //
     handle_onEditClick = () => {
         this.props.onEdit({
-            key: this.state.key,
+            key: this.props.uniqueId,
             data: {...this.state.data},
             actions: {
                 onCancel: this.handle_onItemReset,
@@ -82,7 +80,7 @@ class ListItem extends PureComponent {
     }
     handle_onDeleteClick = () => {
         this.props.onDelete({
-            key: this.state.key,
+            key: this.props.uniqueId,
             data: {...this.state.data},
             actions: {
                 callback: this.handle_onItemDelete
@@ -94,15 +92,16 @@ class ListItem extends PureComponent {
     //  RENDER METHOD  ----------------------------------------------- RENDER METHOD //
     render () {
         let cssClasses = [ListItemCSS.List_Item];
-        if (this.props.data.isNew) {
+        if (this.state.data.isNew) {
             cssClasses = [...cssClasses, ListItemCSS.New];
         }
         if (this.state.isSelected) {
             cssClasses = [...cssClasses, ListItemCSS.Selected];
         }
-        if (this.state.isDeleted) {
+        if (this.props.deleted) {
             cssClasses = [ListItemCSS.List_Item, ListItemCSS.Selected, ListItemCSS.Deleted];
         }
+
         return (
             <div
                 className={cssClasses.join(' ')}
@@ -113,12 +112,12 @@ class ListItem extends PureComponent {
                         <p>{this.state.data.details}</p>
                     </Column>
                     <QuickButton
-                        active={this.state.isSelected && this.props.single && !this.state.deleted}
+                        active={this.state.isSelected && this.props.single && !this.state.data.isDeleted}
                         onClick={this.handle_onEditClick}>
                         Edit
                     </QuickButton>
                     <QuickButton
-                        active={this.state.isSelected && this.props.single && !this.state.deleted}
+                        active={this.state.isSelected && this.props.single && !this.state.data.isDeleted}
                         delete
                         onClick={this.handle_onDeleteClick}>
                         Delete

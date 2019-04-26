@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
-import {select_isLoading} from '../../store/reducers/root';
+import {select_isLoading, select_token, select_user, select_collection} from '../../store/reducers/root';
 import * as utility from '../../utility';
 
 import Aux from '../../hoc/Aux/Aux';
@@ -13,6 +13,7 @@ import Aside from '../../components/aside/Aside/Aside';
 
 import AppCSS from '../../App.module.css';
 import CollectionsCSS from './Collections.module.css';
+import { timeout } from 'q';
 
 class Collections extends Component {
     state = {
@@ -35,18 +36,7 @@ class Collections extends Component {
     }
 
     componentDidMount () {
-        this.props.get_async(this.state.state, this.props.token, this.props.user);
-    }
-
-    startSession () {
-        console.log('Start a session...');
-    }
-    createCollection () {
-        this.props.post_async(this.state.state, this.props.token, {
-            details: 'This is a new flashcard deck',
-            title: utility.createHashId() + ' New Flashcard Deck',
-            userId: this.props.user
-        });
+        this.props.get_async(this.state.state, this.props.select_token, this.props.select_user);
     }
 
 
@@ -104,15 +94,6 @@ class Collections extends Component {
     }
 
     //  List  -------------------------------------------------------- List Setters  //
-    set_onItemDelete (payload) {
-        this.setState(previous => ({
-            ...previous,
-            deleted: [
-                ...previous.deleted,
-                payload.key
-            ]
-        }));
-    }
     set_onItemDeselect (payload) {
         this.setState(previous => ({
             ...previous,
@@ -122,10 +103,7 @@ class Collections extends Component {
     set_onItemSelect (payload) {
         this.setState(previous => ({
             ...previous,
-            selected: [
-                ...previous.selected,
-                payload.key
-            ]
+            selected: previous.selected.concat(payload.key)
         }));
     }
 
@@ -184,9 +162,8 @@ class Collections extends Component {
             actions: {
                 ...payload.actions,
                 onConfirm: (deletePayload) => {
-                    this.set_onItemDelete(deletePayload);
                     this.set_onItemDeselect(deletePayload);
-                    this.props.delete_async(this.state.state, this.props.token, payload.key);
+                    this.props.delete_async(this.state.state, this.props.select_token, payload.key);
                 }
             },
             data: {
@@ -207,16 +184,16 @@ class Collections extends Component {
                 ...payload.actions,
                 onConfirm: (putPayload) => {
                     this.handle_onAsideConfirm();
-                    this.props.put_async(this.state.state, this.props.token, this.state.aside.data.key, {
+                    this.props.put_async(this.state.state, this.props.select_token, this.state.aside.data.key, {
                         ...putPayload.data,
-                        userId: this.props.user
+                        userId: this.props.select_user
                     });
                 }
             },
             data: {
                 ...payload.data,
                 key: payload.key,
-                user: this.props.user
+                user: this.props.select_user
             }
         }
         this.set_onHistoryChange(aside, payload.actions.onCancel);
@@ -252,12 +229,54 @@ class Collections extends Component {
     }
 
     //  Action  -------------------------------------------------------  Action EHs  //
+    handle_onSessionStart () {
+        console.log('Start a session...');
+    }
+    handle_onItemCreate () {
+        this.props.post_async(this.state.state, this.props.select_token, {
+            details: 'This is a new flashcard deck',
+            title: utility.createHashId() + ' New Flashcard Deck',
+            userId: this.props.select_user
+        });
+    }
     handle_onActionClick = () => {
         if (this.state.action.state) {
             this.handle_onSessionStart();
         } else {
             this.handle_onItemCreate();
         }
+    }
+
+    //  Bulk Actions  -------------------------------------------  Bulk Actions EHs  //
+    handle_onBulkDelete = () => {
+        let selected = [];
+        this.state.selected.forEach(key => {
+            this.props.select_collection.forEach(item => {
+                if (item.key === key) {
+                    selected.push(item.data.title);
+                }
+            });
+        });
+        const modal = {
+            actions: {
+                onConfirm: () => {
+                    this.state.selected.forEach(key => {
+                        this.set_onItemDeselect({key: key});
+                        this.props.delete_async(this.state.state, this.props.select_token, key);
+                    });
+                }
+            },
+            data: {
+                cancel: 'Cancel',
+                confirm: 'Delete',
+                details: [...selected],
+                key: undefined,
+                message: 'Once you delete a item it cannot be recovered. Are you sure you wish to delete the following items?',
+                title: 'Warning',
+                type: 1,
+            }
+        }
+        this.props.createDeleteModal_sync(modal);
     }
 
 
@@ -268,6 +287,7 @@ class Collections extends Component {
             list = (
                 <List
                     backingCollection={this.state.state}
+                    deleted={this.state.deleted}
                     onDelete={this.handle_onItemDelete}
                     onEdit={this.handle_onItemEdit}
                     onSelect={this.handle_onItemSelect}
@@ -284,6 +304,7 @@ class Collections extends Component {
                 <Header
                     onA={this.handle_onAsideToggle}
                     onB={this.handle_onAsideToggle}
+                    onC={this.handle_onBulkDelete}
                     onClick={this.handle_onAsideClose}
                     onNavigation={this.handle_onAsideToggle}/>
                 <main
@@ -306,10 +327,10 @@ class Collections extends Component {
 
 const mapStateToProps = state => {
     return {
-        loading: select_isLoading(state),
-        token: state.auth.token,
-        userId: state.auth.userId,
-        user: state.auth.userId
+        select_loading: select_isLoading(state),
+        select_token: select_token(state),
+        select_user: select_user(state),
+        select_collection: select_collection(state, 'decks')
     }
 }
 const mapDispatchToProps = dispatch => {

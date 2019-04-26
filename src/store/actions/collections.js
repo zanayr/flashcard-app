@@ -59,7 +59,9 @@ export const get_async = (url, token, user) => {
                 models.push({
                     key: key,
                     data: {
-                        ...response.data[key]
+                        ...response.data[key],
+                        isNew: false,
+                        isDeleted: false
                     }
                 });
             }
@@ -93,7 +95,8 @@ export const postSuccess = (store, key, data) => {
         payload: {
             data: {
                 ...data,
-                isNew: true
+                isNew: true,
+                isDeleted: false
             },
             key: key,
             store: store

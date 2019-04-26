@@ -24,7 +24,8 @@ const header = (props) => {
                 <Search/>
                 <Toolbar
                     onA={props.onA}
-                    onB={props.onB}/>
+                    onB={props.onB}
+                    onC={props.onC}/>
                 <Dashboard
                     onNavigation={props.onNavigation}/>
             </div>

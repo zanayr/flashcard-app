@@ -24,7 +24,7 @@ const deleteSucceeded = (state, action) => {
     const store = action.payload.store;
     const collection = state.collections[store].map(item => {
         if (item.key === action.payload.key) {
-            item.isDeleted = true;
+            item.data.isDeleted = true;
         }
         return item;
     });

@@ -15,8 +15,8 @@ import modalCSS from './Modal.module.css';
 const modal = (props) => {
     let details = [];
     if (props.data.details) {
-        details = props.data.details.map(detail => {
-            return (<li key={createHashId()}>{detail}</li>);
+        details = props.data.details.map((detail, i) => {
+            return (<li key={i}>{detail}</li>);
         });
     }
     const handle_onCancel = () => {
