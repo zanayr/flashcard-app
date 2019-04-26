@@ -18,6 +18,13 @@ class List extends Component {
 
 
     //  STATE SETTERS  ---------------------------------------------  STATE SETTERS  //
+    //  Items  ------------------------------------------------------  Item Setters  //  
+    set_onItemDelete (payload) {
+        this.setState(previous => ({
+            ...previous,
+            deleted: previous.selected.concat(payload.key)
+        }));
+    }
     set_onItemSelect (payload) {
         if (this.state.selected.indexOf(payload.key) > -1) {
             this.setState(previous => ({
@@ -34,30 +41,35 @@ class List extends Component {
 
 
     //  EVENT HANDLERS  -------------------------------------------  EVENT HANDLERS  //
-    //  Context Actions  ------------------------------------------------- C.A. EHs  //
-    handle_onDeleteClick = (payload) => {
-        this.props.onDelete(payload);
-    }
-
     //  Item  -----------------------------------------------------------  Item EHs  //
     handle_onItemSelect = (payload) => {
         this.set_onItemSelect(payload);
         //this.props.onSelect(payload);
     }
 
+    //  Context Actions  --------------------------------------------------- CA EHs  //
+    handle_onItemDelete = (payload) => {
+        this.set_onItemDelete(payload);
+        //this.props.onDelete(payload);
+    }
+
     render () {
         let listItems = this.props.backingCollection.map(item => {
             let isSingle = false;
+            let isDeleted = false;
             if (this.state.selected.length === 1 && this.state.selected[0] === item.key) {
                 isSingle = true;
+            }
+            if (this.state.deleted.length === 1 && this.state.deleted[0] === item.key) {
+                isDeleted = true;
             }
 
             return (
                 <ListItem
                     key={item.key}
                     data={item}
-                    // deleted={deck.data.isDeleted}
-                    // onDelete={this.handle_onDeleteClick}
+                    deleted={isDeleted}
+                    onDelete={this.handle_onItemDelete}
                     // onEdit={this.props.onEdit}
                     onSelect={this.handle_onItemSelect}
                     single={isSingle}

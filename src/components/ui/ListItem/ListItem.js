@@ -11,6 +11,7 @@ import ListItemCSS from './ListItem.module.css';
 class ListItem extends PureComponent {
     state = {
         data: this.props.select_deck,
+        isDeleted: false,
         isSelected: false
     }
 
@@ -39,7 +40,7 @@ class ListItem extends PureComponent {
             }
         }));
     }
-    set_onSelectedToggle () {
+    set_onItemToggle () {
         this.setState(previousState => ({
             ...previousState,
             isSelected: !previousState.isSelected
@@ -52,16 +53,19 @@ class ListItem extends PureComponent {
     handle_onItemChange = (payload) => {
         this.set_onItemChange(payload);
     }
-    handle_onItemDelete = () => {
-        this.set_onItemDelete();
-    }
+    // handle_onItemDelete = () => {
+    //     this.set_onItemDelete();
+    //     this.props.onDelete({
+    //         key: this.props.uniqueId
+    //     });
+    // }
     handle_onItemReset = (payload) => {
         this.set_onItemReset(payload);
     }
     handle_onItemSelect (e) {
         e.stopPropagation();
         
-        this.set_onSelectedToggle();
+        this.set_onItemToggle();
         this.props.onSelect({
             key: this.props.uniqueId
         });
@@ -79,12 +83,16 @@ class ListItem extends PureComponent {
         });
     }
     handle_onDeleteClick = () => {
+        // this.props.onDelete({
+        //     key: this.props.uniqueId,
+        //     data: {...this.state.data},
+        //     actions: {
+        //         callback: this.handle_onItemDelete
+        //     }
+        // });
+        this.set_onItemDelete();
         this.props.onDelete({
-            key: this.props.uniqueId,
-            data: {...this.state.data},
-            actions: {
-                callback: this.handle_onItemDelete
-            }
+            key: this.props.uniqueId
         });
     }
 
@@ -99,7 +107,7 @@ class ListItem extends PureComponent {
         if (this.state.isSelected) {
             cssClasses = [...cssClasses, ListItemCSS.Selected];
         }
-        if (this.props.deleted) {
+        if (this.state.isDeleted) {
             cssClasses = [ListItemCSS.List_Item, ListItemCSS.Selected, ListItemCSS.Deleted];
         }
 
