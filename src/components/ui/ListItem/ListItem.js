@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {select_itemByKey} from '../../../store/reducers/root';
+import * as select from '../../../store/reducers/root';
 
 import Column from '../../../hoc/Column/Column';
 import QuickButton from '../button/Context/ContextButton';
@@ -10,7 +10,7 @@ import ListItemCSS from './ListItem.module.css';
 
 class ListItem extends Component {
     state = {
-        data: this.props.select_item.data,
+        data: this.props.select_deck,
         isSelected: false
     }
 
@@ -130,7 +130,7 @@ class ListItem extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        select_item: select_itemByKey(state, ownProps.uniqueId)
+        select_deck: select.deckByKey(state, ownProps.uniqueId)
     }
 }
 

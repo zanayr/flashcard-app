@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {select_collectionBy} from '../../store/reducers/root';
-import * as sortType from '../../store/reducers/sortTypes';
+// import {connect} from 'react-redux';
+// import {select_collectionBy} from '../../store/reducers/root';
+// import * as sortType from '../../store/reducers/sortTypes';
 
 import Aux from '../../hoc/Aux/Aux';
 import ListItem from '../ui/ListItem/ListItem';
@@ -25,44 +25,45 @@ class List extends Component {
     }
 
     render () {
-        let listItems = this.props.decks.map(deck => {
-            let isSingle = false;
-            if (this.props.selected.length === 1 && this.props.selected[0] === deck.key) {
-                isSingle = true;
-            }
+        // let listItems = this.props.decks.map(deck => {
+        //     let isSingle = false;
+        //     if (this.props.selected.length === 1 && this.props.selected[0] === deck.key) {
+        //         isSingle = true;
+        //     }
 
-            return (
-                <ListItem
-                    key={deck.key}
-                    //data={deck.data}
-                    deleted={deck.data.isDeleted}
-                    onDelete={this.handle_onDeleteClick}
-                    onEdit={this.props.onEdit}
-                    onSelect={this.handle_onItemSelect}
-                    single={isSingle}
-                    uniqueId={deck.key}/>
-            );
-        });
+        //     return (
+        //         <ListItem
+        //             key={deck.key}
+        //             //data={deck.data}
+        //             deleted={deck.data.isDeleted}
+        //             onDelete={this.handle_onDeleteClick}
+        //             onEdit={this.props.onEdit}
+        //             onSelect={this.handle_onItemSelect}
+        //             single={isSingle}
+        //             uniqueId={deck.key}/>
+        //     );
+        // });
+        // {this.props.children}
+        //         <section className={[AppCSS.With_Margin, ListCSS.List].join(' ')}>
+        //             <div className={AppCSS.Inner}>
+        //                 {listItems}
+        //             </div>
+        //         </section>
 
         return (
             <Aux>
-                {this.props.children}
-                <section className={[AppCSS.With_Margin, ListCSS.List].join(' ')}>
-                    <div className={AppCSS.Inner}>
-                        {listItems}
-                    </div>
-                </section>
+                <h1>Hello World!</h1>
             </Aux>
         );
     }
 }
 
 
-const mapStateToProps = state => {
-    return {
-        decks: select_collectionBy(state, 'decks', sortType.ALPHA_DEC)
-    }
-}
+// const mapStateToProps = state => {
+//     return {
+//         decks: select_collectionBy(state, 'decks', sortType.ALPHA_DEC)
+//     }
+// }
 
-
-export default connect(mapStateToProps)(List);
+export default List;
+// export default connect(mapStateToProps)(List);

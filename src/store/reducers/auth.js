@@ -3,37 +3,37 @@ import {updateObject} from '../utility';
 
 const initialState = {
     error: null,
-    loading: false,
-    refeshToken: null,
+    isLoading: false,
+    refesh: null,
     token: null,
-    userId: null,
+    user: null,
 };
 
 
 const authFailed = (state, action) => {
     return updateObject(state, {
         error: action.payload,
-        loading: false
+        isLoading: false
     });
 };
 const authEnded = (state, action) => {
     return updateObject(state, {
         token: null,
-        userId: null
+        user: null
     });
 };
 const authInitiated = (state, action) => {
     return updateObject(state, {
         error: null,
-        loading: true
+        isLoading: true
     });
 };
 const authSucceeded = (state, action) => {
     return updateObject(state, {
         error: null,
-        loading: false,
+        isLoading: false,
         token: action.payload.token,
-        userId: action.payload.userId
+        user: action.payload.user
     });
 };
 
@@ -56,11 +56,17 @@ const reducer = (state=initialState, action) => {
 
 
 //  STORE SELECTORS  --------------------------------------------------- SELECTORS  //
-export function selectToken (state) {
+export function selectAuthError (state) {
+    return state.error;
+}
+export function selectAuthIsLoading (state) {
+    return state.isLoading;
+}
+export function selectAuthToken (state) {
     return state.token;
 }
-export function selectUser (state) {
-    return state.userId;
+export function selectAuthUser (state) {
+    return state.user;
 }
 
 

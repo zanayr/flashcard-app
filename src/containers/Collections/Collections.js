@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
-import {select_isLoading, select_token, select_user, select_collection} from '../../store/reducers/root';
+import * as select from '../../store/reducers/root';
+import * as sortType from '../../store/reducers/sortTypes';
 import * as utility from '../../utility';
 
 import Aux from '../../hoc/Aux/Aux';
@@ -35,7 +36,7 @@ class Collections extends Component {
     }
 
     componentDidMount () {
-        this.props.get_async(this.state.state, this.props.select_token, this.props.select_user);
+        this.props.getAllDecks_async(this.state.state, this.props.select_token, this.props.select_user);
     }
 
 
@@ -162,7 +163,7 @@ class Collections extends Component {
                 ...payload.actions,
                 onConfirm: (deletePayload) => {
                     this.set_onItemDeselect(deletePayload);
-                    this.props.delete_async(this.state.state, this.props.select_token, payload.key);
+                    this.props.deleteDeck_async(this.state.state, this.props.select_token, payload.key);
                 }
             },
             data: {
@@ -183,7 +184,7 @@ class Collections extends Component {
                 ...payload.actions,
                 onConfirm: (putPayload) => {
                     this.handle_onAsideConfirm();
-                    this.props.put_async(this.state.state, this.props.select_token, this.state.aside.data.key, {
+                    this.props.putDeck_async(this.state.state, this.props.select_token, this.state.aside.data.key, {
                         ...putPayload.data,
                         userId: this.props.select_user
                     });
@@ -232,7 +233,7 @@ class Collections extends Component {
         console.log('Start a session...');
     }
     handle_onItemCreate = () => {
-        this.props.post_async(this.state.state, this.props.select_token, {
+        this.props.postDeck_async(this.state.state, this.props.select_token, {
             details: 'This is a new flashcard deck',
             title: utility.createHashId() + ' New Flashcard Deck',
             userId: this.props.select_user
@@ -326,19 +327,19 @@ class Collections extends Component {
 
 const mapStateToProps = state => {
     return {
-        select_loading: select_isLoading(state),
-        select_token: select_token(state),
-        select_user: select_user(state),
-        select_collection: select_collection(state, 'decks')
+        select_deckIsLoading: select.deckIsLoading(state),
+        select_decks: select.decksBy(state, sortType.ALPHA_DEC),
+        select_token: select.authToken(state),
+        select_user: select.authUser(state)
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
-        delete_async: (url, token, key) => dispatch(actions.delete_async(url, token, key)),
-        get_async: (url, token, user) => dispatch(actions.get_async(url, token, user)),
-        post_async: (url, token, data) => dispatch(actions.post_async(url, token, data)),
-        put_async: (url, token, key, data) => dispatch(actions.put_async(url, token, key, data)),
-        createDeleteModal_sync: (data) => dispatch(actions.createDeleteModal_sync(data))
+        deleteDeck_async: (url, token, key) => dispatch(actions.deleteDeck_async(url, token, key)),
+        getAllDecks_async: (url, token, user) => dispatch(actions.getAllDecks_async(url, token, user)),
+        postDeck_async: (url, token, data) => dispatch(actions.postDeck_async(url, token, data)),
+        putDeck_async: (url, token, key, data) => dispatch(actions.putDeck_async(url, token, key, data)),
+        displayModal: (data) => dispatch(actions.displayModal(data))
     };
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../../store/actions/index';
+import * as select from '../../../store/reducers/root';
 
 import {createHashId} from '../../../utility';
 
@@ -23,14 +24,14 @@ const modal = (props) => {
         if (props.actions.onCancel) {
             props.actions.onCancel();
         }
-        props.clearModal_sync({key: props.uniqueId});
+        props.clearModal({key: props.uniqueId});
     }
     const handle_onConfirm = () => {
         if (props.actions.callback) {
             props.actions.callback();
         }
         props.actions.onConfirm({key: props.data.key});
-        props.clearModal_sync({key: props.uniqueId});
+        props.clearModal({key: props.uniqueId});
     }
 
     return (
@@ -55,10 +56,12 @@ const modal = (props) => {
     );
 }
 
+
 const mapDispatchToProps = dispatch => {
     return {
-        clearModal_sync: (data) => dispatch(actions.clearModal_sync(data))
+        clearModal: (data) => dispatch(actions.clearModal(data))
     }
 }
+
 
 export default connect(null, mapDispatchToProps)(modal);

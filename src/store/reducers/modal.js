@@ -6,13 +6,13 @@ const initialState = {
 };
 
 
-const deleteModalDisplayed = (state, action) => {
+const displayModal = (state, action) => {
     return {
         ...state,
         modals: state.modals.concat(action.payload)
     };
 };
-const modalCleared = (state, action) => {
+const clearModal = (state, action) => {
     return {
         ...state,
         modals: state.modals.filter(modal => modal.key !== action.payload.key)
@@ -23,13 +23,19 @@ const modalCleared = (state, action) => {
 //  REDUCER  -------------------------------------------------------------  REDUCER  //
 const reducer = (state=initialState, action) => {
     switch (action.type) {
-        case actionTypes.DELETE_MODAL:
-            return deleteModalDisplayed(state, action);
+        case actionTypes.DISPLAY_MODAL:
+            return displayModal(state, action);
         case actionTypes.CLEAR_MODAL:
-            return modalCleared(state, action);
+            return clearModal(state, action);
         default:
             return state;
     }
+}
+
+
+//  STORE SELECTORS  ---------------------------------------------------  SELECTORS  //
+export const selectModals = (state) => {
+    return state.modals;
 }
 
 export default reducer;

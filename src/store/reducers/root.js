@@ -1,42 +1,53 @@
 import {combineReducers} from 'redux'
 
 import authReducer, * as FromAuth from './auth';
-import collectionReducer, * as FromCollection from './collections';
-import modalReducer from './modal';
+import deckReducer, * as FromDeck from './deck';
+import modalReducer, * as FromModal from './modal';
 
-const AUTH = 'auth';
-const COLLECTION = 'collection';
+
+const AUTH = 'AUTH';
+const DECK = 'DECK';
+const MODAL = 'MODAL';
 
 const rootReducer = combineReducers({
-    auth: authReducer,
-    collection: collectionReducer,
-    modal: modalReducer
+    AUTH: authReducer,
+    DECK: deckReducer,
+    MODAL: modalReducer
 });
-
 
 
 //  STORE SELECTORS  --------------------------------------------------- SELECTORS  //
 //  Auth  --------------------------------------------------------- Auth Selectors  //
-export function select_token (store) {
-    return FromAuth.selectToken(store[AUTH]);
+export function authError (store) {
+    return FromAuth.selectAuthError(store[AUTH]);
 }
-export function select_user (store) {
-    return FromAuth.selectUser(store[AUTH]);
+export function authIsLoading (store) {
+    return FromAuth.selectAuthIsLoading(store[AUTH]);
 }
-
-//  Collection  --------------------------------------------------- Coll. Selectors  //
-export function select_collection (store, collection) {
-    return FromCollection.selectCollection(store[COLLECTION], collection);
+export function authToken (store) {
+    return FromAuth.selectAuthToken(store[AUTH]);
 }
-export function select_collectionBy (store, collection, method) {
-    return FromCollection.selectCollectionBy(store[COLLECTION], collection, method);
-}
-export function select_isLoading (store) {
-    return FromCollection.selectIsLoading(store[COLLECTION]);
-}
-export function select_itemByKey (store, id) {
-    return FromCollection.selectItemByKey(store[COLLECTION], id);
+export function authUser (store) {
+    return FromAuth.selectAuthUser(store[AUTH]);
 }
 
+//  Deck  ---------------------------------------------------------- Deck Selectors  //
+export function deckByKey (store, id) {
+    return FromDeck.selectDeckByKey(store[DECK], id);
+}
+export function decks (store, collection) {
+    return FromDeck.selectDecks(store[DECK], collection);
+}
+export function decksBy (store, collection, sort) {
+    return FromDeck.selectDecksBy(store[DECK], collection, sort);
+}
+export function deckIsLoading (store) {
+    return FromDeck.selectDecksIsLoading(store[DECK]);
+}
+
+//  Modal  -------------------------------------------------------- Modal Selectors  //
+export function modals (store) {
+    return FromModal.selectModals(store[MODAL]);
+}
 
 export default rootReducer;

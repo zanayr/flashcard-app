@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {connect} from 'react-redux';
+import * as select from '../../../store/reducers/root';
+import * as actions from '../../../store/actions/index';
 
 import Column from '../../../hoc/Column/Column';
 import Row from '../../../hoc/Row/Row';
 import Input from '../../ui/input/Input/Input';
 import Button from '../../ui/button/Button/Button';
-
-import * as actions from '../../../store/actions/index';
 
 import AppCSS from '../../../App.module.css';
 import AuthFormCSS from './AuthForm.module.css';
@@ -90,7 +90,7 @@ class AuthForm extends Component {
     }
 
     handle_onSubmitClicked = () => {
-        this.props.onAuth(
+        this.props.auth_async(
             this.state.form.email.value,
             this.state.form.password.value,
             this.state.isSignUp
@@ -153,12 +153,12 @@ class AuthForm extends Component {
 
 const mapStateToProps = state => {
     return {
-        error: state.auth.error
+        select_error: select.authError(state)
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
-        onAuth: (email, password, isSignUp) => dispatch(actions.auth_async(email, password, isSignUp))
+        auth_async: (email, password, isSignUp) => dispatch(actions.auth_async(email, password, isSignUp))
     };
 };
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Route, Switch, withRouter, Redirect} from 'react-router-dom';
-import { select_token } from './store/reducers/root';
+import * as select from './store/reducers/root';
 import {connect} from 'react-redux';
 
 import AppCSS from './App.module.css';
@@ -47,7 +47,7 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: select_token(state) !== null
+    isAuthenticated: select.authToken(state) !== null
   }
 };
 const mapDispatchToProps = dispatch => {

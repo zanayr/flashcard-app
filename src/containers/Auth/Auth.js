@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
+import * as select from '../../store/reducers/root';
 
 import AuthForm from '../../components/form/Auth/AuthForm';
 
@@ -32,8 +33,8 @@ class Auth extends Component {
 
 const mapStateToProps = state => {
     return {
-        loading: state.auth.loading,
-        isAuthenticated: state.auth.token !== null
+        select_isLoading: select.authIsLoading(state),
+        isAuthenticated: select.authToken(state) !== null
     };
 }
 
