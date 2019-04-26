@@ -25,12 +25,13 @@ class Collections extends Component {
             isActive: false,
             state: 0
         },
-        collections: {
-            deleted: [],
-            selected: []
+        deleted: [],
+        history: {
+            store: {},
+            undo: null
         },
-        state: 'decks',
-        isPosting: false,
+        selected: [],
+        state: 'decks'
     }
 
     componentDidMount () {
@@ -48,8 +49,39 @@ class Collections extends Component {
         });
     }
 
-    //  Toggle Aside
-    toggleAside () {
+
+    //  STATE SETTERS  ---------------------------------------------  STATE SETTERS  //
+    //  Aside  -----------------------------------------------------  Aside Setters  //
+    set_onAsideClose () {
+        this.setState(previous => ({
+            ...previous,
+            aside: {
+                ...previous.aside,
+                actions: {},
+                data: {}
+            }
+        }));
+    }
+    set_onAsideOpen (payload) {
+        this.setState(previous => ({
+            ...previous,
+            aside: {
+                ...previous.aside,
+                actions: payload.actions ? payload.actions : {},
+                data: payload.data ? payload.data : {},
+            }
+        }));
+    }
+    set_onAsideStateChange (state) {
+        this.setState(previous => ({
+            ...previous,
+            aside: {
+                ...previous.aside,
+                state: state
+            }
+        }));
+    }
+    set_onAsideToggle () {
         this.setState(previousState => ({
             ...previousState,
             aside: {
@@ -58,164 +90,348 @@ class Collections extends Component {
             }
         }));
     }
-    // updateAsideData (payload) {
-    //     this.setState(previousState => ({
-    //         ...previousState,
-    //         aside: {
-    //             ...previousState.aside,
-    //             data: {
-    //                 ...previousState.aside.data,
-    //                 title: payload.data.title,
-    //                 details: payload.data.details
-    //             }
-    //         }
-    //     }));
-    // }
-    updateAside (payload) {
-        this.setState(previousState => ({
-            ...previousState,
+    set_onQuickInspectChange (payload) {
+        this.setState(previous => ({
+            ...previous,
             aside: {
-                ...previousState.aside,
-                actions: {...payload.actions},
-                data: {...payload.data},
-                state: payload.state
+                ...previous.aside,
+                data: {
+                    ...previous.aside.data,
+                    [payload.target]: payload.value
+                }
+            }
+        }))
+    }
+
+    //  List  -------------------------------------------------------- List Setters  //
+    set_onItemDelete (payload) {
+        this.setState(previous => ({
+            ...previous,
+            deleted: [
+                ...previous.deleted,
+                payload.key
+            ]
+        }));
+    }
+    set_onItemDeselect (payload) {
+        this.setState(previous => ({
+            ...previous,
+            selected: previous.selected.filter(key => key !== payload.key)
+        }));
+    }
+    set_onItemSelect (payload) {
+        this.setState(previous => ({
+            ...previous,
+            selected: [
+                ...previous.selected,
+                payload.key
+            ]
+        }));
+    }
+
+    //  History  -------------------------------------------------- History Setters  //
+    set_onHistoryChange (store, undo) {
+        this.setState(previous => ({
+            ...previous,
+            history: {
+                store: {
+                    ...store
+                },
+                undo: undo
             }
         }));
+    }
+
+
+    //  EVENT HANDLERS  --------------------------------------------  EVENT HANDERS  //
+    //  History  -----------------------------------------------------  History EHs  //
+    handle_onHistoryUndo = () => {
+        this.state.history.undo(this.state.history.store);
+    }
+
+    //  Aside  ---------------------------------------------------------  Aside EHs  //
+    handle_onAsideClose = () => {
+        if (this.state.aside.isActive) {
+            this.set_onAsideClose();
+            this.set_onAsideToggle();
+            if (this.state.aside.state === 99) {
+                this.set_onAsideStateChange(0);
+                this.handle_onHistoryUndo();
+            }
+        }
+    }
+    handle_onAsideConfirm = () => {
+        this.set_onAsideToggle();
+        this.set_onAsideClose();
     }
     handle_onAsideToggle = (payload) => {
         if (this.state.aside.isActive) {
             if (this.state.aside.state === payload.state) {
-                this.toggleAside();
+                this.set_onAsideToggle();
             } else {
-                this.updateAside(payload);
+                this.set_onAsideOpen(payload);
             }
         } else {
-            this.toggleAside();
-            this.updateAside(payload);
-        }
-    }
-    handle_onAsideClose = (payload) => {
-        if (this.state.aside.isActive) {
-            this.toggleAside();
+            this.set_onAsideToggle();
+            this.set_onAsideOpen(payload);
         }
     }
 
 
-    //  QUICK EDIT  //
-    handle_onQucikEditSubmit = (payload) => {
-        this.props.put_async(this.state.state, this.props.token, payload.key, payload.data);
-        this.toggleAside();
-        this.updateAside({});
-    }
-
-    //  LIST EVENT HANDLERS  //
-    addDeleted (payload) {
-        this.setState(previousState => ({
-            ...previousState,
-            collections: {
-                ...previousState.collections,
-                deleted: [
-                    ...previousState.collections.deleted,
-                    payload
-                ]
-            }
-        }));
-    }
-    addSelected (payload) {
-        this.setState(previousState => ({
-            ...previousState,
-            collections: {
-                ...previousState.collections,
-                selected: [...previousState.collections.selected, payload]
-            }
-        }));
-    }
-    removeSelected (payload) {
-        let selected = this.state.collections.selected.filter(id => id !== payload);
-        this.setState(previousState => ({
-            ...previousState,
-            collections: {
-                ...previousState.collections,
-                selected: [...selected]
-            }
-        }));
-    }
-    removeAllSelected () {
-        this.setState(previousState => ({
-            ...previousState,
-            collections: {
-                ...previousState.collections,
-                selected: []
-            }
-        }));
-    }
-
-
-    handle_onListDeleteClick = (payload) => {
-        this.props.createModal_async({
+    //  List  -----------------------------------------------------------  List EHs  //
+    handle_onItemDelete = (payload) => {
+        const modal = {
             actions: {
                 ...payload.actions,
-                onConfirm: () => {
+                onConfirm: (deletePayload) => {
+                    this.set_onItemDelete(deletePayload);
+                    this.set_onItemDeselect(deletePayload);
                     this.props.delete_async(this.state.state, this.props.token, payload.key);
-                },
-                onCancel: () => {
-                    console.log('Never mind...');
                 }
             },
             data: {
-                type: 1,
-                title: 'Caution',
-                message: 'Once you delete a collection it cannot be recovered. Are you sure you want to delete the following collections: ',
-                details: [payload.data.title],
+                cancel: 'Cancel',
                 confirm: 'Delete',
-                cancel: 'Cancel'
+                details: [payload.data.details],
+                key: payload.key,
+                message: 'Once you delete a item it cannot be recovered. Are you sure you wish to delete the following items?',
+                title: 'Warning',
+                type: 1,
             }
-        });
+        }
+        this.props.createDeleteModal_sync(modal);
     }
-    handle_onListEditClick = (payload) => {
-        this.updateAside({
+    handle_onItemEdit = (payload) => {
+        const aside = {
             actions: {
                 ...payload.actions,
-                onSubmit: this.handle_onQucikEditSubmit
+                onConfirm: (putPayload) => {
+                    this.handle_onAsideConfirm();
+                    this.props.put_async(this.state.state, this.props.token, this.state.aside.data.key, {
+                        ...putPayload.data,
+                        userId: this.props.user
+                    });
+                }
             },
             data: {
                 ...payload.data,
                 key: payload.key,
-                userId: this.props.user
-            },
-            state: 99
-        });
-        this.toggleAside();
+                user: this.props.user
+            }
+        }
+        this.set_onHistoryChange(aside, payload.actions.onCancel);
+        this.set_onAsideOpen(aside);
+        this.set_onAsideStateChange(99);
+        this.set_onAsideToggle();
     }
-    handle_onListItemSelect = (payload) => {
-        if (this.state.collections.selected.indexOf(payload) > -1) {
-            this.removeSelected(payload);
+    handle_onItemSelect = (payload) => {
+        if (this.state.selected.indexOf(payload.key) > -1) {
+            this.set_onItemDeselect(payload);
         } else {
-            this.addSelected(payload);
+            this.set_onItemSelect(payload);
         }
         if (this.state.aside.isActive && this.state.aside.state === 99) {
-            this.toggleAside();
+            this.set_onAsideStateChange(0);
+            this.set_onAsideToggle();
+            if (this.state.history.undo) {
+                this.handle_onHistoryUndo();
+            }
         }
     }
-
-    //  ACTION BUTTON EVENT HANDLERS  //
-    handle_onQuickActionClick = (payload) => {
-        if (this.state.action.state) {
-            this.startSession();
-        } else {
-            this.createCollection();
-        }
-    }
-
-    //  MAIN EVENT HANDLER  //
-    handle_onMainClick = (payload) => {
-        if (this.state.collections.selected.length) {
-            this.removeAllSelected();
+    handle_onListOut = () => {
+        if (this.state.selected.length) {
+            //  Deselect all items
+            this.state.selected.forEach(key => {
+                this.set_onItemDeselect({key: key})
+            });
         }
         if (this.state.aside.isActive) {
-            this.toggleAside();
+            //  Close the aside if it is open
+            this.set_onAsideToggle();
         }
     }
+
+    //  Action  -------------------------------------------------------  Action EHs  //
+    handle_onActionClick = () => {
+        if (this.state.action.state) {
+            this.handle_onSessionStart();
+        } else {
+            this.handle_onItemCreate();
+        }
+    }
+    
+        // //  MAIN EVENT HANDLER  //
+        // handle_onMainClick = (payload) => {
+        //     if (this.state.collections.selected.length) {
+        //         this.removeAllSelected();
+        //     }
+        //     if (this.state.aside.isActive) {
+        //         this.toggleAside();
+        //     }
+        // }
+
+
+    // updateHistory (payload) {
+    //     this.setState(previous => ({
+    //         ...previous,
+    //         history: {
+    //             last: {
+    //                 data: payload.data,
+    //                 key: payload.key
+    //             },
+    //             reset: payload.actions.onReset
+    //         }
+    //     }));
+    // }
+    // updateAside (payload) {
+    //     this.setState(previousState => ({
+    //         ...previousState,
+    //         aside: {
+    //             ...previousState.aside,
+    //             actions: {...payload.actions},
+    //             data: {...payload.data},
+    //             state: payload.state
+    //         }
+    //     }));
+    // }
+    // handle_onAsideToggle = (payload) => {
+    //     if (this.state.aside.isActive) {
+    //         if (this.state.aside.state === payload.state) {
+    //             this.toggleAside();
+    //         } else {
+    //             this.updateAside(payload);
+    //         }
+    //     } else {
+    //         this.toggleAside();
+    //         this.updateAside(payload);
+    //     }
+    // }
+    // handle_onAsideClose = (payload) => {
+    //     if (this.state.aside.isActive) {
+    //         this.toggleAside();
+    //     }
+    // }
+
+
+    //  QUICK EDIT  //
+    // handle_onQucikEditSubmit = (payload) => {
+    //     this.props.put_async(this.state.state, this.props.token, this.state.aside.data.key, {
+    //         ...payload.data,
+    //         userId: this.props.user
+    //     });
+    //     this.toggleAside();
+    //     this.onAsideClose();
+    // }
+
+    //  LIST EVENT HANDLERS  //
+    // addDeleted (payload) {
+    //     this.setState(previousState => ({
+    //         ...previousState,
+    //         collections: {
+    //             ...previousState.collections,
+    //             deleted: [
+    //                 ...previousState.collections.deleted,
+    //                 payload
+    //             ]
+    //         }
+    //     }));
+    // }
+    // addSelected (payload) {
+    //     this.setState(previousState => ({
+    //         ...previousState,
+    //         collections: {
+    //             ...previousState.collections,
+    //             selected: [...previousState.collections.selected, payload]
+    //         }
+    //     }));
+    // }
+    // removeSelected (payload) {
+    //     let selected = this.state.collections.selected.filter(id => id !== payload);
+    //     this.setState(previousState => ({
+    //         ...previousState,
+    //         collections: {
+    //             ...previousState.collections,
+    //             selected: [...selected]
+    //         }
+    //     }));
+    // }
+    // removeAllSelected () {
+    //     this.setState(previousState => ({
+    //         ...previousState,
+    //         collections: {
+    //             ...previousState.collections,
+    //             selected: []
+    //         }
+    //     }));
+    // }
+
+
+    // handle_onListDeleteClick = (payload) => {
+    //     this.props.createModal_async({
+    //         actions: {
+    //             ...payload.actions,
+    //             onConfirm: () => {
+    //                 this.props.delete_async(this.state.state, this.props.token, payload.key);
+    //             },
+    //             onCancel: () => {
+    //                 console.log('Never mind...');
+    //             }
+    //         },
+    //         data: {
+    //             type: 1,
+    //             title: 'Caution',
+    //             message: 'Once you delete a collection it cannot be recovered. Are you sure you want to delete the following collections: ',
+    //             details: [payload.data.title],
+    //             confirm: 'Delete',
+    //             cancel: 'Cancel'
+    //         }
+    //     });
+    // }
+    // handle_onListEditClick = (payload) => {
+    //     this.updateAside({
+    //         actions: {
+    //             ...payload.actions,
+    //             onSubmit: this.handle_onQucikEditSubmit
+    //         },
+    //         data: {
+    //             ...payload.data,
+    //             key: payload.key,
+    //             userId: this.props.user
+    //         },
+    //         state: 99
+    //     });
+    //     this.updateHistory(payload)
+    //     this.toggleAside();
+    // }
+    // handle_onListItemSelect = (payload) => {
+    //     if (this.state.collections.selected.indexOf(payload) > -1) {
+    //         this.removeSelected(payload);
+    //     } else {
+    //         this.addSelected(payload);
+    //     }
+    //     if (this.state.aside.isActive && this.state.aside.state === 99) {
+    //         this.toggleAside();
+    //     }
+    // }
+
+    //  ACTION BUTTON EVENT HANDLERS  //
+    // handle_onQuickActionClick = (payload) => {
+    //     if (this.state.action.state) {
+    //         this.startSession();
+    //     } else {
+    //         this.createCollection();
+    //     }
+    // }
+
+    // //  MAIN EVENT HANDLER  //
+    // handle_onMainClick = (payload) => {
+    //     if (this.state.collections.selected.length) {
+    //         this.removeAllSelected();
+    //     }
+    //     if (this.state.aside.isActive) {
+    //         this.toggleAside();
+    //     }
+    // }
 
 
     //  RENDER METHOD  //
@@ -225,10 +441,12 @@ class Collections extends Component {
             list = (
                 <List
                     backingCollection={this.state.state}
-                    onDelete={this.handle_onListDeleteClick}
-                    onEdit={this.handle_onListEditClick}>
+                    onDelete={this.handle_onItemDelete}
+                    onEdit={this.handle_onItemEdit}
+                    onSelect={this.handle_onItemSelect}
+                    selected={this.state.selected}>
                     <ActionButton
-                        onClick={this.handle_onQuickActionClick}
+                        onClick={this.handle_onActionClick}
                         state={this.state.action.state}
                         values={['Create', 'Study']}/>
                 </List>
@@ -243,15 +461,15 @@ class Collections extends Component {
                     onNavigation={this.handle_onAsideToggle}/>
                 <main
                     className={CollectionsCSS.Main}
-                    onClick={this.handle_onMainClick}>
+                    onClick={this.handle_onListOut}>
                     <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
                         {list}
                     </div>
                 </main>
                 <Aside
+                    actions={this.state.aside.actions}
                     active={this.state.aside.isActive}
                     data={this.state.aside.data}
-                    actions={this.state.aside.actions}
                     onClose={this.handle_onAsideClose}
                     state={this.state.aside.state}/>
             </Aux>
@@ -273,7 +491,8 @@ const mapDispatchToProps = dispatch => {
         get_async: (url, token, user) => dispatch(actions.get_async(url, token, user)),
         post_async: (url, token, data) => dispatch(actions.post_async(url, token, data)),
         put_async: (url, token, key, data) => dispatch(actions.put_async(url, token, key, data)),
-        createModal_async: (payload) => dispatch(actions.modalCreate(payload))
+        //reset_sync: (store, key, data) => dispatch(actions.reset_sync(store, key, data)),
+        createDeleteModal_sync: (data) => dispatch(actions.createDeleteModal_sync(data))
     };
 };
 

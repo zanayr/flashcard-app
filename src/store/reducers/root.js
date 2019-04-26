@@ -18,8 +18,8 @@ export function getDeckCollection (store) {
 export function getDecksBy (store, method) {
     return FromCollection.getDecksBy(store[COLLECTION], method);
 }
-export function getItemById (store, id) {
-    return FromCollection.getItemById(store[COLLECTION], id);
+export function get_itemByKey (store, id) {
+    return FromCollection.get_itemByKey(store[COLLECTION], id);
 }
 export function getItemDataById (store, id) {
     return FromCollection.getItemDataById(store[COLLECTION], id);

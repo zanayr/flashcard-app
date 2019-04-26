@@ -4,26 +4,25 @@ const initialState = {
     modals: []
 };
 
-const modalCreate = (state, action) => {
+const deleteModalDisplayed = (state, action) => {
     return {
         ...state,
-        modals: [...state.modals, action.payload]
+        modals: state.modals.concat(action.payload)
     };
 };
-const modalClear = (state, action) => {
-    let modals = state.modals.filter(m => m.data.id !== action.payload.data.id);
+const modalCleared = (state, action) => {
     return {
         ...state,
-        modals: [...modals]
+        modals: state.modals.filter(modal => modal.key !== action.payload.key)
     };
 };
 
 const reducer = (state=initialState, action) => {
     switch (action.type) {
-        case actionTypes.MODAL_CREATE:
-            return modalCreate(state, action);
-        case actionTypes.MODAL_CLEAR:
-            return modalClear(state, action);
+        case actionTypes.DELETE_MODAL:
+            return deleteModalDisplayed(state, action);
+        case actionTypes.CLEAR_MODAL:
+            return modalCleared(state, action);
         default:
             return state;
     }

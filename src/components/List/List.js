@@ -31,20 +31,21 @@ class List extends Component {
     handle_onDeleteClick = (payload) => {
         this.props.onDelete(payload);
     }
-    handle_onEditClick = (payload) => {
-        this.props.onEdit({
-            ...payload,
-            state: 99
-        });
-    }
+    // handle_onEditClick = (payload) => {
+    //     this.props.onEdit({
+    //         ...payload,
+    //         state: 99
+    //     });
+    // }
     handle_onItemSelect = (payload) => {
-        this.toogleSelectedItem(payload.key);
+        //this.toogleSelectedItem(payload.key);
+        this.props.onSelect(payload);
     }
 
     render() {
         let listItems = this.props.decks.map(deck => {
             let isSingle = false;
-            if (this.state.selected.length === 1 && this.state.selected[0] === deck.key) {
+            if (this.props.selected.length === 1 && this.props.selected[0] === deck.key) {
                 isSingle = true;
             }
             return (
@@ -52,7 +53,7 @@ class List extends Component {
                     key={deck.key}
                     data={deck.data}
                     onDelete={this.handle_onDeleteClick}
-                    onEdit={this.handle_onEditClick}
+                    onEdit={this.props.onEdit}
                     onSelect={this.handle_onItemSelect}
                     single={isSingle}
                     uniqueId={deck.key}/>

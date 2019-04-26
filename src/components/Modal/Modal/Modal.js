@@ -14,26 +14,23 @@ import modalCSS from './Modal.module.css';
 
 const modal = (props) => {
     let details = [];
-    /*
-    if (!props.data.isActive) {
-        return null;
-    }*/
     if (props.data.details) {
         details = props.data.details.map(detail => {
             return (<li key={createHashId()}>{detail}</li>);
         });
     }
-
     const handle_onCancel = () => {
-        props.actions.onCancel();
-        props.clearModal_async(props);
+        if (props.actions.onCancel) {
+            props.actions.onCancel();
+        }
+        props.clearModal_sync({key: props.uniqueId});
     }
     const handle_onConfirm = () => {
         if (props.actions.callback) {
             props.actions.callback();
         }
-        props.actions.onConfirm();
-        props.clearModal_async(props);
+        props.actions.onConfirm({key: props.data.key});
+        props.clearModal_sync({key: props.uniqueId});
     }
 
     return (
@@ -60,7 +57,7 @@ const modal = (props) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        clearModal_async: (payload) => dispatch(actions.modalClear(payload))
+        clearModal_sync: (data) => dispatch(actions.clearModal_sync(data))
     }
 }
 

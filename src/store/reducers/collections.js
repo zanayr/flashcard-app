@@ -116,6 +116,8 @@ const reducer = (state=initialState, action) => {
             return serviceFailed(state, action);
         case actionTypes.PUT_SUCC:
             return putSucceeded(state, action);
+        // case actionTypes.RESET_ONE:
+        //     return putSucceeded(state, action);
         default:
             return state;
     }
@@ -146,8 +148,8 @@ export function getDecksBy (state, method) {
 export function getIsPosting (state) {
     return state.isPosting;
 }
-export function getItemById (state, id) {
-    return state.collections.decks.find(deck => deck.id === id);
+export function get_itemByKey (state, key) {
+    return state.collections.decks.find(item => item.key === key);
 }
 export function getItemDataById (state, id) {
     return state.collections.decks.find(deck => deck.key === id).data;

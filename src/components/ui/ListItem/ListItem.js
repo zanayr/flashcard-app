@@ -1,8 +1,7 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
-import {getItemDataById} from '../../../store/reducers/root';
+import {get_itemByKey} from '../../../store/reducers/root';
 
-import withContextActions from '../../../hoc/withContextActions/withContextActions.js';
 import Column from '../../../hoc/Column/Column';
 import QuickButton from '../button/Context/ContextButton';
 
@@ -11,68 +10,88 @@ import ListItemCSS from './ListItem.module.css';
 
 class ListItem extends PureComponent {
     state = {
-        data: this.props.item,
+        data: this.props.get_item.data,
         isDeleted: false,
         isSelected: false,
+        key: this.props.get_item.key,
     }
 
-    //  Methods  //
-    toggleSelect () {
+    //  STATE SETTERS  ----------------------------------------------  STATE SETTERS  //
+    //  Item  --------------------------------------------------------- Item Setters  //
+    set_onItemChange = (payload) => {
+        this.setState(previousState => ({
+            ...previousState,
+            data: {
+                ...previousState.data,
+                [payload.target]: payload.value
+            }
+        }));
+    }
+    set_onItemDelete = () => {
+        this.setState(previousState => ({
+            ...previousState,
+            isDeleted: true
+        }));
+    }
+    set_onItemReset = (payload) => {
+        this.setState(previousState => ({
+            ...previousState,
+            data: {
+                ...payload.data
+            }
+        }));
+    }
+    set_onSelectedToggle () {
         this.setState(previousState => ({
             ...previousState,
             isSelected: !previousState.isSelected
         }));
     }
 
-    //  Event Handlers  //
-    onDelete = () => {
-        this.setState(previousState => ({
-            ...previousState,
-            isDeleted: true
-        }));
-    }
-    onChange = (target, value) => {
-        this.setState(previousState => ({
-            ...previousState,
-            data: {
-                ...previousState.data,
-                [target]: value
-            }
-        }));
-    }
 
-    handle_onClick (e) {
+    //  EVENT HANDLERS  -------------------------------------------  EVENT HANDLERS  //
+    //  Item  -----------------------------------------------------------  Item HEs  //
+    handle_onItemChange = (payload) => {
+        this.set_onItemChange(payload);
+    }
+    handle_onItemDelete = () => {
+        this.set_onItemDelete();
+    }
+    handle_onItemReset = (payload) => {
+        this.set_onItemReset(payload);
+    }
+    handle_onItemSelect (e) {
         e.stopPropagation();
-        this.toggleSelect();
+        
+        this.set_onSelectedToggle();
         this.props.onSelect({
-            key: this.props.item.id
+            key: this.state.key
         });
     }
 
-    handle_onEditClicked = () => {
+    //  Context Actions -------------------------------------------------  C.A. HEs  //
+    handle_onEditClick = () => {
         this.props.onEdit({
-            key: this.props.item.id,
-            data: {
-                title: this.state.data.title,
-                details: this.state.data.details
-            },
+            key: this.state.key,
+            data: {...this.state.data},
             actions: {
-                onChange: this.onChange
+                onCancel: this.handle_onItemReset,
+                onChange: this.handle_onItemChange
             }
         });
     }
     handle_onDeleteClick = () => {
         this.props.onDelete({
-            key: this.props.item.id,
-            data: {
-                title: this.state.data.title,
-            },
+            key: this.state.key,
+            data: {...this.state.data},
             actions: {
-                callback: this.onDelete
+                callback: this.handle_onItemDelete
             }
         });
     }
 
+
+    //  RENDER METHOD  ----------------------------------------------- RENDER METHOD //
     render () {
         let cssClasses = [ListItemCSS.List_Item];
         if (this.props.data.isNew) {
@@ -87,7 +106,7 @@ class ListItem extends PureComponent {
         return (
             <div
                 className={cssClasses.join(' ')}
-                onClick={(e) => this.handle_onClick(e)}>
+                onClick={(e) => this.handle_onItemSelect(e)}>
                 <div className={AppCSS.Inner}>
                     <Column just='Center' align='Start'>
                         <h3>{this.state.data.title}</h3>
@@ -95,7 +114,7 @@ class ListItem extends PureComponent {
                     </Column>
                     <QuickButton
                         active={this.state.isSelected && this.props.single && !this.state.deleted}
-                        onClick={this.handle_onEditClicked}>
+                        onClick={this.handle_onEditClick}>
                         Edit
                     </QuickButton>
                     <QuickButton
@@ -112,7 +131,7 @@ class ListItem extends PureComponent {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        item: getItemDataById(state, ownProps.uniqueId)
+        get_item: get_itemByKey(state, ownProps.uniqueId)
     }
 }
 

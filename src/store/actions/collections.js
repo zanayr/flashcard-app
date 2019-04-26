@@ -58,8 +58,7 @@ export const get_async = (url, token, user) => {
                 models.push({
                     key: key,
                     data: {
-                        ...response.data[key],
-                        id: key
+                        ...response.data[key]
                     }
                 });
             }

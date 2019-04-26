@@ -8,10 +8,11 @@ export {
     delete_async,
     get_async,
     post_async,
-    put_async
+    put_async,
+    //reset_sync
 } from './collections';
 
 export {
-    modalCreate,
-    modalClear
+    createDeleteModal_sync,
+    clearModal_sync
 } from './modal';

@@ -26,9 +26,10 @@ class Layout extends Component {
             modal.data.index = i;
             return (
                 <Modal 
-                    key={modal.data.id}
+                    key={modal.key}
                     actions={modal.actions}
-                    data={modal.data}/>
+                    data={modal.data}
+                    uniqueId={modal.key}/>
             );
         });
         let routes = (

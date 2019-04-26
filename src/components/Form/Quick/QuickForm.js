@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 
 import Column from '../../../hoc/Column/Column';
 import Input from '../../ui/input/Input/Input';
+import TextField from '../../ui/input/Field/TextField';
+import TextArea from '../../ui/input/TextArea/TextArea';
 import Button from '../../ui/button/Button/Button';
 
 import AppCSS from '../../../App.module.css';
@@ -9,124 +11,76 @@ import QuickInspectFormCSS from './QuickForm.module.css';
 
 class QuickInspectForm extends Component {
     state = {
-        form: {
-            title: {
-                config: {
-                    placeholder: 'Title',
-                    type: 'text'
-                },
-                label: 'Collection Title',
-                touched: false,
-                valid: true,
-                validation: {
-                    required: true,
-                    minLength: 6,
-                    maxLength: 48
-                },
-                value: this.props.data.title
-            },
-            details: {
-                config: {
-                    placeholder: 'Details',
-                    type: 'textarea'
-                },
-                label: 'Collection Details',
-                touched: false,
-                valid: true,
-                validation: {
-                    required: true,
-                    maxLength: 64
-                },
-                value: this.props.data.details
-            }
-        },
-        valid: true
+        title: this.props.data.title,
+        details: this.props.data.details
     }
 
-    _formValidate(value, rules) {
-        let isValid = true;
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
-        }
-        if (rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid;
-        }
-        return isValid;
-    }
-    _formUpdate = (form, valid, target, value) => {
-        this.setState(previousState => ({
-            ...previousState,
-            form: form,
-            valid: valid
+    form = React.createRef();
+
+    //  Methods  //
+    update (target, value) {
+        this.setState(previous => ({
+            ...previous,
+            [target]: value
         }), () => {
-            this.props.actions.onChange(target, value);
+
         });
     }
-
-    handle_onChange = (e, target) => {
-        const form = {
-            ...this.state.form,
-            [target]: {
-                ...this.state.form[target],
-                touched: true,
-                value: e.target.value,
-                valid: this._formValidate(e.target.value, this.state.form[target].validation)
-            }
-        };
-
-        let isValid = true;
-        for (let key in form) {
-            isValid = form[key].valid && isValid;
-        }
-        this._formUpdate(form, isValid, target, e.target.value);
-    }
-    handle_onSubmit = () => {
-        this.props.actions.onSubmit({
-            data: {
-                details: this.state.form.details.value,
-                title: this.state.form.title.value,
-                userId: this.props.data.userId
-            },
-            key: this.props.data.key
-        });
+    validate () {
+        return this.form.current.reportValidity();
     }
 
-    render() {
-        const form = [];
-        for (let label in this.state.form) {
-            form.push({
-                config: this.state.form[label],
-                id: label
+    //  Event Handlers  //
+    handle_onChange = (target, value) => {
+        this.update(target, value);
+        this.props.actions.onChange({target: target, value: value});
+    }
+    handle_onFormConfirm = () => {
+        if (this.validate()) {
+            this.props.actions.onConfirm({
+                data: {
+                    details: this.state.details,
+                    title: this.state.title
+                }
             });
         }
+    }
+
+    render () {
+        console.log('rendering aside', this.props.actions.onChange);
         return (
-            <form className={QuickInspectFormCSS.Quick_Inspect_Form}>
+            <form
+                onSubmit={(e) => e.preventDefault()}
+                ref={this.form}>
                 <div className={AppCSS.Inner}>
-                    <Column just='Between'>
-                        {
-                            form.map(input => (
-                                    <Input
-                                        config={input.config.config}
-                                        label={input.config.label}
-                                        key={input.id}
-                                        onChange={(e) => this.handle_onChange(e, input.id)}
-                                        touched={input.config.touched}
-                                        validate={input.config.validation}
-                                        valid={input.config.valid}
-                                        value={input.config.value}/>
-                            ))
-                        }
-                        <Button
-                            disabled={!this.state.valid}
-                            key="submit"
-                            onClick={this.handle_onSubmit}
-                            type="submit">
-                            Save
-                        </Button>
-                    </Column>
+                    <TextField
+                        config={{
+                            label: 'Title',
+                            maxLength: 64,
+                            minLength: 6,
+                            placeholder: 'Title',
+                            value: this.state.title
+                        }}
+                        key='title'
+                        onChange={this.handle_onChange}
+                        required
+                        target='title'/>
+                    <TextArea
+                        config={{
+                            label: 'Details',
+                            maxLength: 64,
+                            placeholder: 'Details',
+                            value: this.state.details
+                        }}
+                        key='details'
+                        onChange={this.handle_onChange}
+                        target='details'/>
+                    <Button
+                        key='submit'
+                        onClick={this.handle_onFormConfirm}
+                        type='submit'>
+                        Save
+                    </Button>
                 </div>
             </form>
         );

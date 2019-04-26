@@ -12,6 +12,7 @@ const aside = (props) => {
     if (props.active) {
         cssClasses = [...cssClasses, AsideCSS.Active];
     }
+
     switch (props.state) {
         case 1:
             asideContent = (
@@ -47,6 +48,7 @@ const aside = (props) => {
     }
 
     return (
+        
         <aside className={cssClasses.join(' ')}>
             <div className={AppCSS.Inner}>
                 {asideContent}

@@ -6,6 +6,7 @@ const button = (props) => {
     const handle_onClicked = (e) => {
         e.preventDefault();
         e.stopPropagation();
+
         props.onClick();
     }
     let buttonClass;
