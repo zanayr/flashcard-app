@@ -75,11 +75,11 @@ const put_success = (key, data) => {
 
 //  ASYNC FUNCTIONS  ---------------------------------------------  ASYNC FUNCTIONS  //
 //  Delete  ---------------------------------------------------------  Delete Async  //
-export const deleteDeck_async = (url, token, key) => {
+export const deleteDeck_async = (token, key) => {
     return dispatch => {
-        axios.delete('/' + url + '/' + key + '.json?auth=' + token)
+        axios.delete('/decks/' + key + '.json?auth=' + token)
         .then(response => {
-            dispatch(delete_success(url, key));
+            dispatch(delete_success(key));
         })
         .catch(error => {
             dispatch(delete_fail(error));
@@ -87,25 +87,24 @@ export const deleteDeck_async = (url, token, key) => {
     };
 };
 //  Pass an array of key strings
-export const deleteManyDecks_async = (url, token, keys) => {
+export const deleteManyDecks_async = (token, keys) => {
     keys.forEach(key => {
-        deleteDeck_async(url, token, key)
+        deleteDeck_async(token, key)
     });
 }
 
 //  Get  ----------------------------------------------------------------  Get Async //
-export const getAllDecks_async = (url, token, user) => {
+export const getAllDecks_async = (token, user) => {
     return dispatch => {
         dispatch(getAll_init());
-        axios.get('/' + url + '.json?auth=' + token + '&orderBy="userId"&equalTo="' + user + '"')
+        axios.get('/decks.json?auth=' + token + '&orderBy="userId"&equalTo="' + user + '"')
         .then(response => {
             const models = {};
             Object.keys(response.data).map(key => {
                 models[key] = response.data[key];
             })
             dispatch(getAll_success({
-                data: models,
-                store: url
+                data: models
             }));
         })
         .catch(error => {
@@ -115,11 +114,11 @@ export const getAllDecks_async = (url, token, user) => {
 };
 
 //  Post  --------------------------------------------------------------  Post Async //
-export const postDeck_async = (url, token, data) => {
+export const postDeck_async = (token, data) => {
     return dispatch => {
-        axios.post('/' + url + '.json?auth=' + token, data)
+        axios.post('/decks.json?auth=' + token, data)
         .then(response => {
-            dispatch(post_success(url, response.data.name, data));
+            dispatch(post_success(response.data.name, data));
         })
         .catch(error => {
             dispatch(post_fail(error));
@@ -127,18 +126,18 @@ export const postDeck_async = (url, token, data) => {
     };
 };
 //  Pass an object of deck objects
-export const postManyDecks_async = (url, token, data) => {
+export const postManyDecks_async = (token, data) => {
     Object.keys(data).forEach(key => {
-        postDeck_async(url, token, data[key]);
+        postDeck_async(token, data[key]);
     });
 };
 
 //  Put  ----------------------------------------------------------------  Put Async //
-export const putDeck_async = (url, token, key, data) => {
+export const putDeck_async = (token, key, data) => {
     return dispatch => {
-        axios.put('/' + url + '/' + key + '.json?auth=' + token, data)
+        axios.put('/decks/' + key + '.json?auth=' + token, data)
         .then(response => {
-            dispatch(put_success(url, response.data.name, data));
+            dispatch(put_success(response.data.name, data));
         })
         .catch(error => {
             dispatch(put_fail(error));
@@ -146,8 +145,8 @@ export const putDeck_async = (url, token, key, data) => {
     };
 };
 //  Pass an object of deck objects
-export const putManyDecks_async = (url, token, data) => {
+export const putManyDecks_async = (token, data) => {
     Object.keys(data).forEach(key => {
-        putDeck_async(url, token, key, data[key]);
+        putDeck_async(token, key, data[key]);
     })
 }

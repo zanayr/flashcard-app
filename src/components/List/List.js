@@ -25,34 +25,34 @@ class List extends Component {
     }
 
     render () {
-        // let listItems = this.props.decks.map(deck => {
-        //     let isSingle = false;
-        //     if (this.props.selected.length === 1 && this.props.selected[0] === deck.key) {
-        //         isSingle = true;
-        //     }
+        console.log('List:', this.props.backingCollection);
+        let listItems = this.props.backingCollection.map(item => {
+            // let isSingle = false;
+            // if (this.props.selected.length === 1 && this.props.selected[0] === deck.key) {
+            //     isSingle = true;
+            // }
 
-        //     return (
-        //         <ListItem
-        //             key={deck.key}
-        //             //data={deck.data}
-        //             deleted={deck.data.isDeleted}
-        //             onDelete={this.handle_onDeleteClick}
-        //             onEdit={this.props.onEdit}
-        //             onSelect={this.handle_onItemSelect}
-        //             single={isSingle}
-        //             uniqueId={deck.key}/>
-        //     );
-        // });
-        // {this.props.children}
-        //         <section className={[AppCSS.With_Margin, ListCSS.List].join(' ')}>
-        //             <div className={AppCSS.Inner}>
-        //                 {listItems}
-        //             </div>
-        //         </section>
+            return (
+                <ListItem
+                    key={item.key}
+                    data={item}
+                    // deleted={deck.data.isDeleted}
+                    // onDelete={this.handle_onDeleteClick}
+                    // onEdit={this.props.onEdit}
+                    // onSelect={this.handle_onItemSelect}
+                    // single={isSingle}
+                    uniqueId={item.key}/>
+            );
+        });
 
         return (
             <Aux>
-                <h1>Hello World!</h1>
+                 <section className={[AppCSS.With_Margin, ListCSS.List].join(' ')}>
+                     <div className={AppCSS.Inner}>
+                         {listItems}
+                     </div>
+                 </section>
+                 {this.props.children}
             </Aux>
         );
     }

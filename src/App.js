@@ -6,7 +6,8 @@ import {connect} from 'react-redux';
 import AppCSS from './App.module.css';
 
 import Auth from './containers/Auth/Auth';
-import Logout from './containers/Out/Out';
+import In from './containers/In/In';
+import Out from './containers/Out/Out';
 import Collections from './containers/Collections/Collections';
 import Inspector from './containers/Inspector/Inspector';
 import * as actions from './store/actions/index';
@@ -29,7 +30,8 @@ class App extends Component {
         <Switch>
           <Route path='/u' exact component={Collections}/>
           <Route path='/u/inspect' exact component={Inspector}/>
-          <Route path='/logout' exact component={Logout}/>
+          <Route path='/in' exact component={In}/>
+          <Route path='/out' exact component={Out}/>
           <Route path='/auth' exact component={Auth}/>
           <Redirect to='/auth'/>
         </Switch>

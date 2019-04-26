@@ -26,6 +26,7 @@ class Collections extends Component {
             isActive: false,
             state: 0
         },
+        decks: this.props.select_decks,
         deleted: [],
         history: {
             store: {},
@@ -36,7 +37,8 @@ class Collections extends Component {
     }
 
     componentDidMount () {
-        this.props.getAllDecks_async(this.state.state, this.props.select_token, this.props.select_user);
+        console.log('CDM', this.props.select_decks);
+        // this.props.getAllDecks_async(this.props.select_token, this.props.select_user);
     }
 
 
@@ -282,23 +284,24 @@ class Collections extends Component {
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
-        let list = (<Throbber/>);
-        if (!this.props.loading) {
-            list = (
-                <List
-                    backingCollection={this.state.state}
-                    deleted={this.state.deleted}
-                    onDelete={this.handle_onItemDelete}
-                    onEdit={this.handle_onItemEdit}
-                    onSelect={this.handle_onItemSelect}
-                    selected={this.state.selected}>
-                    <ActionButton
-                        onClick={this.handle_onActionClick}
-                        state={this.state.action.state}
-                        values={['Create', 'Study']}/>
-                </List>
-            );
-        }
+        console.log('Collections:', this.state.decks);
+        // let list = (<Throbber/>);
+        // if (!this.props.select_deckIsLoading) {
+        //     list = (
+        //         <List
+        //             backingCollection={this.state.decks}>
+        //             {/*deleted={this.state.deleted}
+        //             onDelete={this.handle_onItemDelete}
+        //             onEdit={this.handle_onItemEdit}
+        //             onSelect={this.handle_onItemSelect}
+        //             selected={this.state.selected}> */}
+        //             <ActionButton
+        //                 onClick={this.handle_onActionClick}
+        //                 state={this.state.action.state}
+        //                 values={['Create', 'Study']}/>
+        //         </List>
+        //     );
+        // }
         return (
             <Aux>
                 <Header
@@ -311,7 +314,18 @@ class Collections extends Component {
                     className={CollectionsCSS.Main}
                     onClick={this.handle_onListOut}>
                     <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
-                        {list}
+                    <List
+                        backingCollection={this.state.decks}>
+                        {/*deleted={this.state.deleted}
+                        onDelete={this.handle_onItemDelete}
+                        onEdit={this.handle_onItemEdit}
+                        onSelect={this.handle_onItemSelect}
+                        selected={this.state.selected}> */}
+                        <ActionButton
+                            onClick={this.handle_onActionClick}
+                            state={this.state.action.state}
+                            values={['Create', 'Study']}/>
+                    </List>
                     </div>
                 </main>
                 <Aside
@@ -335,10 +349,10 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        deleteDeck_async: (url, token, key) => dispatch(actions.deleteDeck_async(url, token, key)),
-        getAllDecks_async: (url, token, user) => dispatch(actions.getAllDecks_async(url, token, user)),
-        postDeck_async: (url, token, data) => dispatch(actions.postDeck_async(url, token, data)),
-        putDeck_async: (url, token, key, data) => dispatch(actions.putDeck_async(url, token, key, data)),
+        deleteDeck_async: (token, key) => dispatch(actions.deleteDeck_async(token, key)),
+        getAllDecks_async: (token, user) => dispatch(actions.getAllDecks_async(token, user)),
+        postDeck_async: (token, data) => dispatch(actions.postDeck_async(token, data)),
+        putDeck_async: (token, key, data) => dispatch(actions.putDeck_async(token, key, data)),
         displayModal: (data) => dispatch(actions.displayModal(data))
     };
 };

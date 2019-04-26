@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import * as select from '../../../store/reducers/root';
 
@@ -8,7 +8,7 @@ import QuickButton from '../button/Context/ContextButton';
 import AppCSS from '../../../App.module.css';
 import ListItemCSS from './ListItem.module.css';
 
-class ListItem extends Component {
+class ListItem extends PureComponent {
     state = {
         data: this.props.select_deck,
         isSelected: false

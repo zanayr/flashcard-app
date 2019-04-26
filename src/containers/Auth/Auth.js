@@ -11,14 +11,14 @@ import AuthCSS from './Auth.module.css';
 class Auth extends Component {
     render() {
         let markup = (<AuthForm/>);
-        if (this.props.loading) {
+        if (this.props.select_isLoading) {
             markup = (
                 <h1>Loading...</h1>
             );
         }
         if (this.props.isAuthenticated) {
             markup = (
-                <Redirect to="/u"/>
+                <Redirect to="/in"/>
             );
         }
         return (

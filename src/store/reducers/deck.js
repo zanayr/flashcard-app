@@ -5,7 +5,7 @@ import * as sortTypes from './sortTypes';
 const initialState = {
     decks: {},
     error: null,
-    isLoading: false
+    isLoading: true
 };
 
 
@@ -32,6 +32,7 @@ const deleteSuccess = (state, action) => {
 
 //  Get Init  //
 const getInit = (state, action) => {
+    console.log('get init');
     return {
         ...state,
         isLoading: true
@@ -101,26 +102,35 @@ const reducer = (state=initialState, action) => {
 
 //  STORE SELECTORS  ---------------------------------------------------  SELECTORS  //
 export function selectDeckByKey (state, key) {
-    return {...state.decks[key]};
+    return {
+            ...state.decks[key],
+            key: key
+        };
 }
+//  Returns array of all decks
 export function selectDecks (state) {
-    return state.decks;
+    return Object.keys(state.decks).map(key => {
+        return {
+            ...state.decks[key],
+            key: key
+        };
+    });
 }
-//  Pass a sort type string
+//  Pass a sort type string, returns array of decks
 export function selectDecksBy (state, sort) {
-    let decks = [];
-    let sorted = {};
+    // let decks = [];
+    // let sorted = {};
     switch (sort) {
         case sortTypes.ALPHA_DEC:
-            decks = Object.keys(state.decks).map(key => {
+            return Object.keys(state.decks).map(key => {
                 return {
-                    data: {...state.decks[key]},
+                    ...state.decks[key],
                     key: key
                 }
             })
             .sort((a, b) => {
-                const A = a.data.title.toUpperCase();
-                const B = b.data.title.toUpperCase();
+                const A = a.title.toUpperCase();
+                const B = b.title.toUpperCase();
                 let c = 0;
                 if (A > B) {
                     c = 1;
@@ -130,14 +140,15 @@ export function selectDecksBy (state, sort) {
                 return c;
             });
         default:
-            break;
+            return [];
     }
-    //  Reform sorted array into object
-    decks.forEach(deck => {
-        sorted[deck.key] = deck.data;
-    });
-    //  Return final sorted object
-    return sorted;
+    // //  Reform sorted array into object
+    // decks.forEach(deck => {
+    //     sorted[deck.key] = deck.data;
+    // });
+    // console.log(sorted);
+    // //  Return final sorted object
+    // return sorted;
 }
 export function selectDecksIsLoading (state) {
     return state.isLoading;
