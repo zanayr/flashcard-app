@@ -229,10 +229,10 @@ class Collections extends Component {
     }
 
     //  Action  -------------------------------------------------------  Action EHs  //
-    handle_onSessionStart () {
+    handle_onSessionStart = () => {
         console.log('Start a session...');
     }
-    handle_onItemCreate () {
+    handle_onItemCreate = () => {
         this.props.post_async(this.state.state, this.props.select_token, {
             details: 'This is a new flashcard deck',
             title: utility.createHashId() + ' New Flashcard Deck',

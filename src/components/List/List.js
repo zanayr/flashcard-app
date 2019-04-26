@@ -30,6 +30,7 @@ class List extends Component {
             if (this.props.selected.length === 1 && this.props.selected[0] === deck.key) {
                 isSingle = true;
             }
+
             return (
                 <ListItem
                     key={deck.key}

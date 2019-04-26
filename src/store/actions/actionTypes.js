@@ -14,5 +14,8 @@ export const POST_SUCC = 'POST_SUCC';
 export const PUT_FAIL = 'PUT_FAIL';
 export const PUT_SUCC = 'PUT_SUCC';
 
+export const MAKE_OLD = 'MAKE_OLD';
+export const REMOVE_ITEM = 'REMOVE_ITEM';
+
 export const DELETE_MODAL = 'DELETE_MODAL';
 export const CLEAR_MODAL = 'CLEAR_MODAL';
