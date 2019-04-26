@@ -1,7 +1,7 @@
 export {
     auth_async,
     authOut_async,
-    authCheckState_async
+    checkAuth_async
 } from './auth';
 
 export {

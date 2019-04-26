@@ -38,7 +38,7 @@ export const authCheckTimeout_async = (expirationTime) => {
         }, expirationTime * 1000);
     };
 }
-export const authCheckState_async = () => {
+export const checkAuth_async = () => {
     return dispatch => {
         const token = localStorage.getItem('token');
         if (!token) {
