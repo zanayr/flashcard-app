@@ -1,6 +1,7 @@
 import * as actionTypes from '../actions/actionTypes';
 import * as sortTypes from './sortTypes';
 
+
 const initialState = {
     collections: {
         decks: [],
@@ -11,7 +12,7 @@ const initialState = {
     isLoading: false
 };
 
-//  FAILURE  //
+
 const serviceFailed = (state, action) => {
     return {
         ...state,
@@ -19,8 +20,6 @@ const serviceFailed = (state, action) => {
         isLoading: false
     };
 }
-
-//  DELETE  //
 const deleteSucceeded = (state, action) => {
     const store = action.payload.store;
     const collection = state.collections[store].map(item => {
@@ -37,8 +36,6 @@ const deleteSucceeded = (state, action) => {
         }
     };
 }
-
-//  GET  //
 const getInitiated = (state, action) => {
     return {
         ...state,
@@ -58,8 +55,6 @@ const getSucceeded = (state, action) => {
         isLoading: false
     };
 };
-
-//  POST  //
 const postSucceeded = (state, action) => {
     const store = action.payload.store;
     return {
@@ -73,8 +68,6 @@ const postSucceeded = (state, action) => {
         }
     };
 };
-
-//  PUT  //
 const putSucceeded = (state, action) => {
     const store = action.payload.store;
     const collection = state.collections[store].map(item => {
@@ -95,7 +88,8 @@ const putSucceeded = (state, action) => {
     };
 };
 
-//  REDUCER  //
+
+//  REDUCER  -------------------------------------------------------------  REDUCER  //
 const reducer = (state=initialState, action) => {
     switch (action.type) {
         case actionTypes.DELETE_FAIL:
@@ -116,21 +110,20 @@ const reducer = (state=initialState, action) => {
             return serviceFailed(state, action);
         case actionTypes.PUT_SUCC:
             return putSucceeded(state, action);
-        // case actionTypes.RESET_ONE:
-        //     return putSucceeded(state, action);
         default:
             return state;
     }
 }
 
-//  SELECTORS  //
-export function getDecks (state) {
-    return state.collections.decks;
+
+//  STORE SELECTORS  ---------------------------------------------------  SELECTORS  //
+export function selectCollection (state, store) {
+    return state.collections[store];
 }
-export function getDecksBy (state, method) {
+export function selectCollectionBy (state, store, method) {
     switch (method) {
         case sortTypes.ALPHA_DEC:
-            return state.collections.decks.sort((a, b) => {
+            return state.collections[store].sort((a, b) => {
                 const A = a.data.title.toUpperCase();
                 const B = b.data.title.toUpperCase();
                 let comparison = 0;
@@ -145,17 +138,12 @@ export function getDecksBy (state, method) {
             break;
     }
 }
-export function getIsPosting (state) {
-    return state.isPosting;
-}
-export function get_itemByKey (state, key) {
-    return state.collections.decks.find(item => item.key === key);
-}
-export function getItemDataById (state, id) {
-    return state.collections.decks.find(deck => deck.key === id).data;
-}
-export function getLoading (state) {
+export function selectIsLoading (state) {
     return state.isLoading;
 }
+export function selectItemByKey (state, key) {
+    return state.collections.decks.find(item => item.key === key);
+}
+
 
 export default reducer;

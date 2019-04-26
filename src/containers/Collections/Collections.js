@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
-import {getIsLoading} from '../../store/reducers/root';
+import {select_isLoading} from '../../store/reducers/root';
 import * as utility from '../../utility';
 
 import Aux from '../../hoc/Aux/Aux';
@@ -306,7 +306,7 @@ class Collections extends Component {
 
 const mapStateToProps = state => {
     return {
-        loading: getIsLoading(state),
+        loading: select_isLoading(state),
         token: state.auth.token,
         userId: state.auth.userId,
         user: state.auth.userId
@@ -318,7 +318,6 @@ const mapDispatchToProps = dispatch => {
         get_async: (url, token, user) => dispatch(actions.get_async(url, token, user)),
         post_async: (url, token, data) => dispatch(actions.post_async(url, token, data)),
         put_async: (url, token, key, data) => dispatch(actions.put_async(url, token, key, data)),
-        //reset_sync: (store, key, data) => dispatch(actions.reset_sync(store, key, data)),
         createDeleteModal_sync: (data) => dispatch(actions.createDeleteModal_sync(data))
     };
 };

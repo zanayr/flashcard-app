@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {getDecksBy} from '../../store/reducers/root';
+import {select_collectionBy} from '../../store/reducers/root';
 import * as sortType from '../../store/reducers/sortTypes';
 
 import Aux from '../../hoc/Aux/Aux';
@@ -74,8 +74,7 @@ class List extends Component {
 
 const mapStateToProps = state => {
     return {
-        decks: getDecksBy(state, sortType.ALPHA_DEC),
-        posting: state.collection.isPosting,
+        decks: select_collectionBy(state, 'decks', sortType.ALPHA_DEC)
     }
 }
 

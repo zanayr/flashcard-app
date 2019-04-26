@@ -9,25 +9,26 @@ const initialState = {
     userId: null,
 };
 
-const authFail = (state, action) => {
+
+const authFailed = (state, action) => {
     return updateObject(state, {
         error: action.payload,
         loading: false
     });
 };
-const authLogout = (state, action) => {
+const authEnded = (state, action) => {
     return updateObject(state, {
         token: null,
         userId: null
     });
 };
-const authStart = (state, action) => {
+const authInitiated = (state, action) => {
     return updateObject(state, {
         error: null,
         loading: true
     });
 };
-const authSuccess = (state, action) => {
+const authSucceeded = (state, action) => {
     return updateObject(state, {
         error: null,
         loading: false,
@@ -36,19 +37,31 @@ const authSuccess = (state, action) => {
     });
 };
 
+
+//  REDUCER  -------------------------------------------------------------  REDUCER  //
 const reducer = (state=initialState, action) => {
     switch (action.type) {
         case actionTypes.AUTH_FAIL:
-            return authFail(state, action);
-        case actionTypes.AUTH_LOGOUT:
-            return authLogout(state, action);
-        case actionTypes.AUTH_START:
-            return authStart(state, action);
-        case actionTypes.AUTH_SUCCESS:
-            return authSuccess(state, action);
+            return authFailed(state, action);
+        case actionTypes.AUTH_OUT:
+            return authEnded(state, action);
+        case actionTypes.AUTH_INIT:
+            return authInitiated(state, action);
+        case actionTypes.AUTH_SUCC:
+            return authSucceeded(state, action);
         default:
             return state;
     }
 }
+
+
+//  STORE SELECTORS  --------------------------------------------------- SELECTORS  //
+export function selectToken (state) {
+    return state.token;
+}
+export function selectUser (state) {
+    return state.userId;
+}
+
 
 export default reducer;

@@ -10,31 +10,31 @@ export const authFail = (data) => {
 };
 export const authStart = () => {
     return {
-        type: actionTypes.AUTH_START
+        type: actionTypes.AUTH_INIT
     };
 };
 export const authSuccess = (token, userId) => {
     return {
-        type: actionTypes.AUTH_SUCCESS,
+        type: actionTypes.AUTH_SUCC,
         payload: {
             token: token,
             userId: userId
         }
     };
 };
-export const authLogout = () => {
+export const authOut_async = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('expirationDate');
     localStorage.removeItem('userId');
     return {
-        type: actionTypes.AUTH_LOGOUT
+        type: actionTypes.AUTH_OUT
     }
 }
 
 export const authCheckTimeout_async = (expirationTime) => {
     return dispatch => {
         setTimeout(() => {
-            dispatch(authLogout());
+            dispatch(authOut_async());
         }, expirationTime * 1000);
     };
 }
@@ -42,11 +42,11 @@ export const authCheckState_async = () => {
     return dispatch => {
         const token = localStorage.getItem('token');
         if (!token) {
-            dispatch(authLogout());
+            dispatch(authOut_async());
         } else {
             const expirationDate = new Date(localStorage.getItem('expirationDate'));
             if (expirationDate <= new Date()) {
-                dispatch(authLogout());
+                dispatch(authOut_async());
             } else {
                 const userId = localStorage.getItem('userId');
                 dispatch(authSuccess(token, userId));

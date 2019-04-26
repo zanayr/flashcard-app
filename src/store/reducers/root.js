@@ -1,9 +1,10 @@
 import {combineReducers} from 'redux'
 
-import authReducer from './auth';
+import authReducer, * as FromAuth from './auth';
 import collectionReducer, * as FromCollection from './collections';
 import modalReducer from './modal';
 
+const AUTH = 'auth';
 const COLLECTION = 'collection';
 
 const rootReducer = combineReducers({
@@ -12,23 +13,30 @@ const rootReducer = combineReducers({
     modal: modalReducer
 });
 
-export function getDeckCollection (store) {
-    return FromCollection.getDecks(store[COLLECTION]);
+
+
+//  STORE SELECTORS  --------------------------------------------------- SELECTORS  //
+//  Auth  --------------------------------------------------------- Auth Selectors  //
+export function select_token (store) {
+    return FromAuth.selectToken(store[AUTH]);
 }
-export function getDecksBy (store, method) {
-    return FromCollection.getDecksBy(store[COLLECTION], method);
+export function select_user (store) {
+    return FromAuth.selectUser(store[AUTH]);
 }
-export function get_itemByKey (store, id) {
-    return FromCollection.get_itemByKey(store[COLLECTION], id);
+
+//  Collection  --------------------------------------------------- Coll. Selectors  //
+export function select_collection (store, collection) {
+    return FromCollection.selectCollection(store[COLLECTION], collection);
 }
-export function getItemDataById (store, id) {
-    return FromCollection.getItemDataById(store[COLLECTION], id);
+export function select_collectionBy (store, collection, method) {
+    return FromCollection.selectCollectionBy(store[COLLECTION], collection, method);
 }
-export function getIsPosting (store) {
-    return FromCollection.getIsPosting(store[COLLECTION]);
+export function select_isLoading (store) {
+    return FromCollection.selectIsLoading(store[COLLECTION]);
 }
-export function getIsLoading (store) {
-    return FromCollection.getLoading(store[COLLECTION]);
+export function select_itemByKey (store, id) {
+    return FromCollection.selectItemByKey(store[COLLECTION], id);
 }
+
 
 export default rootReducer;

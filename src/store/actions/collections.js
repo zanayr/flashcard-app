@@ -30,6 +30,7 @@ export const delete_async = (url, token, key) => {
     };
 };
 
+
 //  GET  //
 export const getFail = (error) => {
     return {
@@ -111,6 +112,7 @@ export const post_async = (url, token, data) => {
         });
     };
 };
+
 
 //  PUT  //
 export const putFail = (error) => {

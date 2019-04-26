@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
-import {get_itemByKey} from '../../../store/reducers/root';
+import {select_itemByKey} from '../../../store/reducers/root';
 
 import Column from '../../../hoc/Column/Column';
 import QuickButton from '../button/Context/ContextButton';
@@ -10,10 +10,10 @@ import ListItemCSS from './ListItem.module.css';
 
 class ListItem extends PureComponent {
     state = {
-        data: this.props.get_item.data,
+        data: this.props.select_item.data,
         isDeleted: false,
         isSelected: false,
-        key: this.props.get_item.key,
+        key: this.props.select_item.key,
     }
 
     //  STATE SETTERS  ----------------------------------------------  STATE SETTERS  //
@@ -131,7 +131,7 @@ class ListItem extends PureComponent {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        get_item: get_itemByKey(state, ownProps.uniqueId)
+        select_item: select_itemByKey(state, ownProps.uniqueId)
     }
 }
 

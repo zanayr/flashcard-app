@@ -1,6 +1,6 @@
 export {
     auth_async,
-    authLogout,
+    authOut_async,
     authCheckState_async
 } from './auth';
 
@@ -8,8 +8,7 @@ export {
     delete_async,
     get_async,
     post_async,
-    put_async,
-    //reset_sync
+    put_async
 } from './collections';
 
 export {
