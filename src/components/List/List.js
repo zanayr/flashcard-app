@@ -25,7 +25,6 @@ class List extends Component {
     }
 
     render () {
-        console.log('List:', this.props.backingCollection);
         let listItems = this.props.backingCollection.map(item => {
             // let isSingle = false;
             // if (this.props.selected.length === 1 && this.props.selected[0] === deck.key) {

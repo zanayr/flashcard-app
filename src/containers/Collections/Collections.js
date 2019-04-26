@@ -37,7 +37,6 @@ class Collections extends Component {
     }
 
     componentDidMount () {
-        console.log('CDM', this.props.select_decks);
         // this.props.getAllDecks_async(this.props.select_token, this.props.select_user);
     }
 
@@ -284,7 +283,6 @@ class Collections extends Component {
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
-        console.log('Collections:', this.state.decks);
         // let list = (<Throbber/>);
         // if (!this.props.select_deckIsLoading) {
         //     list = (

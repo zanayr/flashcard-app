@@ -32,7 +32,6 @@ const deleteSuccess = (state, action) => {
 
 //  Get Init  //
 const getInit = (state, action) => {
-    console.log('get init');
     return {
         ...state,
         isLoading: true
