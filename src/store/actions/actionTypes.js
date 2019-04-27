@@ -18,7 +18,6 @@ export const AUTH_SUCC = 'AUTH_SUCC';
 
 //  Deck Store  //
 export const DECKS_DELETE_FAIL = 'DECKS_DELETE_FAIL';
-export const DECKS_DELETE_INIT = 'DECKS_DELETE_INIT';
 export const DECKS_DELETE_SUCC = 'DECKS_DELETE_SUCC';
 export const DECKS_GET_FAIL = 'DECKS_GET_FAIL';
 export const DECKS_GET_INIT = 'DECKS_GET_INIT';
