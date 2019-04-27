@@ -121,8 +121,6 @@ export function selectDecks (state) {
 }
 //  Pass a sort type string, returns array of decks
 export function selectDecksBy (state, sort) {
-    // let decks = [];
-    // let sorted = {};
     switch (sort) {
         case sortTypes.ALPHA_DEC:
             return Object.keys(state.decks).map(key => {
@@ -145,13 +143,6 @@ export function selectDecksBy (state, sort) {
         default:
             return [];
     }
-    // //  Reform sorted array into object
-    // decks.forEach(deck => {
-    //     sorted[deck.key] = deck.data;
-    // });
-    // console.log(sorted);
-    // //  Return final sorted object
-    // return sorted;
 }
 export function selectDecksIsLoading (state) {
     return state.isLoading;
