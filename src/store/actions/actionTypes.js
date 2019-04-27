@@ -27,7 +27,6 @@ export const DECKS_POST_SUCC = 'DECKS_POST_SUCC';
 export const DECKS_PUT_FAIL = 'DECKS_PUT_FAIL';
 export const DECKS_PUT_SUCC = 'DECKS_PUT_SUCC';
 
-
 //  Card Store  //
 export const CARDS_DELETE_FAIL = 'CARDS_DELETE_FAIL'
 export const CARDS_DELETE_SUCC = 'CARDS_DELETE_SUCC'

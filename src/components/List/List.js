@@ -4,15 +4,16 @@ import React, {Component} from 'react';
 // import * as sortType from '../../store/reducers/sortTypes';
 
 import Aux from '../../hoc/Aux/Aux';
+import QuickButton from '../ui/button/Context/ContextButton';
 import ListItem from '../ui/ListItem/ListItem';
 
 import AppCSS from '../../App.module.css';
 import ListCSS from './List.module.css';
+import ListTemplate from '../ui/ListTemplate/ListTemplate';
 
 
 class List extends Component {
     state = {
-        deleted: [],
         hidden: [],
         selected: []
     }
@@ -26,7 +27,7 @@ class List extends Component {
             deleted: previous.selected.concat(payload.key)
         }));
     }
-    set_onItemSelect (payload) {
+    set_selected (payload) {
         if (this.state.selected.indexOf(payload.key) > -1) {
             this.setState(previous => ({
                 ...previous,
@@ -40,18 +41,14 @@ class List extends Component {
         }
     }
 
-
     //  EVENT HANDLERS  -------------------------------------------  EVENT HANDLERS  //
     //  Item  -----------------------------------------------------------  Item EHs  //
     handle_onItemSelect = (payload) => {
-        this.set_onItemSelect(payload);
-        //this.props.onSelect(payload);
+        this.set_selected(payload);
     }
 
     //  Context Actions  --------------------------------------------------- CA EHs  //
     handle_onItemDelete = (payload) => {
-        // this.set_onItemDelete(payload);
-        this.set_onItemSelect(payload);
         this.props.onDelete(payload);
     }
 
@@ -60,15 +57,26 @@ class List extends Component {
             return (
                 <ListItem
                     key={item.key}
-                    data={item}
-                    onDelete={this.handle_onItemDelete}
-                    deleted={item.isDeleted}
-                    loading={item.isLoading}
-                    // onEdit={this.props.onEdit}
+                    //deleted={this.state.selected.indexOf(item.key) > -1}
+                    selected={this.state.selected.indexOf(item.key) > -1}
                     onSelect={this.handle_onItemSelect}
                     single={this.state.selected.length === 1 && this.state.selected[0] === item.key}
-                    visible={!(this.state.hidden.indexOf(item.key) > -1)}
-                    uniqueId={item.key}/>
+                    uniqueId={item.key}>
+                    <ListTemplate 
+                        title={item.title}
+                        details={item.details}/>
+                    <QuickButton
+                        active={this.state.selected.length === 1 && this.state.selected[0] === item.key}
+                        onClick={this.handle_onEditClick}>
+                        Edit
+                    </QuickButton>
+                    <QuickButton
+                        active={this.state.selected.length === 1 && this.state.selected[0] === item.key}
+                        delete
+                        onClick={this.handle_onDeleteClick}>
+                        Delete
+                    </QuickButton>
+                </ListItem>
             );
         });
 
@@ -86,11 +94,4 @@ class List extends Component {
 }
 
 
-// const mapStateToProps = state => {
-//     return {
-//         decks: select_collectionBy(state, 'decks', sortType.ALPHA_DEC)
-//     }
-// }
-
 export default List;
-// export default connect(mapStateToProps)(List);

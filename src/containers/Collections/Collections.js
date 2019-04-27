@@ -64,12 +64,12 @@ class Collections extends Component {
             }
         }));
     }
-    set_onAsideStateChange (state) {
+    set_onAsideStateChange (payload) {
         this.setState(previous => ({
             ...previous,
             aside: {
                 ...previous.aside,
-                state: state
+                state: payload.state
             }
         }));
     }
@@ -150,10 +150,12 @@ class Collections extends Component {
                 this.set_onAsideToggle();
             } else {
                 this.set_onAsideOpen(payload);
+                this.set_onAsideStateChange(payload);
             }
         } else {
             this.set_onAsideToggle();
             this.set_onAsideOpen(payload);
+            this.set_onAsideStateChange(payload);
         }
     }
 
@@ -161,28 +163,9 @@ class Collections extends Component {
     //  List  -----------------------------------------------------------  List EHs  //
     handle_onItemDelete = (payload) => {
         this.props.displayModal(modalTypes.DELETE, payload);
-        // });
-        // const modal = {
-        //     actions: {
-        //         ...payload.actions,
-        //         onConfirm: (deletePayload) => {
-        //             //this.set_onItemDeselect(deletePayload);
-        //             this.props.deleteDeck_async(this.state.state, this.props.select_token, payload.key);
-        //         }
-        //     },
-        //     data: {
-        //         cancel: 'Cancel',
-        //         confirm: 'Delete',
-        //         details: [payload.data.details],
-        //         key: payload.key,
-        //         message: 'Once you delete a item it cannot be recovered. Are you sure you wish to delete the following items?',
-        //         title: 'Warning',
-        //         type: 1,
-        //     }
-        // }
-        // this.props.displayModal(modal);
     }
     handle_onItemEdit = (payload) => {
+        console.log(payload);
         const aside = {
             actions: {
                 ...payload.actions,
@@ -300,7 +283,8 @@ class Collections extends Component {
                     <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
                     <List
                         backingCollection={this.props.select_decks}
-                        onDelete={this.handle_onItemDelete}>
+                        onDelete={this.handle_onItemDelete}
+                        onEdit={this.handle_onItemEdit}>
                         <ActionButton
                             onClick={this.handle_onActionClick}
                             state={this.state.action.state}
