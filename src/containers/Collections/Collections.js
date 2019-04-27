@@ -27,7 +27,6 @@ class Collections extends Component {
             isActive: false,
             state: 0
         },
-        decks: this.props.select_decks,
         deleted: [],
         history: {
             store: {},
@@ -38,6 +37,7 @@ class Collections extends Component {
     }
 
     componentDidMount () {
+        console.log(this.props.select_decks);
         // this.props.getAllDecks_async(this.props.select_token, this.props.select_user);
     }
 
@@ -160,7 +160,7 @@ class Collections extends Component {
 
     //  List  -----------------------------------------------------------  List EHs  //
     handle_onItemDelete = (payload) => {
-        this.props.displayModal(modalTypes.DELETE, {...this.state.decks.find(deck => deck.key === payload.key)});
+        this.props.displayModal(modalTypes.DELETE, payload);
         // });
         // const modal = {
         //     actions: {
@@ -299,7 +299,7 @@ class Collections extends Component {
                     onClick={this.handle_onListOut}>
                     <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
                     <List
-                        backingCollection={this.state.decks}
+                        backingCollection={this.props.select_decks}
                         onDelete={this.handle_onItemDelete}>
                         <ActionButton
                             onClick={this.handle_onActionClick}

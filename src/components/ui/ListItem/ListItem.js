@@ -106,8 +106,8 @@ class ListItem extends PureComponent {
     //  RENDER METHOD  ----------------------------------------------- RENDER METHOD //
     render () {
         let cssClasses = [ListItemCSS.List_Item];
-        if (this.props.new) {
-            cssClasses = [...cssClasses, this.props.select_deck.isNew];
+        if (this.props.select_deck.isNew) {
+            cssClasses = [...cssClasses, ListItemCSS.New];
         }
         if (this.props.single) {
             cssClasses = [...cssClasses, ListItemCSS.Single];

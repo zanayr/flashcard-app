@@ -51,6 +51,7 @@ class List extends Component {
     //  Context Actions  --------------------------------------------------- CA EHs  //
     handle_onItemDelete = (payload) => {
         // this.set_onItemDelete(payload);
+        this.set_onItemSelect(payload);
         this.props.onDelete(payload);
     }
 
