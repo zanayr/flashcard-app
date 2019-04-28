@@ -30,6 +30,7 @@ class Collections extends Component {
             isActive: false,
             state: 0
         },
+        decks: [],
         deleted: [],
         history: {
             store: {},
@@ -40,8 +41,10 @@ class Collections extends Component {
     }
 
     componentDidMount () {
-        console.log(this.props.select_decks);
-        // this.props.getAllDecks_async(this.props.select_token, this.props.select_user);
+        this.setState(previous => ({
+            ...previous,
+            decks: this.props.select_decks
+        }));
     }
 
 
@@ -271,7 +274,7 @@ class Collections extends Component {
     }
 
     //  STATE SETTERS v2  //
-    set_selected (payload) {
+    setSelected (payload) {
         if (this.state.selected.indexOf(payload.key) > -1) {
             this.setState(previous => ({
                 ...previous,
@@ -293,8 +296,22 @@ class Collections extends Component {
     onItemDelete = (payload) => {
         this.props.deleteDeck_async(this.props.select_token, payload);
     }
+    onItemInspect = (payload) => {
+        console.log(payload);
+        //setAsideState(99);
+    }
     onItemSelect = (payload) => {
-        this.set_selected(payload)
+        this.setSelected(payload)
+    }
+
+    foo = (payload) => {
+        let decks = this.state.decks;
+        decks[0].title = 'foo';
+        console.log(decks[0]);
+        this.setState(previous => ({
+            ...previous,
+            decks: [...decks]
+        }));
     }
 
 
@@ -305,7 +322,7 @@ class Collections extends Component {
                 <Header
                     onA={this.handle_onAsideToggle}
                     onB={this.handle_onAsideToggle}
-                    onC={this.handle_onBulkDelete}
+                    onC={this.foo}
                     onClick={this.handle_onAsideClose}
                     onNavigation={this.handle_onAsideToggle}/>
                 <main
@@ -313,9 +330,10 @@ class Collections extends Component {
                     onClick={this.handle_onListOut}>
                     <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
                         <SelectableList
-                            backingCollection={this.props.select_decks}
+                            backingCollection={this.state.decks}
                             onConfirm={this.onItemDelete}
-                            onSelect={this.onItemSelect}/>
+                            onEdit={this.onItemInspect}
+                            onSelect={this.onItemSelect}>
                         <ActionButton
                             onClick={this.handle_onActionClick}
                             state={this.state.action.state}

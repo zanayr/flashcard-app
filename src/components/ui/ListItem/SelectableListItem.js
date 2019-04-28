@@ -1,30 +1,38 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 
 import Column from '../../../hoc/Column/Column';
 
 import AppCSS from '../../../App.module.css';
 import ListItemCSS from './ListItem.module.css';
 
-class SelectableListItem extends Component {
+class SelectableListItem extends PureComponent {
     state = {
+        detail: this.props.detail,
+        display: this.props.display,
         isSelected: false
     }
 
-    shouldComponentUpdate (nextProps, nextState) {
-        return nextState.isSelected !== this.state.isSelected;
-    }
+    // shouldComponentUpdate (nextProps, nextState) {
+    //     return nextState.isSelected !== this.state.isSelected;
+    // }
 
-    toggle_isSelected () {
+    toggleSelected () {
         this.setState(previousState => ({
             ...previousState,
             isSelected: !previousState.isSelected
         }));
     }
+    setValues (target, value) {
+        this.setState(previous => ({
+            ...previous,
+            [target]: value
+        }));
+    }
 
-    handle_onItemSelect = (e) => {
+    onItemSelect = (e) => {
         e.stopPropagation();
         
-        this.toggle_isSelected();
+        this.toggleSelected();
         this.props.onSelect({
             key: this.props.itemKey
         });
@@ -38,14 +46,28 @@ class SelectableListItem extends Component {
             classes = [ListItemCSS.Selected];
         }
 
+        let item = (
+            <div
+                className={[ListItemCSS.List_Item].concat(classes).join(' ')}
+                onClick={this.onItemSelect}>
+                <div className={AppCSS.Inner}>
+                    <Column just='Center' align='Start'>
+                        <h3>{this.state.display}</h3>
+                        <p>{this.state.detail}</p>
+                        {this.props.children}
+                    </Column>
+                </div>
+            </div>
+        );
+
         return (
             <div
                 className={[ListItemCSS.List_Item].concat(classes).join(' ')}
-                onClick={this.handle_onItemSelect}>
+                onClick={this.onItemSelect}>
                 <div className={AppCSS.Inner}>
                     <Column just='Center' align='Start'>
-                        <h3>{this.props.display}</h3>
-                        <p>{this.props.detail}</p>
+                        <h3>{this.state.display}</h3>
+                        <p>{this.state.detail}</p>
                         {this.props.children}
                     </Column>
                 </div>

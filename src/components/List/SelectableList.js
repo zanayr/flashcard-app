@@ -9,11 +9,11 @@ import ListCSS from './List.module.css';
 
 class SelectableList extends Component {
     state = {
-        collection: this.props.backingCollection,
         confirm: false,
         deleted: [],
         hidden: [],
-        selected: []
+        selected: [],
+        state: 0
     }
 
     setConfirm (payload) {
@@ -30,6 +30,12 @@ class SelectableList extends Component {
         this.setState(previous => ({
             ...previous,
             selected: []
+        }));
+    }
+    setListState (state) {
+        this.setState(previous => ({
+            ...previous,
+            state: state
         }));
     }
     setSelected (payload) {
@@ -54,18 +60,19 @@ class SelectableList extends Component {
     onItemDelete = (payload) => {
         this.setConfirm(true);
     }
+    onItemEdit = () => {
+        this.setListState(1);
+    }
     onItemSelect = (payload) => {
         this.setConfirm(false);
         this.setSelected(payload);
         //this.props.onSelect(payload);
     }
-    onRowDestory = payload => {
-        console.log('destroying:', payload);
-    }
 
     render () {
         let items = this.props.backingCollection.map(item => {
             let isSingle = this.state.selected.length === 1 && this.state.selected[0] === item.key;
+            let isEditing = this.state.state === 1 && this.state.selected[0] === item.key;
             let css = [ListCSS.List_Item]
             if (item.isNew) {
                 css.push(ListCSS.New);
@@ -79,12 +86,13 @@ class SelectableList extends Component {
                     key={item.key}>
                     <div>
                         <SelectableListItem
-                            onSelect={this.onItemSelect}
                             display={item.title}
                             detail={item.details}
-                            itemKey={item.key}/>
+                            itemKey={item.key}
+                            onSelect={this.onItemSelect}
+                            editing={isEditing}/>
                         <ContextAction
-                            action={this.props.onEdit}
+                            action={this.onItemEdit}
                             active={isSingle}
                             itemKey={item.key}>
                             Edit
