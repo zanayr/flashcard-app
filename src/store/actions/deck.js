@@ -14,6 +14,7 @@ const delete_fail = (error, key) => {
     };
 };
 const delete_success = (key) => {
+    console.log(key);
     return {
         type: actionTypes.DECKS_DELETE_SUCC,
         payload: {
@@ -79,9 +80,11 @@ const put_success = (key, data) => {
 //  ASYNC FUNCTIONS  ---------------------------------------------  ASYNC FUNCTIONS  //
 //  Delete  ---------------------------------------------------------  Delete Async  //
 export const deleteDeck_async = (token, key) => {
+    console.log(key);
     return dispatch => {
         axios.delete('/decks/' + key + '.json?auth=' + token)
         .then(response => {
+            
             dispatch(delete_success(key));
         })
         .catch(error => {

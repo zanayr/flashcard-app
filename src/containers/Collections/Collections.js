@@ -11,6 +11,9 @@ import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside from '../../components/aside/Aside/Aside';
 import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
+import SelectableList from '../../components/List/SelectableList';
+import SelectableListItem from '../../components/ui/ListItem/SelectableListItem';
+import ContextAction from '../../components/ui/button/Context/ContextAction';
 import List from '../../components/List/List';
 
 import AppCSS from '../../App.module.css';
@@ -189,18 +192,19 @@ class Collections extends Component {
         this.set_onAsideToggle();
     }
     handle_onItemSelect = (payload) => {
-        if (this.state.selected.indexOf(payload.key) > -1) {
-            this.set_onItemDeselect(payload);
-        } else {
-            this.set_onItemSelect(payload);
-        }
-        if (this.state.aside.isActive && this.state.aside.state === 99) {
-            this.set_onAsideStateChange(0);
-            this.set_onAsideToggle();
-            if (this.state.history.undo) {
-                this.handle_onHistoryUndo();
-            }
-        }
+        console.log(payload);
+        // if (this.state.selected.indexOf(payload.key) > -1) {
+        //     this.set_onItemDeselect(payload);
+        // } else {
+        //     this.set_onItemSelect(payload);
+        // }
+        // if (this.state.aside.isActive && this.state.aside.state === 99) {
+        //     this.set_onAsideStateChange(0);
+        //     this.set_onAsideToggle();
+        //     if (this.state.history.undo) {
+        //         this.handle_onHistoryUndo();
+        //     }
+        // }
     }
     handle_onListOut = () => {
         if (this.state.selected.length) {
@@ -266,6 +270,33 @@ class Collections extends Component {
         this.props.createDeleteModal_sync(modal);
     }
 
+    //  STATE SETTERS v2  //
+    set_selected (payload) {
+        if (this.state.selected.indexOf(payload.key) > -1) {
+            this.setState(previous => ({
+                ...previous,
+                selected: previous.selected.filter(key => key !== payload.key)
+            }), () => {
+                console.log(this.state.selected.length)
+            });
+        } else {
+            this.setState(previous => ({
+                ...previous,
+                selected: previous.selected.concat(payload.key)
+            }), () => {
+                console.log(this.state.selected.length)
+            });
+        }
+    }
+
+    //  EVENT HANDLERS v2  //
+    onItemDelete = (payload) => {
+        this.props.deleteDeck_async(this.props.select_token, payload);
+    }
+    onItemSelect = (payload) => {
+        this.set_selected(payload)
+    }
+
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
@@ -281,15 +312,14 @@ class Collections extends Component {
                     className={CollectionsCSS.Main}
                     onClick={this.handle_onListOut}>
                     <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
-                    <List
-                        backingCollection={this.props.select_decks}
-                        onDelete={this.handle_onItemDelete}
-                        onEdit={this.handle_onItemEdit}>
+                        <SelectableList
+                            backingCollection={this.props.select_decks}
+                            onConfirm={this.onItemDelete}
+                            onSelect={this.onItemSelect}/>
                         <ActionButton
                             onClick={this.handle_onActionClick}
                             state={this.state.action.state}
                             values={['Create', 'Study']}/>
-                    </List>
                     </div>
                 </main>
                 <Aside

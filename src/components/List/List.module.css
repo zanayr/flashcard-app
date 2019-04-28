@@ -1,0 +1,30 @@
+.List {
+    margin: 0px -16px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.List > div {
+    padding: 0px 16px;
+}
+
+.List_Item {
+    height: 64px;
+    margin: 0px -16px;
+    transition: height 0.333s ease;
+}
+.List_Item.Hidden {
+    height: 0px;
+}
+
+@keyframes new-item {
+    0% {
+        height: 0px;
+    }
+    100% {
+        height: 64px;
+    }
+}
+.List_Item.New {
+    animation: new-item 0.333s ease;
+    height: 64px;
+}

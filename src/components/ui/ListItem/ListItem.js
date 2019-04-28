@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import * as select from '../../../store/reducers/root';
 
@@ -10,15 +10,15 @@ import Throbber from '../../ui/Throbber/Throbber';
 import AppCSS from '../../../App.module.css';
 import ListItemCSS from './ListItem.module.css';
 
-class ListItem extends Component {
+class ListItem extends PureComponent {
     state = {
         isSelected: false
     }
 
-    shouldComponentUpdate (nextProps, nextState) {
-        console.log(nextProps.onSelect !== this.props.onSelect);
-        return nextProps.selected !== this.props.selected || nextProps.single !== this.props.single;// || nextProps.deleted !== this.props.deleted;
-    }
+    // shouldComponentUpdate (nextProps, nextState) {
+    //     console.log(nextProps.onSelect !== this.props.onSelect);
+    //     return nextProps.selected !== this.props.selected || nextProps.single !== this.props.single || nextProps.foo !== this.props.foo;
+    // }
 
 
 

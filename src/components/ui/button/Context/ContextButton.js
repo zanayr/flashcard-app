@@ -5,10 +5,13 @@ import ContextButtonCSS from './ContextButton.module.css';
 const contextButton = (props) => {
     let cssClasses = [ContextButtonCSS.Quick_Button];
     if (props.active) {
-        cssClasses = [...cssClasses, ContextButtonCSS.Active];
+        cssClasses = cssClasses.concat(ContextButtonCSS.Active);
+    }
+    if (props.confirm) {
+        cssClasses = cssClasses.concat(ContextButtonCSS.Confirm);
     }
     if (props.delete) {
-        cssClasses = [...cssClasses, ContextButtonCSS.Delete];
+        cssClasses = cssClasses.concat(ContextButtonCSS.Delete);
     }
 
     const handle_onClick = (e) => {

@@ -130,6 +130,7 @@ export function selectDecksBy (state, sort) {
                 }
             })
             .sort((a, b) => {
+                console.log(a, b);
                 const A = a.title.toUpperCase();
                 const B = b.title.toUpperCase();
                 let c = 0;

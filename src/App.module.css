@@ -1,6 +1,9 @@
 .App {
   height: 100%;
 }
+.Outer {
+
+}
 .Inner {
   height: 100%;
 }
@@ -9,4 +12,7 @@
 }
 .With_Padding {
   padding: 0px 16px;
+}
+.No_Scroll {
+  overflow: hidden;
 }

@@ -14,6 +14,7 @@ import ListTemplate from '../ui/ListTemplate/ListTemplate';
 
 class List extends Component {
     state = {
+        confirm: false,
         hidden: [],
         selected: []
     }
@@ -21,7 +22,7 @@ class List extends Component {
 
     //  STATE SETTERS  ---------------------------------------------  STATE SETTERS  //
     //  Items  ------------------------------------------------------  Item Setters  //  
-    set_onItemDelete (payload) {
+    set_deleted (payload) {
         this.setState(previous => ({
             ...previous,
             deleted: previous.selected.concat(payload.key)
@@ -40,16 +41,25 @@ class List extends Component {
             }));
         }
     }
+    setw07_confirm (payload) {
+        this.setState(previous => ({
+            ...previous,
+            confirm: payload
+        }));
+    }
 
     //  EVENT HANDLERS  -------------------------------------------  EVENT HANDLERS  //
     //  Item  -----------------------------------------------------------  Item EHs  //
     handle_onItemSelect = (payload) => {
         this.set_selected(payload);
+        this.set_confirm(false);
+        this.props.onSelect()
     }
 
     //  Context Actions  --------------------------------------------------- CA EHs  //
-    handle_onItemDelete = (payload) => {
-        this.props.onDelete(payload);
+    handle_onDeleteClick = () => {
+        this.set_confirm(true);
+        //this.props.onDelete(payload);
     }
 
     render () {
@@ -61,8 +71,9 @@ class List extends Component {
                     selected={this.state.selected.indexOf(item.key) > -1}
                     onSelect={this.handle_onItemSelect}
                     single={this.state.selected.length === 1 && this.state.selected[0] === item.key}
+                    foo={this.state.confirm && this.state.selected[0] === item.key}
                     uniqueId={item.key}>
-                    <ListTemplate 
+                    <ListTemplate
                         title={item.title}
                         details={item.details}/>
                     <QuickButton
@@ -75,6 +86,12 @@ class List extends Component {
                         delete
                         onClick={this.handle_onDeleteClick}>
                         Delete
+                    </QuickButton>
+                    <QuickButton
+                        active={this.state.confirm && this.state.selected.length === 1 && this.state.selected[0] === item.key}
+                        confirm
+                        onClick={this.handle_onConfirm}>
+                        Confirm
                     </QuickButton>
                 </ListItem>
             );
