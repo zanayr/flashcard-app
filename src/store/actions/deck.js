@@ -78,12 +78,12 @@ const put_success = (key, data) => {
 
 //  ASYNC FUNCTIONS  ---------------------------------------------  ASYNC FUNCTIONS  //
 //  Delete  ---------------------------------------------------------  Delete Async  //
-export const deleteDeck_async = (token, key) => {
+export const deleteDeck_async = (token, id) => {
     return dispatch => {
-        axios.delete('/decks/' + key + '.json?auth=' + token)
+        axios.delete('/decks/' + id + '.json?auth=' + token)
         .then(response => {
             
-            dispatch(delete_success(key));
+            dispatch(delete_success(id));
         })
         .catch(error => {
             dispatch(delete_fail(error));
@@ -106,7 +106,9 @@ export const getAllDecks_async = (token, user) => {
             const models = {};
             Object.keys(response.data).map(key => {
                 models[key] = {
-                    ...response.data[key]
+                    details: response.data[key].details,
+                    title: response.data[key].title,
+                    user: response.data[key].user
                 }
             });
             dispatch(getAll_success({
@@ -123,10 +125,13 @@ export const getAllDecks_async = (token, user) => {
 export const postDeck_async = (token, data) => {
     console.log(data);
     return dispatch => {
-        axios.post('/decks.json?auth=' + token, data)
+        axios.patch('/decks/' + data.id + '.json?auth=' + token, data)
         .then(response => {
-            dispatch(post_success(response.data.name, {
-                ...data
+            console.log(response);
+            dispatch(post_success(response.data.id, {
+                details: response.data.details,
+                title: response.data.title,
+                user: response.data.user
             }));
         })
         .catch(error => {
@@ -142,9 +147,9 @@ export const postManyDecks_async = (token, data) => {
 };
 
 //  Put  ----------------------------------------------------------------  Put Async //
-export const putDeck_async = (token, key, data) => {
+export const putDeck_async = (token, id, data) => {
     return dispatch => {
-        axios.put('/decks/' + key + '.json?auth=' + token, data)
+        axios.put('/decks/' + id + '.json?auth=' + token, data)
         .then(response => {
             dispatch(put_success(response.data.name, data));
         })

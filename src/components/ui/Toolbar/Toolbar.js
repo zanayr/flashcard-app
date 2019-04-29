@@ -8,20 +8,12 @@ import ToolbarCSS from './Toolbar.module.css';
 const toolbar = (props) => {
     //  EVENT HANDLERS  -------------------------------------------  EVENT HANDLERS  //
     const handle_onAClick = () => {
-        const data = {
-            data: {},
-            state: 2
-        }
 
-        props.onA(data);
+        props.onA(2);
     }
     const handle_onBClick = () => {
-        const data = {
-            data: {},
-            state: 3
-        }
 
-        props.onB(data);
+        props.onB(3);
     }
     const handle_onCClick = () => {
         props.onC();

@@ -12,12 +12,8 @@ const dashboard = (props) => {
         console.log("Routing to account page...");
     }
     const handle_onNavigationClicked = () => {
-        const data = {
-            data: {},
-            state: 1
-        }
 
-        props.onNavigation(data);
+        props.onNavigation(1);
     }
     return (
         <div className={DashboardCSS.Dashboard}>

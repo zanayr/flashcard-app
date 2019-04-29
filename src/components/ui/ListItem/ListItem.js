@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import ListItemTemplate from '../ListTemplate/ListTemplate';
+
+import Column from '../../../hoc/Column/Column';
 
 import ListItemStyles from './ListItem.module.css';
 
@@ -10,19 +11,30 @@ class ListItem extends Component {
         display: this.props.display
     }
 
+    onClick (e) {
+        e.stopPropagation();
+
+        this.props.onItemSelect();
+    }
+
     // shouldComponentUpdate (nextProps, nextState) {
     //     return nextProps.active !== this.props.active
     // }
 
     render () {
+        let css = [ListItemStyles.ListItem];
+        if (this.props.selected) {
+            css = [ListItemStyles.ListItem, ListItemStyles.Selected];
+        }
         return (
             <article
-                className={ListItemStyles.ListItem}
-                onClick={this.props.onItemSelect}>
+                className={css.join(' ')}
+                onClick={(e) => this.onClick(e)}>
                 <div>
-                    <ListItemTemplate
-                        detail={this.state.detail}
-                        display={this.state.display}/>
+                    <Column>
+                        <h3>{this.state.display}</h3>
+                        <p>{this.state.detail}</p>
+                    </Column>
                     {this.props.children}
                 </div>
             </article>

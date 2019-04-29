@@ -1,4 +1,5 @@
 .ListItem {
+    background-color: white;
     height: 64px;
     overflow: hidden;
     width: 100%;
@@ -12,4 +13,8 @@
 }
 .ListItem p {
     margin-top: 2px;
+}
+
+.Selected {
+    background-color: pink;
 }

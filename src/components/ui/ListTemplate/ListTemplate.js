@@ -5,9 +5,6 @@ import Aux from '../../../hoc/Aux/Aux';
 import ListItemTemplateStyles from './ListItemTemplate.module.css';
 
 class ListItemTemplate extends Component {
-    state = {
-        selected: false
-    }
 
     toggleSelected () {
         this.setState(prev => ({

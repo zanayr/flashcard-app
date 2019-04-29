@@ -36,12 +36,20 @@ class Collections extends Component {
         },
         confirm: false,
         deleted: [],
+        decks: [],
         history: {
             store: {},
             undo: null
         },
         selected: [],
         state: 'decks'
+    }
+
+    componentDidMount () {
+        this.setState(prev => ({
+            ...prev,
+            decks: this.props.select_decks
+        }));
     }
 
 
@@ -271,6 +279,46 @@ class Collections extends Component {
     // }
 
     //  STATE SETTERS v2  //
+    //  Aside  -------------------------------------------------------------  Aside  //
+    setAsideState (state) {
+        console.log(state);
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                state: state
+            }
+        }));
+    }
+    toggleAside () {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                isActive: !prev.aside.isActive
+            }
+        }));
+    }
+
+    //  List  ---------------------------------------------------------------  List  //
+    addSelected (key) {
+        this.setState(prev => ({
+            ...prev,
+            selected: prev.selected.concat(key)
+        }));
+    }
+    clearSelected (key) {
+        this.setState(prev => ({
+            ...prev,
+            selected: []
+        }));
+    }
+    removeSelected (key) {
+        this.setState(prev => ({
+            ...prev,
+            selected: prev.selected.filter(k => k !== key)
+        }));
+    }
     setConfirm (bool) {
         this.setState(prev => ({
             ...prev,
@@ -283,25 +331,6 @@ class Collections extends Component {
             confirm: !prev.confirm
         }));
     }
-    removeSelected (key) {
-        this.setState(prev => ({
-            ...prev,
-            selected: prev.selected.filter(k => k !== key)
-        }));
-    }
-    toggleSelected (key) {
-        if (this.state.selected.indexOf(key) > -1) {
-            this.setState(prev => ({
-                ...prev,
-                selected: prev.selected.filter(k => k !== key)
-            }));
-        } else {
-            this.setState(prev => ({
-                ...prev,
-                selected: prev.selected.concat(key)
-            }));
-        }
-    }
 
     createItem (item) {
         this.setState(prev => ({
@@ -309,32 +338,54 @@ class Collections extends Component {
             decks: prev.decks.concat(item)
         }));
     }
-    removeItem (key) {
+    removeItem (id) {
         this.setState(prev => ({
             ...prev,
-            decks: prev.decks.filter(item => item.key !== key)
+            decks: prev.decks.filter(item => item.id !== id)
         }));
     }
 
+
+
     //  EVENT HANDLERS v2  //
     onActionClick = () => {
-        let key = utility.createHashId();
+        let id = utility.createHashId(0);
         let item = {
             details: 'These are details for this flashcard',
-            //key: key,
-            title: key + ' Flashcard Deck',
+            id: id,
+            title: id + ' Flashcard Deck',
             user: this.props.select_user
         }
-        //this.createItem(item);
+        this.createItem(item);
         this.props.postDeck_async(this.props.select_token, item);
     }
+
+    //  Aside  -------------------------------------------------------------  Aside  //
+    onAsideClose = state => {
+        if (this.state.aside.isActive) {
+            //closeAside();
+            this.toggleAside();
+        }
+    }
+    onAsideToggle = state => {
+        if (this.state.aside.state === state) {
+            this.toggleAside();
+        } else {
+            this.setAsideState(state);
+            if (!this.state.aside.isActive) {
+                this.toggleAside();
+            }
+        }
+    }
+
+    //  List  ---------------------------------------------------------------  List  //
     onItemCancel = key => {
         this.setConfirm(false);
     }
-    onItemConfirm = key => {
-        //this.removeItem(key);
-        this.removeSelected(key);
-        this.props.deleteDeck_async(this.props.select_token, key);
+    onItemConfirm = id => {
+        this.removeSelected(id);
+        this.removeItem(id);
+        this.props.deleteDeck_async(this.props.select_token, id);
     }
     onItemDelete = key => {
         this.toggleConfirm();
@@ -342,42 +393,56 @@ class Collections extends Component {
     onItemInspect = key => {
         console.log('opening inspector');
     }
-    onItemSelect = key => {
+    onItemSelect = id => {
         this.setConfirm(false);
-        this.toggleSelected(key);
+        if (this.state.selected.indexOf(id) > -1) {
+            this.removeSelected(id);
+        } else {
+            this.addSelected(id)
+        }
+    }
+    onListOut = () => {
+        if (this.state.selected.length) {
+            this.clearSelected()
+        }
+        if (this.state.aside.isActive) {
+            this.toggleAside();
+        }
     }
 
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
-        let listItems = this.props.select_decks.map(item => {
-            let isActive = this.state.selected.length === 1 && this.state.selected[0] === item.key;
+        let listItems = this.state.decks.map(item => {
+            let isActive = this.state.selected.length === 1 && this.state.selected[0] === item.id;
             let isConfirm = this.state.confirm && isActive;
+            let isSelected = this.state.selected.indexOf(item.id) > -1;
             return (
                 <ListItem
                     detail={item.details}
                     display={item.title}
-                    key={item.key}
-                    onItemSelect={() => this.onItemSelect(item.key)}>
+                    key={item.id}
+                    onItemSelect={() => this.onItemSelect(item.id)}
+                    selected={isSelected}>
                     <ContextAction
-                        action={() => this.onItemInspect(item.key)}
+                        action={() => this.onItemInspect(item.id)}
                         active={isActive}>
                         Edit
                     </ContextAction>
                     <ContextAction
-                        action={() => this.onItemDelete(item.key)}
+                        action={() => this.onItemDelete(item.id)}
                         active={isActive}
                         destructive>
                         Delete
                     </ContextAction>
                     <ContextAction
-                        action={() => this.onItemCancel(item.key)}
+                        action={() => this.onItemCancel(item.id)}
                         active={isConfirm}
                         cancel>
                         Cancel
                     </ContextAction>
                     <ContextAction
-                        action={() => this.onItemConfirm(item.key)}
+                        action={() => this.onItemConfirm(item.id)}
                         active={isConfirm}
                         confirm>
                         Confirm
@@ -388,14 +453,14 @@ class Collections extends Component {
         return (
             <Aux>
                 <Header
-                    onA={this.handle_onAsideToggle}
-                    onB={this.handle_onAsideToggle}
+                    onA={this.onAsideToggle}
+                    onB={this.onAsideToggle}
                     onC={this.foo}
-                    onClick={this.handle_onAsideClose}
-                    onNavigation={this.handle_onAsideToggle}/>
+                    onClick={this.onAsideClose}
+                    onNavigation={this.onAsideToggle}/>
                 <main
                     className={CollectionsCSS.Main}
-                    onClick={this.handle_onListOut}>
+                    onClick={this.onListOut}>
                     <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
                         <List>
                             {listItems}
@@ -410,7 +475,7 @@ class Collections extends Component {
                     actions={this.state.aside.actions}
                     active={this.state.aside.isActive}
                     data={this.state.aside.data}
-                    onClose={this.handle_onAsideClose}
+                    onClose={this.onAsideClose}
                     state={this.state.aside.state}/>
             </Aux>
         )

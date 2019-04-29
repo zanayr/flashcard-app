@@ -135,7 +135,7 @@ export function selectDecksBy (state, sort) {
             return Object.keys(state.decks).map(key => {
                 return {
                     ...state.decks[key],
-                    key: key
+                    id: key
                 }
             })
             .sort((a, b) => {
