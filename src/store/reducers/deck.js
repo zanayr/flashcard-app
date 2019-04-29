@@ -121,12 +121,13 @@ export function selectDeckByKey (state, id) {
 }
 //  Returns array of all decks
 export function selectDecks (state) {
-    return Object.keys(state.decks).map(key => {
-        return {
-            ...state.decks[key],
-            id: key
-        };
-    });
+    // return Object.keys(state.decks).map(key => {
+    //     return {
+    //         ...state.decks[key],
+    //         id: key
+    //     };
+    // });
+    return state.decks;
 }
 //  Pass a sort type string, returns array of decks
 export function selectDecksBy (state, sort) {

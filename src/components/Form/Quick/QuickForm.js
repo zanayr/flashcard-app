@@ -33,7 +33,7 @@ class QuickInspectForm extends Component {
     //  Event Handlers  //
     handle_onChange = (target, value) => {
         this.update(target, value);
-        this.props.actions.onChange({target: target, value: value});
+        this.props.actions.onChange(this.props.data.id, target, value);
     }
     handle_onFormConfirm = () => {
         if (this.validate()) {
@@ -47,7 +47,6 @@ class QuickInspectForm extends Component {
     }
 
     render () {
-        console.log('rendering aside', this.props.actions.onChange);
         return (
             <form
                 onSubmit={(e) => e.preventDefault()}

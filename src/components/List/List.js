@@ -65,17 +65,19 @@ class List extends Component {
 
 
     render () {
-        let listItems = this.props.backingCollection.map(item => {
-            let showContext = this.state.selected.length === 1 && this.state.selected[0] === item.id;
+        let listItems = Object.keys(this.props.backingCollection).map(id => {
+            let item = this.props.backingCollection[id];
+            console.log(item.title);
+            let showContext = this.state.selected.length === 1 && this.state.selected[0] === id;
             return (
                 <ListItem
                     detail={item.details}
                     display={item.title}
-                    key={item.id}
-                    onSelect={() => this.onItemSelect(item.id)}
-                    selected={this.state.selected.indexOf(item.id) > -1}>
+                    key={id}
+                    onSelect={() => this.onItemSelect(id)}
+                    selected={this.state.selected.indexOf(id) > -1}>
                     <ContextAction
-                        action={this.props.onInspect}
+                        action={() => this.props.onInspect(id)}
                         active={showContext}>
                         Inspect
                     </ContextAction>
@@ -86,7 +88,7 @@ class List extends Component {
                         Delete
                     </ContextAction>
                     <ContextConfirm
-                        action={() => this.onItemConfirm(item.id)}
+                        action={() => this.onItemConfirm(id)}
                         active={this.state.showConfirm && showContext}>
                         Confirm
                     </ContextConfirm>

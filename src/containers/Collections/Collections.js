@@ -29,7 +29,7 @@ class Collections extends Component {
         },
         showConfirm: false,
         deleted: [],
-        decks: [],
+        decks: {},
         history: {
             store: {},
             undo: null
@@ -273,6 +273,28 @@ class Collections extends Component {
 
     //  STATE SETTERS v2  //
     //  Aside  -------------------------------------------------------------  Aside  //
+    setAsideData (data) {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                data: {
+                    ...data
+                }
+            }
+        }));
+    }
+    setAsideAction (actions) {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                actions: {
+                    ...actions
+                }
+            }
+        }));
+    }
     setAsideState (state) {
         console.log(state);
         this.setState(prev => ({
@@ -337,6 +359,25 @@ class Collections extends Component {
             decks: prev.decks.filter(item => item.id !== id)
         }));
     }
+    updateItem (id, target, value) {
+        console.log(id, target, value);
+        this.setState(prev => ({
+            ...prev,
+            decks: {
+                ...prev.decks,
+                [id]: {
+                    ...prev.decks[id],
+                    [target]: value
+                }
+            }
+        }))
+    }
+    getItemById (id) {
+        return {
+            ...this.state.decks[id],
+            id: id
+        }
+    }
 
 
 
@@ -372,16 +413,19 @@ class Collections extends Component {
     }
 
     //  List  ---------------------------------------------------------------  List  //
-    onItemCancel = key => {
-        this.setConfirm(false);
-    }
     onItemDelete = id => {
         this.removeSelected(id);
         this.removeItem(id);
         this.props.deleteDeck_async(this.props.select_token, id);
     }
-    onItemInspect = key => {
-        console.log('opening inspector');
+    onItemChange = (id, target, value) => {
+        this.updateItem(id, target, value);
+    }
+    onItemInspect = id => {
+        this.setAsideState(99);
+        this.toggleAside();
+        this.setAsideData(this.getItemById(id));
+        this.setAsideAction({onChange: this.onItemChange});
     }
     onItemSelect = id => {
         this.setConfirm(false);
@@ -431,7 +475,7 @@ class Collections extends Component {
 const mapStateToProps = state => {
     return {
         select_deckIsLoading: select.deckIsLoading(state),
-        select_decks: select.decksBy(state, sortType.ALPHA_DEC),
+        select_decks: select.decks(state),
         select_token: select.authToken(state),
         select_user: select.authUser(state)
     }
@@ -440,7 +484,6 @@ const mapDispatchToProps = dispatch => {
     return {
         deleteDeck_async: (token, key) => dispatch(actions.deleteDeck_async(token, key)),
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
-        getAllDecks_async: (token, user) => dispatch(actions.getAllDecks_async(token, user)),
         postDeck_async: (token, data) => dispatch(actions.postDeck_async(token, data)),
         putDeck_async: (token, key, data) => dispatch(actions.putDeck_async(token, key, data)),
 

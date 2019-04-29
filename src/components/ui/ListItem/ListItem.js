@@ -6,10 +6,10 @@ import ListItemStyles from './ListItem.module.css';
 
 
 class ListItem extends Component {
-    state = {
-        detail: this.props.detail,
-        display: this.props.display
-    }
+    // state = {
+    //     detail: this.props.detail,
+    //     display: this.props.display
+    // }
 
     onClick (e) {
         e.stopPropagation();
@@ -21,6 +21,7 @@ class ListItem extends Component {
     // }
 
     render () {
+        console.log(this.props.display);
         let css = [ListItemStyles.ListItem];
         if (this.props.selected) {
             css = [ListItemStyles.ListItem, ListItemStyles.Selected];
@@ -31,8 +32,8 @@ class ListItem extends Component {
                 onClick={(e) => this.onClick(e)}>
                 <div>
                     <Column>
-                        <h3>{this.state.display}</h3>
-                        <p>{this.state.detail}</p>
+                        <h3>{this.props.display}</h3>
+                        <p>{this.props.detail}</p>
                     </Column>
                     {this.props.children}
                 </div>
