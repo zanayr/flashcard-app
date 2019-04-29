@@ -360,7 +360,6 @@ class Collections extends Component {
         }));
     }
     updateItem (id, target, value) {
-        console.log(id, target, value);
         this.setState(prev => ({
             ...prev,
             decks: {
@@ -418,14 +417,23 @@ class Collections extends Component {
         this.removeItem(id);
         this.props.deleteDeck_async(this.props.select_token, id);
     }
+    onItemUpdate = (id) => {
+        console.log(id);
+        this.props.putDeck_async(this.props.select_token, this.getItemById(id));
+    }
     onItemChange = (id, target, value) => {
         this.updateItem(id, target, value);
+        //this.clearAsideData();
+        //this.clearAsideActions();
     }
     onItemInspect = id => {
         this.setAsideState(99);
         this.toggleAside();
         this.setAsideData(this.getItemById(id));
-        this.setAsideAction({onChange: this.onItemChange});
+        this.setAsideAction({
+            onChange: this.onItemChange,
+            onConfirm: this.onItemUpdate
+        });
     }
     onItemSelect = id => {
         this.setConfirm(false);
@@ -482,10 +490,10 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        deleteDeck_async: (token, key) => dispatch(actions.deleteDeck_async(token, key)),
+        deleteDeck_async: (token, id) => dispatch(actions.deleteDeck_async(token, id)),
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
         postDeck_async: (token, data) => dispatch(actions.postDeck_async(token, data)),
-        putDeck_async: (token, key, data) => dispatch(actions.putDeck_async(token, key, data)),
+        putDeck_async: (token, data) => dispatch(actions.putDeck_async(token, data)),
 
     };
 };

@@ -37,12 +37,7 @@ class QuickInspectForm extends Component {
     }
     handle_onFormConfirm = () => {
         if (this.validate()) {
-            this.props.actions.onConfirm({
-                data: {
-                    details: this.state.details,
-                    title: this.state.title
-                }
-            });
+            this.props.actions.onConfirm(this.props.data.id);
         }
     }
 

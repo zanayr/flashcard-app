@@ -66,7 +66,7 @@ const postSuccess = (state, action) => {
         ...state,
         decks: {
             ...state.decks,
-            [action.payload.key]: {...action.payload.data}
+            [action.payload.id]: {...action.payload.data}
         },
         error: null
     };
@@ -78,7 +78,7 @@ const putSuccess = (state, action) => {
         ...state,
         decks: {
             ...state.decks,
-            [action.payload.key]: {...action.payload.data}
+            [action.payload.id]: {...action.payload.data}
         },
         error: null
     };
