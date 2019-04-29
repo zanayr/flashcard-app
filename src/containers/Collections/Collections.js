@@ -333,7 +333,7 @@ class Collections extends Component {
                             backingCollection={this.state.decks}
                             onConfirm={this.onItemDelete}
                             onEdit={this.onItemInspect}
-                            onSelect={this.onItemSelect}>
+                            onSelect={this.onItemSelect}/>
                         <ActionButton
                             onClick={this.handle_onActionClick}
                             state={this.state.action.state}
