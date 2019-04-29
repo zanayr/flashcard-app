@@ -460,6 +460,12 @@ class Collections extends Component {
     }
 
     //  List  ---------------------------------------------------------------  List  //
+    onListOut = () => {
+        if (this.state.aside.isActive) {
+            console.log('here');
+            this.onAsideClose();
+        }
+    }
     onItemDelete = id => {
         this.removeSelected(id);
         this.removeItem(id);
@@ -493,6 +499,9 @@ class Collections extends Component {
         } else {
             this.addSelected(id)
         }
+        if (this.state.aside.isActive && this.state.aside.state === 99) {
+            this.onAsideClose();
+        }
     }
 
 
@@ -506,7 +515,9 @@ class Collections extends Component {
                     onC={this.foo}
                     onClick={this.onAsideClose}
                     onNavigation={this.onAsideToggle}/>
-                <main className={CollectionsCSS.Main}>
+                <main
+                    className={CollectionsCSS.Main}
+                    onClick={this.onListOut}>
                     <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
                         <List
                             backingCollection={this.state.decks}
