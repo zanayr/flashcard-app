@@ -20,18 +20,27 @@ const failure = (state, action) => {
 
 //  Delete Success  //
 const deleteSuccess = (state, action) => {
-    const key = action.payload.key;
+    //const key = action.payload.key;
+    const collection = state.decks;
+    delete collection[action.payload.key]
     return {
         ...state,
         decks: {
-            ...state.decks,
-            [key]: {
-                ...state.decks[key],
-                isDeleted: true
-            }
+            ...collection,
         },
         error: null,
     };
+    // return {
+    //     ...state,
+    //     decks: {
+    //         ...state.decks,
+    //         [key]: {
+    //             ...state.decks[key],
+    //             isDeleted: true
+    //         }
+    //     },
+    //     error: null,
+    // };
 }
 
 //  Get Init  //

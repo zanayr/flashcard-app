@@ -50,6 +50,7 @@ const post_fail = (error) => {
     }
 }
 const post_success = (key, data) => {
+    console.log(key);
     return {
         type: actionTypes.DECKS_POST_SUCC,
         payload: {
@@ -103,14 +104,13 @@ export const deleteManyDecks_async = (token, keys) => {
 export const getAllDecks_async = (token, user) => {
     return dispatch => {
         dispatch(getAll_init());
-        axios.get('/decks.json?auth=' + token + '&orderBy="userId"&equalTo="' + user + '"')
+        axios.get('/decks.json?auth=' + token + '&orderBy="user"&equalTo="' + user + '"')
         .then(response => {
+            console.log(response);
             const models = {};
             Object.keys(response.data).map(key => {
                 models[key] = {
-                    ...response.data[key],
-                    isDeleted: false,
-                    isNew: false
+                    ...response.data[key]
                 }
             });
             dispatch(getAll_success({
@@ -131,9 +131,7 @@ export const postDeck_async = (token, data) => {
         .then(response => {
             console.log(response);
             dispatch(post_success(response.data.name, {
-                ...data,
-                isDeleted: false,
-                isNew: true
+                ...data
             }));
         })
         .catch(error => {

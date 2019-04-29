@@ -328,12 +328,12 @@ class Collections extends Component {
         let key = utility.createHashId();
         let item = {
             details: 'These are details for this flashcard',
-            key: key,
+            //key: key,
             title: key + ' Flashcard Deck',
-            userId: this.props.user
+            user: this.props.select_user
         }
-        this.createItem(item);
-        //this.props.postDeck_async(this.props.select_token, item);
+        //this.createItem(item);
+        this.props.postDeck_async(this.props.select_token, item);
     }
     onItemCancel = key => {
         this.setConfirm(false);
@@ -341,7 +341,7 @@ class Collections extends Component {
     onItemConfirm = key => {
         this.removeItem(key);
         this.setSelected(key);
-        //this.props.deleteDeck_async(this.props.select_token, key);
+        this.props.deleteDeck_async(this.props.select_token, key);
     }
     onItemDelete = key => {
         this.toggleConfirm();
