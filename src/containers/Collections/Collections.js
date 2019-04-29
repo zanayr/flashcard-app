@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
-import * as modalTypes from '../../components/modal/Modal/modalTypes';
 import * as select from '../../store/reducers/root';
 import * as sortType from '../../store/reducers/sortTypes';
 import * as utility from '../../utility';
@@ -10,15 +9,9 @@ import * as utility from '../../utility';
 import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside from '../../components/aside/Aside/Aside';
 import Aux from '../../hoc/Aux/Aux';
+import ContextActions from '../../components/ui/Context/ContextActions';
 import Header from '../../components/Header/Header';
-import SelectableList from '../../components/List/SelectableList';
-import SelectableListItem from '../../components/ui/ListItem/SelectableListItem';
-import ContextAction from '../../components/ui/button/Context/ContextAction';
 import List from '../../components/List/List';
-
-
-import ListItem from '../../components//ui/ListItem/ListItem';
-import ListItemTemplate from '../../components//ui/ListTemplate/ListItemTemplate2';
 
 import AppCSS from '../../App.module.css';
 import CollectionsCSS from './Collections.module.css';
@@ -34,7 +27,7 @@ class Collections extends Component {
             isActive: false,
             state: 0
         },
-        confirm: false,
+        showConfirm: false,
         deleted: [],
         decks: [],
         history: {
@@ -382,13 +375,11 @@ class Collections extends Component {
     onItemCancel = key => {
         this.setConfirm(false);
     }
-    onItemConfirm = id => {
+    onItemDelete = id => {
+        console.log('here');
         this.removeSelected(id);
         this.removeItem(id);
         this.props.deleteDeck_async(this.props.select_token, id);
-    }
-    onItemDelete = key => {
-        this.toggleConfirm();
     }
     onItemInspect = key => {
         console.log('opening inspector');
@@ -401,55 +392,10 @@ class Collections extends Component {
             this.addSelected(id)
         }
     }
-    onListOut = () => {
-        if (this.state.selected.length) {
-            this.clearSelected()
-        }
-        if (this.state.aside.isActive) {
-            this.toggleAside();
-        }
-    }
 
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
-        let listItems = this.state.decks.map(item => {
-            let isActive = this.state.selected.length === 1 && this.state.selected[0] === item.id;
-            let isConfirm = this.state.confirm && isActive;
-            let isSelected = this.state.selected.indexOf(item.id) > -1;
-            return (
-                <ListItem
-                    detail={item.details}
-                    display={item.title}
-                    key={item.id}
-                    onItemSelect={() => this.onItemSelect(item.id)}
-                    selected={isSelected}>
-                    <ContextAction
-                        action={() => this.onItemInspect(item.id)}
-                        active={isActive}>
-                        Edit
-                    </ContextAction>
-                    <ContextAction
-                        action={() => this.onItemDelete(item.id)}
-                        active={isActive}
-                        destructive>
-                        Delete
-                    </ContextAction>
-                    <ContextAction
-                        action={() => this.onItemCancel(item.id)}
-                        active={isConfirm}
-                        cancel>
-                        Cancel
-                    </ContextAction>
-                    <ContextAction
-                        action={() => this.onItemConfirm(item.id)}
-                        active={isConfirm}
-                        confirm>
-                        Confirm
-                    </ContextAction>
-                </ListItem>
-            );
-        });
         return (
             <Aux>
                 <Header
@@ -458,12 +404,13 @@ class Collections extends Component {
                     onC={this.foo}
                     onClick={this.onAsideClose}
                     onNavigation={this.onAsideToggle}/>
-                <main
-                    className={CollectionsCSS.Main}
-                    onClick={this.onListOut}>
+                <main className={CollectionsCSS.Main}>
                     <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
-                        <List>
-                            {listItems}
+                        <List
+                            backingCollection={this.state.decks}
+                            onConfirm={this.onItemDelete}
+                            onInspect={this.onItemInspect}
+                            onSelect={this.onItemSelect}>
                         </List>
                         <ActionButton
                             onClick={this.onActionClick}

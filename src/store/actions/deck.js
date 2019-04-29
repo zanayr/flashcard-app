@@ -123,11 +123,9 @@ export const getAllDecks_async = (token, user) => {
 
 //  Post  --------------------------------------------------------------  Post Async //
 export const postDeck_async = (token, data) => {
-    console.log(data);
     return dispatch => {
         axios.patch('/decks/' + data.id + '.json?auth=' + token, data)
         .then(response => {
-            console.log(response);
             dispatch(post_success(response.data.id, {
                 details: response.data.details,
                 title: response.data.title,

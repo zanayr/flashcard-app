@@ -1,27 +1,35 @@
-.Context_Action {
-    background-color: lightcoral;
+.ContextAction {
+    background-color: gold;
     height: 64px;
-    right: -72px;
+    right: -64px;
     position: absolute;
     top: 0px;
     transition: right 0.333s, top 0.333s;
     width: 64px;
 }
-.Context_Action > div {
+.ContextAction.Destructive {
+    background-color: coral;
+    color: white;
+    right: -128px;
+}
+.ContextAction > div {
     height: 100%;
 }
-.Context_Action button {
+.ContextAction button {
     background-color: transparent;
     height: 100%;
     width: 100%;
 }
 
 
-.Active {
+.ContextAction.Active {
     right: 64px;
 }
+.ContextAction.Destructive.Active {
+    right: 0px;
+}
 
-.Cancel {
+/* .Cancel {
     background-color: gold;
     top: 64px;
     right: 64px;
@@ -39,11 +47,11 @@
     top: 0px;
 }
 
-.Delete {
+.Destructive {
     background-color: coral;
     color: white;
     right: -128px;
 }
 .Delete.Active {
     right: 0px;
-}
+} */

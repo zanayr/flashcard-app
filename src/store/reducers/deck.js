@@ -113,10 +113,10 @@ const reducer = (state=initialState, action) => {
 
 
 //  STORE SELECTORS  ---------------------------------------------------  SELECTORS  //
-export function selectDeckByKey (state, key) {
+export function selectDeckByKey (state, id) {
     return {
-            ...state.decks[key],
-            key: key
+            ...state.decks[id],
+            id: id
         };
 }
 //  Returns array of all decks
@@ -124,7 +124,7 @@ export function selectDecks (state) {
     return Object.keys(state.decks).map(key => {
         return {
             ...state.decks[key],
-            key: key
+            id: key
         };
     });
 }

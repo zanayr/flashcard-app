@@ -13,8 +13,7 @@ class ListItem extends Component {
 
     onClick (e) {
         e.stopPropagation();
-
-        this.props.onItemSelect();
+        this.props.onSelect();
     }
 
     // shouldComponentUpdate (nextProps, nextState) {
