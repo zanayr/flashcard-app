@@ -1,111 +1,105 @@
 import React, {Component} from 'react';
-// import {connect} from 'react-redux';
-// import {select_collectionBy} from '../../store/reducers/root';
-// import * as sortType from '../../store/reducers/sortTypes';
 
-import Aux from '../../hoc/Aux/Aux';
-import QuickButton from '../ui/button/Context/ContextButton';
 import ListItem from '../ui/ListItem/ListItem';
+import ContextAction from '../ui/button/Context/ContextAction';
+import ContextConfirm from '../ui/button/Context/ContextConfirm';
 
-import AppCSS from '../../App.module.css';
-import ListCSS from './List.module.css';
-import ListTemplate from '../ui/ListTemplate/ListTemplate';
-
+import listStyles from './List.module.css';
 
 class List extends Component {
     state = {
-        confirm: false,
-        hidden: [],
-        selected: []
+        selected: [],
+        showConfirm: false
     }
 
 
-    //  STATE SETTERS  ---------------------------------------------  STATE SETTERS  //
-    //  Items  ------------------------------------------------------  Item Setters  //  
-    set_deleted (payload) {
-        this.setState(previous => ({
-            ...previous,
-            deleted: previous.selected.concat(payload.key)
+    addSelected (id) {
+        this.setState(prev => ({
+            ...prev,
+            selected: prev.selected.concat(id)
         }));
     }
-    set_selected (payload) {
-        if (this.state.selected.indexOf(payload.key) > -1) {
-            this.setState(previous => ({
-                ...previous,
-                selected: previous.selected.filter(key => key !== payload.key)
-            }));
+    clearAllSelected () {
+        this.setState(prev => ({
+            ...prev,
+            selected: []
+        }));
+    }
+    removeSelected (key) {
+        this.setState(prev => ({
+            ...prev,
+            selected: prev.selected.filter(k => k !== key)
+        }));
+    }
+
+    showConfirm () {
+        this.setState(prev => ({
+            ...prev,
+            showConfirm: true
+        }));
+    }
+    hideConfirm () {
+        this.setState(prev => ({
+            ...prev,
+            showConfirm: false
+        }));
+    }
+
+
+    onItemDelete = () => {
+        this.showConfirm();
+    }
+    onItemConfirm = id => {
+        this.clearAllSelected();
+        this.props.onConfirm(id);
+    }
+    onItemSelect = id => {
+        if (this.state.selected.indexOf(id) > -1) {
+            this.removeSelected(id);
         } else {
-            this.setState(previous => ({
-                ...previous,
-                selected: previous.selected.concat(payload.key)
-            }));
+            this.addSelected(id)
         }
-    }
-    setw07_confirm (payload) {
-        this.setState(previous => ({
-            ...previous,
-            confirm: payload
-        }));
+        this.hideConfirm();
+        this.props.onSelect(id);
     }
 
-    //  EVENT HANDLERS  -------------------------------------------  EVENT HANDLERS  //
-    //  Item  -----------------------------------------------------------  Item EHs  //
-    handle_onItemSelect = (payload) => {
-        this.set_selected(payload);
-        this.set_confirm(false);
-        this.props.onSelect()
-    }
-
-    //  Context Actions  --------------------------------------------------- CA EHs  //
-    handle_onDeleteClick = () => {
-        this.set_confirm(true);
-        //this.props.onDelete(payload);
-    }
 
     render () {
         let listItems = this.props.backingCollection.map(item => {
+            let showContext = this.state.selected.length === 1 && this.state.selected[0] === item.id;
             return (
                 <ListItem
-                    key={item.key}
-                    //deleted={this.state.selected.indexOf(item.key) > -1}
-                    selected={this.state.selected.indexOf(item.key) > -1}
-                    onSelect={this.handle_onItemSelect}
-                    single={this.state.selected.length === 1 && this.state.selected[0] === item.key}
-                    foo={this.state.confirm && this.state.selected[0] === item.key}
-                    uniqueId={item.key}>
-                    <ListTemplate
-                        title={item.title}
-                        details={item.details}/>
-                    <QuickButton
-                        active={this.state.selected.length === 1 && this.state.selected[0] === item.key}
-                        onClick={this.handle_onEditClick}>
-                        Edit
-                    </QuickButton>
-                    <QuickButton
-                        active={this.state.selected.length === 1 && this.state.selected[0] === item.key}
-                        delete
-                        onClick={this.handle_onDeleteClick}>
+                    detail={item.details}
+                    display={item.title}
+                    key={item.id}
+                    onSelect={() => this.onItemSelect(item.id)}
+                    selected={this.state.selected.indexOf(item.id) > -1}>
+                    <ContextAction
+                        action={this.props.onInspect}
+                        active={showContext}>
+                        Inspect
+                    </ContextAction>
+                    <ContextAction
+                        action={this.onItemDelete}
+                        active={showContext}
+                        destructive>
                         Delete
-                    </QuickButton>
-                    <QuickButton
-                        active={this.state.confirm && this.state.selected.length === 1 && this.state.selected[0] === item.key}
-                        confirm
-                        onClick={this.handle_onConfirm}>
+                    </ContextAction>
+                    <ContextConfirm
+                        action={() => this.onItemConfirm(item.id)}
+                        active={this.state.showConfirm && showContext}>
                         Confirm
-                    </QuickButton>
+                    </ContextConfirm>
                 </ListItem>
             );
         });
 
         return (
-            <Aux>
-                 <section className={[AppCSS.With_Margin, ListCSS.List].join(' ')}>
-                     <div className={AppCSS.Inner}>
-                         {listItems}
-                     </div>
-                 </section>
-                 {this.props.children}
-            </Aux>
+            <section className={listStyles.List}>
+                <div>
+                    {listItems}
+                </div>
+            </section>
         );
     }
 }

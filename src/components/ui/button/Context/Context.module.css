@@ -1,0 +1,43 @@
+.ContextAction {
+    background-color: gold;
+    height: 64px;
+    right: -64px;
+    position: absolute;
+    top: 0px;
+    transition: right 0.333s ease;
+    width: 64px;
+    z-index: 1;
+}
+.ContextAction > div {
+    height: 100%;
+}
+.ContextAction button {
+    background-color: transparent;
+    height: 100%;
+    width: 100%;
+}
+.ContextAction.Confirm {
+    background-color: paleturquoise;
+    height: 64px;
+    right: 0px;
+    top: 64px;
+    transition: top 0.333s ease;
+    width: 128px;
+    z-index: 2;
+}
+.ContextAction.Destructive {
+    background-color: coral;
+    color: white;
+    right: -128px;
+}
+
+.ContextAction.Active {
+    right: 64px;
+}
+.ContextAction.Confirm.Active {
+    right: 0px;
+    top: 0px;
+}
+.ContextAction.Destructive.Active {
+    right: 0px;
+}

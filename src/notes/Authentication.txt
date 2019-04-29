@@ -1,3 +1,6 @@
+"auth != null"
+
+
 Section 18, Lesson 355
 How to pass token for protecting things
 1.  in the actions document:

@@ -1,153 +1,45 @@
-import React, {PureComponent} from 'react';
-import {connect} from 'react-redux';
-import * as select from '../../../store/reducers/root';
+import React, {Component} from 'react';
 
-import Aux from '../../../hoc/Aux/Aux';
 import Column from '../../../hoc/Column/Column';
 
-import Throbber from '../../ui/Throbber/Throbber';
+import ListItemStyles from './ListItem.module.css';
 
-import AppCSS from '../../../App.module.css';
-import ListItemCSS from './ListItem.module.css';
 
-class ListItem extends PureComponent {
+class ListItem extends Component {
     state = {
-        isSelected: false
+        detail: this.props.detail,
+        display: this.props.display
+    }
+
+    onClick (e) {
+        e.stopPropagation();
+        this.props.onSelect();
     }
 
     // shouldComponentUpdate (nextProps, nextState) {
-    //     console.log(nextProps.onSelect !== this.props.onSelect);
-    //     return nextProps.selected !== this.props.selected || nextProps.single !== this.props.single || nextProps.foo !== this.props.foo;
+    //     return nextProps.active !== this.props.active
     // }
 
-
-
-    //  STATE SETTERS  ----------------------------------------------  STATE SETTERS  //
-    //  Item  --------------------------------------------------------- Item Setters  //
-    // set_onItemChange = (payload) => {
-    //     this.setState(previousState => ({
-    //         ...previousState,
-    //         data: {
-    //             ...previousState.data,
-    //             [payload.target]: payload.value
-    //         }
-    //     }));
-    // }
-    // set_onItemDelete = () => {
-    //     this.setState(previousState => ({
-    //         ...previousState,
-    //         isDeleted: true
-    //     }));
-    // }
-    // set_onItemReset = (payload) => {
-    //     this.setState(previousState => ({
-    //         ...previousState,
-    //         data: {
-    //             ...payload.data
-    //         }
-    //     }));
-    // }
-    toggle_isSelected () {
-        this.setState(previousState => ({
-            ...previousState,
-            isSelected: !previousState.isSelected
-        }));
-    }
-    // set_onItemVisibleToggle () {
-    //     this.setState(previous => ({
-    //         ...previous,
-    //         isVisible: !previous.isVisible
-    //     }));
-    // }
-
-
-    //  EVENT HANDLERS  -------------------------------------------  EVENT HANDLERS  //
-    //  Item  -----------------------------------------------------------  Item HEs  //
-    // handle_onItemChange = (payload) => {
-    //     this.set_onItemChange(payload);
-    // }
-    // handle_onItemReset = (payload) => {
-    //     this.set_onItemReset(payload);
-    // }
-    handle_onItemSelect = (e) => {
-        e.stopPropagation();
-        
-        this.toggle_isSelected();
-        this.props.onSelect({
-            key: this.props.uniqueId
-        });
-    }
-
-    //  Context Actions -------------------------------------------------  C.A. HEs  //
-    // handle_onEditClick = () => {
-    //     this.props.onEdit({
-    //         key: this.props.uniqueId,
-    //         data: {
-    //             details: this.state.details,
-    //             title: this.state.title
-    //         },
-    //         actions: {
-    //             onCancel: this.handle_onItemReset,
-    //             onChange: this.handle_onItemChange
-    //         }
-    //     });
-    // }
-    // handle_onDeleteClick = () => {
-    //     this.props.onDelete({
-    //         key: this.props.uniqueId
-    //     });
-    // }
-
-
-    //  RENDER METHOD  ----------------------------------------------- RENDER METHOD //
     render () {
-        console.log('rendering item:', this.props.uniqueId);
-
-        let cssClasses = [ListItemCSS.List_Item];
-        // if (this.props.new) {
-        //     cssClasses = [...cssClasses, ListItemCSS.New];
-        // }
+        let css = [ListItemStyles.ListItem];
         if (this.props.selected) {
-            cssClasses = [...cssClasses, ListItemCSS.Selected];
+            css = [ListItemStyles.ListItem, ListItemStyles.Selected];
         }
-        // if (!this.props.visible || this.props.select_deck.isDeleted) {
-        //     cssClasses = [ListItemCSS.List_Item, ListItemCSS.Selected, ListItemCSS.Hidden];
-        // }
-        // let contextActions = (null);
-        // if (this.props.single) {
-        //     contextActions = (
-        //         <Aux>
-        //             <QuickButton
-        //                 active={this.state.isSelected && this.props.single && this.props.visible}
-        //                 onClick={this.handle_onEditClick}>
-        //                 Edit
-        //             </QuickButton>
-        //             <QuickButton
-        //                 active={this.state.isSelected && this.props.single && this.props.visible}
-        //                 delete
-        //                 onClick={this.handle_onDeleteClick}>
-        //                 Delete
-        //             </QuickButton>
-        //         </Aux>
-        //     );
-        // }
-
         return (
-            <div
-                className={cssClasses.join(' ')}
-                onClick={this.handle_onItemSelect}>
-                <div className={AppCSS.Inner}>
+            <article
+                className={css.join(' ')}
+                onClick={(e) => this.onClick(e)}>
+                <div>
+                    <Column>
+                        <h3>{this.state.display}</h3>
+                        <p>{this.state.detail}</p>
+                    </Column>
                     {this.props.children}
                 </div>
-            </div>
+            </article>
         );
     }
 }
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-        select_deck: select.deckByKey(state, ownProps.uniqueId)
-    }
-}
 
-export default connect(mapStateToProps)(ListItem);
+export default ListItem;

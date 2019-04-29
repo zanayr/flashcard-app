@@ -20,18 +20,27 @@ const failure = (state, action) => {
 
 //  Delete Success  //
 const deleteSuccess = (state, action) => {
-    const key = action.payload.key;
+    //const key = action.payload.key;
+    const collection = state.decks;
+    delete collection[action.payload.key]
     return {
         ...state,
         decks: {
-            ...state.decks,
-            [key]: {
-                ...state.decks[key],
-                isDeleted: true
-            }
+            ...collection,
         },
         error: null,
     };
+    // return {
+    //     ...state,
+    //     decks: {
+    //         ...state.decks,
+    //         [key]: {
+    //             ...state.decks[key],
+    //             isDeleted: true
+    //         }
+    //     },
+    //     error: null,
+    // };
 }
 
 //  Get Init  //
@@ -104,10 +113,10 @@ const reducer = (state=initialState, action) => {
 
 
 //  STORE SELECTORS  ---------------------------------------------------  SELECTORS  //
-export function selectDeckByKey (state, key) {
+export function selectDeckByKey (state, id) {
     return {
-            ...state.decks[key],
-            key: key
+            ...state.decks[id],
+            id: id
         };
 }
 //  Returns array of all decks
@@ -115,7 +124,7 @@ export function selectDecks (state) {
     return Object.keys(state.decks).map(key => {
         return {
             ...state.decks[key],
-            key: key
+            id: key
         };
     });
 }
@@ -126,7 +135,7 @@ export function selectDecksBy (state, sort) {
             return Object.keys(state.decks).map(key => {
                 return {
                     ...state.decks[key],
-                    key: key
+                    id: key
                 }
             })
             .sort((a, b) => {

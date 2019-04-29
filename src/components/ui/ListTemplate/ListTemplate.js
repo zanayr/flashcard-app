@@ -1,16 +1,39 @@
-import React from 'react';
+import React, {Component} from 'react';
 
-import Column from '../../../hoc/Column/Column';
+import Aux from '../../../hoc/Aux/Aux';
 
+import ListItemTemplateStyles from './ListItemTemplate.module.css';
 
-const listTemplate = (props) => {
-    return (
-        <Column just='Center' align='Start'>
-            <h3>{props.title}</h3>
-            <p>{props.details}</p>
-        </Column>
-    );
+class ListItemTemplate extends Component {
+
+    toggleSelected () {
+        this.setState(prev => ({
+            selected: !prev.selected
+        }));
+    }
+    onSelect = () => {
+        this.toggleSelected();
+    }
+
+    render () {
+        let styling = [ListItemTemplateStyles.Display];
+        if (this.state.selected) {
+            styling = styling.concat(ListItemTemplateStyles.Selected);
+        }
+        return (
+            <Aux>
+                <div
+                className={styling.join(' ')}
+                onClick={this.onSelect}>
+                    <div>
+                        <h3>{this.props.display}</h3>
+                        <p>{this.props.detail}</p>
+                    </div>
+                </div>
+            </Aux>
+        );
+    }
 }
 
 
-export default listTemplate;
+export default ListItemTemplate;

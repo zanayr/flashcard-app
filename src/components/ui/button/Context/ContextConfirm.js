@@ -3,10 +3,6 @@ import React, {Component} from 'react';
 import styles from './Context.module.css';
 
 class ContextAction extends Component {
-    shouldComponentUpdate (nextProps, nextState) {
-        return nextProps.active !== this.props.active;
-    }
-
     onClick (e) {
         e.stopPropagation();
         
@@ -14,12 +10,9 @@ class ContextAction extends Component {
     }
 
     render () {
-        let css = [styles.ContextAction];
+        let css = [styles.ContextAction, styles.Confirm];
         if (this.props.active) {
             css.push(styles.Active);
-        }
-        if (this.props.destructive) {
-            css.push(styles.Destructive);
         }
 
         return (
