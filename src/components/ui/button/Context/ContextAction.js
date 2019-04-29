@@ -7,10 +7,20 @@ class ContextAction extends Component {
         return nextProps.active !== this.props.active;
     }
 
+    onClick (e) {
+        e.stopPropagation();
+        
+        this.props.action();
+    }
+
     render () {
+        //console.log('rendering ac');
         let classes = [];
         if (this.props.active) {
             classes = classes.concat(ContextActionCSS.Active);
+        }
+        if (this.props.cancel) {
+            classes = classes.concat(ContextActionCSS.Cancel);
         }
         if (this.props.confirm) {
             classes = classes.concat(ContextActionCSS.Confirm);
@@ -19,15 +29,10 @@ class ContextAction extends Component {
             classes = classes.concat(ContextActionCSS.Delete);
         }
 
-        const handle_onClick = (e) => {
-            e.stopPropagation();
-            this.props.action(this.props.itemKey);
-        }
-
         let button = (null);
         if (this.props.active) {
             button = (
-                <button onClick={(e) => handle_onClick(e)}>
+                <button onClick={(e) => {this.onClick(e)}}>
                     {this.props.children}
                 </button>
             );

@@ -21,6 +21,15 @@
     right: 64px;
 }
 
+.Cancel {
+    background-color: gold;
+    top: 64px;
+    right: 64px;
+}
+.Cancel.Active {
+    top: 0px;
+}
+
 .Confirm {
     background-color: paleturquoise;
     top: 64px;

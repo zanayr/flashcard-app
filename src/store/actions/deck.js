@@ -125,9 +125,11 @@ export const getAllDecks_async = (token, user) => {
 
 //  Post  --------------------------------------------------------------  Post Async //
 export const postDeck_async = (token, data) => {
+    console.log(data);
     return dispatch => {
         axios.post('/decks.json?auth=' + token, data)
         .then(response => {
+            console.log(response);
             dispatch(post_success(response.data.name, {
                 ...data,
                 isDeleted: false,

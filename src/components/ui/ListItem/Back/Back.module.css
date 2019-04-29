@@ -1,0 +1,9 @@
+.List_Item_Back {
+    background-color: white;
+    height: 100%;
+    transition: backgroun-color 167ms ease;
+    width: 100%
+}
+.Selected {
+    background-color: pink;
+}
