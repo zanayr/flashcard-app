@@ -35,7 +35,6 @@ class Collections extends Component {
             state: 0
         },
         confirm: false,
-        decks: [],
         deleted: [],
         history: {
             store: {},
@@ -43,17 +42,6 @@ class Collections extends Component {
         },
         selected: [],
         state: 'decks'
-    }
-
-    componentDidMount () {
-        this.setState(previous => ({
-            ...previous,
-            decks: [...this.props.select_decks]
-        }));
-    }
-
-    componentDidUpdate (prevProps, prevState) {
-        console.log(prevState.decks.length, this.state.decks.length);
     }
 
 
@@ -295,8 +283,13 @@ class Collections extends Component {
             confirm: !prev.confirm
         }));
     }
-
-    setSelected (key) {
+    removeSelected (key) {
+        this.setState(prev => ({
+            ...prev,
+            selected: prev.selected.filter(k => k !== key)
+        }));
+    }
+    toggleSelected (key) {
         if (this.state.selected.indexOf(key) > -1) {
             this.setState(prev => ({
                 ...prev,
@@ -339,8 +332,8 @@ class Collections extends Component {
         this.setConfirm(false);
     }
     onItemConfirm = key => {
-        this.removeItem(key);
-        this.setSelected(key);
+        //this.removeItem(key);
+        this.removeSelected(key);
         this.props.deleteDeck_async(this.props.select_token, key);
     }
     onItemDelete = key => {
@@ -351,13 +344,13 @@ class Collections extends Component {
     }
     onItemSelect = key => {
         this.setConfirm(false);
-        this.setSelected(key);
+        this.toggleSelected(key);
     }
 
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
-        let listItems = this.state.decks.map(item => {
+        let listItems = this.props.select_decks.map(item => {
             let isActive = this.state.selected.length === 1 && this.state.selected[0] === item.key;
             let isConfirm = this.state.confirm && isActive;
             return (

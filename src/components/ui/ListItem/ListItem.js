@@ -15,7 +15,6 @@ class ListItem extends Component {
     // }
 
     render () {
-        //console.log('rendering item');
         return (
             <article
                 className={ListItemStyles.ListItem}
