@@ -6,22 +6,12 @@ import ListItemStyles from './ListItem.module.css';
 
 
 class ListItem extends Component {
-    // state = {
-    //     detail: this.props.detail,
-    //     display: this.props.display
-    // }
-
     onClick (e) {
         e.stopPropagation();
         this.props.onSelect();
     }
 
-    // shouldComponentUpdate (nextProps, nextState) {
-    //     return nextProps.active !== this.props.active
-    // }
-
     render () {
-        console.log(this.props.display);
         let css = [ListItemStyles.ListItem];
         if (this.props.selected) {
             css = [ListItemStyles.ListItem, ListItemStyles.Selected];

@@ -296,7 +296,6 @@ class Collections extends Component {
         }));
     }
     setAsideState (state) {
-        console.log(state);
         this.setState(prev => ({
             ...prev,
             aside: {
@@ -348,15 +347,21 @@ class Collections extends Component {
     }
 
     createItem (item) {
+        console.log(item);
         this.setState(prev => ({
             ...prev,
-            decks: prev.decks.concat(item)
+            decks: {
+                ...prev.decks,
+                [item.id]: item
+            }
         }));
     }
     removeItem (id) {
+        const collection = this.state.decks;
+        delete collection[id];
         this.setState(prev => ({
             ...prev,
-            decks: prev.decks.filter(item => item.id !== id)
+            decks: {...collection}
         }));
     }
     updateItem (id, target, value) {
@@ -377,6 +382,43 @@ class Collections extends Component {
             id: id
         }
     }
+    clearAsideData () {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                data: {}
+            }
+        }));
+    }
+    clearAsideActions () {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                actions: {}
+            }
+        }));
+    }
+    resetItem = () => {
+        this.setState(prev => ({
+            ...prev,
+            decks: {
+                ...prev.decks,
+                [this.state.history.last.id]: {
+                    ...this.state.history.last
+                }
+            }
+        }));
+    }
+    setHistory (data) {
+        this.setState(prev => ({
+            ...prev,
+            history: {
+                ...data
+            }
+        }));
+    }
 
 
 
@@ -396,8 +438,14 @@ class Collections extends Component {
     //  Aside  -------------------------------------------------------------  Aside  //
     onAsideClose = state => {
         if (this.state.aside.isActive) {
-            //closeAside();
+            this.clearAsideActions();
+            this.clearAsideData();
             this.toggleAside();
+            if (this.state.aside.state === 99) {
+                this.state.history.undo();
+                this.setAsideState(0);
+                //this.setAsideData(this.state.history.last);
+            }
         }
     }
     onAsideToggle = state => {
@@ -418,18 +466,21 @@ class Collections extends Component {
         this.props.deleteDeck_async(this.props.select_token, id);
     }
     onItemUpdate = (id) => {
-        console.log(id);
+        this.clearAsideData();
+        this.clearAsideActions();
         this.props.putDeck_async(this.props.select_token, this.getItemById(id));
     }
     onItemChange = (id, target, value) => {
         this.updateItem(id, target, value);
-        //this.clearAsideData();
-        //this.clearAsideActions();
     }
     onItemInspect = id => {
         this.setAsideState(99);
         this.toggleAside();
         this.setAsideData(this.getItemById(id));
+        this.setHistory({
+            last: this.getItemById(id),
+            undo: this.resetItem
+        });
         this.setAsideAction({
             onChange: this.onItemChange,
             onConfirm: this.onItemUpdate

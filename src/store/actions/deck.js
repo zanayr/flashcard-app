@@ -103,7 +103,6 @@ export const getAllDecks_async = (token, user) => {
         dispatch(getAll_init());
         axios.get('/decks.json?auth=' + token + '&orderBy="user"&equalTo="' + user + '"')
         .then(response => {
-            console.log(response.data);
             dispatch(getAll_success({
                 data: response.data
             }));
@@ -138,7 +137,6 @@ export const putDeck_async = (token, data) => {
     return dispatch => {
         axios.put('/decks/' + data.id + '.json?auth=' + token, data)
         .then(response => {
-            console.log(response.data)
             dispatch(put_success(response.data));
         })
         .catch(error => {
