@@ -1,0 +1,39 @@
+.TabBar {
+    background-color: gold;
+    height: 32px;
+}
+.TabBar > div {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    justify-content: flex-start;
+}
+
+.QuickTab {
+    background-color: indigo;
+    width: 64px;
+    height: 32px;
+}
+.QuickTab.Active {
+    background-color: green;
+}
+.QuickTab > div {
+    height: 100%;
+}
+
+.AddButton {
+    background-color: lightsalmon;
+    width: 64px;
+    height: 32px;
+}
+.AddButton > div {
+    height: 100%;
+}
+
+.TabBar button {
+    background-color: transparent;
+    color: white;
+    font-size: 11px;
+    height: 100%;
+    width: 100%;
+}

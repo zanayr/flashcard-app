@@ -9,9 +9,9 @@ import * as utility from '../../utility';
 import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside from '../../components/aside/Aside/Aside';
 import Aux from '../../hoc/Aux/Aux';
-import ContextActions from '../../components/ui/Context/ContextActions';
 import Header from '../../components/Header/Header';
 import List from '../../components/List/List';
+import TabBar from '../../components/ui/tab/TabBar/TabBar';
 
 import AppCSS from '../../App.module.css';
 import CollectionsCSS from './Collections.module.css';
@@ -30,12 +30,23 @@ class Collections extends Component {
         showConfirm: false,
         deleted: [],
         decks: {},
+        cards: {},
         history: {
             store: {},
             undo: null
         },
         selected: [],
-        state: 'decks'
+        state: 'decks',
+        tabs: {
+            cards: {
+                isActive: false,
+                canDelete: true
+            },
+            decks: {
+                isActive: true,
+                canDelete: false
+            }
+        }
     }
 
     componentDidMount () {
@@ -43,6 +54,18 @@ class Collections extends Component {
             ...prev,
             decks: this.props.select_decks
         }));
+        this.setState(prev => ({
+            ...prev,
+            tabs: {
+                ...prev.tabs,
+                actions: {
+                    add: this.handle_onTabAdd,
+                    click: this.handle_onTabBarClick,
+                    remove: this.handle_onTabRemove,
+                    toggle: this.handle_onTabToggle,
+                }
+            }
+        }))
     }
 
 
@@ -419,6 +442,22 @@ class Collections extends Component {
             }
         }));
     }
+    toggleTabs (tab) {
+        const tabs = this.state.tabs;
+        Object.keys(tabs).forEach(t => {
+            if (t === tab) {
+                tabs[t].isActive = true;
+            } else if (tabs[t].isActive) {
+                tabs[t].isActive = false;
+            }
+        });
+        this.setState(prev => ({
+            ...prev,
+            tabs: {
+                ...tabs
+            }
+        }));
+    }
 
     //  EVENT HANDLERS v2  //
     onActionClick = () => {
@@ -501,10 +540,62 @@ class Collections extends Component {
         }
     }
 
+    handle_onTabAdd = tab => {
+        this.setState(prev => ({
+            ...prev,
+            tabs: {
+                [tab.id]: {
+                    canDelete: true,
+                    isActive: false,
+                    name: tab.name
+                }
+            }
+        }));
+    }
+    handle_onCloseQuickInspect = tab => {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                isActive: false,
+                state: 0,
+            }
+        }))
+    }
+    handle_onTabRemove = tab => {
+        let tabs = this.state.tabs;
+        delete tabs[tab];
+        this.setState(prev => ({
+            ...prev,
+            tabs: {
+                ...tabs
+            }
+        }));
+    }
+    handle_onTabToggle = tab => {
+        const tabs = this.state.tabs;
+        Object.keys(tabs).forEach(t => {
+            if (t === tab) {
+                tabs[t].isActive = true;
+            } else if (tabs[t].isActive) {
+                tabs[t].isActive = false;
+            }
+        });
+        this.setState(prev => ({
+            ...prev,
+            tabs: {
+                ...tabs
+            }
+        }));
+    }
+
     handle_onItemDelete = id => {
         this.removeSelected(id);
         this.removeItem(id);
         this.props.deleteDeck_async(this.props.select_token, id);
+    }
+    handle_onTabToggle = collection => {
+        this.toggleTabs(collection);
+        //this.setCurrentCollection(collection);
     }
 
 
@@ -526,12 +617,14 @@ class Collections extends Component {
                     className={CollectionsCSS.Main}
                     onClick={this.onListOut}>
                     <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
+                        <TabBar
+                            actions={this.state.tabs.actions}
+                            backingCollection={this.state.tabs}/>
                         <List
                             backingCollection={this.state.decks}
                             onConfirm={this.onItemDelete}
                             onInspect={this.onItemInspect}
-                            onSelect={this.onItemSelect}>
-                        </List>
+                            onSelect={this.onItemSelect}/>
                         <ActionButton
                             onClick={this.onActionClick}
                             state={this.state.action.state}
