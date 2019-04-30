@@ -257,7 +257,7 @@ class Collections extends Component {
             }
         }
         this.createItem(item);
-        //this.props.patch_async(this.state.state, this.props.select_token, item);
+        this.props.patch_async(this.state.state, this.props.select_token, item);
     }
 
     //  Aside  -------------------------------------------------------------  Aside  //
