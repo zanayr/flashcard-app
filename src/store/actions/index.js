@@ -13,7 +13,7 @@ export {
 
 export {
     getUser_async,
-    patchUser_success,
+    patchUser_async,
     putUser_async
 } from './user'
 

@@ -22,9 +22,10 @@ const getUser_init = (state, action) => {
     };
 };
 const getUser_succ = (state, action) => {
+    console.log(action.payload);
     return {
         ...state,
-        user: {...action.payload.data},
+        user: {...action.payload},
         error: null,
         isLoading: false
     };

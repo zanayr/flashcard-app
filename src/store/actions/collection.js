@@ -114,7 +114,7 @@ export const getAll_async = (url, token, user) => {
 //  Patch  ------------------------------------------------------------  Patch Async //
 export const patch_async = (url, token, data) => {
     return dispatch => {
-        axios.post('/' + url + '.json?auth=' + token, data)
+        axios.patch('/' + url + '/' + data.id + '.json?auth=' + token, data)
         .then(response => {
             dispatch(patch_success(url, data));
         })

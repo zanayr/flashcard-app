@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
+import * as actions from '../../store/actions/index';
 import * as select from '../../store/reducers/root';
 
 import AuthForm from '../../components/form/Auth/AuthForm';
@@ -20,6 +21,23 @@ class Auth extends Component {
             markup = (
                 <Redirect to="/in"/>
             );
+            // this.props.patchUser_async(this.props.select_token, {
+            //     active: 1,
+            //     assigned: {},
+            //     auth: this.props.select_user,
+            //     date: Date.now(),
+            //     id: 'gaxyaaxy04vj',
+            //     info: {
+            //         first: 'Ryan',
+            //         last:'Fickencher',
+            //         email:'rsficken@gmail.com',
+            //     },
+            //     buds: {},
+            //     priv: 4,
+            //     pref:{},
+            //     sessions: {},
+            //     tabs: {},
+            // });
         }
         return (
             <main className={AuthCSS.Open}>
@@ -33,12 +51,20 @@ class Auth extends Component {
 
 const mapStateToProps = state => {
     return {
+        select_token: select.authToken(state),
+        select_user: select.authUser(state),
         select_isLoading: select.authIsLoading(state),
         isAuthenticated: select.authToken(state) !== null
     };
 }
 
-export default connect(mapStateToProps, null)(Auth);
+const mapDispatchToProps = dispatch => {
+    return {
+        patchUser_async: (token, data) => dispatch(actions.patchUser_async(token, data))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);
 
 /*
 const mapStateToProps = state => {
