@@ -61,6 +61,7 @@ class Collections extends Component {
             ...prev,
             tabs: {
                 ...prev.tabs,
+                ...this.props.select_userTabs,
                 actions: {
                     add: this.handle_onTabAdd,
                     click: this.handle_onTabBarClick,
@@ -68,7 +69,9 @@ class Collections extends Component {
                     toggle: this.handle_onTabToggle,
                 }
             }
-        }))
+        }), () => {
+            console.log(this.props.select_userTabs);
+        })
     }
 
 
@@ -465,16 +468,17 @@ const mapStateToProps = state => {
         select_cards: select.cards(state),
         select_token: select.authToken(state),
         select_user: select.authUser(state),
-        select_userId: select.userId(state)
+        select_userId: select.userId(state),
+        select_userTabs: select.userTabs(state)
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
         delete_async: (url, token, id) => dispatch(actions.delete_async(url, token, id)),
-        deleteUserTab_async: (token, auth, id) => dispatch(actions.deleteUserTab_async(token, auth, id)),
+        deleteUserTab_async: (token, user, id) => dispatch(actions.deleteUserTab_async(token, user, id)),
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
         patch_async: (url, token, data) => dispatch(actions.patch_async(url, token, data)),
-        patchUserTab_async: (token, auth, data) => dispatch(actions.patchUserTab_async(token, auth, data)),
+        patchUserTab_async: (token, user, data) => dispatch(actions.patchUserTab_async(token, user, data)),
         put_async: (url, token, data) => dispatch(actions.put_async(url, token, data)),
 
     };

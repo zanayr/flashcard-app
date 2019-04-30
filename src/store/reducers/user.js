@@ -102,7 +102,6 @@ export function selectUser (state) {
     return state.user;
 }
 export function selectUserId (state) {
-    console.log(state.user.id);
     return state.user.id;
 }
 export function selectUserInfo (state) {
@@ -115,6 +114,7 @@ export function selectUserPreviliage (state) {
     return state.user.previliage;
 }
 export function selectUserTabs (state) {
+    console.log(state.user.tabs);
     return state.user.tabs;
 }
 

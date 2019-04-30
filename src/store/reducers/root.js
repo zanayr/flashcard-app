@@ -61,6 +61,9 @@ export function userId (store) {
 export function userIsLoading (store) {
     return FromUser.selectUserIsLoading(store[USER]);
 }
+export function userTabs (store) {
+    return FromUser.selectUserTabs(store[USER]);
+}
 
 
 export default rootReducer;
