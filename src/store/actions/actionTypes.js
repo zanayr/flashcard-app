@@ -31,25 +31,8 @@ export const PATCH_USER_FAIL = 'PATCH_USER_FAIL';
 export const PATCH_USER_SUCC = 'PATCH_USER_SUCC';
 export const PUT_USER_FAIL = 'PUT_USER_FAIL';
 export const PUT_USER_SUCC = 'PUT_USER_SUCC';
-
-// //  Deck Store  //
-// export const DECKS_DELETE_FAIL = 'DECKS_DELETE_FAIL';
-// export const DECKS_DELETE_SUCC = 'DECKS_DELETE_SUCC';
-// export const DECKS_GET_FAIL = 'DECKS_GET_FAIL';
-// export const DECKS_GET_INIT = 'DECKS_GET_INIT';
-// export const DECKS_GET_SUCC = 'DECKS_GET_SUCC';
-// export const DECKS_POST_FAIL = 'DECKS_POST_FAIL';
-// export const DECKS_POST_SUCC = 'DECKS_POST_SUCC';
-// export const DECKS_PUT_FAIL = 'DECKS_PUT_FAIL';
-// export const DECKS_PUT_SUCC = 'DECKS_PUT_SUCC';
-
-// //  Card Store  //
-// export const CARDS_DELETE_FAIL = 'CARDS_DELETE_FAIL'
-// export const CARDS_DELETE_SUCC = 'CARDS_DELETE_SUCC'
-// export const CARDS_GET_FAIL = 'CARDS_GET_FAIL'
-// export const CARDS_GET_INIT = 'CARDS_GET_INIT'
-// export const CARDS_GET_SUCC = 'CARDS_GET_SUCC'
-// export const CARDS_POST_FAIL = 'CARDS_POST_FAIL'
-// export const CARDS_POST_SUCC = 'CARDS_POST_SUCC'
-// export const CARDS_PUT_FAIL = 'CARDS_PUT_FAIL'
-// export const CARDS_PUT_SUCC = 'CARDS_PUT_SUCC'
+//  User Tabs  //
+export const DELETE_TAB_FAIL = 'DELETE_TAB_FAIL';
+export const DELETE_TAB_SUCC = 'DELETE_TAB_SUCC';
+export const PATCH_TAB_FAIL = 'PATCH_TAB_FAIL';
+export const PATCH_TAB_SUCC = 'PATCH_TAB_SUCC';

@@ -44,6 +44,26 @@ const putUser_succ = (state, action) => {
     };
 };
 
+//  Tabs  //
+const deleteTab_succ = (state, action) => {
+    let tabs = state.tabs;
+    delete tabs[action.payload.data.id];
+    return {
+        ...state,
+        tabs: {
+            ...tabs
+        }
+    }
+}
+const patchTab_succ = (state, action) => {
+    return {
+        ...state,
+        tabs: {
+            ...state.tabs,
+            [action.payload.data.id]: {...action.payload.data}
+        }
+    }
+}
 
 //  REDUCER  -------------------------------------------------------------  REDUCER  //
 const reducer = (state=initialState, action) => {
@@ -62,6 +82,14 @@ const reducer = (state=initialState, action) => {
             return service_fail(state, action);
         case actionTypes.PUT_USER_SUCC:
             return putUser_succ(state, action);
+        case actionTypes.DELETE_TAB_FAIL:
+            return service_fail(state, action);
+        case actionTypes.DELETE_TAB_SUCC:
+            return deleteTab_succ(state, action);
+        case actionTypes.PATCH_TAB_FAIL:
+            return service_fail(state, action);
+        case actionTypes.PATCH_TAB_SUCC:
+            return patchTab_succ(state, action);
         default:
             return state;
     }
