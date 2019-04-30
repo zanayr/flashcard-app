@@ -12,6 +12,7 @@ import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
 import List from '../../components/List/List';
 import TabBar from '../../components/ui/tab/TabBar/TabBar';
+import TabForm from '../../components/form/Tab/TabForm';
 
 import AppCSS from '../../App.module.css';
 import CollectionsCSS from './Collections.module.css';
@@ -38,6 +39,7 @@ class Collections extends Component {
         selected: [],
         state: 'decks',
         tabs: {
+            actions: {},
             cards: {
                 isActive: false,
                 canDelete: true
@@ -540,16 +542,33 @@ class Collections extends Component {
         }
     }
 
-    handle_onTabAdd = tab => {
+    handle_onTabCreate = tab => {
+        let tabId = utility.createHashId(0);
+        console.log(tabId, tab);
         this.setState(prev => ({
             ...prev,
             tabs: {
-                [tab.id]: {
+                ...prev.tabs,
+                [tabId]: {
                     canDelete: true,
                     isActive: false,
                     name: tab.name
                 }
             }
+        }));
+        this.setState(prev => ({
+            ...prev,
+            [tabId]: {}
+        }));
+        this.setState(prev => ({
+            ...prev,
+            state: tabId
+        }));
+    }
+    handle_onTabAdd = tab => {
+        this.setState(prev => ({
+            ...prev,
+            state: 0
         }));
     }
     handle_onCloseQuickInspect = tab => {
@@ -586,6 +605,10 @@ class Collections extends Component {
                 ...tabs
             }
         }));
+        this.setState(prev => ({
+            ...prev,
+            state: tab
+        }));
     }
 
     handle_onItemDelete = id => {
@@ -593,14 +616,27 @@ class Collections extends Component {
         this.removeItem(id);
         this.props.deleteDeck_async(this.props.select_token, id);
     }
-    handle_onTabToggle = collection => {
-        this.toggleTabs(collection);
-        //this.setCurrentCollection(collection);
-    }
 
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
+        let content = (
+            <p>Something when wrong...</p>
+        );
+        if (!this.state.state) {
+            content = (
+                <TabForm onConfirm={this.handle_onTabCreate}/>
+            );
+        } else {
+            console.log(this.state[this.state.state]);
+            content = (
+                <List
+                    backingCollection={this.state[this.state.state]}
+                    onConfirm={this.onItemDelete}
+                    onInspect={this.onItemInspect}
+                    onSelect={this.onItemSelect}/>
+            );
+        }
         return (
             <Aux>
                 <Header
@@ -620,11 +656,7 @@ class Collections extends Component {
                         <TabBar
                             actions={this.state.tabs.actions}
                             backingCollection={this.state.tabs}/>
-                        <List
-                            backingCollection={this.state.decks}
-                            onConfirm={this.onItemDelete}
-                            onInspect={this.onItemInspect}
-                            onSelect={this.onItemSelect}/>
+                        {content}
                         <ActionButton
                             onClick={this.onActionClick}
                             state={this.state.action.state}

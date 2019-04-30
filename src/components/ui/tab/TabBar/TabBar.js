@@ -10,12 +10,20 @@ import styles from '../Tab.module.css';
 const tabBar = (props) => {
     const handle_onBarClick = (e) => {
         e.stopPropagation();
-        this.props.actions.click();
+        props.actions.click();
+    }
+    const handle_onAddClick = (e) => {
+        e.stopPropagation();
+        props.actions.add();
     }
     let tabs = Object.keys(props.backingCollection).map((tab, i) => {
         if (tab === 'actions') {
             return null
         } else {
+            let content = tab;
+            if (props.backingCollection[tab].name) {
+                content = props.backingCollection[tab].name;
+            }
             return (
                 <QuickTab
                     active={props.backingCollection[tab].isActive}
@@ -23,7 +31,7 @@ const tabBar = (props) => {
                     key={tab}
                     onClick={() => props.actions.toggle(tab)}
                     onRemove={() => props.actions.remove(tab)}>
-                    {tab}
+                    {content}
                 </QuickTab>
             )
         }
@@ -37,7 +45,7 @@ const tabBar = (props) => {
                 {tabs}
                 <div className={styles.AddButton}>
                     <div>
-                        <button onClick={props.actions.add}>+</button>
+                        <button onClick={(e) => handle_onAddClick(e)}>+</button>
                     </div>
                 </div>
             </div>
