@@ -22,10 +22,13 @@ export const delete_success = (store, id) => {
 
 
 //  GET  //
-export const getAll_fail = (error) => {
+export const getAll_fail = (store, error) => {
     return {
         type: actionTypes.GET_FAIL,
-        payload: error
+        payload: {
+            error: error,
+            store: store
+        }
     }
 }
 export const getAll_init = (data) => {
@@ -100,13 +103,13 @@ export const delete_async = (url, token, id) => {
 //  Get  ----------------------------------------------------------------  Get Async //
 export const getAll_async = (url, token, user) => {
     return dispatch => {
-        dispatch(getAll_init({data: {store: url}}));
+        dispatch(getAll_init(url));
         axios.get('/' + url + '.json?auth=' + token + '&orderBy="user"&equalTo="' + user + '"')
         .then(response => {
             dispatch(getAll_success(url, response.data));
         })
         .catch(error => {
-            dispatch(getAll_fail(error));
+            dispatch(getAll_fail(url, error));
         });
     };
 };

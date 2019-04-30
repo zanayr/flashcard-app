@@ -149,7 +149,6 @@ class Collections extends Component {
     }
 
     createItem (item) {
-        console.log('create item', this.state.state);
         this.setState(prev => ({
             ...prev,
             [this.state.state]: {
@@ -257,7 +256,6 @@ class Collections extends Component {
                 user: this.props.select_user
             }
         }
-        console.log('create', this.state.state);
         this.createItem(item);
         //this.props.patch_async(this.state.state, this.props.select_token, item);
     }

@@ -41,8 +41,8 @@ const delete_succ = (state, action) => {
 const getAll_init = (state, action) => {
     return {
         ...state,
-        [action.payload.store]: {
-            ...state[action.payload.store],
+        [action.payload]: {
+            ...state[action.payload],
             isLoading: true
         }
     };
