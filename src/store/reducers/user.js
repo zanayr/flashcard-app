@@ -72,15 +72,19 @@ const reducer = (state=initialState, action) => {
 export function selectUser (state) {
     return state.user;
 }
-export function selectUserTabs (state) {
-    return state.user.tabs;
-}
 export function selectUserInfo (state) {
-    return state.user.info
+    return state.user.info;
+}
+export function selectUserIsLoading (state) {
+    return state.user.isLoading;
 }
 export function selectUserPreviliage (state) {
     return state.user.previliage;
 }
+export function selectUserTabs (state) {
+    return state.user.tabs;
+}
+
 
 
 export default reducer;

@@ -28,9 +28,10 @@ export const getAll_fail = (error) => {
         payload: error
     }
 }
-export const getAll_init = () => {
+export const getAll_init = (data) => {
     return {
-        type: actionTypes.GET_INIT
+        type: actionTypes.GET_INIT,
+        payload: data
     }
 }
 export const getAll_success = (store, data) => {
@@ -99,8 +100,8 @@ export const delete_async = (url, token, id) => {
 //  Get  ----------------------------------------------------------------  Get Async //
 export const getAll_async = (url, token, user) => {
     return dispatch => {
-        dispatch(getAll_init());
-        axios.get('/' + url + '.json?auth=' + token + '&orderBy="userId"&equalTo="' + user + '"')
+        dispatch(getAll_init({data: {store: url}}));
+        axios.get('/' + url + '.json?auth=' + token + '&orderBy="user"&equalTo="' + user + '"')
         .then(response => {
             dispatch(getAll_success(url, response.data));
         })

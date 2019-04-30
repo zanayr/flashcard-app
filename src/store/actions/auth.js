@@ -57,6 +57,7 @@ export const checkAuth_async = () => {
 }
 export const auth_async = (email, password, isSignUp) => {
     return dispatch => {
+        try {
         dispatch(auth_init());
         const data = {
             email: email,
@@ -80,5 +81,8 @@ export const auth_async = (email, password, isSignUp) => {
             .catch(error => {
                 dispatch(auth_fail(error));
             });
+        } catch (e) {
+            console.log(e);
+        }
     }
 }

@@ -21,7 +21,7 @@ const deleteSingleModal = (props) => {
         //     props.actions.callback();
         // }
         // props.actions.onConfirm({key: props.data.key});
-        props.deleteDeck_async(props.select_token, props.data.key);
+        props.delete_async(props.select_token, props.data.key);
         props.onClear();
     }
 
@@ -50,7 +50,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         clearModal: (data) => dispatch(actions.clearModal(data)),
-        deleteDeck_async: (token, key) => dispatch(actions.deleteDeck_async(token, key))
+        delete_async: (token, key) => dispatch(actions.delete_async(token, key))
     }
 }
 

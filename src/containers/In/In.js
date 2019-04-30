@@ -10,13 +10,15 @@ import Throbber from '../../components/ui/Throbber/Throbber';
 
 class In extends Component {
     componentDidMount() {
-        this.props.getAllDecks_async(this.props.select_token, this.props.select_user);
+        this.props.getAll_async('cards', this.props.select_token, this.props.select_user);
+        this.props.getAll_async('decks', this.props.select_token, this.props.select_user);
+        this.props.getUser_async(this.props.select_token, this.props.select_user);
     }
 
     
     render() {
         let inContent = (<Throbber/>);
-        if (!this.props.select_deckIsLoading) {
+        if (!this.props.select_decksIsLoading && !this.props.select_cardsIsLoading && !this.props.userIsLoading) {
             inContent = <Redirect to="/u"/>;
         }
         return (
@@ -30,14 +32,17 @@ class In extends Component {
 
 const mapStateToProps = state => {
     return {
-        select_deckIsLoading: select.deckIsLoading(state),
+        select_cardsIsLoading: select.cardsIsLoading(state),
+        select_decksIsLoading: select.decksIsLoading(state),
         select_token: select.authToken(state),
-        select_user: select.authUser(state)
+        select_user: select.authUser(state),
+        select_userIsLoading: select.userIsLoading(state)
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
-        getAllDecks_async: (token, user) => dispatch(actions.getAllDecks_async(token, user)),
+        getAll_async: (url, token, user) => dispatch(actions.getAll_async(url, token, user)),
+        getUser_async: (token, auth) => dispatch(actions.getUser_async(token, auth))
     };
 };
 

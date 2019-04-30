@@ -3,16 +3,20 @@ import {combineReducers} from 'redux'
 import authReducer, * as FromAuth from './auth';
 import collReducer, * as FromColl from './collection';
 import modalReducer, * as FromModal from './modal';
+import userReducer, * as FromUser from './user';
 
 
 const AUTH = 'AUTH';
 const COLL = 'COLL';
 const MODAL = 'MODAL';
+const USER = 'USER';
+
 
 const rootReducer = combineReducers({
     AUTH: authReducer,
     COLL: collReducer,
-    MODAL: modalReducer
+    MODAL: modalReducer,
+    USER: userReducer
 });
 
 
@@ -39,15 +43,21 @@ export function cardsIsLoading (store) {
     return FromColl.selectCardsIsLoading(store[COLL]);
 }
 export function decks (store) {
-    return FromDeck.selectDecks(store[COLL]);
+    return FromColl.selectDecks(store[COLL]);
 }
 export function decksIsLoading (store) {
-    return FromDeck.selectDecksIsLoading(store[COLL]);
+    return FromColl.selectDecksIsLoading(store[COLL]);
 }
 
 //  Modal  -------------------------------------------------------- Modal Selectors  //
 export function modals (store) {
     return FromModal.selectModals(store[MODAL]);
 }
+
+//  User  ---------------------------------------------------------  User Selectors  //
+export function userIsLoading (store) {
+    return FromUser.selectUserIsLoading(store[USER]);
+}
+
 
 export default rootReducer;

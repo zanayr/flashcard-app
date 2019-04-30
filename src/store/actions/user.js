@@ -5,50 +5,44 @@ import axios from '../database';
 //  Get  //
 export const getUser_fail = (error) => {
     return {
-        type: actionTypes.GET_FAIL,
+        type: actionTypes.GET_USER_FAIL,
         payload: error
     }
 }
 export const getUser_init = () => {
     return {
-        type: actionTypes.GET_INIT
+        type: actionTypes.GET_USER_INIT
     }
 }
 export const getUser_success = (data) => {
     return {
-        type: actionTypes.GET_SUCC,
+        type: actionTypes.GET_USER_SUCC,
         payload: data
     }
 }
-
-
-
-//  POST  //
+//  Patch  //
 export const patchUser_fail = (error) => {
     return {
-        type: actionTypes.PATCH_FAIL,
+        type: actionTypes.PATCH_USER_FAIL,
         payload: error
     }
 }
-export const patchUSer_success = (data) => {
+export const patchUser_success = (data) => {
     return {
-        type: actionTypes.PATCH_SUCC,
+        type: actionTypes.PATCH_USER_SUCC,
         payload: data
     }
 }
-
-
-
-//  PUT  //
+//  Put  //
 export const putUser_fail = (error) => {
     return {
-        type: actionTypes.PUT_FAIL,
+        type: actionTypes.PUT_USER_FAIL,
         payload: error
     };
 };
 export const putUser_success = (data) => {
     return {
-        type: actionTypes.PUT_SUCC,
+        type: actionTypes.PUT_USER_SUCC,
         payload: data
     };
 };
@@ -81,6 +75,8 @@ export const patchUser_async = (token, data) => {
         });
     };
 };
+
+//  Put  ----------------------------------------------------------------  Put Async //
 export const putUser_async = (token, data) => {
     return dispatch => {
         axios.put('/users/' + data.id + '.json?auth=' + token, data)

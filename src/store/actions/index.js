@@ -6,14 +6,14 @@ export {
 
 export {
     delete_async,
-    get_async,
+    getAll_async,
     patch_async,
     put_async
 } from './collection';
 
 export {
     getUser_async,
-    patchUSer_success,
+    patchUser_success,
     putUser_async
 } from './user'
 

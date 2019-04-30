@@ -452,7 +452,6 @@ class Collections extends Component {
 
 const mapStateToProps = state => {
     return {
-        select_deckIsLoading: select.deckIsLoading(state),
         select_decks: select.decks(state),
         select_token: select.authToken(state),
         select_user: select.authUser(state)
@@ -460,10 +459,10 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        deleteDeck_async: (token, id) => dispatch(actions.deleteDeck_async(token, id)),
+        delete_async: (token, id) => dispatch(actions.delete_async(token, id)),
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
-        postDeck_async: (token, data) => dispatch(actions.postDeck_async(token, data)),
-        putDeck_async: (token, data) => dispatch(actions.putDeck_async(token, data)),
+        patch_async: (token, data) => dispatch(actions.patch_async(token, data)),
+        put_async: (token, data) => dispatch(actions.put_async(token, data)),
 
     };
 };

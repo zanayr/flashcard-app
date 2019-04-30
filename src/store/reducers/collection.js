@@ -39,6 +39,7 @@ const delete_succ = (state, action) => {
     };
 }
 const getAll_init = (state, action) => {
+    console.log(action);
     return {
         ...state,
         [action.payload.store]: {
