@@ -30,7 +30,7 @@ const tabBar = (props) => {
                     delete={props.backingCollection[tab].canDelete}
                     key={tab}
                     onClick={() => props.actions.toggle(tab)}
-                    onRemove={() => props.actions.remove(tab)}>
+                    onClose={() => props.actions.close(tab)}>
                     {content}
                 </QuickTab>
             )
@@ -43,7 +43,7 @@ const tabBar = (props) => {
             onClick={(e) => handle_onBarClick(e)}>
             <div>
                 {tabs}
-                <div className={styles.AddButton}>
+                <div className={styles.QuickTab}>
                     <div>
                         <button onClick={(e) => handle_onAddClick(e)}>+</button>
                     </div>

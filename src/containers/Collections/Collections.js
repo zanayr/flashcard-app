@@ -42,7 +42,7 @@ class Collections extends Component {
             actions: {},
             cards: {
                 isActive: false,
-                canDelete: true
+                canDelete: false
             },
             decks: {
                 isActive: true,
@@ -65,7 +65,7 @@ class Collections extends Component {
                 actions: {
                     add: this.handle_onTabAdd,
                     click: this.handle_onTabBarClick,
-                    remove: this.handle_onTabRemove,
+                    close: this.handle_onTabRemove,
                     toggle: this.handle_onTabToggle,
                 }
             }
@@ -378,6 +378,7 @@ class Collections extends Component {
                 ...tabs
             }
         }));
+        this.props.deleteUserTab_async(this.props.select_token, this.props.select_userId, tab);
     }
     handle_onTabToggle = tab => {
         const tabs = this.state.tabs;

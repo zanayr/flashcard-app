@@ -8,20 +8,35 @@ class QuickTab extends Component {
         return (nextProps.active !== this.props.active);
     }
 
-    handle_onClick = (e) => {
+    handle_onTabClick = (e) => {
         e.stopPropagation();
         this.props.onClick();
+    }
+    handle_onTabClose = (e) => {
+        e.stopPropagation();
+        this.props.onClose();
     }
 
     render () {
         let css = [styles.QuickTab];
+        let close = null;
         if (this.props.active) {
             css.push(styles.Active);
+        }
+        if (this.props.delete) {
+            close = (
+                <button
+                    className={styles.Close}
+                    onClick={(e) => this.handle_onTabClose(e)}>
+                    x
+                </button>
+                );
         }
         return (
             <div className={css.join(' ')}>
                 <div>
-                    <button onClick={(e) => this.handle_onClick(e)}>{this.props.children}</button>
+                    <button onClick={(e) => this.handle_onTabClick(e)}>{this.props.children}</button>
+                    {close}
                 </div>
             </div>
         )

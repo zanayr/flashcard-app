@@ -19,6 +19,9 @@
 }
 .QuickTab > div {
     height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .AddButton {
@@ -33,7 +36,15 @@
 .TabBar button {
     background-color: transparent;
     color: white;
+    flex-grow: 1;
     font-size: 11px;
     height: 100%;
-    width: 100%;
+}
+
+.QuickTab:hover button.Close {
+    display: block;
+}
+button.Close {
+    display: none;
+    width: 24px;
 }
