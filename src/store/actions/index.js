@@ -4,22 +4,28 @@ export {
     checkAuth_async
 } from './auth';
 
-// export {
-//     delete_async,
-//     get_async,
-//     post_async,
-//     put_async
-// } from './collections';
+export {
+    delete_async,
+    get_async,
+    patch_async,
+    put_async
+} from './collection';
 
 export {
-    deleteDeck_async,
-    deleteManyDecks_async,
-    getAllDecks_async,
-    postDeck_async,
-    postManyDecks_async,
-    putDeck_async,
-    putManyDecks_async
-} from './deck'
+    getUser_async,
+    patchUSer_success,
+    putUser_async
+} from './user'
+
+// export {
+//     deleteDeck_async,
+//     deleteManyDecks_async,
+//     getAllDecks_async,
+//     postDeck_async,
+//     postManyDecks_async,
+//     putDeck_async,
+//     putManyDecks_async
+// } from './deck'
 
 export {
     displayModal,

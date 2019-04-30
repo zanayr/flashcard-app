@@ -1,23 +1,23 @@
 import {combineReducers} from 'redux'
 
 import authReducer, * as FromAuth from './auth';
-import deckReducer, * as FromDeck from './deck';
+import collReducer, * as FromColl from './collection';
 import modalReducer, * as FromModal from './modal';
 
 
 const AUTH = 'AUTH';
-const DECK = 'DECK';
+const COLL = 'COLL';
 const MODAL = 'MODAL';
 
 const rootReducer = combineReducers({
     AUTH: authReducer,
-    DECK: deckReducer,
+    COLL: collReducer,
     MODAL: modalReducer
 });
 
 
 //  STORE SELECTORS  --------------------------------------------------- SELECTORS  //
-//  Auth  --------------------------------------------------------- Auth Selectors  //
+//  Authentication  ------------------------------------- Authentication Selectors  //
 export function authError (store) {
     return FromAuth.selectAuthError(store[AUTH]);
 }
@@ -31,18 +31,18 @@ export function authUser (store) {
     return FromAuth.selectAuthUser(store[AUTH]);
 }
 
-//  Deck  ---------------------------------------------------------- Deck Selectors  //
-export function deckByKey (store, id) {
-    return FromDeck.selectDeckByKey(store[DECK], id);
+//  Collection  ------------------------------------------------ Collection Selectors  //
+export function cards (store) {
+    return FromColl.selectCards(store[COLL]);
 }
-export function decks (store, collection) {
-    return FromDeck.selectDecks(store[DECK], collection);
+export function cardsIsLoading (store) {
+    return FromColl.selectCardsIsLoading(store[COLL]);
 }
-export function decksBy (store, collection, sort) {
-    return FromDeck.selectDecksBy(store[DECK], collection, sort);
+export function decks (store) {
+    return FromDeck.selectDecks(store[COLL]);
 }
-export function deckIsLoading (store) {
-    return FromDeck.selectDecksIsLoading(store[DECK]);
+export function decksIsLoading (store) {
+    return FromDeck.selectDecksIsLoading(store[COLL]);
 }
 
 //  Modal  -------------------------------------------------------- Modal Selectors  //
