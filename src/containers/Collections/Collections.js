@@ -420,8 +420,6 @@ class Collections extends Component {
         }));
     }
 
-
-
     //  EVENT HANDLERS v2  //
     onActionClick = () => {
         let id = utility.createHashId(0);
@@ -444,7 +442,6 @@ class Collections extends Component {
             if (this.state.aside.state === 99) {
                 this.state.history.undo();
                 this.setAsideState(0);
-                //this.setAsideData(this.state.history.last);
             }
         }
     }
@@ -504,6 +501,12 @@ class Collections extends Component {
         }
     }
 
+    handle_onItemDelete = id => {
+        this.removeSelected(id);
+        this.removeItem(id);
+        this.props.deleteDeck_async(this.props.select_token, id);
+    }
+
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
@@ -512,7 +515,11 @@ class Collections extends Component {
                 <Header
                     onA={this.onAsideToggle}
                     onB={this.onAsideToggle}
-                    onC={this.foo}
+                    actions={{
+                        deleteItem: this.handle_onItemDelete
+                    }}
+                    selected={this.state.selected}
+                    collection={this.state.decks}
                     onClick={this.onAsideClose}
                     onNavigation={this.onAsideToggle}/>
                 <main

@@ -11,8 +11,14 @@ import HeaderCSS from './Header.module.css';
 const header = (props) => {
     const handle_onClick = (event) => {
         event.stopPropagation();
-
         props.onClick();
+    }
+
+    const handle_onBulkDelete = () => {
+        const selected = props.selected;
+        selected.forEach(id => {
+            props.actions.deleteItem(id);
+        });
     }
 
     return (
@@ -25,7 +31,7 @@ const header = (props) => {
                 <Toolbar
                     onA={props.onA}
                     onB={props.onB}
-                    onC={props.onC}/>
+                    onC={handle_onBulkDelete}/>
                 <Dashboard
                     onNavigation={props.onNavigation}/>
             </div>
