@@ -18,7 +18,7 @@ class In extends Component {
     
     render() {
         let inContent = (<Throbber/>);
-        if (!this.props.select_decksIsLoading && !this.props.select_cardsIsLoading && !this.props.userIsLoading) {
+        if (!this.props.select_decksIsLoading && !this.props.select_cardsIsLoading && !this.props.select_userIsLoading) {
             inContent = <Redirect to="/u"/>;
         }
         return (

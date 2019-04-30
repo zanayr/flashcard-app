@@ -55,7 +55,6 @@ export const getUser_async = (token, auth) => {
         dispatch(getUser_init());
         axios.get('/users.json?auth=' + token + '&orderBy="auth"&equalTo="' + auth + '"')
         .then(response => {
-            console.log(response);
             dispatch(getUser_success(response.data));
         })
         .catch(error => {

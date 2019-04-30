@@ -54,7 +54,8 @@ class Collections extends Component {
     componentDidMount () {
         this.setState(prev => ({
             ...prev,
-            decks: this.props.select_decks
+            decks: this.props.select_decks,
+            cards: this.props.select_cards
         }));
         this.setState(prev => ({
             ...prev,
@@ -148,11 +149,11 @@ class Collections extends Component {
     }
 
     createItem (item) {
-        console.log(item);
+        console.log('create item', this.state.state);
         this.setState(prev => ({
             ...prev,
-            decks: {
-                ...prev.decks,
+            [this.state.state]: {
+                ...prev[this.state.state],
                 [item.id]: item
             }
         }));
@@ -240,14 +241,25 @@ class Collections extends Component {
     //  EVENT HANDLERS v2  //
     onActionClick = () => {
         let id = utility.createHashId(0);
-        let item = {
-            details: 'These are details for this flashcard',
-            id: id,
-            title: id + ' Flashcard Deck',
-            user: this.props.select_user
+        let item;
+        if (this.state.state === 'decks') {
+            item = {
+                details: 'These are details for this flashcard',
+                id: id,
+                title: id + ' Flashcard Deck',
+                user: this.props.select_user
+            }
+        } else {
+            item = {
+                details: 'These are details for this card',
+                id: id,
+                title: id + ' Flashcard',
+                user: this.props.select_user
+            }
         }
+        console.log('create', this.state.state);
         this.createItem(item);
-        this.props.postDeck_async(this.props.select_token, item);
+        //this.props.patch_async(this.state.state, this.props.select_token, item);
     }
 
     //  Aside  -------------------------------------------------------------  Aside  //
@@ -276,19 +288,18 @@ class Collections extends Component {
     //  List  ---------------------------------------------------------------  List  //
     onListOut = () => {
         if (this.state.aside.isActive) {
-            console.log('here');
             this.onAsideClose();
         }
     }
     onItemDelete = id => {
         this.removeSelected(id);
         this.removeItem(id);
-        this.props.deleteDeck_async(this.props.select_token, id);
+        this.props.delete_async(this.state.state, this.props.select_token, id);
     }
     onItemUpdate = (id) => {
         this.clearAsideData();
         this.clearAsideActions();
-        this.props.putDeck_async(this.props.select_token, this.getItemById(id));
+        this.props.put_async(this.state.state, this.props.select_token, this.getItemById(id));
     }
     onItemChange = (id, target, value) => {
         this.updateItem(id, target, value);
@@ -320,7 +331,6 @@ class Collections extends Component {
 
     handle_onTabCreate = tab => {
         let tabId = utility.createHashId(0);
-        console.log(tabId, tab);
         this.setState(prev => ({
             ...prev,
             tabs: {
@@ -390,7 +400,7 @@ class Collections extends Component {
     handle_onItemDelete = id => {
         this.removeSelected(id);
         this.removeItem(id);
-        this.props.deleteDeck_async(this.props.select_token, id);
+        this.props.delete_async(this.state.state, this.props.select_token, id);
     }
 
 
@@ -404,7 +414,6 @@ class Collections extends Component {
                 <TabForm onConfirm={this.handle_onTabCreate}/>
             );
         } else {
-            console.log(this.state[this.state.state]);
             content = (
                 <List
                     backingCollection={this.state[this.state.state]}
@@ -453,16 +462,17 @@ class Collections extends Component {
 const mapStateToProps = state => {
     return {
         select_decks: select.decks(state),
+        select_cards: select.cards(state),
         select_token: select.authToken(state),
         select_user: select.authUser(state)
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
-        delete_async: (token, id) => dispatch(actions.delete_async(token, id)),
+        delete_async: (url, token, id) => dispatch(actions.delete_async(url, token, id)),
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
-        patch_async: (token, data) => dispatch(actions.patch_async(token, data)),
-        put_async: (token, data) => dispatch(actions.put_async(token, data)),
+        patch_async: (url, token, data) => dispatch(actions.patch_async(url, token, data)),
+        put_async: (url, token, data) => dispatch(actions.put_async(url, token, data)),
 
     };
 };

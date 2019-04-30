@@ -14,7 +14,6 @@ class QuickTab extends Component {
     }
 
     render () {
-        console.log('rendering tab');
         let css = [styles.QuickTab];
         if (this.props.active) {
             css.push(styles.Active);

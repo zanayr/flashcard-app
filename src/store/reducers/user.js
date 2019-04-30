@@ -22,7 +22,6 @@ const getUser_init = (state, action) => {
     };
 };
 const getUser_succ = (state, action) => {
-    console.log(action.payload);
     return {
         ...state,
         user: {...action.payload},
@@ -77,7 +76,7 @@ export function selectUserInfo (state) {
     return state.user.info;
 }
 export function selectUserIsLoading (state) {
-    return state.user.isLoading;
+    return state.isLoading;
 }
 export function selectUserPreviliage (state) {
     return state.user.previliage;
