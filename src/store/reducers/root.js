@@ -55,6 +55,9 @@ export function modals (store) {
 }
 
 //  User  ---------------------------------------------------------  User Selectors  //
+export function userId (store) {
+    return FromUser.selectUserId(store[USER]);
+}
 export function userIsLoading (store) {
     return FromUser.selectUserIsLoading(store[USER]);
 }

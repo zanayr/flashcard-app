@@ -12,8 +12,10 @@ export {
 } from './collection';
 
 export {
+    deleteUserTab_async,
     getUser_async,
     patchUser_async,
+    patchUserTab_async,
     putUser_async
 } from './user'
 

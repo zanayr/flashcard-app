@@ -328,26 +328,28 @@ class Collections extends Component {
     }
 
     handle_onTabCreate = tab => {
-        let tabId = utility.createHashId(0);
+        let t = {
+            canDelete: true,
+            id: utility.createHashId(0),
+            isActive: false,
+            name: tab.name
+        }
         this.setState(prev => ({
             ...prev,
             tabs: {
                 ...prev.tabs,
-                [tabId]: {
-                    canDelete: true,
-                    isActive: false,
-                    name: tab.name
-                }
+                [t.id]: t
             }
         }));
         this.setState(prev => ({
             ...prev,
-            [tabId]: {}
+            [t.id]: {}
         }));
         this.setState(prev => ({
             ...prev,
-            state: tabId
+            state: t.id
         }));
+        this.props.patchUserTab_async(this.props.select_token, this.props.select_userId, t);
     }
     handle_onTabAdd = tab => {
         this.setState(prev => ({
@@ -462,14 +464,17 @@ const mapStateToProps = state => {
         select_decks: select.decks(state),
         select_cards: select.cards(state),
         select_token: select.authToken(state),
-        select_user: select.authUser(state)
+        select_user: select.authUser(state),
+        select_userId: select.userId(state)
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
         delete_async: (url, token, id) => dispatch(actions.delete_async(url, token, id)),
+        deleteUserTab_async: (token, auth, id) => dispatch(actions.deleteUserTab_async(token, auth, id)),
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
         patch_async: (url, token, data) => dispatch(actions.patch_async(url, token, data)),
+        patchUserTab_async: (token, auth, data) => dispatch(actions.patchUserTab_async(token, auth, data)),
         put_async: (url, token, data) => dispatch(actions.put_async(url, token, data)),
 
     };

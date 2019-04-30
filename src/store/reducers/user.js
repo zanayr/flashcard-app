@@ -22,9 +22,10 @@ const getUser_init = (state, action) => {
     };
 };
 const getUser_succ = (state, action) => {
+    console.log(action.payload);
     return {
         ...state,
-        user: {...action.payload},
+        user: action.payload,
         error: null,
         isLoading: false
     };
@@ -47,7 +48,7 @@ const putUser_succ = (state, action) => {
 //  Tabs  //
 const deleteTab_succ = (state, action) => {
     let tabs = state.tabs;
-    delete tabs[action.payload.data.id];
+    delete tabs[action.payload];
     return {
         ...state,
         tabs: {
@@ -60,7 +61,7 @@ const patchTab_succ = (state, action) => {
         ...state,
         tabs: {
             ...state.tabs,
-            [action.payload.data.id]: {...action.payload.data}
+            [action.payload.data.id]: {...action.payload}
         }
     }
 }
@@ -99,6 +100,10 @@ const reducer = (state=initialState, action) => {
 //  STORE SELECTORS  ---------------------------------------------------  SELECTORS  //
 export function selectUser (state) {
     return state.user;
+}
+export function selectUserId (state) {
+    console.log(state.user.id);
+    return state.user.id;
 }
 export function selectUserInfo (state) {
     return state.user.info;

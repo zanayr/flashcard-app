@@ -80,7 +80,11 @@ export const getUser_async = (token, auth) => {
         dispatch(getUser_init());
         axios.get('/users.json?auth=' + token + '&orderBy="auth"&equalTo="' + auth + '"')
         .then(response => {
-            dispatch(getUser_success(response.data));
+            let data = {};
+            Object.keys(response.data).map(key => {
+                data = response.data[key];
+            });
+            dispatch(getUser_success(data));
         })
         .catch(error => {
             dispatch(getUser_fail(error));
@@ -116,9 +120,9 @@ export const putUser_async = (token, data) => {
 
 
 //  ASYNC TAB FUNCTIONS  ---------------------------------  ASYNC TAB FUNCTIONS  //
-export const deleteUserTab_async = (token, auth, id) => {
+export const deleteUserTab_async = (token, user, id) => {
     return dispatch => {
-        axios.delete('/users/' + auth + '/tabs/' + id + '.json?auth=' + token)
+        axios.delete('/users/' + user + '/tabs/' + id + '.json?auth=' + token)
         .then(response => {
             dispatch(deleteTab_success(id));
         })
@@ -127,11 +131,12 @@ export const deleteUserTab_async = (token, auth, id) => {
         });
     };
 };
-export const patchUserTab_async = (token, auth, data) => {
+export const patchUserTab_async = (token, user, data) => {
+    console.log({...data});
     return dispatch => {
-        axios.patch('/users/' + auth + '/tabs.json?auth=' + token, data)
+        axios.patch('/users/' + user + '/tabs/' + data.id + '/.json?auth=' + token, data)
         .then(response => {
-            dispatch(patchUserTab_success(data));
+            dispatch(patchUserTab_success({...data}));
         })
         .catch(error => {
             dispatch(patchUserTab_fail(error));
