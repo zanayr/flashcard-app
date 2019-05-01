@@ -248,7 +248,6 @@ class Collections extends Component {
             item = {
                 details: 'These are details for this flashcard',
                 id: id,
-                tags: [],
                 title: id + ' Flashcard Deck',
                 user: this.props.select_user
             }
@@ -256,7 +255,6 @@ class Collections extends Component {
             item = {
                 details: 'These are details for this card',
                 id: id,
-                tags: [],
                 title: id + ' Flashcard',
                 user: this.props.select_user
             }
@@ -302,7 +300,8 @@ class Collections extends Component {
     onItemUpdate = () => {
         this.clearAsideData();
         this.clearAsideActions();
-        this.handle_onCloseQuickInspect()
+        this.handle_onCloseQuickInspect();
+        console.log('new item:', this.getItemById(this.state.aside.data.id));
         this.props.put_async(this.state.state, this.props.select_token, this.getItemById(this.state.aside.data.id));
     }
     onItemTagAdd = tag => {

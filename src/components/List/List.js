@@ -68,6 +68,9 @@ class List extends Component {
         let listItems = Object.keys(this.props.backingCollection).map(id => {
             let item = this.props.backingCollection[id];
             let showContext = this.state.selected.length === 1 && this.state.selected[0] === id;
+            if (!item.tags) {
+                item.tags = [];
+            }
             return (
                 <ListItem
                     detail={item.details}

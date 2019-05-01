@@ -38,16 +38,10 @@ export const getAll_init = (data) => {
     }
 }
 export const getAll_success = (store, data) => {
-    let d = Object.keys(data).map(key => {
-        return {
-            ...data[key],
-            tags: []
-        }
-    });
     return {
         type: actionTypes.GET_SUCC,
         payload: {
-            data: d,
+            data: data,
             store: store
         }
     }
@@ -133,6 +127,7 @@ export const patch_async = (url, token, data) => {
     };
 };
 export const put_async = (url, token, data) => {
+    console.log('actions', data);
     return dispatch => {
         axios.put('/' + url + '/' + data.id + '.json?auth=' + token, data)
         .then(response => {
