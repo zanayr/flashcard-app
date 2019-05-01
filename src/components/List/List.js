@@ -64,40 +64,60 @@ class List extends Component {
     }
 
 
+    checkFilter (item) {
+        let match = true;
+        if (this.props.filters.tags.length) {
+            this.props.filters.tags.forEach(tag => {
+                if (item.tags.indexOf(tag) < 0 && match) {
+                    match = false;
+                }
+            });
+        }
+        if (this.props.filters.groups.length) {
+            this.props.filters.groups.forEach(group => {
+                if (item.groups.indexOf(group) < 0 && match) {
+                    match = false;
+                }
+            });
+        }
+        return match;
+    }
+
     render () {
         let listItems = Object.keys(this.props.backingCollection).map(id => {
             let item = this.props.backingCollection[id];
             let showContext = this.state.selected.length === 1 && this.state.selected[0] === id;
-            if (!item.tags) {
-                item.tags = [];
+
+            if (this.checkFilter(item)) {
+                return (
+                    <ListItem
+                        detail={item.details}
+                        display={item.title}
+                        tags={item.tags}
+                        key={id}
+                        onSelect={() => this.onItemSelect(id)}
+                        selected={this.state.selected.indexOf(id) > -1}>
+                        <ContextAction
+                            action={() => this.props.onInspect(id)}
+                            active={showContext}>
+                            Inspect
+                        </ContextAction>
+                        <ContextAction
+                            action={this.onItemDelete}
+                            active={showContext}
+                            destructive>
+                            Delete
+                        </ContextAction>
+                        <ContextConfirm
+                            action={() => this.onItemConfirm(id)}
+                            active={this.state.showConfirm && showContext}>
+                            Confirm
+                        </ContextConfirm>
+                    </ListItem>
+                );
+            } else {
+                return null;
             }
-            console.log(this.props.filters);
-            return (
-                <ListItem
-                    detail={item.details}
-                    display={item.title}
-                    tags={item.tags}
-                    key={id}
-                    onSelect={() => this.onItemSelect(id)}
-                    selected={this.state.selected.indexOf(id) > -1}>
-                    <ContextAction
-                        action={() => this.props.onInspect(id)}
-                        active={showContext}>
-                        Inspect
-                    </ContextAction>
-                    <ContextAction
-                        action={this.onItemDelete}
-                        active={showContext}
-                        destructive>
-                        Delete
-                    </ContextAction>
-                    <ContextConfirm
-                        action={() => this.onItemConfirm(id)}
-                        active={this.state.showConfirm && showContext}>
-                        Confirm
-                    </ContextConfirm>
-                </ListItem>
-            );
         });
 
         return (
