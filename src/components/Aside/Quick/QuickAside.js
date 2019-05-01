@@ -14,6 +14,7 @@ import styles from './QuickAside.module.css';
 class QuickAside extends Component {
     state = {
         form: this.props.data,
+        groups: [],
         tags: []
     }
     form = React.createRef();
@@ -33,17 +34,17 @@ class QuickAside extends Component {
     validate () {
         return this.form.current.reportValidity();
     }
-    //  Tags  //
-    add (tag) {
+    //  Tags & Groups  //
+    add (collection, item) {
         this.setState(prev => ({
             ...prev,
-            tags: prev.tags.concat(tag)
+            [collection]: prev[collection].concat(item)
         }));
     }
-    remove (tag) {
+    remove (collection, item) {
         this.setState(prev => ({
             ...prev,
-            tags: prev.tags.filter(t => t !== tag)
+            [collection]: prev[collection].filter(i => i !== item)
         }));
     }
 
@@ -56,17 +57,27 @@ class QuickAside extends Component {
     }
     handle_onConfirm = () => {
         if (this.validate()) {
-            this.props.actions.onConfirm(this.state);
+            this.props.actions.onConfirm({...this.state});
         }
     }
     //  Tags  //
     handle_onTagToggle = tag => {
         if (this.state.tags.indexOf(tag) > -1) {
-            this.remove(tag);
-            this.props.actions.onRemove(tag);
+            this.remove('tags', tag);
+            this.props.actions.onRemove('tags', tag);
         } else {
-            this.add(tag);
-            this.props.actions.onAdd(tag);
+            this.add('tags', tag);
+            this.props.actions.onAdd('tags', tag);
+        }
+    }
+    //  Groups  //
+    handle_onGroupToggle = group => {
+        if (this.state.tags.indexOf(group) > -1) {
+            this.remove('groups', group);
+            this.props.actions.onRemove('groups', group);
+        } else {
+            this.add('groups', group);
+            this.props.actions.onAdd('groups', group);
         }
     }
 
@@ -87,10 +98,16 @@ class QuickAside extends Component {
                             data={this.state.form}
                             onChange={this.handle_onChange}/>
                     </form>
+                    <h4>Tags</h4>
                     <TagForm
                         activeCollection={this.state.tags}
-                        backingCollection={['foo', 'bar', 'spam', 'Really Long Tag Name', 'Tag', 'Tag2']}
+                        backingCollection={['foo', 'bar', 'spam']}
                         toggle={this.handle_onTagToggle}/>
+                    <h4>Groups</h4>
+                    <TagForm
+                        activeCollection={this.state.groups}
+                        backingCollection={['fizz', 'buzz']}
+                        toggle={this.handle_onGroupToggle}/>
                     </div>
                     <div>
                         <BarButton onClick={this.handle_onConfirm}>Save</BarButton>

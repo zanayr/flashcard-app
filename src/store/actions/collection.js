@@ -38,6 +38,15 @@ export const getAll_init = (data) => {
     }
 }
 export const getAll_success = (store, data) => {
+    Object.keys(data).map(key => {
+        if (!data[key].tags) {
+            data[key].tags = [];
+        }
+        if (!data[key].groups) {
+            data[key].groups = [];
+        }
+    });
+    console.log(data);
     return {
         type: actionTypes.GET_SUCC,
         payload: {

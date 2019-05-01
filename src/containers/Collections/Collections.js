@@ -304,26 +304,30 @@ class Collections extends Component {
         console.log('new item:', this.getItemById(this.state.aside.data.id));
         this.props.put_async(this.state.state, this.props.select_token, this.getItemById(this.state.aside.data.id));
     }
-    onItemTagAdd = tag => {
+    onItemFilterAdd = (filter, name) => {
+        let id = this.state.aside.data.id;
+        let current = this.state.state;
         this.setState(prev => ({
             ...prev,
-            [this.state.state]: {
-                ...prev[this.state.state],
-                [this.state.aside.data.id]: {
-                    ...prev[this.state.state][this.state.aside.data.id],
-                    tags: prev[this.state.state][this.state.aside.data.id].tags.concat(tag)
+            [current]: {
+                ...prev[current],
+                [id]: {
+                    ...prev[current][id],
+                    [filter]: prev[current][id][filter].concat(name)
                 }
             }
         }));
     }
-    onItemTagRemove = tag => {
+    onItemFilterRemove = (filter, name) => {
+        let id = this.state.aside.data.id;
+        let current = this.state.state;
         this.setState(prev => ({
             ...prev,
-            [this.state.state]: {
-                ...prev[this.state.state],
-                [this.state.aside.data.id]: {
-                    ...prev[this.state.state][this.state.aside.data.id],
-                    tags: prev[this.state.state][this.state.aside.data.id].tags.filter(t => t !== tag)
+            [current]: {
+                ...prev[current],
+                [id]: {
+                    ...prev[current][id],
+                    [filter]: prev[current][id][filter].filter(n => n !== name)
                 }
             }
         }));
@@ -342,8 +346,8 @@ class Collections extends Component {
         this.setAsideAction({
             onChange: this.onItemChange,
             onConfirm: this.onItemUpdate,
-            onAdd: this.onItemTagAdd,
-            onRemove: this.onItemTagRemove
+            onAdd: this.onItemFilterAdd,
+            onRemove: this.onItemFilterRemove
         });
     }
     onItemSelect = id => {
