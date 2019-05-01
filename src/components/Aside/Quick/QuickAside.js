@@ -72,7 +72,7 @@ class QuickAside extends Component {
     }
     //  Groups  //
     handle_onGroupToggle = group => {
-        if (this.state.tags.indexOf(group) > -1) {
+        if (this.state.groups.indexOf(group) > -1) {
             this.remove('groups', group);
             this.props.actions.onRemove('groups', group);
         } else {
