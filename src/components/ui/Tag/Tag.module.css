@@ -1,0 +1,33 @@
+.Tag {
+    background-color: lightslategray;
+    cursor: pointer;
+    display: inline-block;
+    height: 28px;
+    margin: 4px;
+    width: auto;
+}
+.Tag.Active {
+    background-color: darkslategray;
+    color: white;
+}
+.Tag > div {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 4px;
+}
+
+
+/* Button */
+.Tab > div button {
+    display: none;
+    height: 28px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 28px;
+}
+.Tab:hover > div button {
+    display: block;
+}
