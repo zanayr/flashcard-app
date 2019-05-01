@@ -69,9 +69,7 @@ class Collections extends Component {
                     toggle: this.handle_onTabToggle,
                 }
             }
-        }), () => {
-            console.log(this.props.select_userTabs);
-        })
+        }));
     }
 
 
@@ -171,14 +169,16 @@ class Collections extends Component {
     updateItem (id, target, value) {
         this.setState(prev => ({
             ...prev,
-            decks: {
-                ...prev.decks,
+            [this.state.state]: {
+                ...prev[this.state.state],
                 [id]: {
-                    ...prev.decks[id],
+                    ...prev[this.state.state][id],
                     [target]: value
                 }
             }
-        }))
+        }), () => {
+            console.log(this.state[this.state.state][id][target]);
+        });
     }
     getItemById (id) {
         return {
@@ -248,6 +248,7 @@ class Collections extends Component {
             item = {
                 details: 'These are details for this flashcard',
                 id: id,
+                tags: [],
                 title: id + ' Flashcard Deck',
                 user: this.props.select_user
             }
@@ -255,6 +256,7 @@ class Collections extends Component {
             item = {
                 details: 'These are details for this card',
                 id: id,
+                tags: [],
                 title: id + ' Flashcard',
                 user: this.props.select_user
             }
@@ -297,13 +299,37 @@ class Collections extends Component {
         this.removeItem(id);
         this.props.delete_async(this.state.state, this.props.select_token, id);
     }
-    onItemUpdate = (id) => {
+    onItemUpdate = () => {
         this.clearAsideData();
         this.clearAsideActions();
-        this.props.put_async(this.state.state, this.props.select_token, this.getItemById(id));
+        this.props.put_async(this.state.state, this.props.select_token, this.getItemById(this.state.aside.data.id));
     }
-    onItemChange = (id, target, value) => {
-        this.updateItem(id, target, value);
+    onItemTagAdd = tag => {
+        this.setState(prev => ({
+            ...prev,
+            [this.state.state]: {
+                ...prev[this.state.state],
+                [this.state.aside.data.id]: {
+                    ...prev[this.state.state][this.state.aside.data.id],
+                    tags: prev[this.state.state][this.state.aside.data.id].tags.concat(tag)
+                }
+            }
+        }));
+    }
+    onItemTagRemove = tag => {
+        this.setState(prev => ({
+            ...prev,
+            [this.state.state]: {
+                ...prev[this.state.state],
+                [this.state.aside.data.id]: {
+                    ...prev[this.state.state][this.state.aside.data.id],
+                    tags: prev[this.state.state][this.state.aside.data.id].tags.filter(t => t !== tag)
+                }
+            }
+        }));
+    }
+    onItemChange = (target, value) => {
+        this.updateItem(this.state.aside.data.id, target, value);
     }
     onItemInspect = id => {
         this.setAsideState(99);
@@ -315,7 +341,9 @@ class Collections extends Component {
         });
         this.setAsideAction({
             onChange: this.onItemChange,
-            onConfirm: this.onItemUpdate
+            onConfirm: this.onItemUpdate,
+            onAdd: this.onItemTagAdd,
+            onRemove: this.onItemTagRemove
         });
     }
     onItemSelect = id => {

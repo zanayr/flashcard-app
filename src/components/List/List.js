@@ -72,6 +72,7 @@ class List extends Component {
                 <ListItem
                     detail={item.details}
                     display={item.title}
+                    tags={item.tags}
                     key={id}
                     onSelect={() => this.onItemSelect(id)}
                     selected={this.state.selected.indexOf(id) > -1}>

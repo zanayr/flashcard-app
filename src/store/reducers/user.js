@@ -22,7 +22,7 @@ const getUser_init = (state, action) => {
     };
 };
 const getUser_succ = (state, action) => {
-    console.log(action.payload);
+    console.log('getting user...');
     return {
         ...state,
         user: action.payload,
@@ -114,7 +114,6 @@ export function selectUserPreviliage (state) {
     return state.user.previliage;
 }
 export function selectUserTabs (state) {
-    console.log(state.user.tabs);
     return state.user.tabs;
 }
 

@@ -38,10 +38,16 @@ export const getAll_init = (data) => {
     }
 }
 export const getAll_success = (store, data) => {
+    let d = Object.keys(data).map(key => {
+        return {
+            ...data[key],
+            tags: []
+        }
+    });
     return {
         type: actionTypes.GET_SUCC,
         payload: {
-            data: data,
+            data: d,
             store: store
         }
     }

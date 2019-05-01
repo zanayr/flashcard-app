@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import Column from '../../../hoc/Column/Column';
+import Row from '../../../hoc/Row/Row';
 
 import ListItemStyles from './ListItem.module.css';
 
@@ -16,17 +17,25 @@ class ListItem extends Component {
         if (this.props.selected) {
             css = [ListItemStyles.ListItem, ListItemStyles.Selected];
         }
+        let tags = this.props.tags.map(tag => {
+            return (
+                <div key={tag}><p>{tag}</p></div>
+            );
+        })
         return (
             <article
                 className={css.join(' ')}
                 onClick={(e) => this.onClick(e)}>
-                <div>
-                    <Column>
+                <Row>
+                    <div>
                         <h3>{this.props.display}</h3>
                         <p>{this.props.detail}</p>
-                    </Column>
+                    </div>
+                    <div>
+                        {tags}
+                    </div>
                     {this.props.children}
-                </div>
+                </Row>
             </article>
         );
     }
