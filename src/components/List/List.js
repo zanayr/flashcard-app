@@ -71,6 +71,7 @@ class List extends Component {
             if (!item.tags) {
                 item.tags = [];
             }
+            console.log(this.props.filters);
             return (
                 <ListItem
                     detail={item.details}

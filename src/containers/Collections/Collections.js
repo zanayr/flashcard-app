@@ -48,6 +48,14 @@ class Collections extends Component {
                 isActive: true,
                 canDelete: false
             }
+        },
+        filters: {
+            tags: [],
+            groups: []
+        },
+        user: {
+            tags: ['foo', 'bar', 'spam'],
+            groups: ['fizz', 'buzz']
         }
     }
 
@@ -128,9 +136,7 @@ class Collections extends Component {
         this.setState(prev => ({
             ...prev,
             selected: []
-        }), () => {
-            console.log(this.state.selected);
-        });
+        }));
     }
     removeSelected (key) {
         this.setState(prev => ({
@@ -178,9 +184,7 @@ class Collections extends Component {
                     [target]: value
                 }
             }
-        }), () => {
-            console.log(this.state[this.state.state][id][target]);
-        });
+        }));
     }
     getItemById (id) {
         return {
@@ -441,6 +445,38 @@ class Collections extends Component {
         this.props.delete_async(this.state.state, this.props.select_token, id);
     }
 
+    toggleFilter = (category, filter) => {
+        if (this.state.filters[category].indexOf(filter) > -1) {
+            this.setState(prev => ({
+                ...prev,
+                filters: {
+                    ...prev.filters,
+                    [category]: prev.filters[category].filter(f => f !== filter)
+                }
+            }));
+        } else {
+            this.setState(prev => ({
+                ...prev,
+                filters: {
+                    ...prev.filters,
+                    [category]: prev.filters[category].concat(filter)
+                }
+            }));
+        }
+    }
+
+    handle_onFilterOpen = category => {
+        this.setAsideState(2);
+        this.setAsideData({
+            filters: this.state.user[category],
+            category: category
+        });
+        this.setAsideAction({
+            onToggle: this.toggleFilter,
+        });
+        this.toggleAside();
+    }
+
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
@@ -455,6 +491,7 @@ class Collections extends Component {
             content = (
                 <List
                     backingCollection={this.state[this.state.state]}
+                    filters={this.state.filters}
                     onConfirm={this.onItemDelete}
                     onInspect={this.onItemInspect}
                     onSelect={this.onItemSelect}/>
@@ -463,10 +500,9 @@ class Collections extends Component {
         return (
             <Aux>
                 <Header
-                    onA={this.onAsideToggle}
-                    onB={this.onAsideToggle}
                     actions={{
-                        deleteItem: this.handle_onItemDelete
+                        deleteItem: this.handle_onItemDelete,
+                        openFilter: this.handle_onFilterOpen
                     }}
                     selected={this.state.selected}
                     collection={this.state.decks}

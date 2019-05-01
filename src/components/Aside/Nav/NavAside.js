@@ -24,7 +24,7 @@ const navigationAside = (props) => {
             //     {link.value}
             // </NavigationButton>
             <BarLink
-                key={createHashId()}
+                key={createHashId(0)}
                 path={link.path}>{link.value}
             </BarLink>
         );

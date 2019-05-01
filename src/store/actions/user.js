@@ -132,7 +132,6 @@ export const deleteUserTab_async = (token, user, id) => {
     };
 };
 export const patchUserTab_async = (token, user, data) => {
-    console.log({...data});
     return dispatch => {
         axios.patch('/users/' + user + '/tabs/' + data.id + '/.json?auth=' + token, data)
         .then(response => {

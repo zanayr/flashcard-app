@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import NavigationAiside from '../Nav/NavAside';
+import FilterAside from '../Filter/FilterAside';
 import QuickInspectAside from '../Quick/QuickAside';
 
 import AppCSS from '../../../App.module.css';
@@ -24,7 +25,10 @@ const aside = (props) => {
             break;
         case 2:
             asideContent = (
-                <h3>Aside #{props.state}</h3>
+                <FilterAside
+                    actions={props.actions}
+                    data={props.data}
+                    onClose={props.onClose}/>
             );
             break;
         case 3:

@@ -46,7 +46,6 @@ export const getAll_success = (store, data) => {
             data[key].groups = [];
         }
     });
-    console.log(data);
     return {
         type: actionTypes.GET_SUCC,
         payload: {

@@ -22,7 +22,6 @@ const getUser_init = (state, action) => {
     };
 };
 const getUser_succ = (state, action) => {
-    console.log('getting user...');
     return {
         ...state,
         user: action.payload,

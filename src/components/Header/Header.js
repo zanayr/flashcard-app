@@ -19,6 +19,9 @@ const header = (props) => {
         selected.forEach(id => {
             props.actions.deleteItem(id);
         });
+    };
+    const handle_onFilterBy = (filter) => {
+        props.actions.openFilter(filter);
     }
 
     return (
@@ -29,8 +32,8 @@ const header = (props) => {
                 <ReturnLink/>
                 <Search/>
                 <Toolbar
-                    onA={props.onA}
-                    onB={props.onB}
+                    onA={() => handle_onFilterBy('tags')}
+                    onB={() => handle_onFilterBy('groups')}
                     onC={handle_onBulkDelete}/>
                 <Dashboard
                     onNavigation={props.onNavigation}/>
