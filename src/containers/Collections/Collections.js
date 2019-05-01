@@ -302,6 +302,7 @@ class Collections extends Component {
     onItemUpdate = () => {
         this.clearAsideData();
         this.clearAsideActions();
+        this.handle_onCloseQuickInspect()
         this.props.put_async(this.state.state, this.props.select_token, this.getItemById(this.state.aside.data.id));
     }
     onItemTagAdd = tag => {
@@ -388,7 +389,7 @@ class Collections extends Component {
             state: 0
         }));
     }
-    handle_onCloseQuickInspect = tab => {
+    handle_onCloseQuickInspect = () => {
         this.setState(prev => ({
             ...prev,
             aside: {
