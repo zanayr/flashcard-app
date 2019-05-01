@@ -14,8 +14,8 @@ import styles from './QuickAside.module.css';
 class QuickAside extends Component {
     state = {
         form: this.props.data,
-        groups: [],
-        tags: []
+        groups: this.props.data.groups,
+        tags: this.props.data.tags
     }
     form = React.createRef();
 

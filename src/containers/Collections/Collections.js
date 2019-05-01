@@ -128,7 +128,9 @@ class Collections extends Component {
         this.setState(prev => ({
             ...prev,
             selected: []
-        }));
+        }), () => {
+            console.log(this.state.selected);
+        });
     }
     removeSelected (key) {
         this.setState(prev => ({
@@ -301,7 +303,7 @@ class Collections extends Component {
         this.clearAsideData();
         this.clearAsideActions();
         this.handle_onCloseQuickInspect();
-        console.log('new item:', this.getItemById(this.state.aside.data.id));
+        //this.clearSelected();
         this.props.put_async(this.state.state, this.props.select_token, this.getItemById(this.state.aside.data.id));
     }
     onItemFilterAdd = (filter, name) => {
