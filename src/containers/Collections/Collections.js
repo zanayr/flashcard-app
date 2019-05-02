@@ -106,15 +106,6 @@ class Collections extends Component {
             }
         }));
     }
-    // setAsideState (state) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             state: state
-    //         }
-    //     }));
-    // }
     toggleAside (state) {
         console.log('here');
         if (this.state.aside.isActive) {
@@ -225,24 +216,6 @@ class Collections extends Component {
             id: id
         }
     }
-    // clearAsideData () {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             data: {}
-    //         }
-    //     }));
-    // }
-    // clearAsideActions () {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             actions: {}
-    //         }
-    //     }));
-    // }
     resetItem = () => {
         this.setState(prev => ({
             ...prev,
@@ -304,15 +277,6 @@ class Collections extends Component {
 
     //  Aside  -------------------------------------------------------------  Aside  //
     handle_onAsideClose = state => {
-        // if (this.state.aside.isActive) {
-        //     this.clearAsideActions();
-        //     this.clearAsideData();
-        //     this.toggleAside();
-        //     if (this.state.aside.state === 99) {
-        //         this.state.history.undo();
-        //         this.setAsideState(0);
-        //     }
-        // }
         if (this.state.aside.state === 99) {
             this.state.history.undo();
             //this.setAsideState(0);
@@ -320,14 +284,6 @@ class Collections extends Component {
         this.closeAside();
     }
     handle_onAsideToggle = state => {
-        // if (this.state.aside.state === state) {
-        //     this.toggleAside();
-        // } else {
-        //     this.setAsideState(state);
-        //     if (!this.state.aside.isActive) {
-        //         this.toggleAside();
-        //     }
-        // }
         this.toggleAside(state);
     }
 
@@ -343,10 +299,6 @@ class Collections extends Component {
         this.props.delete_async(this.state.state, this.props.select_token, id);
     }
     onItemUpdate = () => {
-        // this.clearAsideData();
-        // this.clearAsideActions();
-        // this.handle_onCloseQuickInspect();
-        //this.clearSelected();
         this.closeAside();
         this.props.put_async(this.state.state, this.props.select_token, this.getItemById(this.state.aside.data.id));
     }
@@ -382,7 +334,6 @@ class Collections extends Component {
         this.updateItem(this.state.aside.data.id, target, value);
     }
     onItemInspect = id => {
-        //this.setAsideState(99);
         this.toggleAside(99);
         this.setAsideData(this.getItemById(id));
         this.setHistory({
@@ -506,7 +457,6 @@ class Collections extends Component {
     }
 
     handle_onFilterOpen = category => {
-        //this.setAsideState(2);
         this.setAsideData({
             filters: this.state.user[category],
             category: category
