@@ -472,6 +472,10 @@ class Collections extends Component {
         } else {
             mainContent = (
                 <TabForm
+                    data={{
+                        userTags: this.state.user.tags,
+                        userGroups: this.state.user.groups
+                    }}
                     groups={this.state.user.groups}
                     onConfirm={this.handle_onTabCreate}
                     tags={this.state.user.tags}/>

@@ -91,20 +91,20 @@ class TabForm extends Component {
                         onChange={this.handle_onChange}
                         required
                         target='name'/>
-                    <h4>Collection</h4>
+                    {/* <h4>Collection</h4>
                     <TagForm
                         activeCollection={this.state.collections}
                         backingCollection={['decks', 'cards']}
-                        toggle={this.handle_onCollToggle}/>
+                        toggle={this.handle_onCollToggle}/> */}
                     <h4>Tags</h4>
                     <TagForm
                         activeCollection={this.state.tags}
-                        backingCollection={this.props.tags}
+                        backingCollection={this.props.data.userTags}
                         toggle={this.handle_onTagToggle}/>
                     <h4>Groups</h4>
                     <TagForm
                         activeCollection={this.state.groups}
-                        backingCollection={this.props.groups}
+                        backingCollection={this.props.data.userGroups}
                         toggle={this.handle_onGroupToggle}/>
                     <Button
                         key='add'

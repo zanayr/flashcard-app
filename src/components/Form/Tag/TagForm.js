@@ -53,21 +53,28 @@ class TagForm extends Component {
                 </Tag>
             );
         });
+        let field = null;
+        if (this.props.field) {
+            field = (
+                <form ref={this.form}>
+                    <div>
+                        <TagField
+                            action={this.handle_onChange}
+                            label={this.props.field.label}
+                            placeholder={this.props.field.placeholder}
+                            value={this.state.add}/>
+                        <Button onClick={() => this.handle_onAdd(this.state.add)}>Add</Button>
+                    </div>
+                </form>
+            );
+        }
+
 
         return (
             <div className={styles.TagForm}>
                 <div>
                     {tags}
-                    <form ref={this.form}>
-                        <div>
-                            <TagField
-                                action={this.handle_onChange}
-                                label={this.props.field.label}
-                                placeholder={this.props.field.placeholder}
-                                value={this.state.add}/>
-                            <Button onClick={() => this.handle_onAdd(this.state.add)}>Add</Button>
-                        </div>
-                    </form>
+                    {field}
                 </div>
             </div>
         );
