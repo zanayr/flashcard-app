@@ -16,6 +16,14 @@ export const sortAlpha = (arr) => {
     });
 }
 
+export const sortAscByProp = (obj, property) => {
+    return Object.keys(obj).map(key => {
+        return [key, obj[key][property]];
+    }).sort((a, b) => {
+        return a[1] - b[1];
+    });
+}
+
 export const insertItem = (array, index, item) => {
     let newArray = array.slice();
     newArray.splice(index, 0, item);

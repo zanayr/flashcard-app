@@ -55,6 +55,9 @@ export function modals (store) {
 }
 
 //  User  ---------------------------------------------------------  User Selectors  //
+export function user (store) {
+    return FromUser.selectUser(store[USER]);
+}
 export function userId (store) {
     return FromUser.selectUserId(store[USER]);
 }

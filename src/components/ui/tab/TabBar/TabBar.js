@@ -16,25 +16,22 @@ const tabBar = (props) => {
         e.stopPropagation();
         props.actions.add();
     }
-    let tabs = Object.keys(props.backingCollection).map((tab, i) => {
-        if (tab === 'actions') {
-            return null
-        } else {
-            let content = tab;
-            if (props.backingCollection[tab].name) {
-                content = props.backingCollection[tab].name;
-            }
-            return (
-                <QuickTab
-                    active={props.backingCollection[tab].isActive}
-                    delete={props.backingCollection[tab].canDelete}
-                    key={tab}
-                    onClick={() => props.actions.toggle(tab)}
-                    onClose={() => props.actions.close(tab)}>
-                    {content}
-                </QuickTab>
-            )
+    let tabs = utility.sortAscByProp(props.backingCollection, 'order').map((orderedTab, i) => {
+        let tab = props.backingCollection[orderedTab[0]];
+        let isActive = false;
+        if (orderedTab[0] === props.current) {
+            isActive = true;
         }
+        return (
+            <QuickTab
+                active={isActive}
+                delete={tab.canDelete}
+                key={i}
+                onClick={() => props.actions.toggle(tab)}
+                onClose={() => props.actions.close(tab)}>
+                {tab.name}
+            </QuickTab>
+        );
     })
 
     return (

@@ -30,55 +30,65 @@ class Collections extends Component {
         },
         showConfirm: false,
         deleted: [],
-        decks: {},
-        cards: {},
+        decks: this.props.select_decks,
+        cards: this.props.select_cards,
         history: {
             store: {},
             undo: null
         },
         selected: [],
         state: 'decks',
-        tabs: {
-            actions: {},
-            cards: {
-                isActive: false,
-                canDelete: false
-            },
-            decks: {
-                isActive: true,
-                canDelete: false
-            }
-        },
+        // tabs: {
+        //     actions: {},
+        //     cards: {
+        //         isActive: false,
+        //         canDelete: false,
+        //         filters: {
+        //             groups: [],
+        //             tags: []
+        //         },
+        //         name: 'Cards',
+        //         order: 1
+        //     },
+        //     decks: {
+        //         isActive: true,
+        //         canDelete: false,
+        //         filters: {
+        //             groups: [],
+        //             tags: []
+        //         },
+        //         name: 'Decks',
+        //         order: 0
+        //     }
+        // },
         filters: {
             tags: [],
             groups: []
         },
-        user: {
-            tags: ['foo', 'bar', 'spam'],
-            groups: ['fizz', 'buzz']
-        }
+        user: this.props.select_user
     }
 
-    componentDidMount () {
-        this.setState(prev => ({
-            ...prev,
-            decks: this.props.select_decks,
-            cards: this.props.select_cards
-        }));
-        this.setState(prev => ({
-            ...prev,
-            tabs: {
-                ...prev.tabs,
-                ...this.props.select_userTabs,
-                actions: {
-                    add: this.handle_onTabAdd,
-                    click: this.handle_onTabBarClick,
-                    close: this.handle_onTabRemove,
-                    toggle: this.handle_onTabToggle,
-                }
-            }
-        }));
-    }
+    // componentDidMount () {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         decks: this.props.select_decks,
+    //         cards: this.props.select_cards,
+    //         user: this.props.select_user
+    //     }));
+        // this.setState(prev => ({
+        //     ...prev,
+        //     tabs: {
+        //         ...prev.tabs,
+        //         ...this.props.select_authUserTabs,
+        //         actions: {
+        //             add: this.handle_onTabAdd,
+        //             click: this.handle_onTabBarClick,
+        //             close: this.handle_onTabRemove,
+        //             toggle: this.handle_onTabToggle,
+        //         }
+        //     }
+        // }));
+    // }
 
 
 
@@ -258,14 +268,14 @@ class Collections extends Component {
                 details: 'These are details for this flashcard',
                 id: id,
                 title: id + ' Flashcard Deck',
-                user: this.props.select_user
+                user: this.props.select_authUser
             }
         } else {
             item = {
                 details: 'These are details for this card',
                 id: id,
                 title: id + ' Flashcard',
-                user: this.props.select_user
+                user: this.props.select_authUser
             }
         }
         this.createItem(item);
@@ -378,12 +388,12 @@ class Collections extends Component {
             ...prev,
             state: t.id
         }));
-        this.props.patchUserTab_async(this.props.select_token, this.props.select_userId, t);
+        this.props.patchUserTab_async(this.props.select_token, this.props.select_authUser, t);
     }
     handle_onTabAdd = tab => {
         this.setState(prev => ({
             ...prev,
-            state: 0
+            state: 'add'
         }));
     }
     handle_onCloseQuickInspect = () => {
@@ -404,7 +414,7 @@ class Collections extends Component {
                 ...tabs
             }
         }));
-        this.props.deleteUserTab_async(this.props.select_token, this.props.select_userId, tab);
+        this.props.deleteUserTab_async(this.props.select_token, this.props.select_authUser, tab);
     }
     handle_onTabToggle = tab => {
         const tabs = this.state.tabs;
@@ -471,15 +481,33 @@ class Collections extends Component {
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
-        let content = null;
-
-        //  Render Main Content  //
-        if (!this.state.state) {
-            content = (
-                <TabForm onConfirm={this.handle_onTabCreate}/>
-            );
-        } else {
-            content = (
+        // let tabs = null;
+        // let list = null;
+        // if (this.state.user.tabs) {
+        //     console.log(this.state.user.tabs);
+        //     list = (
+        //         <List
+        //             backingCollection={this.state[this.state.state]}
+        //             filters={this.state.filters}
+        //             onConfirm={this.onItemDelete}
+        //             onInspect={this.onItemInspect}
+        //             onSelect={this.onItemSelect}/>
+        //     );
+        //     tabs = (
+        //         <TabBar
+        //             actions={{
+        //                 add: this.handle_onTabAdd,
+        //                 click: this.handle_onTabBarClick,
+        //                 close: this.handle_onTabRemove,
+        //                 toggle: this.handle_onTabToggle,
+        //             }}
+        //             backingCollection={this.state.user.tabs}/>
+        //     );
+        // }
+        let mainContent = null;
+        console.log(this.state.state, this.state.user.tabs);
+        if (this.state.user.tabs[this.state.state]) {
+            mainContent = (
                 <List
                     backingCollection={this.state[this.state.state]}
                     filters={this.state.filters}
@@ -487,9 +515,11 @@ class Collections extends Component {
                     onInspect={this.onItemInspect}
                     onSelect={this.onItemSelect}/>
             );
+        } else {
+            mainContent = (
+                <TabForm />
+            );
         }
-
-
         return (
             <Aux>
                 <Header
@@ -505,9 +535,15 @@ class Collections extends Component {
                     onClick={this.onListOut}>
                     <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
                         <TabBar
-                            actions={this.state.tabs.actions}
-                            backingCollection={this.state.tabs}/>
-                        {content}
+                            actions={{
+                                add: this.handle_onTabAdd,
+                                click: this.handle_onTabBarClick,
+                                close: this.handle_onTabRemove,
+                                toggle: this.handle_onTabToggle,
+                            }}
+                            backingCollection={this.state.user.tabs}
+                            current={this.state.state}/>
+                        {mainContent}
                         <ActionButton
                             onClick={this.onActionClick}
                             state={this.state.action.state}
@@ -530,9 +566,10 @@ const mapStateToProps = state => {
         select_decks: select.decks(state),
         select_cards: select.cards(state),
         select_token: select.authToken(state),
-        select_user: select.authUser(state),
-        select_userId: select.userId(state),
-        select_userTabs: select.userTabs(state)
+        select_authUser: select.authUser(state),
+        select_user: select.user(state),
+        select_userId: select.userId(state)
+        //select_userTabs: select.userTabs(state)
     }
 }
 const mapDispatchToProps = dispatch => {
