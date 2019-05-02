@@ -11,7 +11,7 @@ import HeaderCSS from './Header.module.css';
 const header = (props) => {
     const handle_onClick = (event) => {
         event.stopPropagation();
-        props.onClick();
+        props.actions.closeAside();
     }
 
     const handle_onBulkDelete = () => {
@@ -34,11 +34,9 @@ const header = (props) => {
                 <Toolbar
                     onA={() => handle_onFilterBy('tags')}
                     onB={() => handle_onFilterBy('groups')}
-                    onD={() => props.actions.toggleAside('Hello')}
-                    onE={() => props.actions.toggleAside('World')}
                     onC={handle_onBulkDelete}/>
                 <Dashboard
-                    onNavigation={props.onNavigation}/>
+                    onNavigation={() => props.actions.toggleAside(1)}/>
             </div>
         </header>
     );

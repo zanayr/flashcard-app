@@ -106,21 +106,54 @@ class Collections extends Component {
             }
         }));
     }
-    setAsideState (state) {
-        this.setState(prev => ({
-            ...prev,
-            aside: {
-                ...prev.aside,
-                state: state
+    // setAsideState (state) {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         aside: {
+    //             ...prev.aside,
+    //             state: state
+    //         }
+    //     }));
+    // }
+    toggleAside (state) {
+        console.log('here');
+        if (this.state.aside.isActive) {
+            if (state !== this.state.aside.state && this.state.aside.isActive) {
+                console.log('1');
+                this.setState(prev => ({
+                    ...prev,
+                    aside: {
+                        ...prev.aside,
+                        state: state
+                    }
+                }));
+            } else {
+                console.log('3');
+                this.setState(prev => ({
+                    ...prev,
+                    aside: {
+                        ...prev.aside,
+                        isActive: false
+                    }
+                }));
             }
-        }));
+        } else {
+            this.setState(prev => ({
+                ...prev,
+                aside: {
+                    ...prev.aside,
+                    isActive: true,
+                    state: state
+                }
+            }));
+        }
     }
-    toggleAside () {
+    closeAside () {
         this.setState(prev => ({
             ...prev,
             aside: {
                 ...prev.aside,
-                isActive: !prev.aside.isActive
+                isActive: false
             }
         }));
     }
@@ -192,24 +225,24 @@ class Collections extends Component {
             id: id
         }
     }
-    clearAsideData () {
-        this.setState(prev => ({
-            ...prev,
-            aside: {
-                ...prev.aside,
-                data: {}
-            }
-        }));
-    }
-    clearAsideActions () {
-        this.setState(prev => ({
-            ...prev,
-            aside: {
-                ...prev.aside,
-                actions: {}
-            }
-        }));
-    }
+    // clearAsideData () {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         aside: {
+    //             ...prev.aside,
+    //             data: {}
+    //         }
+    //     }));
+    // }
+    // clearAsideActions () {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         aside: {
+    //             ...prev.aside,
+    //             actions: {}
+    //         }
+    //     }));
+    // }
     resetItem = () => {
         this.setState(prev => ({
             ...prev,
@@ -270,7 +303,7 @@ class Collections extends Component {
     }
 
     //  Aside  -------------------------------------------------------------  Aside  //
-    onAsideClose = state => {
+    handle_onAsideClose = state => {
         // if (this.state.aside.isActive) {
         //     this.clearAsideActions();
         //     this.clearAsideData();
@@ -280,23 +313,28 @@ class Collections extends Component {
         //         this.setAsideState(0);
         //     }
         // }
-        this.toggleAside();
-    }
-    onAsideToggle = state => {
-        if (this.state.aside.state === state) {
-            this.toggleAside();
-        } else {
-            this.setAsideState(state);
-            if (!this.state.aside.isActive) {
-                this.toggleAside();
-            }
+        if (this.state.aside.state === 99) {
+            this.state.history.undo();
+            //this.setAsideState(0);
         }
+        this.closeAside();
+    }
+    handle_onAsideToggle = state => {
+        // if (this.state.aside.state === state) {
+        //     this.toggleAside();
+        // } else {
+        //     this.setAsideState(state);
+        //     if (!this.state.aside.isActive) {
+        //         this.toggleAside();
+        //     }
+        // }
+        this.toggleAside(state);
     }
 
     //  List  ---------------------------------------------------------------  List  //
     onListOut = () => {
         if (this.state.aside.isActive) {
-            this.onAsideClose();
+            this.closeAside();
         }
     }
     onItemDelete = id => {
@@ -309,7 +347,7 @@ class Collections extends Component {
         // this.clearAsideActions();
         // this.handle_onCloseQuickInspect();
         //this.clearSelected();
-        this.toggleAside();
+        this.closeAside();
         this.props.put_async(this.state.state, this.props.select_token, this.getItemById(this.state.aside.data.id));
     }
     onItemFilterAdd = (filter, name) => {
@@ -344,8 +382,8 @@ class Collections extends Component {
         this.updateItem(this.state.aside.data.id, target, value);
     }
     onItemInspect = id => {
-        this.setAsideState(99);
-        this.toggleAside();
+        //this.setAsideState(99);
+        this.toggleAside(99);
         this.setAsideData(this.getItemById(id));
         this.setHistory({
             last: this.getItemById(id),
@@ -366,7 +404,7 @@ class Collections extends Component {
             this.addSelected(id)
         }
         if (this.state.aside.isActive && this.state.aside.state === 99) {
-            this.onAsideClose();
+            this.closeAside();
         }
     }
 
@@ -468,7 +506,7 @@ class Collections extends Component {
     }
 
     handle_onFilterOpen = category => {
-        this.setAsideState(2);
+        //this.setAsideState(2);
         this.setAsideData({
             filters: this.state.user[category],
             category: category
@@ -476,24 +514,10 @@ class Collections extends Component {
         this.setAsideAction({
             onToggle: this.toggleFilter,
         });
-        this.toggleAside();
-    }
-    setAside (bar) {
-        this.setState(prev => ({
-            ...prev,
-            aside: {
-                ...prev.aside,
-                data: bar
-            }
-        }));
-    }
-    test_toggleAside = foo => {
-        console.log(foo);
-        this.setAsideState(3);
-        this.setAside({foo: foo});
-        if (!this.state.aside.isActive) {
-            console.log('toggleing aside');
-            this.toggleAside();
+        if (category === 'tags') {
+            this.toggleAside(2);
+        } else {
+            this.toggleAside(3);
         }
     }
 
@@ -501,7 +525,7 @@ class Collections extends Component {
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
         let content = null;
-        
+
         //  Render Main Content  //
         if (!this.state.state) {
             content = (
@@ -525,12 +549,10 @@ class Collections extends Component {
                     actions={{
                         deleteItem: this.handle_onItemDelete,
                         openFilter: this.handle_onFilterOpen,
-                        toggleAside: this.test_toggleAside
+                        toggleAside: this.handle_onAsideToggle,
+                        closeAside: this.handle_onAsideClose
                     }}
-                    selected={this.state.selected}
-                    collection={this.state.decks}
-                    onClick={this.onAsideClose}
-                    onNavigation={this.onAsideToggle}/>
+                    selected={this.state.selected}/>
                 <main
                     className={CollectionsCSS.Main}
                     onClick={this.onListOut}>
@@ -549,7 +571,7 @@ class Collections extends Component {
                     actions={this.state.aside.actions}
                     active={this.state.aside.isActive}
                     data={this.state.aside.data}
-                    onClose={this.onAsideClose}
+                    onClose={this.handle_onAsideClose}
                     state={this.state.aside.state}/>
             </Aux>
         )

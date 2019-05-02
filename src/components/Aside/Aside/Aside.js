@@ -12,6 +12,7 @@ class Aside extends Component {
     render () {
         let aside = null;
         if (this.props.active) {
+            console.log('rendering aside', this.props.state);
             switch (this.props.state) {
                 case 1:
                     aside = (
@@ -22,17 +23,12 @@ class Aside extends Component {
                     );
                     break;
                 case 2:
+                case 3:
                     aside = (
                         <FilterAside
                             actions={this.props.actions}
                             data={this.props.data}
                             onClose={this.props.onClose}/>
-                    );
-                    break;
-                case 3:
-                    aside = (
-                        <TestAside
-                            data={this.props.data}/>
                     );
                     break;
                 case 99:
