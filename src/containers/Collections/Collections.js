@@ -220,15 +220,23 @@ class Collections extends Component {
         if (this.state.state === 'decks') {
             item = {
                 details: 'These are details for this flashcard',
+                groups: [],
                 id: id,
+                notes: 'These are notes for this flashcard',
+                tags: [],
                 title: id + ' Flashcard Deck',
+                type: 0,
                 user: this.props.select_authUser
             }
         } else {
             item = {
                 details: 'These are details for this card',
+                groups: [],
                 id: id,
+                notes: 'These are notes for this card',
+                tags: [],
                 title: id + ' Flashcard',
+                type: 1,
                 user: this.props.select_authUser
             }
         }
