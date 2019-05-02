@@ -321,28 +321,33 @@ class Collections extends Component {
     }
 
     handle_onTabCreate = tab => {
+        let order = 2;
+        Object.keys(this.state.user.tabs).map(key => {
+            console.log(this.state.user.tabs[key].order, order);
+            if (this.state.user.tabs[key].order >= order) {
+                order = this.state.user.tabs[key].order + 1;
+            }
+        });
+        const id = utility.createHashId(0);
         let t = {
             canDelete: true,
-            id: utility.createHashId(0),
-            isActive: false,
-            name: tab.name
+            id: id,
+            name: tab.name,
+            order: order
         }
+
         this.setState(prev => ({
             ...prev,
-            tabs: {
-                ...prev.tabs,
-                [t.id]: t
-            }
+            user: {
+                ...prev.user,
+                tabs: {
+                    ...prev.user.tabs,
+                    [id]: t
+                }
+            },
+            state: id
         }));
-        this.setState(prev => ({
-            ...prev,
-            [t.id]: {}
-        }));
-        this.setState(prev => ({
-            ...prev,
-            state: t.id
-        }));
-        this.props.patchUserTab_async(this.props.select_token, this.props.select_authUser, t);
+        this.props.patchUserTab_async(this.props.select_token, this.props.select_userId, t);
     }
     handle_onTabAdd = tab => {
         this.setState(prev => ({
@@ -426,17 +431,17 @@ class Collections extends Component {
     render () {
         let mainContent = null;
         if (this.state.user.tabs[this.state.state]) {
-            mainContent = (
-                <List
-                    backingCollection={this.state[this.state.state]}
-                    filters={this.state.filters}
-                    onConfirm={this.onItemDelete}
-                    onInspect={this.onItemInspect}
-                    onSelect={this.onItemSelect}/>
-            );
+            // mainContent = (
+            //     <List
+            //         backingCollection={this.state[this.state.state]}
+            //         filters={this.state.filters}
+            //         onConfirm={this.onItemDelete}
+            //         onInspect={this.onItemInspect}
+            //         onSelect={this.onItemSelect}/>
+            // );
         } else {
             mainContent = (
-                <TabForm />
+                <TabForm onConfirm={this.handle_onTabCreate}/>
             );
         }
 
