@@ -66,6 +66,10 @@ class QuickAside extends Component {
         }
     }
     //  Tags  //
+    handle_onTagAdd = tag => {
+        this.add('tags', tag);
+        this.props.actions.onAdd('tags', tag);
+    }
     handle_onTagToggle = tag => {
         if (this.state.data.tags.indexOf(tag) > -1) {
             this.remove('tags', tag);
@@ -76,6 +80,10 @@ class QuickAside extends Component {
         }
     }
     //  Groups  //
+    handle_onGroupAdd = group => {
+        this.add('groups', group);
+        this.props.actions.onAdd('groups', group);
+    }
     handle_onGroupToggle = group => {
         if (this.state.data.groups.indexOf(group) > -1) {
             this.remove('groups', group);
@@ -107,12 +115,22 @@ class QuickAside extends Component {
                     <TagForm
                         activeCollection={this.state.data.tags}
                         backingCollection={['foo', 'bar', 'spam']}
-                        toggle={this.handle_onTagToggle}/>
+                        field={{
+                            label: 'Additional Tag',
+                            placeholder: 'Verb'
+                        }}
+                        toggle={this.handle_onTagToggle}
+                        add={this.handle_onTagAdd}/>
                     <h4>Groups</h4>
                     <TagForm
                         activeCollection={this.state.data.groups}
                         backingCollection={['fizz', 'buzz']}
-                        toggle={this.handle_onGroupToggle}/>
+                        field={{
+                            label: 'Additional Group',
+                            placeholder: 'Spanish'
+                        }}
+                        toggle={this.handle_onGroupToggle}
+                        add={this.handle_onGroupAdd}/>
                     </div>
                     <div>
                         <BarButton onClick={this.handle_onConfirm}>Save</BarButton>

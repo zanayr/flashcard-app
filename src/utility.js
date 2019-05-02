@@ -30,3 +30,9 @@ export const insertItem = (array, index, item) => {
     console.log(newArray);
     return newArray;
 }
+
+
+//  Remove all whitespace and replace with hyphens
+export const cleanString = string => {
+    return string.trim().replace('/\s/g', '-');
+}

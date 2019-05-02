@@ -441,7 +441,6 @@ class Collections extends Component {
             this.state.user.tabs[this.state.state].collections.forEach(collection => {
                 coll = {...coll, ...this.state[collection]};
             });
-            console.log(coll);
             mainContent = (
                 <List
                     backingCollection={coll}
