@@ -107,10 +107,8 @@ class Collections extends Component {
         }));
     }
     toggleAside (state) {
-        console.log('here');
         if (this.state.aside.isActive) {
             if (state !== this.state.aside.state && this.state.aside.isActive) {
-                console.log('1');
                 this.setState(prev => ({
                     ...prev,
                     aside: {
@@ -119,7 +117,6 @@ class Collections extends Component {
                     }
                 }));
             } else {
-                console.log('3');
                 this.setState(prev => ({
                     ...prev,
                     aside: {
