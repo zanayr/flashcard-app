@@ -23,17 +23,18 @@ const tabBar = (props) => {
         if (name === props.current) {
             isActive = true;
         }
+
         return (
             <QuickTab
                 active={isActive}
                 delete={tab.canDelete}
                 key={i}
                 onClick={() => props.actions.toggle(name)}
-                onClose={() => props.actions.close(tab)}>
+                onClose={() => props.actions.close(name)}>
                 {tab.name}
             </QuickTab>
         );
-    })
+    });
 
     return (
         <section

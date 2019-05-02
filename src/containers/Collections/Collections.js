@@ -360,15 +360,18 @@ class Collections extends Component {
         }))
     }
     handle_onTabRemove = tab => {
-        let tabs = this.state.tabs;
+        let tabs = this.state.user.tabs;
         delete tabs[tab];
         this.setState(prev => ({
             ...prev,
-            tabs: {
-                ...tabs
+            user: {
+                ...prev.user,
+                tabs: {
+                    ...tabs
+                }
             }
         }));
-        this.props.deleteUserTab_async(this.props.select_token, this.props.select_authUser, tab);
+        this.props.deleteUserTab_async(this.props.select_token, this.props.select_userId, tab);
     }
     handle_onTabToggle = tab => {
         this.setState(prev => ({
