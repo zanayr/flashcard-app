@@ -16,7 +16,7 @@ const tabBar = (props) => {
         e.stopPropagation();
         props.actions.add();
     }
-    let tabs = utility.sortAscByProp(props.backingCollection, 'order').map((orderedTab, i) => {
+    let tabs = utility.sortAscByProp(props.backingCollection, 'date').map((orderedTab, i) => {
         let name = orderedTab[0];
         let tab = props.backingCollection[name];
         let isActive = false;
@@ -36,17 +36,24 @@ const tabBar = (props) => {
         );
     });
 
+    let add = null;
+    if (Object.keys(props.backingCollection).length < 12) {
+        add = (
+            <div className={styles.QuickTab}>
+                <div>
+                    <button onClick={(e) => handle_onAddClick(e)}>+</button>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <section
             className={styles.TabBar}
             onClick={(e) => handle_onBarClick(e)}>
             <div>
                 {tabs}
-                <div className={styles.QuickTab}>
-                    <div>
-                        <button onClick={(e) => handle_onAddClick(e)}>+</button>
-                    </div>
-                </div>
+                {add}
             </div>
         </section>
     )

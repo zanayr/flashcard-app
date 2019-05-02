@@ -352,7 +352,7 @@ class Collections extends Component {
             ...tab,
             canDelete: true,
             id: id,
-            order: order
+            date: Date.now()
         }
         this.setState(prev => ({
             ...prev,

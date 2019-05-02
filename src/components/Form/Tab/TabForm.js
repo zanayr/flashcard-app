@@ -44,7 +44,7 @@ class TabForm extends Component {
         }));
     }
     handle_onFormConfirm = () => {
-        if (this.validate() && (this.state.tags.length > 0 || this.state.groups.length > 0)) {
+        if (this.validate() && (this.state.tags.length > 0 || this.state.groups.length > 0) && this.state.collection.length > 0) {
             this.props.onConfirm({...this.state});
         }
     }
@@ -81,7 +81,7 @@ class TabForm extends Component {
                     <TextField
                         config={{
                             label: 'Tab Name',
-                            maxLength: 32,
+                            maxLength: 24,
                             minLength: 3,
                             placeholder: 'Tab Name',
                             value: this.state.name
