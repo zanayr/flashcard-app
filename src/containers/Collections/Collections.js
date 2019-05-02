@@ -323,7 +323,6 @@ class Collections extends Component {
     handle_onTabCreate = tab => {
         let order = 2;
         Object.keys(this.state.user.tabs).map(key => {
-            console.log(this.state.user.tabs[key].order, order);
             if (this.state.user.tabs[key].order >= order) {
                 order = this.state.user.tabs[key].order + 1;
             }
@@ -331,9 +330,11 @@ class Collections extends Component {
         const id = utility.createHashId(0);
         let t = {
             canDelete: true,
+            groups: tab.groups,
             id: id,
             name: tab.name,
-            order: order
+            order: order,
+            tags: tab.tags
         }
 
         this.setState(prev => ({
@@ -441,7 +442,10 @@ class Collections extends Component {
             // );
         } else {
             mainContent = (
-                <TabForm onConfirm={this.handle_onTabCreate}/>
+                <TabForm
+                    groups={this.state.user.groups}
+                    onConfirm={this.handle_onTabCreate}
+                    tags={this.state.user.tags}/>
             );
         }
 
