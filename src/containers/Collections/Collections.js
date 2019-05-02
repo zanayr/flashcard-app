@@ -259,9 +259,25 @@ class Collections extends Component {
         this.removeItem(id);
         this.props.delete_async(this.state.state, this.props.select_token, id);
     }
+
+    //  Check for new user tags and groups
+    checkForNew (category, arr) {
+        let filters = this.state.user[category].concat(arr.filter(f => this.state.user[category].indexOf(f) < 0))
+        this.setState(prev => ({
+            ...prev,
+            user: {
+                ...prev.user,
+                [category]: filters
+            }
+        }));
+        this.props.putUserFilter_async(category, this.props.select_token, this.state.user.id, filters);
+    }
     onItemUpdate = () => {
+        let item = this.getItemById(this.state.aside.data.id);
         this.closeAside();
-        this.props.put_async(this.state.state, this.props.select_token, this.getItemById(this.state.aside.data.id));
+        this.checkForNew('tags', item.tags);
+        this.checkForNew('groups', item.groups);
+        this.props.put_async(this.state.state, this.props.select_token, item);
     }
     onItemFilterAdd = (filter, name) => {
         let id = this.state.aside.data.id;
@@ -516,6 +532,7 @@ const mapDispatchToProps = dispatch => {
         deleteUserTab_async: (token, user, id) => dispatch(actions.deleteUserTab_async(token, user, id)),
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
         patch_async: (url, token, data) => dispatch(actions.patch_async(url, token, data)),
+        putUserFilter_async: (url, token, user, data) => dispatch(actions.putUserFilter_async(url, token, user, data)),
         patchUserTab_async: (token, user, data) => dispatch(actions.patchUserTab_async(token, user, data)),
         put_async: (url, token, data) => dispatch(actions.put_async(url, token, data)),
 

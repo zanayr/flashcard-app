@@ -51,6 +51,20 @@ export const putUser_success = (data) => {
     };
 };
 
+//  User Filters  //
+export const putUserFilter_fail = (error) => {
+    return {
+        type: actionTypes.PUT_FILTER_FAIL,
+        payload: error
+    }
+}
+export const putUserFilter_success = (tags) => {
+    return {
+        type: actionTypes.PUT_FILTER_SUCC,
+        payload: tags
+    }
+}
+
 //  Tabs  //
 export const deleteTab_fail = (error) => {
     return {
@@ -118,6 +132,20 @@ export const putUser_async = (token, data) => {
         })
         .catch(error => {
             dispatch(putUser_fail(error));
+        });
+    };
+};
+
+
+//  ASYNC TAG FUNCTIONS  ---------------------------------  ASYNC TAG FUNCTIONS  //
+export const putUserFilter_async = (url, token, user, tags) => {
+    return dispatch => {
+        axios.put('/users/' + user + '/' + url + '.json?auth=' + token, tags)
+        .then(response => {
+            dispatch(putUserFilter_success(tags));
+        })
+        .catch(error => {
+            dispatch(putUserFilter_fail(error));
         });
     };
 };

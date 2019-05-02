@@ -16,7 +16,8 @@ export {
     getUser_async,
     patchUser_async,
     patchUserTab_async,
-    putUser_async
+    putUser_async,
+    putUserFilter_async
 } from './user'
 
 // export {

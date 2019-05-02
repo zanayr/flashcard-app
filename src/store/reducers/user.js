@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import { putUserFilter_success } from '../actions/user';
 
 
 const initialState = {
@@ -44,23 +45,40 @@ const putUser_succ = (state, action) => {
     };
 };
 
+//  Tags  //
+const putFilter_success = (state, action) => {
+    return {
+        ...state,
+        user: {
+            ...state.user,
+            [action.payload.filter]: [...action.payload.data]
+        }
+    }
+}
+
 //  Tabs  //
 const deleteTab_succ = (state, action) => {
     let tabs = state.tabs;
     delete tabs[action.payload];
     return {
         ...state,
-        tabs: {
-            ...tabs
+        user: {
+            ...state.user,
+            tabs: {
+                ...tabs
+            }
         }
     }
 }
 const patchTab_succ = (state, action) => {
     return {
         ...state,
-        tabs: {
-            ...state.tabs,
-            [action.payload.data.id]: {...action.payload}
+        user: {
+            ...state.user,
+            tabs: {
+                ...state.tabs,
+                [action.payload.data.id]: {...action.payload}
+            }
         }
     }
 }
@@ -82,6 +100,10 @@ const reducer = (state=initialState, action) => {
             return service_fail(state, action);
         case actionTypes.PUT_USER_SUCC:
             return putUser_succ(state, action);
+        case actionTypes.PUT_FILTER_FAIL:
+            return service_fail(state, action);
+        case actionTypes.PUT_FILTER_SUCC:
+            return putFilter_success(state, action);
         case actionTypes.DELETE_TAB_FAIL:
             return service_fail(state, action);
         case actionTypes.DELETE_TAB_SUCC:

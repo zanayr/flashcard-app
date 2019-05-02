@@ -31,6 +31,9 @@ export const PATCH_USER_FAIL = 'PATCH_USER_FAIL';
 export const PATCH_USER_SUCC = 'PATCH_USER_SUCC';
 export const PUT_USER_FAIL = 'PUT_USER_FAIL';
 export const PUT_USER_SUCC = 'PUT_USER_SUCC';
+//  User Tags  //
+export const PUT_FILTER_FAIL = 'PUT_FILTER_FAIL';
+export const PUT_FILTER_SUCC = 'PUT_FILTER_SUCC';
 //  User Tabs  //
 export const DELETE_TAB_FAIL = 'DELETE_TAB_FAIL';
 export const DELETE_TAB_SUCC = 'DELETE_TAB_SUCC';
