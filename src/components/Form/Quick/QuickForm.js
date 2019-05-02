@@ -9,7 +9,7 @@ const quickInspectForm = (props) => {
             <TextField
                 config={{
                     label: 'Title',
-                    maxLength: 64,
+                    maxLength: 32,
                     minLength: 6,
                     placeholder: 'Title',
                     value: props.data.title
@@ -28,6 +28,16 @@ const quickInspectForm = (props) => {
                 key='details'
                 onChange={props.onChange}
                 target='details'/>
+            <TextArea
+                config={{
+                    label: 'Notes',
+                    maxLength: 128,
+                    placeholder: 'Notes',
+                    value: props.data.notes
+                }}
+                key='notes'
+                onChange={props.onChange}
+                target='notes'/>
         </div>
     );
 }
