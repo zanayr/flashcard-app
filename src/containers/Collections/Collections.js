@@ -312,7 +312,11 @@ class Collections extends Component {
     }
     onItemInspect = id => {
         this.toggleAside(99);
-        this.setAsideData(this.getItemById(id));
+        this.setAsideData({
+            ...this.getItemById(id),
+            userTags: this.state.user.tags,
+            userGroups: this.state.user.groups
+        });
         this.setHistory({
             last: this.getItemById(id),
             undo: this.resetItem
@@ -373,15 +377,15 @@ class Collections extends Component {
             state: 'add'
         }));
     }
-    handle_onCloseQuickInspect = () => {
-        this.setState(prev => ({
-            ...prev,
-            aside: {
-                isActive: false,
-                state: 0,
-            }
-        }))
-    }
+    // handle_onCloseQuickInspect = () => {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         aside: {
+    //             isActive: false,
+    //             state: 0,
+    //         }
+    //     }))
+    // }
     handle_onTabRemove = tab => {
         let tabs = this.state.user.tabs;
         delete tabs[tab];

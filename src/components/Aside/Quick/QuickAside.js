@@ -114,7 +114,7 @@ class QuickAside extends Component {
                     <h4>Tags</h4>
                     <TagForm
                         activeCollection={this.state.data.tags}
-                        backingCollection={['foo', 'bar', 'spam']}
+                        backingCollection={this.state.data.userTags}
                         field={{
                             label: 'Additional Tag',
                             placeholder: 'Verb'
@@ -124,7 +124,7 @@ class QuickAside extends Component {
                     <h4>Groups</h4>
                     <TagForm
                         activeCollection={this.state.data.groups}
-                        backingCollection={['fizz', 'buzz']}
+                        backingCollection={this.state.data.userGroups}
                         field={{
                             label: 'Additional Group',
                             placeholder: 'Spanish'
