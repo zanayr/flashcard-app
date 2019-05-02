@@ -349,25 +349,25 @@ class Collections extends Component {
         });
         const id = utility.createHashId(0);
         let t = {
+            ...tab,
             canDelete: true,
-            collections: tab.collections,
-            groups: tab.groups,
             id: id,
-            name: tab.name,
-            order: order,
-            tags: tab.tags
+            order: order
         }
-
         this.setState(prev => ({
             ...prev,
+            filters: {
+                groups: t.groups,
+                tags: t.tags
+            },
+            state: id,
             user: {
                 ...prev.user,
                 tabs: {
                     ...prev.user.tabs,
                     [id]: t
                 }
-            },
-            state: id
+            }
         }));
         this.props.patchUserTab_async(this.props.select_token, this.props.select_userId, t);
     }
@@ -377,15 +377,6 @@ class Collections extends Component {
             state: 'add'
         }));
     }
-    // handle_onCloseQuickInspect = () => {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             isActive: false,
-    //             state: 0,
-    //         }
-    //     }))
-    // }
     handle_onTabRemove = tab => {
         let tabs = this.state.user.tabs;
         delete tabs[tab];
@@ -457,13 +448,10 @@ class Collections extends Component {
     render () {
         let mainContent = null;
         if (this.state.user.tabs[this.state.state]) {
-            let coll = {};
-            this.state.user.tabs[this.state.state].collections.forEach(collection => {
-                coll = {...coll, ...this.state[collection]};
-            });
+            let tab = this.state.user.tabs[this.state.state];
             mainContent = (
                 <List
-                    backingCollection={coll}
+                    backingCollection={this.state[tab.collection]}
                     filters={this.state.filters}
                     onConfirm={this.onItemDelete}
                     onInspect={this.onItemInspect}

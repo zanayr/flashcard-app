@@ -1,0 +1,9 @@
+.CollectionToggle > div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.CollectionToggle p {
+    text-transform: capitalize;
+}

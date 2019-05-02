@@ -3,12 +3,13 @@ import React, {Component} from 'react';
 import TextField from '../../ui/input/Field/TextField';
 import Button from '../../ui/button/Button/Button';
 import TagForm from '../../form/Tag/TagForm';
+import CollectionToggle from '../../ui/toggle/Collection/CollectionToggle';
 
 import styles from './TabForm.module.css';
 
 class TabForm extends Component {
     state = {
-        collections: [],
+        collection: '',
         name: '',
         tags: [],
         groups: []
@@ -43,17 +44,16 @@ class TabForm extends Component {
         }));
     }
     handle_onFormConfirm = () => {
-        if (this.validate()) {
+        if (this.validate() && (this.state.tags.length > 0 || this.state.groups.length > 0)) {
             this.props.onConfirm({...this.state});
         }
     }
     //  Coll  //
-    handle_onCollToggle = coll => {
-        if (this.state.collections.indexOf(coll) > -1) {
-            this.remove('collections', coll);
-        } else {
-            this.add('collections', coll);
-        }
+    handle_onCollectionSelect = collection => {
+        this.setState(prev => ({
+            ...prev,
+            collection: collection
+        }));
     }
     //  Tags  //
     handle_onTagToggle = tag => {
@@ -73,7 +73,6 @@ class TabForm extends Component {
     }
 
     render () {
-        console.log(this.props);
         return (
             <form
                 onSubmit={(e) => e.preventDefault()}
@@ -91,11 +90,10 @@ class TabForm extends Component {
                         onChange={this.handle_onChange}
                         required
                         target='name'/>
-                    {/* <h4>Collection</h4>
-                    <TagForm
-                        activeCollection={this.state.collections}
+                    <h4>Collection</h4>
+                    <CollectionToggle
                         backingCollection={['decks', 'cards']}
-                        toggle={this.handle_onCollToggle}/> */}
+                        toggle={this.handle_onCollectionSelect}/>
                     <h4>Tags</h4>
                     <TagForm
                         activeCollection={this.state.tags}
