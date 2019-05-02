@@ -34,6 +34,8 @@ const header = (props) => {
                 <Toolbar
                     onA={() => handle_onFilterBy('tags')}
                     onB={() => handle_onFilterBy('groups')}
+                    onD={() => props.actions.toggleAside('Hello')}
+                    onE={() => props.actions.toggleAside('World')}
                     onC={handle_onBulkDelete}/>
                 <Dashboard
                     onNavigation={props.onNavigation}/>

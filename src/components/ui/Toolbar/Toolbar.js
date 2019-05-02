@@ -23,6 +23,8 @@ const toolbar = (props) => {
                 <IconButton onClick={props.onA}>T</IconButton>
                 <IconButton onClick={props.onB}>G</IconButton>
                 <IconButton onClick={props.onC}>D</IconButton>
+                <IconButton onClick={props.onD}>X</IconButton>
+                <IconButton onClick={props.onE}>Y</IconButton>
             </div>
         </div>
     );

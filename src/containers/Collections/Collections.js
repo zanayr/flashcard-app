@@ -476,6 +476,23 @@ class Collections extends Component {
         });
         this.toggleAside();
     }
+    setAside (bar) {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                data: bar
+            }
+        }));
+    }
+    test_toggleAside = foo => {
+        console.log(foo);
+        this.setAsideState(3);
+        this.setAside({foo: foo});
+        if (!this.state.aside.isActive) {
+            this.toggleAside();
+        }
+    }
 
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
@@ -497,12 +514,15 @@ class Collections extends Component {
                     onSelect={this.onItemSelect}/>
             );
         }
+        console.log(this.state.aside.data);
         return (
+            
             <Aux>
                 <Header
                     actions={{
                         deleteItem: this.handle_onItemDelete,
-                        openFilter: this.handle_onFilterOpen
+                        openFilter: this.handle_onFilterOpen,
+                        toggleAside: this.test_toggleAside
                     }}
                     selected={this.state.selected}
                     collection={this.state.decks}

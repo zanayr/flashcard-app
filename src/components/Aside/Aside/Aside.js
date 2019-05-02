@@ -4,6 +4,8 @@ import NavigationAiside from '../Nav/NavAside';
 import FilterAside from '../Filter/FilterAside';
 import QuickInspectAside from '../Quick/QuickAside';
 
+import TestAside from '../Test/TestAside';
+
 import AppCSS from '../../../App.module.css';
 import AsideCSS from './Aside.module.css';
 
@@ -13,7 +15,7 @@ const aside = (props) => {
     if (props.active) {
         cssClasses = [...cssClasses, AsideCSS.Active];
     }
-
+    console.log('aside rendering...', props);
     switch (props.state) {
         case 1:
             asideContent = (
@@ -33,7 +35,8 @@ const aside = (props) => {
             break;
         case 3:
             asideContent = (
-                <h3>Aside #{props.state}</h3>
+                <TestAside
+                    data={props.data}/>
             );
             break;
         case 99:
