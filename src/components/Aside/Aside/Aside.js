@@ -6,62 +6,52 @@ import QuickInspectAside from '../Quick/QuickAside';
 
 import TestAside from '../Test/TestAside';
 
-import AppCSS from '../../../App.module.css';
-import AsideCSS from './Aside.module.css';
+import styles from '../Aside.module.css';
 
-const aside = (props) => {
-    let asideContent;
-    let cssClasses = [AsideCSS.Aside];
-    if (props.active) {
-        cssClasses = [...cssClasses, AsideCSS.Active];
+class Aside extends Component {
+    render () {
+        let aside = null;
+        if (this.props.active) {
+            switch (this.props.state) {
+                case 1:
+                    aside = (
+                        <NavigationAiside
+                            actions={this.props.actions}
+                            data={this.props.data}
+                            onClose={this.props.onClose}/>
+                    );
+                    break;
+                case 2:
+                    aside = (
+                        <FilterAside
+                            actions={this.props.actions}
+                            data={this.props.data}
+                            onClose={this.props.onClose}/>
+                    );
+                    break;
+                case 3:
+                    aside = (
+                        <TestAside
+                            data={this.props.data}/>
+                    );
+                    break;
+                case 99:
+                    aside = (
+                        <QuickInspectAside
+                            actions={this.props.actions}
+                            data={this.props.data}
+                            onClose={this.props.onClose}/>
+                    );
+                    break;
+                default:
+                    aside = (
+                        null
+                    );
+                    break;
+            }
+        }
+        return aside;
     }
-    console.log('aside rendering...', props);
-    switch (props.state) {
-        case 1:
-            asideContent = (
-                <NavigationAiside
-                    actions={props.actions}
-                    data={props.data}
-                    onClose={props.onClose}/>
-            );
-            break;
-        case 2:
-            asideContent = (
-                <FilterAside
-                    actions={props.actions}
-                    data={props.data}
-                    onClose={props.onClose}/>
-            );
-            break;
-        case 3:
-            asideContent = (
-                <TestAside
-                    data={props.data}/>
-            );
-            break;
-        case 99:
-            asideContent = (
-                <QuickInspectAside
-                    actions={props.actions}
-                    data={props.data}
-                    onClose={props.onClose}/>
-            );
-            break;
-        default:
-            asideContent = (
-                null
-            );
-            break;
-    }
-
-    return (
-        
-        <aside className={cssClasses.join(' ')}>
-            <div className={AppCSS.Inner}>
-                {asideContent}
-            </div>
-        </aside>
-    );
 }
 
-export default aside;
+export default Aside;

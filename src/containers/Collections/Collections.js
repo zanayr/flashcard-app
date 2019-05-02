@@ -271,15 +271,16 @@ class Collections extends Component {
 
     //  Aside  -------------------------------------------------------------  Aside  //
     onAsideClose = state => {
-        if (this.state.aside.isActive) {
-            this.clearAsideActions();
-            this.clearAsideData();
-            this.toggleAside();
-            if (this.state.aside.state === 99) {
-                this.state.history.undo();
-                this.setAsideState(0);
-            }
-        }
+        // if (this.state.aside.isActive) {
+        //     this.clearAsideActions();
+        //     this.clearAsideData();
+        //     this.toggleAside();
+        //     if (this.state.aside.state === 99) {
+        //         this.state.history.undo();
+        //         this.setAsideState(0);
+        //     }
+        // }
+        this.toggleAside();
     }
     onAsideToggle = state => {
         if (this.state.aside.state === state) {
@@ -304,10 +305,11 @@ class Collections extends Component {
         this.props.delete_async(this.state.state, this.props.select_token, id);
     }
     onItemUpdate = () => {
-        this.clearAsideData();
-        this.clearAsideActions();
-        this.handle_onCloseQuickInspect();
+        // this.clearAsideData();
+        // this.clearAsideActions();
+        // this.handle_onCloseQuickInspect();
         //this.clearSelected();
+        this.toggleAside();
         this.props.put_async(this.state.state, this.props.select_token, this.getItemById(this.state.aside.data.id));
     }
     onItemFilterAdd = (filter, name) => {
@@ -490,6 +492,7 @@ class Collections extends Component {
         this.setAsideState(3);
         this.setAside({foo: foo});
         if (!this.state.aside.isActive) {
+            console.log('toggleing aside');
             this.toggleAside();
         }
     }
@@ -497,9 +500,9 @@ class Collections extends Component {
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
-        let content = (
-            <p>Something when wrong...</p>
-        );
+        let content = null;
+        
+        //  Render Main Content  //
         if (!this.state.state) {
             content = (
                 <TabForm onConfirm={this.handle_onTabCreate}/>
@@ -514,9 +517,9 @@ class Collections extends Component {
                     onSelect={this.onItemSelect}/>
             );
         }
-        console.log(this.state.aside.data);
+
+
         return (
-            
             <Aux>
                 <Header
                     actions={{

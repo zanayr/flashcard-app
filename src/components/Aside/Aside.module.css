@@ -1,0 +1,57 @@
+.Aside {
+    background-color: gold;
+    bottom: 0px;
+    left: auto;
+    max-width: 256px;
+    position: fixed;
+    right: 0px;
+    top: 64px;
+    transition: right 0.666s ease;
+    width: 66vw;
+    z-index: 97;
+}
+.Aside > div {
+    height: 100%;
+}
+.Active {
+    display: block;
+    right: 0px;
+}
+.Aside_Button {
+    height: 64px;
+    width: 100%;
+}
+.Aside_Button > div {
+    padding: 8px;
+}
+
+.FilterAside > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.FilterButton {
+    background-color: lightcoral;
+    width: 100%;
+    height: 28px;
+    padding: 4px;
+}
+.FilterButton.Active {
+    background-color: coral;
+}
+
+.Navigation > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.QuickInspect_Aside {
+    height: 100%;
+}
+.QuickInspect_Aside > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}

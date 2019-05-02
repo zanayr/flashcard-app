@@ -6,7 +6,7 @@ import Row from '../../../hoc/Row/Row';
 import IconButton from '../../ui/button/Icon/IconButton';
 import BarButton from '../../ui/button/Bar/BarButton';
 
-import styles from './FilterAside.module.css';
+import styles from '../Aside.module.css';
 
 class FilterAside extends Component {
     state = {
@@ -47,17 +47,19 @@ class FilterAside extends Component {
         });
         
         return (
-            <Aux>
-                <Row just='Between'>
-                    <h3>Filter</h3>
-                    <IconButton onClick={() => this.props.onClose()}>X</IconButton>
-                </Row>
-                <div className={styles.FilterAside}>
-                    <div>
-                        {filterButtons}
+            <aside className={[styles.Aside].join(' ')}>
+                <div>
+                    <Row just='Between'>
+                        <h3>Filter</h3>
+                        <IconButton onClick={() => this.props.onClose()}>X</IconButton>
+                    </Row>
+                    <div className={styles.FilterAside}>
+                        <div>
+                            {filterButtons}
+                        </div>
                     </div>
                 </div>
-            </Aux>
+            </aside>
         );
     }
 }

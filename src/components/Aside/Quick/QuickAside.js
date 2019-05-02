@@ -9,13 +9,12 @@ import QuickForm from '../../form/Quick/QuickForm';
 import TagForm from '../../form/Tag/TagForm';
 import BarButton from '../../ui/button/Bar/BarButton';
 
-import styles from './QuickAside.module.css';
+import styles from '../Aside.module.css';
 
 class QuickAside extends Component {
     state = {
-        form: this.props.data,
-        groups: this.props.data.groups,
-        tags: this.props.data.tags
+        actions: this.props.actions,
+        data: this.props.data
     }
     form = React.createRef();
 
@@ -25,8 +24,8 @@ class QuickAside extends Component {
     udpate (target, value) {
         this.setState(prev => ({
             ...prev,
-            form: {
-                ...prev.form,
+            data: {
+                ...prev.data,
                 [target]: value
             }
         }));
@@ -38,13 +37,19 @@ class QuickAside extends Component {
     add (collection, item) {
         this.setState(prev => ({
             ...prev,
-            [collection]: prev[collection].concat(item)
+            data: {
+                ...prev.data,
+                [collection]: prev.data[collection].concat(item)
+            }
         }));
     }
     remove (collection, item) {
         this.setState(prev => ({
             ...prev,
-            [collection]: prev[collection].filter(i => i !== item)
+            data: {
+                ...prev.data,
+                [collection]: prev.data[collection].filter(i => i !== item)
+            }
         }));
     }
 
@@ -62,7 +67,7 @@ class QuickAside extends Component {
     }
     //  Tags  //
     handle_onTagToggle = tag => {
-        if (this.state.tags.indexOf(tag) > -1) {
+        if (this.state.data.tags.indexOf(tag) > -1) {
             this.remove('tags', tag);
             this.props.actions.onRemove('tags', tag);
         } else {
@@ -72,7 +77,7 @@ class QuickAside extends Component {
     }
     //  Groups  //
     handle_onGroupToggle = group => {
-        if (this.state.groups.indexOf(group) > -1) {
+        if (this.state.data.groups.indexOf(group) > -1) {
             this.remove('groups', group);
             this.props.actions.onRemove('groups', group);
         } else {
@@ -84,7 +89,7 @@ class QuickAside extends Component {
 
     render () {
         return (
-            <div className={styles.QuickInspect_Aside}>
+            <aside className={[styles.Aside].join(' ')}>
                 <div>
                     <div>
                     <Row just='Between'>
@@ -95,17 +100,17 @@ class QuickAside extends Component {
                         className={styles.QuickForm}
                         ref={this.form}>
                         <QuickForm
-                            data={this.state.form}
+                            data={this.state.data}
                             onChange={this.handle_onChange}/>
                     </form>
                     <h4>Tags</h4>
                     <TagForm
-                        activeCollection={this.state.tags}
+                        activeCollection={this.state.data.tags}
                         backingCollection={['foo', 'bar', 'spam']}
                         toggle={this.handle_onTagToggle}/>
                     <h4>Groups</h4>
                     <TagForm
-                        activeCollection={this.state.groups}
+                        activeCollection={this.state.data.groups}
                         backingCollection={['fizz', 'buzz']}
                         toggle={this.handle_onGroupToggle}/>
                     </div>
@@ -114,7 +119,7 @@ class QuickAside extends Component {
                         <BarLink path='u/inspect'>Edit</BarLink>
                     </div>
                 </div>
-            </div>
+            </aside>
         );
     }
 }

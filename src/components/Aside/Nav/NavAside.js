@@ -1,13 +1,11 @@
 import React from 'react';
-import {createHashId} from '../../../utility';
 
 import Aux from '../../../hoc/Aux/Aux';
 import Row from '../../../hoc/Row/Row';
 import IconButton from '../../ui/button/Icon/IconButton';
 import BarLink from '../../ui/link/Bar/BarLink';
 
-import AppCSS from '../../../App.module.css';
-import NavAsideCSS from './NavAside.module.css';
+import styles from '../Aside.module.css';
 
 const navigationAside = (props) => {
     const navigationLinks = [
@@ -16,36 +14,29 @@ const navigationAside = (props) => {
             value: 'Sign Out'
         }
     ];
-    const navigationButtons = navigationLinks.map(link => {
+    const navigationButtons = navigationLinks.map((link, i) => {
         return (
-            // <NavigationButton
-            //     key={createHashId()}
-            //     path={link.path}>
-            //     {link.value}
-            // </NavigationButton>
             <BarLink
-                key={createHashId(0)}
+                key={i}
                 path={link.path}>{link.value}
             </BarLink>
         );
     });
-
-    const handle_onClick = () => {
-        props.onClose();
-    }
     
     return (
-        <Aux>
-            <Row just='Between'>
-                <h3>Navigation</h3>
-                <IconButton onClick={handle_onClick}>X</IconButton>
-            </Row>
-            <nav className={NavAsideCSS.Navigation}>
-                <div className={AppCSS.Inner}>
+        <nav className={styles.Aside}>
+            <div>
+                <Row just='Between'>
+                    <h3>Navigation</h3>
+                    <IconButton onClick={() => props.onClose()}>X</IconButton>
+                </Row>
+                <div className={styles.Navigation}>
+                    <div>
                     {navigationButtons}
+                    </div>
                 </div>
-            </nav>
-        </Aux>
+            </div>
+        </nav>
     );
 }
 
