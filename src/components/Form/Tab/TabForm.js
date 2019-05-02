@@ -8,6 +8,7 @@ import styles from './TabForm.module.css';
 
 class TabForm extends Component {
     state = {
+        collections: [],
         name: '',
         tags: [],
         groups: []
@@ -46,25 +47,28 @@ class TabForm extends Component {
             this.props.onConfirm({...this.state});
         }
     }
-
+    //  Coll  //
+    handle_onCollToggle = coll => {
+        if (this.state.collections.indexOf(coll) > -1) {
+            this.remove('collections', coll);
+        } else {
+            this.add('collections', coll);
+        }
+    }
     //  Tags  //
     handle_onTagToggle = tag => {
         if (this.state.tags.indexOf(tag) > -1) {
             this.remove('tags', tag);
-            //this.props.actions.onRemove('tags', tag);
         } else {
             this.add('tags', tag);
-            //this.props.actions.onAdd('tags', tag);
         }
     }
     //  Groups  //
     handle_onGroupToggle = group => {
         if (this.state.groups.indexOf(group) > -1) {
             this.remove('groups', group);
-            //this.props.actions.onRemove('groups', group);
         } else {
             this.add('groups', group);
-            //this.props.actions.onAdd('groups', group);
         }
     }
 
@@ -87,6 +91,11 @@ class TabForm extends Component {
                         onChange={this.handle_onChange}
                         required
                         target='name'/>
+                    <h4>Collection</h4>
+                    <TagForm
+                        activeCollection={this.state.collections}
+                        backingCollection={['decks', 'cards']}
+                        toggle={this.handle_onCollToggle}/>
                     <h4>Tags</h4>
                     <TagForm
                         activeCollection={this.state.tags}

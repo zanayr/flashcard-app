@@ -15,6 +15,11 @@ export const getUser_init = () => {
     }
 }
 export const getUser_success = (data) => {
+    data.tabs.cards.tags = [];
+    data.tabs.cards.groups = [];
+    data.tabs.decks.tags = [];
+    data.tabs.decks.groups = [];
+    console.log(data.tabs.cards);
     return {
         type: actionTypes.GET_USER_SUCC,
         payload: data

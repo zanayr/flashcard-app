@@ -330,6 +330,7 @@ class Collections extends Component {
         const id = utility.createHashId(0);
         let t = {
             canDelete: true,
+            collections: tab.collections,
             groups: tab.groups,
             id: id,
             name: tab.name,
@@ -382,7 +383,11 @@ class Collections extends Component {
     handle_onTabToggle = tab => {
         this.setState(prev => ({
             ...prev,
-            state: tab
+            state: tab,
+            filters: {
+                groups: this.state.user.tabs[tab].groups || [],
+                tags: this.state.user.tabs[tab].tags || []
+            }
         }));
     }
 
@@ -432,14 +437,19 @@ class Collections extends Component {
     render () {
         let mainContent = null;
         if (this.state.user.tabs[this.state.state]) {
-            // mainContent = (
-            //     <List
-            //         backingCollection={this.state[this.state.state]}
-            //         filters={this.state.filters}
-            //         onConfirm={this.onItemDelete}
-            //         onInspect={this.onItemInspect}
-            //         onSelect={this.onItemSelect}/>
-            // );
+            let coll = {};
+            this.state.user.tabs[this.state.state].collections.forEach(collection => {
+                coll = {...coll, ...this.state[collection]};
+            });
+            console.log(coll);
+            mainContent = (
+                <List
+                    backingCollection={coll}
+                    filters={this.state.filters}
+                    onConfirm={this.onItemDelete}
+                    onInspect={this.onItemInspect}
+                    onSelect={this.onItemSelect}/>
+            );
         } else {
             mainContent = (
                 <TabForm
