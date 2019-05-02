@@ -14,13 +14,20 @@ class TagForm extends Component {
         add: '',
         tags: this.props.backingCollection
     }
+    form = React.createRef();
+
+    validate () {
+        return this.form.current.reportValidity();
+    }
 
     handle_onAdd = value => {
-        this.setState(prev => ({
-            add: '',
-            tags: prev.tags.concat(value)
-        }));
-        this.props.add(value);
+        if (this.validate() && value.length > 0) {
+            this.setState(prev => ({
+                add: '',
+                tags: prev.tags.concat(value)
+            }));
+            this.props.add(value);
+        }
     }
     handle_onChange = (value) => {
         this.setState(prev => ({
@@ -51,7 +58,7 @@ class TagForm extends Component {
             <div className={styles.TagForm}>
                 <div>
                     {tags}
-                    <form>
+                    <form ref={this.form}>
                         <div>
                             <TagField
                                 action={this.handle_onChange}

@@ -9,8 +9,7 @@ const tagField = (props) => {
             <label>{props.label}</label>
             <input
                 className={InputCSS.Text_Field}
-                maxLength='32'
-                minLength='1'
+                maxLength={24}
                 onChange={(e) => props.action(e.target.value)}
                 placeholder={props.placeholder}
                 type='text'
