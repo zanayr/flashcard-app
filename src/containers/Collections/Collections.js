@@ -38,58 +38,12 @@ class Collections extends Component {
         },
         selected: [],
         state: 'decks',
-        // tabs: {
-        //     actions: {},
-        //     cards: {
-        //         isActive: false,
-        //         canDelete: false,
-        //         filters: {
-        //             groups: [],
-        //             tags: []
-        //         },
-        //         name: 'Cards',
-        //         order: 1
-        //     },
-        //     decks: {
-        //         isActive: true,
-        //         canDelete: false,
-        //         filters: {
-        //             groups: [],
-        //             tags: []
-        //         },
-        //         name: 'Decks',
-        //         order: 0
-        //     }
-        // },
         filters: {
             tags: [],
             groups: []
         },
         user: this.props.select_user
     }
-
-    // componentDidMount () {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         decks: this.props.select_decks,
-    //         cards: this.props.select_cards,
-    //         user: this.props.select_user
-    //     }));
-        // this.setState(prev => ({
-        //     ...prev,
-        //     tabs: {
-        //         ...prev.tabs,
-        //         ...this.props.select_authUserTabs,
-        //         actions: {
-        //             add: this.handle_onTabAdd,
-        //             click: this.handle_onTabBarClick,
-        //             close: this.handle_onTabRemove,
-        //             toggle: this.handle_onTabToggle,
-        //         }
-        //     }
-        // }));
-    // }
-
 
 
     //  STATE SETTERS v2  //
@@ -417,20 +371,6 @@ class Collections extends Component {
         this.props.deleteUserTab_async(this.props.select_token, this.props.select_authUser, tab);
     }
     handle_onTabToggle = tab => {
-        const tabs = this.state.tabs;
-        Object.keys(tabs).forEach(t => {
-            if (t === tab) {
-                tabs[t].isActive = true;
-            } else if (tabs[t].isActive) {
-                tabs[t].isActive = false;
-            }
-        });
-        this.setState(prev => ({
-            ...prev,
-            tabs: {
-                ...tabs
-            }
-        }));
         this.setState(prev => ({
             ...prev,
             state: tab
@@ -481,31 +421,7 @@ class Collections extends Component {
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
-        // let tabs = null;
-        // let list = null;
-        // if (this.state.user.tabs) {
-        //     console.log(this.state.user.tabs);
-        //     list = (
-        //         <List
-        //             backingCollection={this.state[this.state.state]}
-        //             filters={this.state.filters}
-        //             onConfirm={this.onItemDelete}
-        //             onInspect={this.onItemInspect}
-        //             onSelect={this.onItemSelect}/>
-        //     );
-        //     tabs = (
-        //         <TabBar
-        //             actions={{
-        //                 add: this.handle_onTabAdd,
-        //                 click: this.handle_onTabBarClick,
-        //                 close: this.handle_onTabRemove,
-        //                 toggle: this.handle_onTabToggle,
-        //             }}
-        //             backingCollection={this.state.user.tabs}/>
-        //     );
-        // }
         let mainContent = null;
-        console.log(this.state.state, this.state.user.tabs);
         if (this.state.user.tabs[this.state.state]) {
             mainContent = (
                 <List
@@ -520,6 +436,8 @@ class Collections extends Component {
                 <TabForm />
             );
         }
+
+
         return (
             <Aux>
                 <Header
@@ -569,7 +487,6 @@ const mapStateToProps = state => {
         select_authUser: select.authUser(state),
         select_user: select.user(state),
         select_userId: select.userId(state)
-        //select_userTabs: select.userTabs(state)
     }
 }
 const mapDispatchToProps = dispatch => {

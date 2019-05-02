@@ -17,9 +17,10 @@ const tabBar = (props) => {
         props.actions.add();
     }
     let tabs = utility.sortAscByProp(props.backingCollection, 'order').map((orderedTab, i) => {
-        let tab = props.backingCollection[orderedTab[0]];
+        let name = orderedTab[0];
+        let tab = props.backingCollection[name];
         let isActive = false;
-        if (orderedTab[0] === props.current) {
+        if (name === props.current) {
             isActive = true;
         }
         return (
@@ -27,7 +28,7 @@ const tabBar = (props) => {
                 active={isActive}
                 delete={tab.canDelete}
                 key={i}
-                onClick={() => props.actions.toggle(tab)}
+                onClick={() => props.actions.toggle(name)}
                 onClose={() => props.actions.close(tab)}>
                 {tab.name}
             </QuickTab>
