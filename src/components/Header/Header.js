@@ -27,8 +27,6 @@ const header = (props) => {
             titles.push(collection.find(i => i.id == id).title);
         });
         props.displayModal(modalTypes.DELETE, titles);
-        //  Clear selected
-        //props.actions.clearSelected();
     };
     
 
@@ -46,8 +44,8 @@ const header = (props) => {
                 <ReturnLink/>
                 <Search/>
                 <Toolbar
-                    onA={() => handle_onFilterBy('tags')}
-                    onB={() => handle_onFilterBy('groups')}
+                    onA={() => props.actions.toggleAside(2)}
+                    onB={() => props.actions.toggleAside(3)}
                     onC={handle_onBulkDelete}/>
                 <Dashboard
                     onNavigation={() => props.actions.toggleAside(1)}/>

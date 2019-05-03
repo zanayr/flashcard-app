@@ -261,7 +261,49 @@ class Collections extends Component {
             }));
         }
     }
-    handle_onAsideToggle = state => {
+    handle_onFilterSelect = (category, tag) => {
+        if (this.state.filters[category].includes(tag)) {
+            this.setState(prev => ({
+                ...prev,
+                filters: {
+                    ...prev.filters,
+                    [category]: prev.filters[category].filter(t => t !== tag)
+                }
+            }));
+        } else {
+            this.setState(prev => ({
+                ...prev,
+                filters: {
+                    ...prev.filters,
+                    [category]: prev.filters[category].concat(tag)
+                }
+            }));
+        }
+    }
+
+    handle_onAsideToggle = (state) => {
+        switch (state) {
+            case 2:
+                this.setAsideData({
+                    category: 'tags',
+                    tags: this.state.tags.slice()
+                });
+                this.setAsideAction({
+                    onSelect: this.handle_onFilterSelect
+                });
+                break;
+            case 3:
+                this.setAsideData({
+                    category: 'groups',
+                    tags: this.state.groups.slice()
+                });
+                this.setAsideAction({
+                    onSelect: this.handle_onFilterSelect
+                });
+                break;
+            default:
+                break;
+        }
         this.toggleAside(state);
     }
 
@@ -423,29 +465,11 @@ class Collections extends Component {
         this.props.deleteItem_async(this.props.token, item);
     }
 
-    toggleFilter = (category, filter) => {
-        if (this.state.filters[category].indexOf(filter) > -1) {
-            this.setState(prev => ({
-                ...prev,
-                filters: {
-                    ...prev.filters,
-                    [category]: prev.filters[category].filter(f => f !== filter)
-                }
-            }));
-        } else {
-            this.setState(prev => ({
-                ...prev,
-                filters: {
-                    ...prev.filters,
-                    [category]: prev.filters[category].concat(filter)
-                }
-            }));
-        }
-    }
+    
 
-    handle_onFilterOpen = category => {
+    handle_onFilterOpen = (category) => {
         this.setAsideData({
-            filters: this.state.user[category],
+            filters: this.state[category],
             category: category
         });
         this.setAsideAction({
@@ -485,7 +509,6 @@ class Collections extends Component {
                 <Header
                     actions={{
                         deleteItem: this.handle_onItemDelete,
-                        openFilter: this.handle_onFilterOpen,
                         toggleAside: this.handle_onAsideToggle,
                         closeAside: this.handle_onAsideClose
                     }}

@@ -13,34 +13,29 @@ class FilterAside extends Component {
         selected: []
     }
 
-
-    toggleSelectedFilters = filter => {
-        if (this.state.selected.indexOf(filter) > -1) {
-            this.setState({selected: this.state.selected.filter(f => f !== filter)});
+    handle_onSelect = (tag) => {
+        if (this.state.selected.includes(tag)) {
+            this.setState({selected: this.state.selected.filter(t => t !== tag)});
         } else {
-            this.setState({selected: this.state.selected.concat(filter)});
+            this.setState({selected: this.state.selected.concat(tag)});
         }
-    }
-
-    handle_onFilterClick = (category, filter) => {
-        this.toggleSelectedFilters(filter);
-        this.props.actions.onToggle(category, filter);
+        this.props.actions.onSelect(this.props.data.category, tag);
     }
 
 
     render () {
-            const filterButtons = this.props.data.filters.map((filter, i) => {
+        const tagButtons = this.props.data.tags.map((tag, i) => {
             let css = [styles.FilterButton];
-            if (this.state.selected.indexOf(filter) > -1) {
+            if (this.state.selected.includes(tag)) {
                 css.push(styles.Active);
             }
             return (
                 <div
                     className={css.join(' ')}
                     key={i}
-                    onClick={() => this.handle_onFilterClick(this.props.data.category, filter)}>
+                    onClick={() => this.handle_onSelect(tag)}>
                     <div>
-                        <p>{filter}</p>
+                        <p>{tag}</p>
                     </div>
                 </div>
             );
@@ -49,13 +44,11 @@ class FilterAside extends Component {
         return (
             <aside className={[styles.Aside].join(' ')}>
                 <div>
-                    <Row just='Between'>
-                        <h3>Filter</h3>
-                        <IconButton onClick={() => this.props.onClose()}>X</IconButton>
-                    </Row>
+                    <h3>Filter</h3>
+                    <p>Instructions on how to filter here.</p>
                     <div className={styles.FilterAside}>
                         <div>
-                            {filterButtons}
+                            {tagButtons}
                         </div>
                     </div>
                 </div>
