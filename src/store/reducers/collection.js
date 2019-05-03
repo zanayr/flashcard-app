@@ -69,7 +69,7 @@ const patch_succ = (state, action) => {
         [action.payload.store]: {
             collection: {
                 ...state[action.payload.store].collection,
-                [action.payload.data.id]: {...action.payload.data}
+                [action.payload.id]: create.itemModel(action.payload.id, action.payload.data)
             },
             error: null,
             isLoading: false

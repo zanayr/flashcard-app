@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
 import * as select from '../../store/reducers/root';
-import * as sortType from '../../store/reducers/sortTypes';
+import * as create from '../../store/models/models';
 import * as utility from '../../utility';
 
 
@@ -152,14 +152,11 @@ class Collections extends Component {
     createItem (item) {
         this.setState(prev => ({
             ...prev,
-            [this.state.state]: {
-                ...prev[this.state.state],
-                [item.id]: item
-            }
+            [this.state.current]: prev[this.state.current].concat(item)
         }));
     }
     removeItem (id) {
-        const collection = this.state.decks;
+        const collection = this.state[this.state.current];
         delete collection[id];
         this.setState(prev => ({
             ...prev,
@@ -225,31 +222,33 @@ class Collections extends Component {
     onActionClick = () => {
         let id = utility.createHashId(0);
         let item;
-        if (this.state.state === 'decks') {
+        if (this.state.current === 'deck') {
             item = {
-                details: 'These are details for this flashcard',
-                groups: [],
-                id: id,
-                notes: 'These are notes for this flashcard',
-                tags: [],
-                title: id + ' Flashcard Deck',
-                type: 0,
-                user: this.props.select_authUser
+                date: Date.now(),
+                groups: [...this.state.filters.groups],
+                meta: {},
+                notes: 'These are notes for this flashcard deck.',
+                owner: this.props.user.id,
+                primary: id + ' Flashcard Deck',
+                secondary: 'These are details for this flashcard deck.',
+                tags: [...this.state.filters.tags],
+                type: 'deck',
             }
         } else {
             item = {
-                details: 'These are details for this card',
-                groups: [],
-                id: id,
-                notes: 'These are notes for this card',
-                tags: [],
-                title: id + ' Flashcard',
-                type: 1,
-                user: this.props.select_authUser
+                date: Date.now(),
+                groups: [...this.state.filters.groups],
+                meta: {},
+                notes: 'These are notes for this flashcard',
+                owner: this.props.user.id,
+                primary: id + ' Flashcard Front',
+                secondary: 'Flashcard Back',
+                tags: [...this.state.filters.tags],
+                type: 'card',
             }
         }
-        this.createItem(item);
-        this.props.patch_async(this.state.state, this.props.select_token, item);
+        this.createItem(create.itemModel(id, item));
+        this.props.patchItem_async(this.state.current, this.props.token, id, item);
     }
 
 
@@ -575,9 +574,7 @@ const mapStateToProps = state => {
         select_decks: select.decks(state),
         select_cards: select.cards(state),
         select_token: select.authToken(state),
-        select_authUser: select.authUser(state),
-        select_user: select.user(state),
-        select_userId: select.userId(state)
+        select_user: select.user(state)
     }
 }
 const mapDispatchToProps = dispatch => {
@@ -585,7 +582,7 @@ const mapDispatchToProps = dispatch => {
         delete_async: (url, token, id) => dispatch(actions.delete_async(url, token, id)),
         deleteTab_async: (token, user, id) => dispatch(actions.deleteTab_async(token, user, id)),
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
-        patch_async: (url, token, data) => dispatch(actions.patch_async(url, token, data)),
+        patchItem_async: (url, token, id, data) => dispatch(actions.patchItem_async(url, token, id, data)),
         putUserFilter_async: (url, token, user, data) => dispatch(actions.putUserFilter_async(url, token, user, data)),
         patchTab_async: (token, user, id, data) => dispatch(actions.patchTab_async(token, user, id, data)),
         put_async: (url, token, data) => dispatch(actions.put_async(url, token, data)),

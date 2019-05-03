@@ -58,11 +58,12 @@ export const patch_fail = (error) => {
         payload: error
     }
 }
-export const patch_success = (store, data) => {
+export const patch_success = (store, id, data) => {
     return {
         type: actionTypes.PATCH_SUCC,
         payload: {
             data: data,
+            id: id,
             store: store
         }
     }
@@ -117,11 +118,12 @@ export const getAll_async = (url, token, user) => {
 };
 
 //  Patch  ------------------------------------------------------------  Patch Async //
-export const patch_async = (url, token, data) => {
+export const patchItem_async = (url, token, id, data) => {
     return dispatch => {
-        axios.patch('/' + url + '/' + data.id + '.json?auth=' + token, data)
+        axios.patch('/' + url + '/' + id + '.json?auth=' + token, data)
         .then(response => {
-            dispatch(patch_success(url, data));
+            console.log(response.data);
+            dispatch(patch_success(url, id, data));
         })
         .catch(error => {
             dispatch(patch_fail(error));

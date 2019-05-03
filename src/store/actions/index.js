@@ -7,7 +7,7 @@ export {
 export {
     delete_async,
     getAll_async,
-    patch_async,
+    patchItem_async,
     put_async
 } from './collection';
 
