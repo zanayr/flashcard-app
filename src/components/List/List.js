@@ -9,7 +9,7 @@ import listStyles from './List.module.css';
 class List extends Component {
     state = {
         // selected: [],
-        confrim: false
+        confirm: false
     }
 
 
@@ -41,7 +41,7 @@ class List extends Component {
     hideConfirm () {
         this.setState(prev => ({
             ...prev,
-            confrim: false
+            confirm: false
         }));
     }
 
@@ -87,7 +87,7 @@ class List extends Component {
         let listItems = this.props.backingCollection.map(item => {
             let showContext = item.isSelected && item.isActive;
             if (this.checkFilter(item)) {
-                
+                console.log(this.state.confirm);
                 return (
                     <ListItem
                         key={item.id}
