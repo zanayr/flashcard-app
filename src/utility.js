@@ -1,5 +1,5 @@
 export const createHashId = (i) => {
-    return (Date.now().toString(36) + (Math.floor((Date.now() + Math.random() * 10)) + i).toString(36).substr(4, 9)).split('').reverse().join('');
+    return (Date.now().toString(36) + (Math.floor((Date.now() + Math.random() * 10)) + (i * 10)).toString(36).substr(4, 9)).split('').reverse().join('');
 }
 
 export const sortAlpha = (arr) => {
@@ -23,8 +23,11 @@ export const sortAscByProp = (obj, property) => {
         return a[1] - b[1];
     });
 }
-export const sortByDateAsc = (arr) => {
-    return arr.sort((a, b) => {
+export const sortCollectionByDateAsc = (collection) => {
+    return Object.keys(collection).map(id => { 
+        return collection[id];
+    })
+    .sort((a, b) => {
         return b.date - a.date;
     });
 }

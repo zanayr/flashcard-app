@@ -104,7 +104,7 @@ class Collections extends Component {
             ...prev,
             aside: {
                 ...prev.aside,
-                isActive: false
+                state: 0
             }
         }));
     }
@@ -152,7 +152,10 @@ class Collections extends Component {
     createItem (item) {
         this.setState(prev => ({
             ...prev,
-            [this.state.current]: prev[this.state.current].concat(item)
+            [item.type]: {
+                ...prev[item.type],
+                [item.id]: item
+            }
         }));
     }
     removeItem (item) {
@@ -214,10 +217,11 @@ class Collections extends Component {
     }
 
     //  EVENT HANDLERS v2  //
-    onActionClick = () => {
+    handle_onActionClick = () => {
+        //  This is all temporary  //
         let id = utility.createHashId(0);
         let item;
-        if (this.state.current === 'deck') {
+        if (this.state.tabs[this.state.current].collection === 'deck') {
             item = {
                 date: Date.now(),
                 groups: [...this.state.filters.groups],
@@ -242,49 +246,10 @@ class Collections extends Component {
                 type: 'card',
             }
         }
-        this.createItem(create.itemModel(id, item));
-        this.props.patchItem_async(this.state.current, this.props.token, id, item);
+        item = create.itemViewModel(id, item);
+        this.createItem(item);
+        this.props.patchItem_async(this.props.token, item);
     }
-
-
-
-
-
-
-    // //  (1) Should return a matching item from the allItems object
-    // getItemById2 (id) {
-    //     return {
-    //         ...this.state.allItems.find(i => i.id == id)
-    //     }
-    // }
-    // //  (1) Should add a selected list item to the selected items array
-    // addSelected (item) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         selected: prev.selected.concat(item)
-    //     }));
-    // }
-    // //  (1) Should remove a selected lsit item from the selected items array
-    // removeSelected (item) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         selected: prev.selected.filter(i => i.id !== item.id)
-    //     }));
-    // }
-    // //  (1) Should close any item that has it's confirm context action button open,
-    // //  (2) add or remove it from the selected items array and (3) check to see if the
-    // //  quick inspect aside is open
-    // handle_listItemSelect = id => {
-    //     this.closeConfirmCA(false);
-    //     if (this.state.selected.find(i => i.id === id)) {
-    //         this.removeSelected(this.getItemById2(id));
-    //     } else {
-    //         this.addSelected(this.getItemById2(id));
-    //     }
-    //     if (this.state.aside.isActive && this.state.aside.state === 99) {
-    //         this.closeAside();
-    //     }
-    // }
 
 
 
@@ -308,87 +273,74 @@ class Collections extends Component {
     }
 
     //  Check for new user tags and groups
-    checkForNew (category, arr) {
-        let filters = this.state.user[category].concat(arr.filter(f => this.state.user[category].indexOf(f) < 0))
+    checkForNewTags (category, tags) {
+        const newTags = tags.filter(tag => this.state[category].indexOf(tag) < 0);
+        let allTags;
+        if (newTags.length) {
+            allTags = this.state[category].concat(newTags);
+            this.setState(prev => ({
+                ...prev,
+                [category]: allTags
+            }));
+            this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
+        }
+    }
+
+    handle_onItemChange = (item, payload) => {
         this.setState(prev => ({
             ...prev,
-            user: {
-                ...prev.user,
-                [category]: filters
+            [item.type]: {
+                ...prev[item.type],
+                [item.id]: {
+                    ...prev[item.type][item.id],
+                    [payload.target]: payload.value
+                }
             }
         }));
-        this.props.putUserFilter_async(category, this.props.select_token, this.state.user.id, filters);
     }
-    onItemUpdate = () => {
-        let item = this.getItemById(this.state.aside.data.id);
+    handle_onItemUpdate = (item) => {
+        console.log(item);
         this.closeAside();
-        this.checkForNew('tags', item.tags);
-        this.checkForNew('groups', item.groups);
-        this.props.put_async(this.state.state, this.props.select_token, item);
+        this.checkForNewTags('tags', item.tags);
+        this.checkForNewTags('groups', item.groups);
+        this.props.putItem_async(this.props.token, item);
     }
-    onItemFilterAdd = (filter, name) => {
-        let id = this.state.aside.data.id;
-        let current = this.state.state;
-        this.setState(prev => ({
-            ...prev,
-            [current]: {
-                ...prev[current],
-                [id]: {
-                    ...prev[current][id],
-                    [filter]: prev[current][id][filter].concat(name)
-                }
-            }
-        }));
-    }
-    onItemFilterRemove = (filter, name) => {
-        let id = this.state.aside.data.id;
-        let current = this.state.state;
-        this.setState(prev => ({
-            ...prev,
-            [current]: {
-                ...prev[current],
-                [id]: {
-                    ...prev[current][id],
-                    [filter]: prev[current][id][filter].filter(n => n !== name)
-                }
-            }
-        }));
-    }
-    onItemChange = (target, value) => {
-        this.updateItem(this.state.aside.data.id, target, value);
-    }
-    onItemInspect = id => {
+    handle_onItemInspect = (item) => {
         this.toggleAside(99);
         this.setAsideData({
-            ...this.getItemById(id),
-            userTags: this.state.user.tags,
-            userGroups: this.state.user.groups
+            groups: this.state.groups,
+            item: item,
+            tags: this.state.tags
         });
         this.setHistory({
-            last: this.getItemById(id),
+            last: item,
             undo: this.resetItem
         });
         this.setAsideAction({
-            onChange: this.onItemChange,
-            onConfirm: this.onItemUpdate,
-            onAdd: this.onItemFilterAdd,
-            onRemove: this.onItemFilterRemove
+            onChange: this.handle_onItemChange,
+            onConfirm: this.handle_onItemUpdate
         });
     }
-    onItemSelect = (item) => {
-        //  1.  Toggle the item that was just selected
-        //  2.  Set the state and check if the item was clicked on while the quick
-        //      inspect aside was open, shut it if it was
-        item.isSelected = !item.isSelected;
-        this.setState(prev => ({
-            ...prev,
-            [item.type]: this.state[item.type].filter(i => i.id !== item.id).concat(item)
-        }));
+    handle_onItemSelect = (item) => {
+        if (this.state.selected.find(i => i.id == item.id)) {
+            this.setState(prev => ({
+                ...prev,
+                selected: prev.selected.filter(i => i.id !== item.id)
+            }));
+        } else {
+            this.setState(prev => ({
+                ...prev,
+                selected: prev.selected.concat(item)
+            }));
+        }
         if (this.state.aside.isActive && this.state.aside.state === 99) {
             this.closeAside();
         }
     }
 
+
+    //  TABS  ---------------------------------------------------------------  TABS  //
+    //  Create Tab  //
     handle_onTabCreate = (tab) => {
         //  1.  Create a unique id for the tab
         //  2.  Build the tab object
@@ -414,12 +366,16 @@ class Collections extends Component {
         }));
         this.props.patchTab_async(this.props.token, this.props.user.id, id, newTab);
     }
+
+    //  Add Tab  //
     handle_onTabAdd = () => {
         this.setState(prev => ({
             ...prev,
             current: 'add'
         }));
     }
+
+    //  Remove Tab  //
     handle_onTabRemove = (tab) => {
         let tabs = this.state.tabs;
         delete tabs[tab];
@@ -431,6 +387,8 @@ class Collections extends Component {
         }));
         this.props.deleteTab_async(this.props.token, this.props.user.id, tab);
     }
+
+    //  Tab Toggle  //
     handle_onTabToggle = (tab) => {
         this.setState(prev => ({
             ...prev,
@@ -442,12 +400,18 @@ class Collections extends Component {
         }));
     }
 
-    handle_onItemDelete = item => {
+    handle_onTabBarClick = () => {
+        //  Do something...
+    }
+
+    handle_onItemDelete = (item) => {
+        const collection = {...this.state[item.type]};
+        delete collection[item.id];
         this.setState(prev => ({
             ...prev,
-            [this.state.current]: prev[this.state.current].filter(i => i.id !== item.id)
+            [item.type]: collection
         }));
-        this.props.deleteItem_async(this.state.current, this.props.token, item.id);
+        this.props.deleteItem_async(this.props.token, item);
     }
 
     toggleFilter = (category, filter) => {
@@ -493,11 +457,11 @@ class Collections extends Component {
             let tab = this.state.tabs[this.state.current];
             mainContent = (
                 <List
-                    backingCollection={utility.sortByDateAsc(this.state[tab.collection])}
+                    backingCollection={utility.sortCollectionByDateAsc(this.state[tab.collection])}
                     filters={this.state.filters}
                     onConfirm={this.handle_onItemDelete}
-                    onInspect={this.onItemInspect}
-                    onSelect={this.onItemSelect}/>
+                    onInspect={this.handle_onItemInspect}
+                    onSelect={this.handle_onItemSelect}/>
             );
         } else {
             mainContent = (
@@ -506,7 +470,7 @@ class Collections extends Component {
                         userTags: this.state.tags,
                         userGroups: this.state.groups
                     }}
-                    onConfirm={this.handle_onTabCreate}/>
+                    onConfirm={this.handle_tabCreate}/>
             );
         }
         return (
@@ -535,16 +499,17 @@ class Collections extends Component {
                             current={this.state.current}/>
                         {mainContent}
                         <ActionButton
-                            onClick={this.onActionClick}
+                            onClick={this.handle_onActionClick}
                             state={0}
                             values={['Create', 'Study']}/>
                     </div>
                 </main>
                 <Aside
+                    // state={this.state.aside}
                     actions={this.state.aside.actions}
-                    active={this.state.aside.isActive}
+                    // active={this.state.aside.isActive}
                     data={this.state.aside.data}
-                    onClose={this.handle_onAsideClose}
+                    // onClose={this.handle_onAsideClose}
                     state={this.state.aside.state}/>
             </Aux>
         )
@@ -561,13 +526,13 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        deleteItem_async: (url, token, id) => dispatch(actions.deleteItem_async(url, token, id)),
+        deleteItem_async: (token, item) => dispatch(actions.deleteItem_async(token, item)),
         deleteTab_async: (token, user, id) => dispatch(actions.deleteTab_async(token, user, id)),
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
-        patchItem_async: (url, token, id, data) => dispatch(actions.patchItem_async(url, token, id, data)),
-        putUserFilter_async: (url, token, user, data) => dispatch(actions.putUserFilter_async(url, token, user, data)),
+        patchItem_async: (token, item) => dispatch(actions.patchItem_async(token, item)),
+        putTag_async: (url, token, user, data) => dispatch(actions.putTag_async(url, token, user, data)),
         patchTab_async: (token, user, id, data) => dispatch(actions.patchTab_async(token, user, id, data)),
-        put_async: (url, token, data) => dispatch(actions.put_async(url, token, data)),
+        putItem_async: (token, item) => dispatch(actions.putItem_async(token, item)),
 
     };
 };

@@ -11,45 +11,37 @@ import styles from './TagForm.module.css';
 
 class TagForm extends Component {
     state = {
-        add: '',
+        tag: '',
         tags: this.props.backingCollection
     }
     form = React.createRef();
 
-    validate () {
-        return this.form.current.reportValidity();
-    }
 
-    handle_onAdd = value => {
-        if (this.validate() && value.length > 0) {
+    handle_onConfirm = value => {
+        if (this.form.current.reportValidity() && value.length > 0) {
             this.setState(prev => ({
-                add: '',
+                tag: '',
                 tags: prev.tags.concat(value)
             }));
-            this.props.add(value);
+            this.props.onConfirm(value);
         }
     }
     handle_onChange = (value) => {
         this.setState(prev => ({
             ...prev,
-            add: value
+            tag: value
         }));
     }
 
 
     render () {
-        let tags = utility.sortAlpha(this.state.tags).map(tagName => {
-            let isActive = false;
-            if (this.props.activeCollection.indexOf(tagName) > -1) {
-                isActive = true;
-            }
-
+        let tags = utility.sortAlpha(this.state.tags).map((tag, i) => {
             return (
                 <Tag
-                    active={isActive}
-                    key={tagName}
-                    onClick={() => this.props.toggle(tagName)}>
-                    {tagName}
+                    active={this.props.activeCollection.indexOf(tag) > -1}
+                    key={utility.createHashId(i)}
+                    onClick={() => this.props.onClick(tag)}>
+                    {tag}
                 </Tag>
             );
         });
@@ -59,11 +51,11 @@ class TagForm extends Component {
                 <form ref={this.form}>
                     <div>
                         <TagField
-                            action={this.handle_onChange}
+                            onChange={this.handle_onChange}
                             label={this.props.field.label}
                             placeholder={this.props.field.placeholder}
-                            value={this.state.add}/>
-                        <Button onClick={() => this.handle_onAdd(this.state.add)}>Add</Button>
+                            value={this.state.tag}/>
+                        <Button onClick={() => this.handle_onConfirm(this.state.tag)}>Add</Button>
                     </div>
                 </form>
             );

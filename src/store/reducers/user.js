@@ -46,7 +46,7 @@ const putUser_succ = (state, action) => {
 };
 
 //  Tags  //
-const putFilter_success = (state, action) => {
+const putTag_success = (state, action) => {
     return {
         ...state,
         user: {
@@ -101,10 +101,10 @@ const reducer = (state=initialState, action) => {
             return service_fail(state, action);
         case actionTypes.PUT_USER_SUCC:
             return putUser_succ(state, action);
-        case actionTypes.PUT_FILTER_FAIL:
+        case actionTypes.PUT_TAG_FAIL:
             return service_fail(state, action);
-        case actionTypes.PUT_FILTER_SUCC:
-            return putFilter_success(state, action);
+        case actionTypes.PUT_TAG_SUCC:
+            return putTag_success(state, action);
         case actionTypes.DELETE_TAB_FAIL:
             return service_fail(state, action);
         case actionTypes.DELETE_TAB_SUCC:

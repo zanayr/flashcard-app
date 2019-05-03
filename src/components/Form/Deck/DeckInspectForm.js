@@ -3,7 +3,7 @@ import React from 'react';
 import TextField from '../../ui/input/Field/TextField';
 import TextArea from '../../ui/input/TextArea/TextArea';
 
-const quickInspectForm = (props) => {
+const deckInspectForm = (props) => {
     return (
         <div>
             <TextField
@@ -12,28 +12,28 @@ const quickInspectForm = (props) => {
                     maxLength: 32,
                     minLength: 6,
                     placeholder: 'Title',
-                    value: props.data.primary
+                    value: props.deck.primary
                 }}
-                key='title'
+                key='primary'
                 onChange={props.onChange}
                 required
-                target='title'/>
+                target='primary'/>
             <TextArea
                 config={{
                     label: 'Details',
                     maxLength: 64,
                     placeholder: 'Details',
-                    value: props.data.secondary
+                    value: props.deck.secondary
                 }}
-                key='details'
+                key='secondary'
                 onChange={props.onChange}
-                target='details'/>
+                target='secondary'/>
             <TextArea
                 config={{
                     label: 'Notes',
                     maxLength: 128,
                     placeholder: 'Notes',
-                    value: props.data.notes
+                    value: props.deck.notes
                 }}
                 key='notes'
                 onChange={props.onChange}
@@ -42,4 +42,4 @@ const quickInspectForm = (props) => {
     );
 }
 
-export default quickInspectForm;
+export default deckInspectForm;

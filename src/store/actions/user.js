@@ -53,15 +53,15 @@ export const putUser_success = (data) => {
 };
 
 //  User Filters  //
-export const putUserFilter_fail = (error) => {
+export const putTag_fail = (error) => {
     return {
-        type: actionTypes.PUT_FILTER_FAIL,
+        type: actionTypes.PUT_TAG_FAIL,
         payload: error
     }
 }
-export const putUserFilter_success = (tags) => {
+export const putTag_success = (tags) => {
     return {
-        type: actionTypes.PUT_FILTER_SUCC,
+        type: actionTypes.PUT_TAG_SUCC,
         payload: tags
     }
 }
@@ -138,14 +138,14 @@ export const putUser_async = (token, data) => {
 
 
 //  ASYNC TAG FUNCTIONS  ---------------------------------  ASYNC TAG FUNCTIONS  //
-export const putUserFilter_async = (url, token, user, tags) => {
+export const putTag_async = (url, token, user, tags) => {
     return dispatch => {
         axios.put('/user/' + user + '/' + url + '.json?auth=' + token, tags)
         .then(response => {
-            dispatch(putUserFilter_success(tags));
+            dispatch(putTag_success(tags));
         })
         .catch(error => {
-            dispatch(putUserFilter_fail(error));
+            dispatch(putTag_fail(error));
         });
     };
 };

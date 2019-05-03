@@ -5,43 +5,40 @@ import axios from '../database';
 
 
 //  DELETE  //
-export const delete_fail = (error) => {
+export const deleteItem_fail = (error) => {
     return {
-        type: actionTypes.DELETE_FAIL,
+        type: actionTypes.DELETE_ITEM_FAIL,
         payload: error
     };
 };
-export const delete_success = (store, id) => {
+export const deleteItem_success = (data) => {
     return {
-        type: actionTypes.DELETE_SUCC,
-        payload: {
-            id: id,
-            store: store
-        }
+        type: actionTypes.DELETE_ITEM_SUCC,
+        payload: data
     };
 };
 
 
 
 //  GET  //
-export const getAll_fail = (store, error) => {
+export const getAllItems_fail = (store, error) => {
     return {
-        type: actionTypes.GET_FAIL,
+        type: actionTypes.GET_ITEMS_FAIL,
         payload: {
             error: error,
             store: store
         }
     }
 }
-export const getAll_init = (data) => {
+export const getAllItems_init = (data) => {
     return {
-        type: actionTypes.GET_INIT,
+        type: actionTypes.GET_ITEMS_INIT,
         payload: data
     }
 }
-export const getAll_success = (store, data) => {
+export const getAllItems_success = (store, data) => {
     return {
-        type: actionTypes.GET_SUCC,
+        type: actionTypes.GET_ITEMS_SUCC,
         payload: {
             data: data,
             store: store
@@ -52,92 +49,84 @@ export const getAll_success = (store, data) => {
 
 
 //  POST  //
-export const patch_fail = (error) => {
+export const patchItem_fail = (error) => {
     return {
-        type: actionTypes.PATCH_FAIL,
+        type: actionTypes.PATCH_ITEM_FAIL,
         payload: error
     }
 }
-export const patch_success = (store, id, data) => {
+export const patchItem_success = (data) => {
     return {
-        type: actionTypes.PATCH_SUCC,
-        payload: {
-            data: data,
-            id: id,
-            store: store
-        }
+        type: actionTypes.PATCH_ITEM_SUCC,
+        payload: data
     }
 }
 
 
 
 //  PUT  //
-export const put_fail = (error) => {
+export const putItem_fail = (error) => {
     return {
-        type: actionTypes.PUT_FAIL,
+        type: actionTypes.PUT_ITEM_FAIL,
         payload: error
     };
 };
-export const put_success = (store, data) => {
+export const putItem_success = (data) => {
     return {
-        type: actionTypes.PUT_SUCC,
-        payload: {
-            data: data,
-            store: store
-        }
+        type: actionTypes.PUT_ITEM_SUCC,
+        payload: data
     };
 };
 
 
 //  ASYNC FUNCTIONS  ---------------------------------------------  ASYNC FUNCTIONS  //
 //  Delete  ---------------------------------------------------------  Delete Async  //
-export const deleteItem_async = (url, token, id) => {
+export const deleteItem_async = (token, data) => {
     try {return dispatch => {
-        axios.delete('/' + url + '/' + id + '.json?auth=' + token)
+        axios.delete('/' + data.type + '/' + data.id + '.json?auth=' + token)
         .then(response => {
-            dispatch(delete_success(url, id));
+            dispatch(deleteItem_success(data));
         })
         .catch(error => {
-            dispatch(delete_fail(error));
+            dispatch(deleteItem_fail(error));
         });
     };} catch (e) {console.log(e)}
 };
 
 //  Get  ----------------------------------------------------------------  Get Async //
-export const getAll_async = (url, token, user) => {
+export const getAllItems_async = (url, token, user) => {
     return dispatch => {
-        dispatch(getAll_init(url));
+        dispatch(getAllItems_init(url));
         axios.get('/' + url + '.json?auth=' + token + '&orderBy="owner"&equalTo="' + user + '"')
         .then(response => {
-            dispatch(getAll_success(url, response.data));
+            dispatch(getAllItems_success(url, response.data));
         })
         .catch(error => {
-            dispatch(getAll_fail(url, error));
+            dispatch(getAllItems_fail(url, error));
         });
     };
 };
 
 //  Patch  ------------------------------------------------------------  Patch Async //
-export const patchItem_async = (url, token, id, data) => {
+export const patchItem_async = (token, data) => {
     return dispatch => {
-        axios.patch('/' + url + '/' + id + '.json?auth=' + token, data)
+        axios.patch('/' + data.type + '/' + data.id + '.json?auth=' + token, create.itemModel(data))
         .then(response => {
-            console.log(response.data);
-            dispatch(patch_success(url, id, data));
+            dispatch(patchItem_success(data));
         })
         .catch(error => {
-            dispatch(patch_fail(error));
+            dispatch(patchItem_fail(error));
         });
     };
 };
-export const put_async = (url, token, data) => {
+export const putItem_async = (token, data) => {
     return dispatch => {
-        axios.put('/' + url + '/' + data.id + '.json?auth=' + token, data)
+        axios.put('/' + data.type + '/' + data.id + '.json?auth=' + token, create.itemModel(data))
         .then(response => {
-            dispatch(put_success(url, data));
+            dispatch(putItem_success(data));
         })
         .catch(error => {
-            dispatch(put_fail(error));
+            dispatch(putItem_fail(error));
         });
     };
 };

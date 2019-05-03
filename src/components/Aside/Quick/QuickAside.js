@@ -1,136 +1,136 @@
 import React, {Component} from 'react';
 
-import Aux from '../../../hoc/Aux/Aux';
-import Row from '../../../hoc/Row/Row';
-import Column from '../../../hoc/Column/Column';
-import IconButton from '../../ui/button/Icon/IconButton';
-import BarLink from '../../ui/link/Bar/BarLink';
-import QuickForm from '../../form/Quick/QuickForm';
-import TagForm from '../../form/Tag/TagForm';
 import BarButton from '../../ui/button/Bar/BarButton';
+import BarLink from '../../ui/link/Bar/BarLink';
+import CardInspectForm from '../../form/Card/CardInspectForm';
+import DeckInspectForm from '../../form/Deck/DeckInspectForm';
+import TagForm from '../../form/Tag/TagForm';
 
 import styles from '../Aside.module.css';
 
-class QuickAside extends Component {
+
+class InspectAside extends Component {
     state = {
         actions: this.props.actions,
-        data: this.props.data
+        groups: this.props.data.groups,
+        item: this.props.data.item,
+        tags: this.props.data.tags
     }
     form = React.createRef();
 
 
-    //  Methods  //
-    //  Form  //
-    udpate (target, value) {
+    //  FORM  ---------------------------------------------------------------  FORM  //
+    handle_onChange = (target, value) => {
         this.setState(prev => ({
             ...prev,
-            data: {
-                ...prev.data,
+            item: {
+                ...prev.item,
                 [target]: value
             }
         }));
-    }
-    validate () {
-        return this.form.current.reportValidity();
-    }
-    //  Tags & Groups  //
-    add (collection, item) {
-        this.setState(prev => ({
-            ...prev,
-            data: {
-                ...prev.data,
-                [collection]: prev.data[collection].concat(item)
-            }
-        }));
-    }
-    remove (collection, item) {
-        this.setState(prev => ({
-            ...prev,
-            data: {
-                ...prev.data,
-                [collection]: prev.data[collection].filter(i => i !== item)
-            }
-        }));
-    }
-
-
-    //  Event Handlers  //
-    //  Form  //
-    handle_onChange = (target, value) => {
-        this.udpate(target, value);
-        this.props.actions.onChange(target, value);
+        this.props.actions.onChange(this.state.item, {
+            target: target,
+            value: value
+        });
     }
     handle_onConfirm = () => {
-        if (this.validate()) {
-            this.props.actions.onConfirm({...this.state});
+        if (this.form.current.reportValidity()) {
+            this.props.actions.onConfirm(this.state.item);
         }
     }
-    //  Tags  //
-    handle_onTagAdd = tag => {
-        this.add('tags', tag);
-        this.props.actions.onAdd('tags', tag);
+
+
+    //  TAGS  ---------------------------------------------------------------  TAGS  //
+    handle_onTagCreate = (category, tag) => {
+        const tags = this.state.item[category];
+        this.setState(prev => ({
+            ...prev,
+            item: {
+                ...prev.item,
+                [category]: prev.item[category].concat(tag)
+            }
+        }));
+        this.props.actions.onChange(this.state.item, {
+            target: category,
+            value: tags.concat(tag)
+        });
     }
-    handle_onTagToggle = tag => {
-        if (this.state.data.tags.indexOf(tag) > -1) {
-            this.remove('tags', tag);
-            this.props.actions.onRemove('tags', tag);
+    handle_onTagToggle = (category, tag) => {
+        const tags = this.state.item[category];
+        if (tags.indexOf(tag) > -1) {
+            this.setState(prev => ({
+                ...prev,
+                item: {
+                    ...prev.item,
+                    [category]: prev.item[category].filter(t => t !== tag)
+                }
+            }));
+            this.props.actions.onChange(this.state.item, {
+                target: category,
+                value: tags.filter(t => t !== tag)
+            });
         } else {
-            this.add('tags', tag);
-            this.props.actions.onAdd('tags', tag);
+            this.setState(prev => ({
+                ...prev,
+                item: {
+                    ...prev.item,
+                    [category]: prev.item[category].concat(tag)
+                }
+            }));
+            this.props.actions.onChange(this.state.item, {
+                target: category,
+                value: tags.concat(tag)
+            });
         }
     }
-    //  Groups  //
-    handle_onGroupAdd = group => {
-        this.add('groups', group);
-        this.props.actions.onAdd('groups', group);
-    }
-    handle_onGroupToggle = group => {
-        if (this.state.data.groups.indexOf(group) > -1) {
-            this.remove('groups', group);
-            this.props.actions.onRemove('groups', group);
-        } else {
-            this.add('groups', group);
-            this.props.actions.onAdd('groups', group);
-        }
-    }
+
 
 
     render () {
+        let form = (
+            <DeckInspectForm
+                deck={this.state.item}
+                onChange={this.handle_onChange}/>
+        );
+        if (this.state.item.type === 'card') {
+            form = (
+                <CardInspectForm
+                    card={this.state.item}
+                    onChange={this.handle_onChange}/>
+            );
+        }
+
         return (
             <aside className={[styles.Aside].join(' ')}>
                 <div>
                     <div>
-                    <Row just='Between'>
-                        <h3>Quick Inspect</h3>
-                        <IconButton onClick={this.props.onClose}>X</IconButton>
-                    </Row>
+                    <h3>Quick Inspect</h3>
+                    <p>Instructions about this aside here.</p>
                     <form
                         className={styles.QuickForm}
                         ref={this.form}>
-                        <QuickForm
-                            data={this.state.data}
-                            onChange={this.handle_onChange}/>
+                        {form}
                     </form>
                     <h4>Tags</h4>
                     <TagForm
-                        activeCollection={this.state.data.tags}
-                        backingCollection={this.state.data.userTags}
+                        activeCollection={this.state.item.tags}
+                        backingCollection={this.state.tags}
                         field={{
                             label: 'Additional Tag',
                             placeholder: 'Verb'
                         }}
-                        toggle={this.handle_onTagToggle}
-                        add={this.handle_onTagAdd}/>
+                        onClick={(tag) => this.handle_onTagToggle('tags', tag)}
+                        onConfirm={(tag) => this.handle_onTagCreate('tags', tag)}/>
                     <h4>Groups</h4>
                     <TagForm
-                        activeCollection={this.state.data.groups}
-                        backingCollection={this.state.data.userGroups}
+                        activeCollection={this.state.item.groups}
+                        backingCollection={this.state.groups}
                         field={{
                             label: 'Additional Group',
                             placeholder: 'Spanish'
                         }}
-                        toggle={this.handle_onGroupToggle}
-                        add={this.handle_onGroupAdd}/>
+                        onClick={(tag) => this.handle_onTagToggle('groups', tag)}
+                        onConfirm={(tag) => this.handle_onTagCreate('groups', tag)}/>
                     </div>
                     <div>
                         <BarButton onClick={this.handle_onConfirm}>Save</BarButton>
@@ -142,4 +142,4 @@ class QuickAside extends Component {
     }
 }
 
-export default QuickAside;
+export default InspectAside;

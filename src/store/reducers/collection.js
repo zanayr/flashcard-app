@@ -25,12 +25,12 @@ const service_fail = (state, action) => {
         }
     };
 }
-const delete_succ = (state, action) => {
-    const collection = state[action.payload.store].collection;
+const deleteItem_succ = (state, action) => {
+    const collection = state[action.payload.type].collection;
     delete collection[action.payload.id];
     return {
         ...state,
-        [action.payload.store]: {
+        [action.payload.type]: {
             collection: {
                 ...collection
             },
@@ -39,7 +39,7 @@ const delete_succ = (state, action) => {
         }
     };
 }
-const getAll_init = (state, action) => {
+const getAllItems_init = (state, action) => {
     return {
         ...state,
         [action.payload]: {
@@ -48,10 +48,10 @@ const getAll_init = (state, action) => {
         }
     };
 };
-const getAll_succ = (state, action) => {
+const getAllItems_succ = (state, action) => {
     let collection = {};
     Object.keys(action.payload.data).map(id => {
-        collection[id] = create.itemModel(id, action.payload.data[id]);
+        collection[id] = create.itemViewModel(id, action.payload.data[id]);
     });
     
     return {
@@ -63,26 +63,26 @@ const getAll_succ = (state, action) => {
         }
     };
 };
-const patch_succ = (state, action) => {
+const patchItem_succ = (state, action) => {
     return {
         ...state,
-        [action.payload.store]: {
+        [action.payload.type]: {
             collection: {
                 ...state[action.payload.store].collection,
-                [action.payload.id]: create.itemModel(action.payload.id, action.payload.data)
+                [action.payload.id]: create.itemViewModel(action.payload.id, action.payload)
             },
             error: null,
             isLoading: false
         }
     };
 };
-const put_succ = (state, action) => {
+const putItem_succ = (state, action) => {
     return {
         ...state,
-        [action.payload.store]: {
+        [action.payload.type]: {
             collection: {
-                ...state[action.payload.store].collection,
-                [action.payload.data.id]: {...action.payload.data}
+                ...state[action.payload.type].collection,
+                [action.payload.id]: create.itemViewModel(action.payload.id, action.payload)
             },
             error: null,
             isLoading: false
@@ -94,24 +94,24 @@ const put_succ = (state, action) => {
 //  REDUCER  -------------------------------------------------------------  REDUCER  //
 const reducer = (state=initialState, action) => {
     switch (action.type) {
-        case actionTypes.DELETE_FAIL:
+        case actionTypes.DELETE_ITEM_FAIL:
             return service_fail(state, action);
-        case actionTypes.DELETE_SUCC:
-            return delete_succ(state, action);
-        case actionTypes.GET_FAIL:
+        case actionTypes.DELETE_ITEM_SUCC:
+            return deleteItem_succ(state, action);
+        case actionTypes.GET_ITEMS_FAIL:
             return service_fail(state, action);
-        case actionTypes.GET_INIT:
-            return getAll_init(state, action);
-        case actionTypes.GET_SUCC:
-            return getAll_succ(state, action);
-        case actionTypes.PATCH_FAIL:
+        case actionTypes.GET_ITEMS_INIT:
+            return getAllItems_init(state, action);
+        case actionTypes.GET_ITEMS_SUCC:
+            return getAllItems_succ(state, action);
+        case actionTypes.PATCH_ITEM_FAIL:
             return service_fail(state, action);
-        case actionTypes.PATCH_SUCC:
-            return patch_succ(state, action);
-        case actionTypes.PUT_FAIL:
+        case actionTypes.PATCH_ITEM_SUCC:
+            return patchItem_succ(state, action);
+        case actionTypes.PUT_ITEM_FAIL:
             return service_fail(state, action);
-        case actionTypes.PUT_SUCC:
-            return put_succ(state, action);
+        case actionTypes.PUT_ITEM_SUCC:
+            return putItem_succ(state, action);
         default:
             return state;
     }
@@ -120,17 +120,13 @@ const reducer = (state=initialState, action) => {
 
 //  STORE SELECTORS  ---------------------------------------------------  SELECTORS  //
 export function selectCards (state) {
-    return Object.keys(state.card.collection).map(id => {
-        return state.card.collection[id];
-    });
+    return state.card.collection
 }
 export function selectCardsIsLoading (state) {
     return state.card.isLoading;
 }
 export function selectDecks (state) {
-    return Object.keys(state.deck.collection).map(id => {
-        return state.deck.collection[id];
-    });
+    return state.deck.collection
 }
 export function selectDecksIsLoading (state) {
     return state.deck.isLoading;

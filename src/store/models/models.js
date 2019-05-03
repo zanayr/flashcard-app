@@ -1,11 +1,9 @@
 //  Item Models  //
-export function itemModel (id, model) {
+export function itemViewModel (id, model) {
     return {
         date: model.date,
         groups: model.groups || [],
         id: id,
-        isSelected: false,
-        isActive: false,
         meta: model.meta || {},
         notes: model.notes || '',
         owner: model.owner,
@@ -15,10 +13,23 @@ export function itemModel (id, model) {
         type: model.type
     }
 }
+export function itemModel (model) {
+    return {
+        date: model.date,
+        groups: model.groups,
+        meta: model.meta,
+        notes: model.notes,
+        owner: model.owner,
+        primary: model.primary,
+        secondary: model.secondary,
+        tags: model.tags,
+        type: model.type
+    }
+}
 
 
 //  Tab Models  //
-export function tabModel (data) {
+export function tabViewModel (data) {
     return {
         collection: data.collection,
         date: data.date,
@@ -28,13 +39,22 @@ export function tabModel (data) {
         tags: data.tags || []
     }
 }
+export function tabModel (data) {
+    return {
+        collection: data.collection,
+        date: data.date,
+        groups: data.groups,
+        name: data.name,
+        tags: data.tags
+    }
+}
 
 
 //  User Models  //
 export function userModel (id, model) {
     let tabs = {};
     Object.keys(model.tabs).map(id => {
-        tabs[id] = tabModel(model.tabs[id]);
+        tabs[id] = tabViewModel(model.tabs[id]);
     });
     return {
         classes: model.classes || [],

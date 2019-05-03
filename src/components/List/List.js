@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import * as utility from '../../utility';
+
 import ListItem from '../ui/ListItem/ListItem';
 import ContextAction from '../ui/button/Context/ContextAction';
 import ContextConfirm from '../ui/button/Context/ContextConfirm';
@@ -85,6 +87,8 @@ class List extends Component {
 
     render () {
         let listItems = this.props.backingCollection.map(item => {
+            let isSelected = this.state.selected.indexOf(item.id) > -1;
+            let isActive = isSelected && this.state.selected.length === 1;
             if (this.checkFilter(item)) {
                 return (
                     <ListItem
@@ -92,22 +96,22 @@ class List extends Component {
                         primary={item.primary}
                         secondary={item.secondary}
                         tags={item.tags}
-                        selected={item.isSelected}
+                        selected={isSelected}
                         onSelect={() => this.onItemSelect(item)}>
                         <ContextAction
                             action={() => this.props.onInspect(item)}
-                            active={item.isSelected && this.state.selected.length === 1}>
+                            active={isActive}>
                             Inspect
                         </ContextAction>
                         <ContextAction
                             action={this.onItemDelete}
-                            active={item.isSelected && this.state.selected.length === 1}
+                            active={isActive}
                             destructive>
                             Delete
                         </ContextAction>
                         <ContextConfirm
                             action={() => this.onItemConfirm(item)}
-                            active={this.state.confirm && item.isSelected && this.state.selected.length === 1}>
+                            active={this.state.confirm && isActive}>
                             Confirm
                         </ContextConfirm>
                     </ListItem>

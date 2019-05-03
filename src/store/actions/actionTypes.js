@@ -7,15 +7,15 @@ export const AUTH_SUCC = 'AUTH_SUCC';
 
 
 //  Collection  //
-export const DELETE_FAIL = 'DELETE_FAIL';
-export const DELETE_SUCC = 'DELETE_SUCC';
-export const GET_FAIL = 'GET_FAIL';
-export const GET_INIT = 'GET_INIT';
-export const GET_SUCC = 'GET_SUCC';
-export const PATCH_FAIL = 'PATCH_FAIL';
-export const PATCH_SUCC = 'PATCH_SUCC';
-export const PUT_FAIL = 'PUT_FAIL';
-export const PUT_SUCC = 'PUT_SUCC';
+export const DELETE_ITEM_FAIL = 'DELETE_ITEM_FAIL';
+export const DELETE_ITEM_SUCC = 'DELETE_ITEM_SUCC';
+export const GET_ITEMS_FAIL = 'GET_ITEMS_FAIL';
+export const GET_ITEMS_INIT = 'GET_ITEMS_INIT';
+export const GET_ITEMS_SUCC = 'GET_ITEMS_SUCC';
+export const PATCH_ITEM_FAIL = 'PATCH_ITEM_FAIL';
+export const PATCH_ITEM_SUCC = 'PATCH_ITEM_SUCC';
+export const PUT_ITEM_FAIL = 'PUT_ITEM_FAIL';
+export const PUT_ITEM_SUCC = 'PUT_ITEM_SUCC';
 
 
 //  Modal Store  //
@@ -32,8 +32,8 @@ export const PATCH_USER_SUCC = 'PATCH_USER_SUCC';
 export const PUT_USER_FAIL = 'PUT_USER_FAIL';
 export const PUT_USER_SUCC = 'PUT_USER_SUCC';
 //  User Tags  //
-export const PUT_FILTER_FAIL = 'PUT_FILTER_FAIL';
-export const PUT_FILTER_SUCC = 'PUT_FILTER_SUCC';
+export const PUT_TAG_FAIL = 'PUT_TAG_FAIL';
+export const PUT_TAG_SUCC = 'PUT_TAG_SUCC';
 //  User Tabs  //
 export const DELETE_TAB_FAIL = 'DELETE_TAB_FAIL';
 export const DELETE_TAB_SUCC = 'DELETE_TAB_SUCC';

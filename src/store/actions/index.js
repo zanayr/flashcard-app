@@ -6,9 +6,9 @@ export {
 
 export {
     deleteItem_async,
-    getAll_async,
+    getAllItems_async,
     patchItem_async,
-    put_async
+    putItem_async
 } from './collection';
 
 export {
@@ -17,7 +17,7 @@ export {
     patchUser_async,
     patchTab_async,
     putUser_async,
-    putUserFilter_async
+    putTag_async
 } from './user'
 
 export {

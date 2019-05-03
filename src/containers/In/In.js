@@ -10,8 +10,8 @@ import Throbber from '../../components/ui/Throbber/Throbber';
 
 class In extends Component {
     componentDidMount() {
-        this.props.getAll_async('card', this.props.select_token, this.props.select_user);
-        this.props.getAll_async('deck', this.props.select_token, this.props.select_user);
+        this.props.getAllItems_async('card', this.props.select_token, this.props.select_user);
+        this.props.getAllItems_async('deck', this.props.select_token, this.props.select_user);
         this.props.getUser_async(this.props.select_token, this.props.select_user);
     }
 
@@ -41,7 +41,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        getAll_async: (url, token, user) => dispatch(actions.getAll_async(url, token, user)),
+        getAllItems_async: (url, token, user) => dispatch(actions.getAllItems_async(url, token, user)),
         getUser_async: (token, auth) => dispatch(actions.getUser_async(token, auth))
     };
 };
