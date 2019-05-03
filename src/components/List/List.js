@@ -8,29 +8,29 @@ import listStyles from './List.module.css';
 
 class List extends Component {
     state = {
-        // selected: [],
+        selected: [],
         confirm: false
     }
 
 
-    // addSelected (id) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         selected: prev.selected.concat(id)
-    //     }));
-    // }
+    addSelected (id) {
+        this.setState(prev => ({
+            ...prev,
+            selected: prev.selected.concat(id)
+        }));
+    }
     // clearAllSelected () {
     //     this.setState(prev => ({
     //         ...prev,
     //         selected: []
     //     }));
     // }
-    // removeSelected (key) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         selected: prev.selected.filter(k => k !== key)
-    //     }));
-    // }
+    removeSelected (key) {
+        this.setState(prev => ({
+            ...prev,
+            selected: prev.selected.filter(k => k !== key)
+        }));
+    }
 
     showConfirm () {
         this.setState(prev => ({
@@ -50,15 +50,15 @@ class List extends Component {
         this.showConfirm();
     }
     onItemConfirm = (item) => {
-        // this.clearAllSelected();
+        this.removeSelected(item.id);
         this.props.onConfirm(item);
     }
     onItemSelect = (item) => {
-        // if (this.state.selected.indexOf(id) > -1) {
-        //     this.removeSelected(id);
-        // } else {
-        //     this.addSelected(id)
-        // }
+        if (this.state.selected.indexOf(item.id) > -1) {
+            this.removeSelected(item.id);
+        } else {
+            this.addSelected(item.id)
+        }
         this.hideConfirm();
         this.props.onSelect(item);
     }
@@ -85,7 +85,6 @@ class List extends Component {
 
     render () {
         let listItems = this.props.backingCollection.map(item => {
-            let showContext = item.isSelected && item.isActive;
             if (this.checkFilter(item)) {
                 return (
                     <ListItem
@@ -97,18 +96,18 @@ class List extends Component {
                         onSelect={() => this.onItemSelect(item)}>
                         <ContextAction
                             action={() => this.props.onInspect(item)}
-                            active={item.isSelected && item.isActive}>
+                            active={item.isSelected && this.state.selected.length === 1}>
                             Inspect
                         </ContextAction>
                         <ContextAction
                             action={this.onItemDelete}
-                            active={item.isSelected && item.isActive}
+                            active={item.isSelected && this.state.selected.length === 1}
                             destructive>
                             Delete
                         </ContextAction>
                         <ContextConfirm
                             action={() => this.onItemConfirm(item)}
-                            active={this.state.confirm && item.isSelected && item.isActive}>
+                            active={this.state.confirm && item.isSelected && this.state.selected.length === 1}>
                             Confirm
                         </ContextConfirm>
                     </ListItem>

@@ -156,10 +156,7 @@ class Collections extends Component {
         }));
     }
     removeItem (item) {
-        this.setState(prev => ({
-            ...prev,
-            [this.state.current]: prev[this.state.current].filter(i => i.id !== item.id)
-        }));
+        
     }
     updateItem (id, target, value) {
         this.setState(prev => ({
@@ -309,11 +306,6 @@ class Collections extends Component {
             this.closeAside();
         }
     }
-    // onItemDelete = id => {
-    //     //this.removeSelectedID(id);
-    //     this.removeItem(id);
-    //     this.props.delete_async(this.state.state, this.props.select_token, id);
-    // }
 
     //  Check for new user tags and groups
     checkForNew (category, arr) {
@@ -385,19 +377,9 @@ class Collections extends Component {
     }
     onItemSelect = (item) => {
         //  1.  Toggle the item that was just selected
-        //  2.  Count the number of selected items
-        //  3.  If the item is selected and the total number of selected items is one,
-        //      make the item as active and show the context actions
-        //  4.  Set the state and check if the item was clicked on while the quick
+        //  2.  Set the state and check if the item was clicked on while the quick
         //      inspect aside was open, shut it if it was
         item.isSelected = !item.isSelected;
-        let selected = 0;
-        this.state[item.type].forEach(i => {
-            if (i.isSelected) {
-                selected++;
-            }
-        });
-        item.isActive = selected === 1 && item.isSelected;
         this.setState(prev => ({
             ...prev,
             [item.type]: this.state[item.type].filter(i => i.id !== item.id).concat(item)
@@ -461,8 +443,10 @@ class Collections extends Component {
     }
 
     handle_onItemDelete = item => {
-        // this.removeSelectedID(item);
-        this.removeItem(item);
+        this.setState(prev => ({
+            ...prev,
+            [this.state.current]: prev[this.state.current].filter(i => i.id !== item.id)
+        }));
         this.props.deleteItem_async(this.state.current, this.props.token, item.id);
     }
 
@@ -509,7 +493,7 @@ class Collections extends Component {
             let tab = this.state.tabs[this.state.current];
             mainContent = (
                 <List
-                    backingCollection={this.state[tab.collection]}
+                    backingCollection={utility.sortByDateAsc(this.state[tab.collection])}
                     filters={this.state.filters}
                     onConfirm={this.handle_onItemDelete}
                     onInspect={this.onItemInspect}

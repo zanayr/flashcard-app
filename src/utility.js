@@ -23,6 +23,11 @@ export const sortAscByProp = (obj, property) => {
         return a[1] - b[1];
     });
 }
+export const sortByDateAsc = (arr) => {
+    return arr.sort((a, b) => {
+        return b.date - a.date;
+    });
+}
 
 export const insertItem = (array, index, item) => {
     let newArray = array.slice();
