@@ -14,12 +14,12 @@ import Aside from '../../components/aside/Aside/Aside';
 import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
 import List from '../../components/List/List';
+import QuickBar from '../../components/ui/bar/Quick/QuickBar';
 import TabBar from '../../components/ui/tab/TabBar/TabBar';
 import TabForm from '../../components/form/Tab/TabForm';
 
 import AppCSS from '../../App.module.css';
 import CollectionsCSS from './Collections.module.css';
-import QuickButton from '../../components/ui/button/Quick/QuickButton';
 
 class Collections extends Component {
     state = {
@@ -36,13 +36,13 @@ class Collections extends Component {
             tags: []
         },
         groups: this.props.user.groups,
+        quick: [],
         selected: [],
         tabs: this.props.user.tabs,
         tags: this.props.user.tags,
         undo: {
             action: null,
-            data: {},
-            state: 0
+            data: {}
         },
     }
 
@@ -240,10 +240,10 @@ class Collections extends Component {
                         this.props.putItem_async(this.props.token, item);
                         this.setState(prev => ({
                             ...prev,
-                            undo: {
-                                ...prev.undo,
-                                state: 1
-                            }
+                            quick: prev.quick.concat({
+                                action: this.state.undo.action,
+                                value: '↺'
+                            })
                         }));
                     }
                     break;
@@ -261,22 +261,55 @@ class Collections extends Component {
             }));
         }
     }
-    handle_onFilterSelect = (category, tag) => {
-        if (this.state.filters[category].includes(tag)) {
-            this.setState(prev => ({
-                ...prev,
-                filters: {
-                    ...prev.filters,
-                    [category]: prev.filters[category].filter(t => t !== tag)
+    handle_onFilterClear = () => {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                data: {
+                    ...prev.aside.data,
+                    selected: []
                 }
-            }));
+            },
+            filters: {
+                groups: [],
+                tags: []
+            }
+        }));
+    }
+    handle_onFilterSelect = (category, tag) => {
+        const filters = {...this.state.filters};
+        if (filters[category].includes(tag)) {
+            filters[category] = filters[category].filter(t => t !== tag);
+        } else {
+            filters[category] = filters[category].concat(tag);
+        }
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                data: {
+                    ...prev.aside.data,
+                    selected: filters[category]
+                }
+            },
+            filters: {
+                ...prev.filters,
+                [category]: filters[category]
+            }
+        }));
+        if (filters.tags.length || filters.groups.length) {
+            if (!this.state.quick.find(q => q.value === '✕')) {
+                this.setState(prev => ({
+                    quick: prev.quick.concat({
+                        action: this.handle_onFilterClear,
+                        value: '✕'
+                    })
+                }));
+            }
         } else {
             this.setState(prev => ({
-                ...prev,
-                filters: {
-                    ...prev.filters,
-                    [category]: prev.filters[category].concat(tag)
-                }
+                quick: prev.quick.filter(q => q.value !== '✕')
             }));
         }
     }
@@ -286,6 +319,7 @@ class Collections extends Component {
             case 2:
                 this.setAsideData({
                     category: 'tags',
+                    selected: this.state.filters.tags,
                     tags: this.state.tags.slice()
                 });
                 this.setAsideAction({
@@ -295,6 +329,7 @@ class Collections extends Component {
             case 3:
                 this.setAsideData({
                     category: 'groups',
+                    selected: this.state.filters.groups,
                     tags: this.state.groups.slice()
                 });
                 this.setAsideAction({
@@ -346,11 +381,11 @@ class Collections extends Component {
                 ...prev[undo.data.type],
                 [undo.data.id]: {...undo.data}
             },
+            quick: prev.quick.filter(q => q.value !== '↺'),
             undo: {
                 ...prev.undo,
                 action: null,
-                data: {},
-                state: 0
+                data: {}
             }
         }));
         this.props.putItem_async(this.props.token, undo.data);
@@ -532,11 +567,7 @@ class Collections extends Component {
                             onClick={this.handle_onActionClick}
                             state={0}
                             values={['Create', 'Study']}/>
-                        <QuickButton
-                            state={this.state.undo.state}
-                            onClick={this.handle_onItemReset}>
-                            &#8619;
-                            </QuickButton>
+                        <QuickBar data={this.state.quick}/>
                     </div>
                 </main>
                 <Aside

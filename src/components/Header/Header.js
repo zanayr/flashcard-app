@@ -32,9 +32,9 @@ const header = (props) => {
 
 
 
-    const handle_onFilterBy = (filter) => {
-        props.actions.openFilter(filter);
-    }
+    // const handle_onFilterBy = (filter) => {
+    //     props.actions.openFilter(filter);
+    // }
 
     return (
         <header

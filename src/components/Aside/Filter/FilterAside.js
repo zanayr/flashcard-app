@@ -9,26 +9,17 @@ import BarButton from '../../ui/button/Bar/BarButton';
 import styles from '../Aside.module.css';
 
 class FilterAside extends Component {
-    state = {
-        selected: []
-    }
-
     handle_onSelect = (tag) => {
-        if (this.state.selected.includes(tag)) {
-            this.setState({selected: this.state.selected.filter(t => t !== tag)});
-        } else {
-            this.setState({selected: this.state.selected.concat(tag)});
-        }
         this.props.actions.onSelect(this.props.data.category, tag);
     }
-
 
     render () {
         const tagButtons = this.props.data.tags.map((tag, i) => {
             let css = [styles.FilterButton];
-            if (this.state.selected.includes(tag)) {
+            if (this.props.data.selected.includes(tag)) {
                 css.push(styles.Active);
             }
+
             return (
                 <div
                     className={css.join(' ')}
