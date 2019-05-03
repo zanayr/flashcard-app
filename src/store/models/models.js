@@ -29,12 +29,13 @@ export function itemModel (model) {
 
 
 //  Tab Models  //
-export function tabViewModel (data) {
+export function tabViewModel (id, data) {
     return {
         collection: data.collection,
         date: data.date,
         delete: true,
         groups: data.groups || [],
+        id: id,
         name: data.name,
         tags: data.tags || []
     }
@@ -54,7 +55,7 @@ export function tabModel (data) {
 export function userModel (id, model) {
     let tabs = {};
     Object.keys(model.tabs).map(id => {
-        tabs[id] = tabViewModel(model.tabs[id]);
+        tabs[id] = tabViewModel(id, model.tabs[id]);
     });
     return {
         classes: model.classes || [],

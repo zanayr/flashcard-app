@@ -85,13 +85,10 @@ export const patchTab_fail = (error) => {
         payload: error
     }
 }
-export const patchTab_success = (id, data) => {
+export const patchTab_success = (data) => {
     return {
         type: actionTypes.PATCH_TAB_SUCC,
-        payload: {
-            data: data,
-            id: id
-        }
+        payload: data
     }
 }
 
@@ -163,11 +160,12 @@ export const deleteTab_async = (token, user, id) => {
         });
     };
 };
-export const patchTab_async = (token, user, id, data) => {
+export const patchTab_async = (token, user, data) => {
+    console.log(data);
     return dispatch => {
-        axios.patch('/user/' + user + '/tabs/' + id + '/.json?auth=' + token, data)
+        axios.patch('/user/' + user + '/tabs/' + data.id + '/.json?auth=' + token, create.tabModel(data))
         .then(response => {
-            dispatch(patchTab_success(id, data));
+            dispatch(patchTab_success(data));
         })
         .catch(error => {
             dispatch(patchTab_fail(error));

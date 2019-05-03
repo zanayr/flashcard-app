@@ -69,7 +69,7 @@ const patchItem_succ = (state, action) => {
         [action.payload.type]: {
             collection: {
                 ...state[action.payload.store].collection,
-                [action.payload.id]: create.itemViewModel(action.payload.id, action.payload)
+                [action.payload.id]: action.payload
             },
             error: null,
             isLoading: false
@@ -82,7 +82,7 @@ const putItem_succ = (state, action) => {
         [action.payload.type]: {
             collection: {
                 ...state[action.payload.type].collection,
-                [action.payload.id]: create.itemViewModel(action.payload.id, action.payload)
+                [action.payload.id]: action.payload
             },
             error: null,
             isLoading: false

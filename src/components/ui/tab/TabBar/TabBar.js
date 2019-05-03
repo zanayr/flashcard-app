@@ -10,11 +10,11 @@ import styles from '../Tab.module.css';
 const tabBar = (props) => {
     const handle_onBarClick = (e) => {
         e.stopPropagation();
-        props.actions.click();
+        props.actions.onClick();
     }
-    const handle_onAddClick = (e) => {
+    const handle_onCreateClick = (e) => {
         e.stopPropagation();
-        props.actions.add();
+        props.actions.onCreate();
     }
     let tabs = utility.sortAscByProp(props.backingCollection, 'date').map((orderedTab, i) => {
         let name = orderedTab[0];
@@ -29,8 +29,8 @@ const tabBar = (props) => {
                 active={isActive}
                 delete={tab.delete}
                 key={i}
-                onClick={() => props.actions.toggle(name)}
-                onClose={() => props.actions.close(name)}>
+                onClick={() => props.actions.onToggle(name)}
+                onClose={() => props.actions.onRemove(name)}>
                 {tab.name}
             </QuickTab>
         );
@@ -41,7 +41,7 @@ const tabBar = (props) => {
         add = (
             <div className={styles.QuickTab}>
                 <div>
-                    <button onClick={(e) => handle_onAddClick(e)}>+</button>
+                    <button onClick={(e) => handle_onCreateClick(e)}>+</button>
                 </div>
             </div>
         );

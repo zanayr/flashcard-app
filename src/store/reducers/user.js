@@ -71,14 +71,13 @@ const deleteTab_succ = (state, action) => {
     }
 }
 const patchTab_succ = (state, action) => {
-    console.log('here');
     return {
         ...state,
         user: {
             ...state.user,
             tabs: {
                 ...state.tabs,
-                [action.payload.id]: create.tabModel(action.payload.data)
+                [action.payload.data.id]: action.payload.data
             }
         }
     }

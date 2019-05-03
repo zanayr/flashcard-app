@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 
+import Aux from '../../../hoc/Aux/Aux';
 import TextField from '../../ui/input/Field/TextField';
 import Button from '../../ui/button/Button/Button';
 import TagForm from '../../form/Tag/TagForm';
@@ -18,25 +19,6 @@ class TabForm extends Component {
 
     form = React.createRef();
 
-    //  Tags & Groups  //
-    add (collection, item) {
-        this.setState(prev => ({
-            ...prev,
-            [collection]: prev[collection].concat(item)
-        }));
-    }
-    remove (collection, item) {
-        this.setState(prev => ({
-            ...prev,
-            [collection]: prev[collection].filter(i => i !== item)
-        }));
-    }
-
-    //  Name  //
-    validate () {
-        return this.form.current.reportValidity();
-    }
-
     handle_onChange = (target, value) => {
         this.setState(prev => ({
             ...prev,
@@ -44,7 +26,7 @@ class TabForm extends Component {
         }));
     }
     handle_onFormConfirm = () => {
-        if (this.validate() && (this.state.tags.length > 0 || this.state.groups.length > 0) && this.state.collection.length > 0) {
+        if (this.form.current.reportValidity() && (this.state.tags.length > 0 || this.state.groups.length > 0) && this.state.collection.length > 0) {
             this.props.onConfirm({...this.state});
         }
     }
@@ -55,55 +37,76 @@ class TabForm extends Component {
             collection: collection
         }));
     }
-    //  Tags  //
-    handle_onTagToggle = tag => {
-        if (this.state.tags.indexOf(tag) > -1) {
-            this.remove('tags', tag);
-        } else {
-            this.add('tags', tag);
-        }
+
+    handle_onTagCreate = (category, tag) => {
+        this.setState(prev => ({
+            ...prev,
+            [category]: prev[category].concat(tag)
+        }));
     }
-    //  Groups  //
-    handle_onGroupToggle = group => {
-        if (this.state.groups.indexOf(group) > -1) {
-            this.remove('groups', group);
+    handle_onTagToggle = (category, tag) => {
+        const tags = this.state[category];
+        if (tags.indexOf(tag) > -1) {
+            this.setState(prev => ({
+                ...prev,
+                [category]: prev[category].filter(t => t !== tag)
+            }));
         } else {
-            this.add('groups', group);
+            this.setState(prev => ({
+                ...prev,
+                [category]: prev[category].concat(tag)
+            }));
         }
     }
 
     render () {
         return (
-            <form
-                onSubmit={(e) => e.preventDefault()}
-                ref={this.form}>
+            <div
+                className={styles.TabForm}
+                onClick={(e) => e.stopPropagation()}>
                 <div>
-                    <TextField
-                        config={{
-                            label: 'Tab Name',
-                            maxLength: 24,
-                            minLength: 3,
-                            placeholder: 'Tab Name',
-                            value: this.state.name
-                        }}
-                        key='name'
-                        onChange={this.handle_onChange}
-                        required
-                        target='name'/>
+                    <form
+                        onSubmit={(e) => e.preventDefault()}
+                        ref={this.form}>
+                        <div>
+                            <TextField
+                                config={{
+                                    label: 'Tab Name',
+                                    maxLength: 24,
+                                    minLength: 3,
+                                    placeholder: 'Tab Name',
+                                    value: this.state.name
+                                }}
+                                key='name'
+                                onChange={this.handle_onChange}
+                                required
+                                target='name'/>
+                        </div>
+                    </form>
                     <h4>Collection</h4>
                     <CollectionToggle
-                        backingCollection={['decks', 'cards']}
+                        backingCollection={['deck', 'card']}
                         toggle={this.handle_onCollectionSelect}/>
                     <h4>Tags</h4>
                     <TagForm
                         activeCollection={this.state.tags}
-                        backingCollection={this.props.data.userTags}
-                        toggle={this.handle_onTagToggle}/>
+                        backingCollection={this.props.tags}
+                        field={{
+                            label: 'Additional Tag',
+                            placeholder: 'Verb'
+                        }}
+                        onClick={(tag) => this.handle_onTagToggle('tags', tag)}
+                        onConfirm={(tag) => this.handle_onTagCreate('tags', tag)}/>
                     <h4>Groups</h4>
                     <TagForm
                         activeCollection={this.state.groups}
-                        backingCollection={this.props.data.userGroups}
-                        toggle={this.handle_onGroupToggle}/>
+                        backingCollection={this.props.groups}
+                        field={{
+                            label: 'Additional Group',
+                            placeholder: 'Spanish'
+                        }}
+                        onClick={(tag) => this.handle_onTagToggle('groups', tag)}
+                        onConfirm={(tag) => this.handle_onTagCreate('groups', tag)}/>
                     <Button
                         key='add'
                         onClick={this.handle_onFormConfirm}
@@ -111,7 +114,7 @@ class TabForm extends Component {
                         Add
                     </Button>
                 </div>
-            </form>
+            </div>
         );
     }
 }

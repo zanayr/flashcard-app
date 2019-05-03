@@ -36,14 +36,14 @@ class Collections extends Component {
             tags: []
         },
         groups: this.props.user.groups,
-        undo: {
-            data: {},
-            action: null,
-            state: 0
-        },
         selected: [],
         tabs: this.props.user.tabs,
-        tags: this.props.user.tags
+        tags: this.props.user.tags,
+        undo: {
+            action: null,
+            data: {},
+            state: 0
+        },
     }
 
 
@@ -226,34 +226,40 @@ class Collections extends Component {
 
     //  Aside  -------------------------------------------------------------  Aside  //
     handle_onAsideClose = () => {
-        console.log(this.state.aside.state);
-        switch (this.state.aside.state) {
-            case 99:
-                let item = this.state[this.state.aside.data.item.type][this.state.aside.data.item.id];
-                console.log(item);
-                this.checkForNewTags('tags', this.state[item.type][item.id].tags);
-                this.checkForNewTags('groups', this.state[item.type][item.id].groups);
-                this.props.putItem_async(this.props.token, item);
-                this.setState(prev => ({
-                    ...prev,
-                    undo: {
-                        ...prev.undo,
-                        state: 1
-                    }
-                }));
-                break;
-            default:
-                break;
+        const aside = {
+            actions: this.state.aside.actions,
+            data: this.state.aside.data
         }
-        this.setState(prev => ({
-            ...prev,
-            aside: {
-                ...prev.aside,
-                actions: {},
-                data: {},
-                state: 0
+        if (this.state.aside.state) {
+            switch (this.state.aside.state) {
+                case 99:
+                    const item = this.state[aside.data.item.type][aside.data.item.id];
+                    if (JSON.stringify(item) !== JSON.stringify(aside.data.item)) {
+                        this.checkForNewTags('tags', this.state[item.type][item.id].tags);
+                        this.checkForNewTags('groups', this.state[item.type][item.id].groups);
+                        this.props.putItem_async(this.props.token, item);
+                        this.setState(prev => ({
+                            ...prev,
+                            undo: {
+                                ...prev.undo,
+                                state: 1
+                            }
+                        }));
+                    }
+                    break;
+                default:
+                    break;
             }
-        }));
+            this.setState(prev => ({
+                ...prev,
+                aside: {
+                    ...prev.aside,
+                    actions: {},
+                    data: {},
+                    state: 0
+                }
+            }));
+        }
     }
     handle_onAsideToggle = state => {
         this.toggleAside(state);
@@ -288,15 +294,24 @@ class Collections extends Component {
         }));
     }
     handle_onItemReset = () => {
-        const item = this.state.undo.data;
+        const undo = {
+            action: this.state.undo.action,
+            data: this.state.undo.data
+        }
         this.setState(prev => ({
             ...prev,
-            [item.type]: {
-                ...prev[item.type],
-                [item.id]: {...item}
+            [undo.data.type]: {
+                ...prev[undo.data.type],
+                [undo.data.id]: {...undo.data}
+            },
+            undo: {
+                ...prev.undo,
+                action: null,
+                data: {},
+                state: 0
             }
         }));
-        this.props.putItem_async(this.props.token, item);
+        this.props.putItem_async(this.props.token, undo.data);
     }
     handle_onItemInspect = (item) => {
         this.toggleAside(99);
@@ -336,25 +351,29 @@ class Collections extends Component {
     //  Create Tab  //
     handle_onTabCreate = (tab) => {
         const id = utility.createHashId(0);
-        let newTab = {
+        const newTab = create.tabViewModel(id, {
             ...tab,
-            collection: tab.collection.substr(0, tab.collection.length - 1),
             date: Date.now()
-        }
+        });
+
+        this.checkForNewTags('tags', tab.tags);
+        this.checkForNewTags('groups', tab.groups);
+        
 
         this.setState(prev => ({
             ...prev,
             current: id,
             filters: {
-                groups: newTab.groups,
-                tags: newTab.tags
+                groups: tab.groups,
+                tags: tab.tags
             },
             tabs: {
                 ...prev.tabs,
                 [id]: newTab
             }
         }));
-        this.props.patchTab_async(this.props.token, this.props.user.id, id, newTab);
+        console.log(newTab);
+        this.props.patchTab_async(this.props.token, this.props.user.id, newTab);
     }
 
     //  Add Tab  //
@@ -456,11 +475,9 @@ class Collections extends Component {
         } else {
             mainContent = (
                 <TabForm
-                    data={{
-                        userTags: this.state.tags,
-                        userGroups: this.state.groups
-                    }}
-                    onConfirm={this.handle_tabCreate}/>
+                    tags={this.state.tags}
+                    groups={this.state.groups}
+                    onConfirm={this.handle_onTabCreate}/>
             );
         }
         return (
@@ -523,7 +540,7 @@ const mapDispatchToProps = dispatch => {
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
         patchItem_async: (token, item) => dispatch(actions.patchItem_async(token, item)),
         putTag_async: (url, token, user, data) => dispatch(actions.putTag_async(url, token, user, data)),
-        patchTab_async: (token, user, id, data) => dispatch(actions.patchTab_async(token, user, id, data)),
+        patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data)),
         putItem_async: (token, item) => dispatch(actions.putItem_async(token, item)),
 
     };
