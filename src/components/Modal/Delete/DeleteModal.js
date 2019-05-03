@@ -53,7 +53,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         clearModal: (data) => dispatch(actions.clearModal(data)),
-        delete_async: (token, key) => dispatch(actions.delete_async(token, key))
+        deleteItem_async: (token, key) => dispatch(actions.deleteItem_async(token, key))
     }
 }
 

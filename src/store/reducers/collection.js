@@ -27,7 +27,7 @@ const service_fail = (state, action) => {
 }
 const delete_succ = (state, action) => {
     const collection = state[action.payload.store].collection;
-    delete collection[action.payload.data.id];
+    delete collection[action.payload.id];
     return {
         ...state,
         [action.payload.store]: {

@@ -155,12 +155,10 @@ class Collections extends Component {
             [this.state.current]: prev[this.state.current].concat(item)
         }));
     }
-    removeItem (id) {
-        const collection = this.state[this.state.current];
-        delete collection[id];
+    removeItem (item) {
         this.setState(prev => ({
             ...prev,
-            decks: {...collection}
+            [this.state.current]: prev[this.state.current].filter(i => i.id !== item.id)
         }));
     }
     updateItem (id, target, value) {
@@ -311,11 +309,11 @@ class Collections extends Component {
             this.closeAside();
         }
     }
-    onItemDelete = id => {
-        this.removeSelectedID(id);
-        this.removeItem(id);
-        this.props.delete_async(this.state.state, this.props.select_token, id);
-    }
+    // onItemDelete = id => {
+    //     //this.removeSelectedID(id);
+    //     this.removeItem(id);
+    //     this.props.delete_async(this.state.state, this.props.select_token, id);
+    // }
 
     //  Check for new user tags and groups
     checkForNew (category, arr) {
@@ -462,10 +460,10 @@ class Collections extends Component {
         }));
     }
 
-    handle_onItemDelete = id => {
-        this.removeSelectedID(id);
-        this.removeItem(id);
-        this.props.delete_async(this.state.state, this.props.select_token, id);
+    handle_onItemDelete = item => {
+        // this.removeSelectedID(item);
+        this.removeItem(item);
+        this.props.deleteItem_async(this.state.current, this.props.token, item.id);
     }
 
     toggleFilter = (category, filter) => {
@@ -513,7 +511,7 @@ class Collections extends Component {
                 <List
                     backingCollection={this.state[tab.collection]}
                     filters={this.state.filters}
-                    onConfirm={this.onItemDelete}
+                    onConfirm={this.handle_onItemDelete}
                     onInspect={this.onItemInspect}
                     onSelect={this.onItemSelect}/>
             );
@@ -579,7 +577,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        delete_async: (url, token, id) => dispatch(actions.delete_async(url, token, id)),
+        deleteItem_async: (url, token, id) => dispatch(actions.deleteItem_async(url, token, id)),
         deleteTab_async: (token, user, id) => dispatch(actions.deleteTab_async(token, user, id)),
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
         patchItem_async: (url, token, id, data) => dispatch(actions.patchItem_async(url, token, id, data)),

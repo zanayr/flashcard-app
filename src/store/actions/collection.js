@@ -91,8 +91,8 @@ export const put_success = (store, data) => {
 
 //  ASYNC FUNCTIONS  ---------------------------------------------  ASYNC FUNCTIONS  //
 //  Delete  ---------------------------------------------------------  Delete Async  //
-export const delete_async = (url, token, id) => {
-    return dispatch => {
+export const deleteItem_async = (url, token, id) => {
+    try {return dispatch => {
         axios.delete('/' + url + '/' + id + '.json?auth=' + token)
         .then(response => {
             dispatch(delete_success(url, id));
@@ -100,7 +100,7 @@ export const delete_async = (url, token, id) => {
         .catch(error => {
             dispatch(delete_fail(error));
         });
-    };
+    };} catch (e) {console.log(e)}
 };
 
 //  Get  ----------------------------------------------------------------  Get Async //

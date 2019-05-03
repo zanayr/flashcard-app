@@ -5,7 +5,7 @@ export {
 } from './auth';
 
 export {
-    delete_async,
+    deleteItem_async,
     getAll_async,
     patchItem_async,
     put_async
