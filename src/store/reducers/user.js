@@ -58,7 +58,7 @@ const putFilter_success = (state, action) => {
 
 //  Tabs  //
 const deleteTab_succ = (state, action) => {
-    let tabs = state.tabs;
+    let tabs = state.user.tabs;
     delete tabs[action.payload];
     return {
         ...state,
@@ -71,6 +71,7 @@ const deleteTab_succ = (state, action) => {
     }
 }
 const patchTab_succ = (state, action) => {
+    console.log('here');
     return {
         ...state,
         user: {

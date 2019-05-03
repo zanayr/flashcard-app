@@ -12,7 +12,7 @@ export {
 } from './collection';
 
 export {
-    deleteUserTab_async,
+    deleteTab_async,
     getUser_async,
     patchUser_async,
     patchTab_async,

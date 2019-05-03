@@ -1,8 +1,11 @@
 //  Item Models  //
-export function itemStoreModel (model) {
+export function itemModel (id, model) {
     return {
         date: model.date,
         groups: model.groups || [],
+        id: id,
+        isSelected: false,
+        isActive: false,
         meta: model.meta || {},
         notes: model.notes || '',
         owner: model.owner,
@@ -12,25 +15,27 @@ export function itemStoreModel (model) {
         type: model.type
     }
 }
-export function itemViewModel (id, model) {
+
+
+//  Tab Models  //
+export function tabModel (data) {
     return {
-        date: model.date,
-        groups: model.groups,
-        id: id,
-        isSelected: false,
-        isActive: false,
-        meta: model.meta,
-        notes: model.notes,
-        owner: model.owner,
-        primary: model.primary,
-        secondary: model.secondary,
-        tags: model.tags,
-        type: model.type
+        collection: data.collection,
+        date: data.date,
+        delete: true,
+        groups: data.groups || [],
+        name: data.name,
+        tags: data.tags || []
     }
 }
 
+
 //  User Models  //
 export function userModel (id, model) {
+    let tabs = {};
+    Object.keys(model.tabs).map(id => {
+        tabs[id] = tabModel(model.tabs[id]);
+    });
     return {
         classes: model.classes || [],
         date: model.date,
@@ -45,7 +50,7 @@ export function userModel (id, model) {
         meta: model.meta || {},
         privilage: model.privilage,
         tabs: {
-            ...model.tabs,
+            ...tabs,
             card: {
                 collection: 'card',
                 date: 1,
@@ -64,17 +69,5 @@ export function userModel (id, model) {
             },
         },
         tags: model.tags || []
-    }
-}
-
-//  Tab Models  //
-export function tabModel (data) {
-    return {
-        collection: data.collection,
-        date: data.date,
-        delete: true,
-        groups: data.groups,
-        name: data.name,
-        tags: data.tags
     }
 }

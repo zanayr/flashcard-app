@@ -433,7 +433,6 @@ class Collections extends Component {
                 [id]: newTab
             }
         }));
-        console.log(this.props.token, this.props.user.id);
         this.props.patchTab_async(this.props.token, this.props.user.id, id, newTab);
     }
     handle_onTabAdd = () => {
@@ -443,18 +442,15 @@ class Collections extends Component {
         }));
     }
     handle_onTabRemove = (tab) => {
-        let tabs = this.state.user.tabs;
+        let tabs = this.state.tabs;
         delete tabs[tab];
         this.setState(prev => ({
             ...prev,
-            user: {
-                ...prev.user,
-                tabs: {
-                    ...tabs
-                }
+            tabs: {
+                ...tabs
             }
         }));
-        this.props.deleteUserTab_async(this.props.select_token, this.props.select_userId, tab);
+        this.props.deleteTab_async(this.props.token, this.props.user.id, tab);
     }
     handle_onTabToggle = (tab) => {
         this.setState(prev => ({
@@ -587,7 +583,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         delete_async: (url, token, id) => dispatch(actions.delete_async(url, token, id)),
-        deleteUserTab_async: (token, user, id) => dispatch(actions.deleteUserTab_async(token, user, id)),
+        deleteTab_async: (token, user, id) => dispatch(actions.deleteTab_async(token, user, id)),
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
         patch_async: (url, token, data) => dispatch(actions.patch_async(url, token, data)),
         putUserFilter_async: (url, token, user, data) => dispatch(actions.putUserFilter_async(url, token, user, data)),

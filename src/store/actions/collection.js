@@ -40,14 +40,6 @@ export const getAll_init = (data) => {
     }
 }
 export const getAll_success = (store, data) => {
-    Object.keys(data).map(key => {
-        if (!data[key].tags) {
-            data[key].tags = [];
-        }
-        if (!data[key].groups) {
-            data[key].groups = [];
-        }
-    });
     return {
         type: actionTypes.GET_SUCC,
         payload: {
@@ -116,11 +108,7 @@ export const getAll_async = (url, token, user) => {
         dispatch(getAll_init(url));
         axios.get('/' + url + '.json?auth=' + token + '&orderBy="owner"&equalTo="' + user + '"')
         .then(response => {
-            let data = {};
-            Object.keys(response.data).map(id => {
-                data[id] = create.itemStoreModel(response.data[id]);
-            });
-            dispatch(getAll_success(url, data));
+            dispatch(getAll_success(url, response.data));
         })
         .catch(error => {
             dispatch(getAll_fail(url, error));

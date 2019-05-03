@@ -152,7 +152,7 @@ export const putUserFilter_async = (url, token, user, tags) => {
 
 
 //  ASYNC TAB FUNCTIONS  ---------------------------------  ASYNC TAB FUNCTIONS  //
-export const deleteUserTab_async = (token, user, id) => {
+export const deleteTab_async = (token, user, id) => {
     return dispatch => {
         axios.delete('/user/' + user + '/tabs/' + id + '.json?auth=' + token)
         .then(response => {

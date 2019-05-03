@@ -49,12 +49,15 @@ const getAll_init = (state, action) => {
     };
 };
 const getAll_succ = (state, action) => {
+    let collection = {};
+    Object.keys(action.payload.data).map(id => {
+        collection[id] = create.itemModel(id, action.payload.data[id]);
+    });
+    
     return {
         ...state,
         [action.payload.store]: {
-            collection: {
-                ...action.payload.data
-            },
+            collection: collection,
             error: null,
             isLoading: false
         }
@@ -118,7 +121,7 @@ const reducer = (state=initialState, action) => {
 //  STORE SELECTORS  ---------------------------------------------------  SELECTORS  //
 export function selectCards (state) {
     return Object.keys(state.card.collection).map(id => {
-        return create.itemViewModel(id, state.card.collection[id]);
+        return state.card.collection[id];
     });
 }
 export function selectCardsIsLoading (state) {
@@ -126,7 +129,7 @@ export function selectCardsIsLoading (state) {
 }
 export function selectDecks (state) {
     return Object.keys(state.deck.collection).map(id => {
-        return create.itemViewModel(id, state.deck.collection[id]);
+        return state.deck.collection[id];
     });
 }
 export function selectDecksIsLoading (state) {

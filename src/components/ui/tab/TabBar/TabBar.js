@@ -27,7 +27,7 @@ const tabBar = (props) => {
         return (
             <QuickTab
                 active={isActive}
-                delete={tab.canDelete}
+                delete={tab.delete}
                 key={i}
                 onClick={() => props.actions.toggle(name)}
                 onClose={() => props.actions.close(name)}>
