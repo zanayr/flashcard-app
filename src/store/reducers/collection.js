@@ -117,7 +117,6 @@ const reducer = (state=initialState, action) => {
 
 //  STORE SELECTORS  ---------------------------------------------------  SELECTORS  //
 export function selectCards (state) {
-    console.log(state);
     return Object.keys(state.card.collection).map(id => {
         return create.itemViewModel(id, state.card.collection[id]);
     });

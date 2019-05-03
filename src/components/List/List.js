@@ -86,7 +86,6 @@ class List extends Component {
     render () {
         let listItems = this.props.backingCollection.map(item => {
             let showContext = item.isSelected && item.isActive;
-
             if (this.checkFilter(item)) {
                 
                 return (
@@ -119,7 +118,6 @@ class List extends Component {
                 return null;
             }
         });
-
         return (
             <section className={listStyles.List}>
                 <div>

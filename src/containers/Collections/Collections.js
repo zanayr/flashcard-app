@@ -387,17 +387,24 @@ class Collections extends Component {
         });
     }
     onItemSelect = (item) => {
-        // this.setConfirm(false);
-        // if (this.state.selected.indexOf(id) > -1) {
-        //     this.removeSelectedID(id);
-        // } else {
-        //     this.addSelectedID(id)
-        // }
+        //  1.  Toggle the item that was just selected
+        //  2.  Count the number of selected items
+        //  3.  If the item is selected and the total number of selected items is one,
+        //      make the item as active and show the context actions
+        //  4.  Set the state and check if the item was clicked on while the quick
+        //      inspect aside was open, shut it if it was
         item.isSelected = !item.isSelected;
+        let selected = 0;
+        this.state[item.type].forEach(i => {
+            if (i.isSelected) {
+                selected++;
+            }
+        });
+        item.isActive = selected === 1 && item.isSelected;
         this.setState(prev => ({
             ...prev,
             [item.type]: this.state[item.type].filter(i => i.id !== item.id).concat(item)
-        }))
+        }));
         if (this.state.aside.isActive && this.state.aside.state === 99) {
             this.closeAside();
         }
@@ -512,7 +519,6 @@ class Collections extends Component {
         let mainContent = null;
         if (this.state.tabs[this.state.current]) {
             let tab = this.state.tabs[this.state.current];
-            console.log(this.state[tab.collection]);
             mainContent = (
                 <List
                     backingCollection={this.state[tab.collection]}
