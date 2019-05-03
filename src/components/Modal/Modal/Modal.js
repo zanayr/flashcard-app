@@ -25,21 +25,19 @@ const modal = (props) => {
     //     props.clearModal({key: props.uniqueId});
     // }
     let modal;
-    switch (props.data.type) {
+    switch (props.type) {
         case modalTypes.DELETE:
             modal = (
                 <DeleteModal
-                    data={{...props.data}}
+                    data={props.data}
                     onClear={handle_onClear}/>
             );
             break;
         default:
             modal = (
                 <Dialog 
-                    data={{
-                        message: 'Something went wrong...',
-                        type: 'default'
-                    }}
+                    data={'Something went wrong...'}
+                    type={'default'}
                     onClear={handle_onClear}/>
             )
             break;

@@ -26,7 +26,8 @@ class App extends Component {
       return (
         <Modal 
           key={i}
-          data={modal}
+          data={modal.data}
+          type={modal.type}
           uniqueId={i}/>
       );
     });

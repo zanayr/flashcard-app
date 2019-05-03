@@ -12,16 +12,19 @@ import ModalCSS from '../Modal/Modal.module.css';
 
 
 const deleteSingleModal = (props) => {
-    //  EVENT HANDLERS  //
+    console.log(props);
+    let titles = props.data.map(title => {
+        return (
+            <li>{title}</li>
+        );
+    });
+
+
     const handle_onCancel = () => {
         props.onClear();
     }
     const handle_onConfirm = () => {
-        // if (props.actions.callback) {
-        //     props.actions.callback();
-        // }
-        // props.actions.onConfirm({key: props.data.key});
-        props.delete_async(props.select_token, props.data.key);
+        //props.deleteManyItems_async(props.select_token, props.data);
         props.onClear();
     }
 
@@ -32,7 +35,7 @@ const deleteSingleModal = (props) => {
                 <h3>Warning!</h3>
             </Row>
             <p>Once an item has been deleted, it cannot be recovered. Are you sure you wish to delete these items?</p>
-            <ul><li>{props.data.title}</li></ul>
+            <ul>{titles}</ul>
             <Row just='Between'>
                 <Button onClick={handle_onCancel}>Cancel</Button>
                 <Button onClick={handle_onConfirm}>Delete</Button>

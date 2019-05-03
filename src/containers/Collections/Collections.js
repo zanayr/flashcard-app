@@ -36,6 +36,11 @@ class Collections extends Component {
             store: {},
             undo: null
         },
+        // allItems: {
+        //     ...this.props.select_decks,
+        //     ...this.props.select_cards
+        // },
+        // selected: [],
         selected: [],
         state: 'decks',
         filters: {
@@ -111,28 +116,36 @@ class Collections extends Component {
     }
 
     //  List  ---------------------------------------------------------------  List  //
-    addSelected (key) {
+    addSelectedID (id) {
         this.setState(prev => ({
             ...prev,
-            selected: prev.selected.concat(key)
+            selected: prev.selected.concat(id)
         }));
     }
-    clearSelected (key) {
+    // clearSelected (id) {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         selected: []
+    //     }));
+    // }
+    removeSelectedID (id) {
         this.setState(prev => ({
             ...prev,
-            selected: []
-        }));
-    }
-    removeSelected (key) {
-        this.setState(prev => ({
-            ...prev,
-            selected: prev.selected.filter(k => k !== key)
+            selected: prev.selected.filter(i => i !== id)
         }));
     }
     setConfirm (bool) {
         this.setState(prev => ({
             ...prev,
             confirm: bool
+        }));
+    }
+
+    //  Closes any open confrim context action button
+    closeConfirmCA () {
+        this.setState(prev => ({
+            ...prev,
+            confirm: false
         }));
     }
     toggleConfirm () {
@@ -177,6 +190,7 @@ class Collections extends Component {
             id: id
         }
     }
+ 
     resetItem = () => {
         this.setState(prev => ({
             ...prev,
@@ -244,6 +258,48 @@ class Collections extends Component {
         this.props.patch_async(this.state.state, this.props.select_token, item);
     }
 
+
+
+
+
+
+    // //  (1) Should return a matching item from the allItems object
+    // getItemById2 (id) {
+    //     return {
+    //         ...this.state.allItems.find(i => i.id == id)
+    //     }
+    // }
+    // //  (1) Should add a selected list item to the selected items array
+    // addSelected (item) {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         selected: prev.selected.concat(item)
+    //     }));
+    // }
+    // //  (1) Should remove a selected lsit item from the selected items array
+    // removeSelected (item) {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         selected: prev.selected.filter(i => i.id !== item.id)
+    //     }));
+    // }
+    // //  (1) Should close any item that has it's confirm context action button open,
+    // //  (2) add or remove it from the selected items array and (3) check to see if the
+    // //  quick inspect aside is open
+    // handle_listItemSelect = id => {
+    //     this.closeConfirmCA(false);
+    //     if (this.state.selected.find(i => i.id === id)) {
+    //         this.removeSelected(this.getItemById2(id));
+    //     } else {
+    //         this.addSelected(this.getItemById2(id));
+    //     }
+    //     if (this.state.aside.isActive && this.state.aside.state === 99) {
+    //         this.closeAside();
+    //     }
+    // }
+
+
+
     //  Aside  -------------------------------------------------------------  Aside  //
     handle_onAsideClose = state => {
         if (this.state.aside.state === 99) {
@@ -263,7 +319,7 @@ class Collections extends Component {
         }
     }
     onItemDelete = id => {
-        this.removeSelected(id);
+        this.removeSelectedID(id);
         this.removeItem(id);
         this.props.delete_async(this.state.state, this.props.select_token, id);
     }
@@ -339,9 +395,9 @@ class Collections extends Component {
     onItemSelect = id => {
         this.setConfirm(false);
         if (this.state.selected.indexOf(id) > -1) {
-            this.removeSelected(id);
+            this.removeSelectedID(id);
         } else {
-            this.addSelected(id)
+            this.addSelectedID(id)
         }
         if (this.state.aside.isActive && this.state.aside.state === 99) {
             this.closeAside();
@@ -411,7 +467,7 @@ class Collections extends Component {
     }
 
     handle_onItemDelete = id => {
-        this.removeSelected(id);
+        this.removeSelectedID(id);
         this.removeItem(id);
         this.props.delete_async(this.state.state, this.props.select_token, id);
     }
@@ -488,6 +544,7 @@ class Collections extends Component {
                         toggleAside: this.handle_onAsideToggle,
                         closeAside: this.handle_onAsideClose
                     }}
+                    collection={this.state[this.state.state]}
                     selected={this.state.selected}/>
                 <main
                     className={CollectionsCSS.Main}

@@ -1,4 +1,8 @@
 import React from 'react';
+import {connect} from 'react-redux';
+
+import * as actions from '../../store/actions/index';
+import * as modalTypes from '../modal/Modal/modalTypes';
 
 import ReturnLink from '../ui/link/Return/ReturnLink';
 import Search from '../ui/input/Search/Search';
@@ -15,11 +19,21 @@ const header = (props) => {
     }
 
     const handle_onBulkDelete = () => {
-        const selected = props.selected;
-        selected.forEach(id => {
-            props.actions.deleteItem(id);
+        const titles = [];
+        const collection = Object.keys(props.collection).map(key => {
+            return props.collection[key];
+        })
+        props.selected.forEach(id => {
+            titles.push(collection.find(i => i.id == id).title);
         });
+        props.displayModal(modalTypes.DELETE, titles);
+        //  Clear selected
+        //props.actions.clearSelected();
     };
+    
+
+
+
     const handle_onFilterBy = (filter) => {
         props.actions.openFilter(filter);
     }
@@ -42,4 +56,13 @@ const header = (props) => {
     );
 }
 
-export default header;
+
+const mapDispatchToProps = dispatch => {
+    return {
+        displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
+
+    };
+};
+
+
+export default connect(null, mapDispatchToProps)(header);
