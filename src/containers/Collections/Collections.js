@@ -6,6 +6,9 @@ import * as select from '../../store/reducers/root';
 import * as sortType from '../../store/reducers/sortTypes';
 import * as utility from '../../utility';
 
+
+import withUser from '../../hoc/withUser/withUser';
+
 import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside from '../../components/aside/Aside/Aside';
 import Aux from '../../hoc/Aux/Aux';
@@ -19,35 +22,22 @@ import CollectionsCSS from './Collections.module.css';
 
 class Collections extends Component {
     state = {
-        action: {
-            state: 0
-        },
         aside: {
             actions: {},
             data: {},
-            isActive: false,
             state: 0
         },
-        showConfirm: false,
-        deleted: [],
         decks: this.props.select_decks,
         cards: this.props.select_cards,
+        current: 'decks',
+        groups: this.props.user.groups,
         history: {
-            store: {},
-            undo: null
+            data: {},
+            action: null
         },
-        // allItems: {
-        //     ...this.props.select_decks,
-        //     ...this.props.select_cards
-        // },
-        // selected: [],
         selected: [],
-        state: 'decks',
-        filters: {
-            tags: [],
-            groups: []
-        },
-        user: this.props.select_user
+        tabs: this.props.user.tabs,
+        tags: this.props.user.tags
     }
 
 
@@ -511,12 +501,17 @@ class Collections extends Component {
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
         let mainContent = null;
-        if (this.state.user.tabs[this.state.state]) {
-            let tab = this.state.user.tabs[this.state.state];
+        console.log(this.state.tabs);
+        if (this.state.tabs[this.state.current]) {
+            let tab = this.state.tabs[this.state.current];
+            console.log(tab);
             mainContent = (
                 <List
                     backingCollection={this.state[tab.collection]}
-                    filters={this.state.filters}
+                    filters={{
+                        groups: this.state.groups,
+                        tags: this.state.tags
+                    }}
                     onConfirm={this.onItemDelete}
                     onInspect={this.onItemInspect}
                     onSelect={this.onItemSelect}/>
@@ -533,8 +528,6 @@ class Collections extends Component {
                     tags={this.state.user.tags}/>
             );
         }
-
-
         return (
             <Aux>
                 <Header
@@ -557,12 +550,12 @@ class Collections extends Component {
                                 close: this.handle_onTabRemove,
                                 toggle: this.handle_onTabToggle,
                             }}
-                            backingCollection={this.state.user.tabs}
-                            current={this.state.state}/>
+                            backingCollection={this.state.tabs}
+                            current={this.state.current}/>
                         {mainContent}
                         <ActionButton
                             onClick={this.onActionClick}
-                            state={this.state.action.state}
+                            state={0}
                             values={['Create', 'Study']}/>
                     </div>
                 </main>
@@ -600,4 +593,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Collections);
+export default connect(mapStateToProps, mapDispatchToProps)(withUser(Collections));

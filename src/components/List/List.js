@@ -68,6 +68,7 @@ class List extends Component {
         let match = true;
         if (this.props.filters.tags.length) {
             this.props.filters.tags.forEach(tag => {
+                console.log(item);
                 if (item.tags.indexOf(tag) < 0 && match) {
                     match = false;
                 }

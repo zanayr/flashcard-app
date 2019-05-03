@@ -1,4 +1,6 @@
 import * as actionTypes from './actionTypes';
+import * as create from '../models/models';
+
 import axios from '../database';
 
 
@@ -93,16 +95,12 @@ export const patchUserTab_success = (data) => {
 
 //  ASYNC FUNCTIONS  ---------------------------------------------  ASYNC FUNCTIONS  //
 //  Get  ----------------------------------------------------------------  Get Async //
-export const getUser_async = (token, auth) => {
+export const getUser_async = (token, user) => {
     return dispatch => {
         dispatch(getUser_init());
-        axios.get('/users.json?auth=' + token + '&orderBy="auth"&equalTo="' + auth + '"')
+        axios.get('/users/' + user + '.json?auth=' + token)
         .then(response => {
-            let data = {};
-            Object.keys(response.data).map(key => {
-                data = response.data[key];
-            });
-            dispatch(getUser_success(data));
+            dispatch(getUser_success(create.userModel(user, response.data)));
         })
         .catch(error => {
             dispatch(getUser_fail(error));

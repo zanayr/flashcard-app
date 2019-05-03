@@ -2,47 +2,33 @@
 export function itemStoreModel (model) {
     return {
         date: model.date,
-        notes: model.notes,
-        meta: model.meta,
+        groups: model.groups || [],
+        meta: model.meta || {},
+        notes: model.notes || '',
+        owner: model.owner,
         primary: model.primary,
         secondary: model.secondary,
-        type: model.type,
-        owner: model.owner
+        tags: model.tags || []
     }
 }
 export function itemViewModel (id, model) {
     return {
         date: model.date,
+        groups: model.groups,
         id: id,
         isSelected: false,
         isActive: false,
-        notes: model.notes,
         meta: model.meta,
+        notes: model.notes,
+        owner: model.owner,
         primary: model.primary,
         secondary: model.secondary,
-        type: model.type,
-        owner: model.owner
+        tags: model.tags
     }
 }
 
 //  User Models  //
-export function userStoreModel (model) {
-    return {
-        classes: model.classes || [],
-        date: model.date,
-        groups: model.groups || [],
-        info: {
-            email: model.info.email,
-            first: model.info.first,
-            last: model.info.last,
-        },
-        priv: model.priv,
-        meta: model.meta,
-        tabs: model.tabs,
-        tags: model.tags || []
-    }
-}
-export function userViewModel (id, model) {
+export function userModel (id, model) {
     return {
         classes: model.classes || [],
         date: model.date,
@@ -52,10 +38,27 @@ export function userViewModel (id, model) {
             email: model.info.email,
             first: model.info.first,
             last: model.info.last,
+            user: model.info.user
         },
-        priv: model.priv,
-        meta: model.meta,
-        tabs: model.tabs,
+        meta: model.meta || {},
+        privilage: model.privilage,
+        tabs: {
+            ...model.tabs,
+            cards: {
+                collection: 'cards',
+                date: 1,
+                groups: [],
+                name: 'Cards',
+                tags: []
+            },
+            decks: {
+                collection: 'decks',
+                date: 0,
+                groups: [],
+                name: 'Decks',
+                tags: []
+            },
+        },
         tags: model.tags || []
     }
 }

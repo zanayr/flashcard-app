@@ -1,4 +1,6 @@
 import * as actionTypes from './actionTypes';
+import * as create from '../models/models';
+
 import axios from '../database';
 
 
@@ -112,9 +114,14 @@ export const delete_async = (url, token, id) => {
 export const getAll_async = (url, token, user) => {
     return dispatch => {
         dispatch(getAll_init(url));
-        axios.get('/' + url + '.json?auth=' + token + '&orderBy="user"&equalTo="' + user + '"')
+        axios.get('/' + url + '.json?auth=' + token + '&orderBy="owner"&equalTo="' + user + '"')
         .then(response => {
-            dispatch(getAll_success(url, response.data));
+            let data = {};
+            Object.keys(response.data).map(id => {
+                data[id] = create.itemStoreModel(response.data[id]);
+            });
+            console.log(data);
+            dispatch(getAll_success(url, data));
         })
         .catch(error => {
             dispatch(getAll_fail(url, error));

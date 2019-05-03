@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import * as create from '../models/models';
 
 
 const initialState = {
@@ -116,13 +117,17 @@ const reducer = (state=initialState, action) => {
 
 //  STORE SELECTORS  ---------------------------------------------------  SELECTORS  //
 export function selectCards (state) {
-    return state.cards.collection;
+    return Object.keys(state.cards.collection).map(id => {
+        return create.itemViewModel(id, state.cards.collection[id]);
+    });
 }
 export function selectCardsIsLoading (state) {
     return state.cards.isLoading;
 }
 export function selectDecks (state) {
-    return state.decks.collection;
+    return Object.keys(state.decks.collection).map(id => {
+        return create.itemViewModel(id, state.decks.collection[id]);
+    });
 }
 export function selectDecksIsLoading (state) {
     return state.decks.isLoading;
