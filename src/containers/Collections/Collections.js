@@ -315,31 +315,35 @@ class Collections extends Component {
     }
 
     handle_onAsideToggle = (state) => {
-        switch (state) {
-            case 2:
-                this.setAsideData({
-                    category: 'tags',
-                    selected: this.state.filters.tags,
-                    tags: this.state.tags.slice()
-                });
-                this.setAsideAction({
-                    onSelect: this.handle_onFilterSelect
-                });
-                break;
-            case 3:
-                this.setAsideData({
-                    category: 'groups',
-                    selected: this.state.filters.groups,
-                    tags: this.state.groups.slice()
-                });
-                this.setAsideAction({
-                    onSelect: this.handle_onFilterSelect
-                });
-                break;
-            default:
-                break;
+        if (this.state.aside.state !== state) {
+            switch (state) {
+                case 2:
+                    this.setAsideData({
+                        category: 'tags',
+                        selected: this.state.filters.tags,
+                        tags: this.state.tags.slice()
+                    });
+                    this.setAsideAction({
+                        onSelect: this.handle_onFilterSelect
+                    });
+                    break;
+                case 3:
+                    this.setAsideData({
+                        category: 'groups',
+                        selected: this.state.filters.groups,
+                        tags: this.state.groups.slice()
+                    });
+                    this.setAsideAction({
+                        onSelect: this.handle_onFilterSelect
+                    });
+                    break;
+                default:
+                    break;
+            }
+            this.toggleAside(state);
+        } else {
+            this.handle_onAsideClose();
         }
-        this.toggleAside(state);
     }
 
     //  List  ---------------------------------------------------------------  List  //
@@ -397,13 +401,14 @@ class Collections extends Component {
             item: item,
             tags: this.state.tags
         });
+        this.setAsideAction({
+            onChange: this.handle_onItemChange
+        });
         this.setUndo({
             action: this.handle_onItemReset,
             data: item
         });
-        this.setAsideAction({
-            onChange: this.handle_onItemChange
-        });
+        
     }
     
     handle_onItemSelect = (item) => {
@@ -498,23 +503,6 @@ class Collections extends Component {
             [item.type]: collection
         }));
         this.props.deleteItem_async(this.props.token, item);
-    }
-
-    
-
-    handle_onFilterOpen = (category) => {
-        this.setAsideData({
-            filters: this.state[category],
-            category: category
-        });
-        this.setAsideAction({
-            onToggle: this.toggleFilter,
-        });
-        if (category === 'tags') {
-            this.toggleAside(2);
-        } else {
-            this.toggleAside(3);
-        }
     }
 
 
