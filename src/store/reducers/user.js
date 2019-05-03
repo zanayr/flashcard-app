@@ -1,5 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
-import { putUserFilter_success } from '../actions/user';
+import * as create from '../models/models';
 
 
 const initialState = {
@@ -25,7 +25,7 @@ const getUser_init = (state, action) => {
 const getUser_succ = (state, action) => {
     return {
         ...state,
-        user: action.payload,
+        user: create.userModel(action.payload.user, action.payload.data),
         error: null,
         isLoading: false
     };
@@ -77,7 +77,7 @@ const patchTab_succ = (state, action) => {
             ...state.user,
             tabs: {
                 ...state.tabs,
-                [action.payload.data.id]: {...action.payload}
+                [action.payload.id]: create.tabModel(action.payload.data)
             }
         }
     }

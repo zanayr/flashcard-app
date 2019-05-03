@@ -410,44 +410,39 @@ class Collections extends Component {
         }
     }
 
-    handle_onTabCreate = tab => {
-        let order = 2;
-        Object.keys(this.state.user.tabs).map(key => {
-            if (this.state.user.tabs[key].order >= order) {
-                order = this.state.user.tabs[key].order + 1;
-            }
-        });
+    handle_onTabCreate = (tab) => {
+        //  1.  Create a unique id for the tab
+        //  2.  Build the tab object
+        //  3.  Set the state and update the db
         const id = utility.createHashId(0);
-        let t = {
+        let newTab = {
             ...tab,
-            canDelete: true,
-            id: id,
+            collection: tab.collection.substr(0, tab.collection.length - 1),
             date: Date.now()
         }
+
         this.setState(prev => ({
             ...prev,
+            current: id,
             filters: {
-                groups: t.groups,
-                tags: t.tags
+                groups: newTab.groups,
+                tags: newTab.tags
             },
-            state: id,
-            user: {
-                ...prev.user,
-                tabs: {
-                    ...prev.user.tabs,
-                    [id]: t
-                }
+            tabs: {
+                ...prev.tabs,
+                [id]: newTab
             }
         }));
-        this.props.patchUserTab_async(this.props.select_token, this.props.select_userId, t);
+        console.log(this.props.token, this.props.user.id);
+        this.props.patchTab_async(this.props.token, this.props.user.id, id, newTab);
     }
-    handle_onTabAdd = tab => {
+    handle_onTabAdd = () => {
         this.setState(prev => ({
             ...prev,
-            state: 'add'
+            current: 'add'
         }));
     }
-    handle_onTabRemove = tab => {
+    handle_onTabRemove = (tab) => {
         let tabs = this.state.user.tabs;
         delete tabs[tab];
         this.setState(prev => ({
@@ -461,13 +456,13 @@ class Collections extends Component {
         }));
         this.props.deleteUserTab_async(this.props.select_token, this.props.select_userId, tab);
     }
-    handle_onTabToggle = tab => {
+    handle_onTabToggle = (tab) => {
         this.setState(prev => ({
             ...prev,
-            state: tab,
+            current: tab,
             filters: {
-                groups: this.state.user.tabs[tab].groups || [],
-                tags: this.state.user.tabs[tab].tags || []
+                groups: this.state.tabs[tab].groups,
+                tags: this.state.tabs[tab].tags
             }
         }));
     }
@@ -596,7 +591,7 @@ const mapDispatchToProps = dispatch => {
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
         patch_async: (url, token, data) => dispatch(actions.patch_async(url, token, data)),
         putUserFilter_async: (url, token, user, data) => dispatch(actions.putUserFilter_async(url, token, user, data)),
-        patchUserTab_async: (token, user, data) => dispatch(actions.patchUserTab_async(token, user, data)),
+        patchTab_async: (token, user, id, data) => dispatch(actions.patchTab_async(token, user, id, data)),
         put_async: (url, token, data) => dispatch(actions.put_async(url, token, data)),
 
     };

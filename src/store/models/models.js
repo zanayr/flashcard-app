@@ -49,6 +49,7 @@ export function userModel (id, model) {
             card: {
                 collection: 'card',
                 date: 1,
+                delete: false,
                 groups: [],
                 name: 'Cards',
                 tags: []
@@ -56,11 +57,24 @@ export function userModel (id, model) {
             deck: {
                 collection: 'deck',
                 date: 0,
+                delete: false,
                 groups: [],
                 name: 'Decks',
                 tags: []
             },
         },
         tags: model.tags || []
+    }
+}
+
+//  Tab Models  //
+export function tabModel (data) {
+    return {
+        collection: data.collection,
+        date: data.date,
+        delete: true,
+        groups: data.groups,
+        name: data.name,
+        tags: data.tags
     }
 }

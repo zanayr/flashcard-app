@@ -16,10 +16,13 @@ export const getUser_init = () => {
         type: actionTypes.GET_USER_INIT
     }
 }
-export const getUser_success = (data) => {
+export const getUser_success = (user, data) => {
     return {
         type: actionTypes.GET_USER_SUCC,
-        payload: data
+        payload: {
+            data: data,
+            user: user
+        }
     }
 }
 //  Patch  //
@@ -76,16 +79,19 @@ export const deleteTab_success = (data) => {
         payload: data
     }
 }
-export const patchUserTab_fail = (error) => {
+export const patchTab_fail = (error) => {
     return {
         type: actionTypes.PATCH_TAB_FAIL,
         payload: error
     }
 }
-export const patchUserTab_success = (data) => {
+export const patchTab_success = (id, data) => {
     return {
         type: actionTypes.PATCH_TAB_SUCC,
-        payload: data
+        payload: {
+            data: data,
+            id: id
+        }
     }
 }
 
@@ -96,7 +102,7 @@ export const getUser_async = (token, user) => {
         dispatch(getUser_init());
         axios.get('/user/' + user + '.json?auth=' + token)
         .then(response => {
-            dispatch(getUser_success(create.userModel(user, response.data)));
+            dispatch(getUser_success(user, response.data));
         })
         .catch(error => {
             dispatch(getUser_fail(error));
@@ -157,14 +163,14 @@ export const deleteUserTab_async = (token, user, id) => {
         });
     };
 };
-export const patchUserTab_async = (token, user, data) => {
+export const patchTab_async = (token, user, id, data) => {
     return dispatch => {
-        axios.patch('/user/' + user + '/tabs/' + data.id + '/.json?auth=' + token, data)
+        axios.patch('/user/' + user + '/tabs/' + id + '/.json?auth=' + token, data)
         .then(response => {
-            dispatch(patchUserTab_success({...data}));
+            dispatch(patchTab_success(id, data));
         })
         .catch(error => {
-            dispatch(patchUserTab_fail(error));
+            dispatch(patchTab_fail(error));
         });
     };
 };

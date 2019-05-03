@@ -87,7 +87,6 @@ class List extends Component {
         let listItems = this.props.backingCollection.map(item => {
             let showContext = item.isSelected && item.isActive;
             if (this.checkFilter(item)) {
-                console.log(this.state.confirm);
                 return (
                     <ListItem
                         key={item.id}
