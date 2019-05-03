@@ -1,0 +1,14 @@
+
+.QuickButton_Container {
+    bottom: 16px;
+    position: absolute;
+}
+
+.QuickButton {
+    background-color: blue;
+    color: white;
+    font-size: 21px;
+    border-radius: 16px;
+    height: 32px;
+    width: 32px;
+}

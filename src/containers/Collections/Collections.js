@@ -19,6 +19,7 @@ import TabForm from '../../components/form/Tab/TabForm';
 
 import AppCSS from '../../App.module.css';
 import CollectionsCSS from './Collections.module.css';
+import QuickButton from '../../components/ui/button/Quick/QuickButton';
 
 class Collections extends Component {
     state = {
@@ -35,9 +36,10 @@ class Collections extends Component {
             tags: []
         },
         groups: this.props.user.groups,
-        history: {
+        undo: {
             data: {},
-            action: null
+            action: null,
+            state: 0
         },
         selected: [],
         tabs: this.props.user.tabs,
@@ -99,15 +101,6 @@ class Collections extends Component {
             }));
         }
     }
-    closeAside () {
-        this.setState(prev => ({
-            ...prev,
-            aside: {
-                ...prev.aside,
-                state: 0
-            }
-        }));
-    }
 
     //  List  ---------------------------------------------------------------  List  //
     addSelectedID (id) {
@@ -116,24 +109,12 @@ class Collections extends Component {
             selected: prev.selected.concat(id)
         }));
     }
-    // clearSelected (id) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         selected: []
-    //     }));
-    // }
     removeSelectedID (id) {
         this.setState(prev => ({
             ...prev,
             selected: prev.selected.filter(i => i !== id)
         }));
     }
-    // setConfirm (bool) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         confirm: bool
-    //     }));
-    // }
 
     //  Closes any open confrim context action button
     closeConfirmCA () {
@@ -180,21 +161,11 @@ class Collections extends Component {
         }
     }
  
-    resetItem = () => {
+
+    setUndo (data) {
         this.setState(prev => ({
             ...prev,
-            decks: {
-                ...prev.decks,
-                [this.state.history.last.id]: {
-                    ...this.state.history.last
-                }
-            }
-        }));
-    }
-    setHistory (data) {
-        this.setState(prev => ({
-            ...prev,
-            history: {
+            undo: {
                 ...data
             }
         }));
@@ -254,23 +225,41 @@ class Collections extends Component {
 
 
     //  Aside  -------------------------------------------------------------  Aside  //
-    handle_onAsideClose = state => {
-        if (this.state.aside.state === 99) {
-            this.state.history.undo();
-            //this.setAsideState(0);
+    handle_onAsideClose = () => {
+        console.log(this.state.aside.state);
+        switch (this.state.aside.state) {
+            case 99:
+                let item = this.state[this.state.aside.data.item.type][this.state.aside.data.item.id];
+                console.log(item);
+                this.checkForNewTags('tags', this.state[item.type][item.id].tags);
+                this.checkForNewTags('groups', this.state[item.type][item.id].groups);
+                this.props.putItem_async(this.props.token, item);
+                this.setState(prev => ({
+                    ...prev,
+                    undo: {
+                        ...prev.undo,
+                        state: 1
+                    }
+                }));
+                break;
+            default:
+                break;
         }
-        this.closeAside();
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                actions: {},
+                data: {},
+                state: 0
+            }
+        }));
     }
     handle_onAsideToggle = state => {
         this.toggleAside(state);
     }
 
     //  List  ---------------------------------------------------------------  List  //
-    onListOut = () => {
-        if (this.state.aside.isActive) {
-            this.closeAside();
-        }
-    }
 
     //  Check for new user tags and groups
     checkForNewTags (category, tags) {
@@ -298,11 +287,15 @@ class Collections extends Component {
             }
         }));
     }
-    handle_onItemUpdate = (item) => {
-        console.log(item);
-        this.closeAside();
-        this.checkForNewTags('tags', item.tags);
-        this.checkForNewTags('groups', item.groups);
+    handle_onItemReset = () => {
+        const item = this.state.undo.data;
+        this.setState(prev => ({
+            ...prev,
+            [item.type]: {
+                ...prev[item.type],
+                [item.id]: {...item}
+            }
+        }));
         this.props.putItem_async(this.props.token, item);
     }
     handle_onItemInspect = (item) => {
@@ -312,15 +305,15 @@ class Collections extends Component {
             item: item,
             tags: this.state.tags
         });
-        this.setHistory({
-            last: item,
-            undo: this.resetItem
+        this.setUndo({
+            action: this.handle_onItemReset,
+            data: item
         });
         this.setAsideAction({
-            onChange: this.handle_onItemChange,
-            onConfirm: this.handle_onItemUpdate
+            onChange: this.handle_onItemChange
         });
     }
+    
     handle_onItemSelect = (item) => {
         if (this.state.selected.find(i => i.id == item.id)) {
             this.setState(prev => ({
@@ -333,8 +326,8 @@ class Collections extends Component {
                 selected: prev.selected.concat(item)
             }));
         }
-        if (this.state.aside.isActive && this.state.aside.state === 99) {
-            this.closeAside();
+        if (this.state.aside.state === 99) {
+            this.handle_onAsideClose();
         }
     }
 
@@ -342,9 +335,6 @@ class Collections extends Component {
     //  TABS  ---------------------------------------------------------------  TABS  //
     //  Create Tab  //
     handle_onTabCreate = (tab) => {
-        //  1.  Create a unique id for the tab
-        //  2.  Build the tab object
-        //  3.  Set the state and update the db
         const id = utility.createHashId(0);
         let newTab = {
             ...tab,
@@ -486,14 +476,14 @@ class Collections extends Component {
                     selected={this.state.selected}/>
                 <main
                     className={CollectionsCSS.Main}
-                    onClick={this.onListOut}>
+                    onClick={this.handle_onAsideClose}>
                     <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
                         <TabBar
                             actions={{
-                                add: this.handle_onTabAdd,
-                                click: this.handle_onTabBarClick,
-                                close: this.handle_onTabRemove,
-                                toggle: this.handle_onTabToggle,
+                                onCreate: this.handle_onTabAdd,
+                                onClick: this.handle_onTabBarClick,
+                                onRemove: this.handle_onTabRemove,
+                                onToggle: this.handle_onTabToggle,
                             }}
                             backingCollection={this.state.tabs}
                             current={this.state.current}/>
@@ -502,14 +492,16 @@ class Collections extends Component {
                             onClick={this.handle_onActionClick}
                             state={0}
                             values={['Create', 'Study']}/>
+                        <QuickButton
+                            state={this.state.undo.state}
+                            onClick={this.handle_onItemReset}>
+                            &#8619;
+                            </QuickButton>
                     </div>
                 </main>
                 <Aside
-                    // state={this.state.aside}
                     actions={this.state.aside.actions}
-                    // active={this.state.aside.isActive}
                     data={this.state.aside.data}
-                    // onClose={this.handle_onAsideClose}
                     state={this.state.aside.state}/>
             </Aux>
         )

@@ -133,7 +133,6 @@ class InspectAside extends Component {
                         onConfirm={(tag) => this.handle_onTagCreate('groups', tag)}/>
                     </div>
                     <div>
-                        <BarButton onClick={this.handle_onConfirm}>Save</BarButton>
                         <BarLink path='u/inspect'>Edit</BarLink>
                     </div>
                 </div>
