@@ -28,8 +28,8 @@ class ListItem extends Component {
                 onClick={(e) => this.onClick(e)}>
                 <Row>
                     <div>
-                        <h3>{this.props.display}</h3>
-                        <p>{this.props.detail}</p>
+                        <h3>{this.props.primary}</h3>
+                        <p>{this.props.secondary}</p>
                     </div>
                     <div>
                         {tags}

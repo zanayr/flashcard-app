@@ -27,9 +27,13 @@ class Collections extends Component {
             data: {},
             state: 0
         },
-        decks: this.props.select_decks,
-        cards: this.props.select_cards,
-        current: 'decks',
+        deck: this.props.select_decks,
+        card: this.props.select_cards,
+        current: 'deck',
+        filters: {
+            groups: [],
+            tags: []
+        },
         groups: this.props.user.groups,
         history: {
             data: {},
@@ -124,12 +128,12 @@ class Collections extends Component {
             selected: prev.selected.filter(i => i !== id)
         }));
     }
-    setConfirm (bool) {
-        this.setState(prev => ({
-            ...prev,
-            confirm: bool
-        }));
-    }
+    // setConfirm (bool) {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         confirm: bool
+    //     }));
+    // }
 
     //  Closes any open confrim context action button
     closeConfirmCA () {
@@ -382,13 +386,18 @@ class Collections extends Component {
             onRemove: this.onItemFilterRemove
         });
     }
-    onItemSelect = id => {
-        this.setConfirm(false);
-        if (this.state.selected.indexOf(id) > -1) {
-            this.removeSelectedID(id);
-        } else {
-            this.addSelectedID(id)
-        }
+    onItemSelect = (item) => {
+        // this.setConfirm(false);
+        // if (this.state.selected.indexOf(id) > -1) {
+        //     this.removeSelectedID(id);
+        // } else {
+        //     this.addSelectedID(id)
+        // }
+        item.isSelected = !item.isSelected;
+        this.setState(prev => ({
+            ...prev,
+            [item.type]: this.state[item.type].filter(i => i.id !== item.id).concat(item)
+        }))
         if (this.state.aside.isActive && this.state.aside.state === 99) {
             this.closeAside();
         }
@@ -501,17 +510,13 @@ class Collections extends Component {
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
         let mainContent = null;
-        console.log(this.state.tabs);
         if (this.state.tabs[this.state.current]) {
             let tab = this.state.tabs[this.state.current];
-            console.log(tab);
+            console.log(this.state[tab.collection]);
             mainContent = (
                 <List
                     backingCollection={this.state[tab.collection]}
-                    filters={{
-                        groups: this.state.groups,
-                        tags: this.state.tags
-                    }}
+                    filters={this.state.filters}
                     onConfirm={this.onItemDelete}
                     onInspect={this.onItemInspect}
                     onSelect={this.onItemSelect}/>
@@ -520,12 +525,10 @@ class Collections extends Component {
             mainContent = (
                 <TabForm
                     data={{
-                        userTags: this.state.user.tags,
-                        userGroups: this.state.user.groups
+                        userTags: this.state.tags,
+                        userGroups: this.state.groups
                     }}
-                    groups={this.state.user.groups}
-                    onConfirm={this.handle_onTabCreate}
-                    tags={this.state.user.tags}/>
+                    onConfirm={this.handle_onTabCreate}/>
             );
         }
         return (

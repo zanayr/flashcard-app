@@ -8,40 +8,40 @@ import listStyles from './List.module.css';
 
 class List extends Component {
     state = {
-        selected: [],
-        showConfirm: false
+        // selected: [],
+        confrim: false
     }
 
 
-    addSelected (id) {
-        this.setState(prev => ({
-            ...prev,
-            selected: prev.selected.concat(id)
-        }));
-    }
-    clearAllSelected () {
-        this.setState(prev => ({
-            ...prev,
-            selected: []
-        }));
-    }
-    removeSelected (key) {
-        this.setState(prev => ({
-            ...prev,
-            selected: prev.selected.filter(k => k !== key)
-        }));
-    }
+    // addSelected (id) {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         selected: prev.selected.concat(id)
+    //     }));
+    // }
+    // clearAllSelected () {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         selected: []
+    //     }));
+    // }
+    // removeSelected (key) {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         selected: prev.selected.filter(k => k !== key)
+    //     }));
+    // }
 
     showConfirm () {
         this.setState(prev => ({
             ...prev,
-            showConfirm: true
+            confirm: true
         }));
     }
     hideConfirm () {
         this.setState(prev => ({
             ...prev,
-            showConfirm: false
+            confrim: false
         }));
     }
 
@@ -49,18 +49,18 @@ class List extends Component {
     onItemDelete = () => {
         this.showConfirm();
     }
-    onItemConfirm = id => {
-        this.clearAllSelected();
-        this.props.onConfirm(id);
+    onItemConfirm = (item) => {
+        // this.clearAllSelected();
+        this.props.onConfirm(item);
     }
-    onItemSelect = id => {
-        if (this.state.selected.indexOf(id) > -1) {
-            this.removeSelected(id);
-        } else {
-            this.addSelected(id)
-        }
+    onItemSelect = (item) => {
+        // if (this.state.selected.indexOf(id) > -1) {
+        //     this.removeSelected(id);
+        // } else {
+        //     this.addSelected(id)
+        // }
         this.hideConfirm();
-        this.props.onSelect(id);
+        this.props.onSelect(item);
     }
 
 
@@ -68,7 +68,6 @@ class List extends Component {
         let match = true;
         if (this.props.filters.tags.length) {
             this.props.filters.tags.forEach(tag => {
-                console.log(item);
                 if (item.tags.indexOf(tag) < 0 && match) {
                     match = false;
                 }
@@ -85,33 +84,33 @@ class List extends Component {
     }
 
     render () {
-        let listItems = Object.keys(this.props.backingCollection).map(id => {
-            let item = this.props.backingCollection[id];
-            let showContext = this.state.selected.length === 1 && this.state.selected[0] === id;
+        let listItems = this.props.backingCollection.map(item => {
+            let showContext = item.isSelected && item.isActive;
 
             if (this.checkFilter(item)) {
+                
                 return (
                     <ListItem
-                        detail={item.details}
-                        display={item.title}
+                        key={item.id}
+                        primary={item.primary}
+                        secondary={item.secondary}
                         tags={item.tags}
-                        key={id}
-                        onSelect={() => this.onItemSelect(id)}
-                        selected={this.state.selected.indexOf(id) > -1}>
+                        selected={item.isSelected}
+                        onSelect={() => this.onItemSelect(item)}>
                         <ContextAction
-                            action={() => this.props.onInspect(id)}
-                            active={showContext}>
+                            action={() => this.props.onInspect(item)}
+                            active={item.isSelected && item.isActive}>
                             Inspect
                         </ContextAction>
                         <ContextAction
                             action={this.onItemDelete}
-                            active={showContext}
+                            active={item.isSelected && item.isActive}
                             destructive>
                             Delete
                         </ContextAction>
                         <ContextConfirm
-                            action={() => this.onItemConfirm(id)}
-                            active={this.state.showConfirm && showContext}>
+                            action={() => this.onItemConfirm(item)}
+                            active={this.state.confirm && item.isSelected && item.isActive}>
                             Confirm
                         </ContextConfirm>
                     </ListItem>

@@ -120,7 +120,6 @@ export const getAll_async = (url, token, user) => {
             Object.keys(response.data).map(id => {
                 data[id] = create.itemStoreModel(response.data[id]);
             });
-            console.log(data);
             dispatch(getAll_success(url, data));
         })
         .catch(error => {
@@ -142,7 +141,6 @@ export const patch_async = (url, token, data) => {
     };
 };
 export const put_async = (url, token, data) => {
-    console.log('actions', data);
     return dispatch => {
         axios.put('/' + url + '/' + data.id + '.json?auth=' + token, data)
         .then(response => {

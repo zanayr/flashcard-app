@@ -8,7 +8,8 @@ export function itemStoreModel (model) {
         owner: model.owner,
         primary: model.primary,
         secondary: model.secondary,
-        tags: model.tags || []
+        tags: model.tags || [],
+        type: model.type
     }
 }
 export function itemViewModel (id, model) {
@@ -23,7 +24,8 @@ export function itemViewModel (id, model) {
         owner: model.owner,
         primary: model.primary,
         secondary: model.secondary,
-        tags: model.tags
+        tags: model.tags,
+        type: model.type
     }
 }
 
@@ -44,15 +46,15 @@ export function userModel (id, model) {
         privilage: model.privilage,
         tabs: {
             ...model.tabs,
-            cards: {
-                collection: 'cards',
+            card: {
+                collection: 'card',
                 date: 1,
                 groups: [],
                 name: 'Cards',
                 tags: []
             },
-            decks: {
-                collection: 'decks',
+            deck: {
+                collection: 'deck',
                 date: 0,
                 groups: [],
                 name: 'Decks',

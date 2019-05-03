@@ -17,10 +17,6 @@ export const getUser_init = () => {
     }
 }
 export const getUser_success = (data) => {
-    data.tabs.cards.tags = [];
-    data.tabs.cards.groups = [];
-    data.tabs.decks.tags = [];
-    data.tabs.decks.groups = [];
     return {
         type: actionTypes.GET_USER_SUCC,
         payload: data
@@ -98,7 +94,7 @@ export const patchUserTab_success = (data) => {
 export const getUser_async = (token, user) => {
     return dispatch => {
         dispatch(getUser_init());
-        axios.get('/users/' + user + '.json?auth=' + token)
+        axios.get('/user/' + user + '.json?auth=' + token)
         .then(response => {
             dispatch(getUser_success(create.userModel(user, response.data)));
         })
@@ -111,7 +107,7 @@ export const getUser_async = (token, user) => {
 //  Patch  ------------------------------------------------------------  Patch Async //
 export const patchUser_async = (token, data) => {
     return dispatch => {
-        axios.patch('/users/' + data.id + '.json?auth=' + token, data)
+        axios.patch('/user/' + data.id + '.json?auth=' + token, data)
         .then(response => {
             dispatch(patchUser_success(data));
         })
@@ -124,7 +120,7 @@ export const patchUser_async = (token, data) => {
 //  Put  ----------------------------------------------------------------  Put Async //
 export const putUser_async = (token, data) => {
     return dispatch => {
-        axios.put('/users/' + data.id + '.json?auth=' + token, data)
+        axios.put('/user/' + data.id + '.json?auth=' + token, data)
         .then(response => {
             dispatch(putUser_success(data));
         })
@@ -138,7 +134,7 @@ export const putUser_async = (token, data) => {
 //  ASYNC TAG FUNCTIONS  ---------------------------------  ASYNC TAG FUNCTIONS  //
 export const putUserFilter_async = (url, token, user, tags) => {
     return dispatch => {
-        axios.put('/users/' + user + '/' + url + '.json?auth=' + token, tags)
+        axios.put('/user/' + user + '/' + url + '.json?auth=' + token, tags)
         .then(response => {
             dispatch(putUserFilter_success(tags));
         })
@@ -152,7 +148,7 @@ export const putUserFilter_async = (url, token, user, tags) => {
 //  ASYNC TAB FUNCTIONS  ---------------------------------  ASYNC TAB FUNCTIONS  //
 export const deleteUserTab_async = (token, user, id) => {
     return dispatch => {
-        axios.delete('/users/' + user + '/tabs/' + id + '.json?auth=' + token)
+        axios.delete('/user/' + user + '/tabs/' + id + '.json?auth=' + token)
         .then(response => {
             dispatch(deleteTab_success(id));
         })
@@ -163,7 +159,7 @@ export const deleteUserTab_async = (token, user, id) => {
 };
 export const patchUserTab_async = (token, user, data) => {
     return dispatch => {
-        axios.patch('/users/' + user + '/tabs/' + data.id + '/.json?auth=' + token, data)
+        axios.patch('/user/' + user + '/tabs/' + data.id + '/.json?auth=' + token, data)
         .then(response => {
             dispatch(patchUserTab_success({...data}));
         })

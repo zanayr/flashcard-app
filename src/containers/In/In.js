@@ -10,8 +10,8 @@ import Throbber from '../../components/ui/Throbber/Throbber';
 
 class In extends Component {
     componentDidMount() {
-        this.props.getAll_async('cards', this.props.select_token, this.props.select_user);
-        this.props.getAll_async('decks', this.props.select_token, this.props.select_user);
+        this.props.getAll_async('card', this.props.select_token, this.props.select_user);
+        this.props.getAll_async('deck', this.props.select_token, this.props.select_user);
         this.props.getUser_async(this.props.select_token, this.props.select_user);
     }
 

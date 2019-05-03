@@ -3,12 +3,12 @@ import * as create from '../models/models';
 
 
 const initialState = {
-    cards: {
+    card: {
         collection: {},
         error: null,
         isLoading: false
     },
-    decks: {
+    deck: {
         collection: {},
         error: null,
         isLoading: false
@@ -117,20 +117,21 @@ const reducer = (state=initialState, action) => {
 
 //  STORE SELECTORS  ---------------------------------------------------  SELECTORS  //
 export function selectCards (state) {
-    return Object.keys(state.cards.collection).map(id => {
-        return create.itemViewModel(id, state.cards.collection[id]);
+    console.log(state);
+    return Object.keys(state.card.collection).map(id => {
+        return create.itemViewModel(id, state.card.collection[id]);
     });
 }
 export function selectCardsIsLoading (state) {
-    return state.cards.isLoading;
+    return state.card.isLoading;
 }
 export function selectDecks (state) {
-    return Object.keys(state.decks.collection).map(id => {
-        return create.itemViewModel(id, state.decks.collection[id]);
+    return Object.keys(state.deck.collection).map(id => {
+        return create.itemViewModel(id, state.deck.collection[id]);
     });
 }
 export function selectDecksIsLoading (state) {
-    return state.decks.isLoading;
+    return state.deck.isLoading;
 }
 
 
