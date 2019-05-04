@@ -149,11 +149,11 @@ export const putTag_async = (url, token, user, tags) => {
 
 
 //  ASYNC TAB FUNCTIONS  ---------------------------------  ASYNC TAB FUNCTIONS  //
-export const deleteTab_async = (token, user, id) => {
+export const deleteTab_async = (token, user, data) => {
     return dispatch => {
-        axios.delete('/user/' + user + '/tabs/' + id + '.json?auth=' + token)
+        axios.delete('/user/' + user + '/tabs/' + data.id + '.json?auth=' + token)
         .then(response => {
-            dispatch(deleteTab_success(id));
+            dispatch(deleteTab_success(data.id));
         })
         .catch(error => {
             dispatch(deleteTab_fail(error));

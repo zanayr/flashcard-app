@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 
-import Aux from '../../../hoc/Aux/Aux';
+import * as actions from '../../../store/actions/index';
+import * as create from '../../../store/models/models';
+import * as select from '../../../store/reducers/root';
+import * as utility from '../../../utility/utility';
+
 import TextField from '../../ui/input/Field/TextField';
 import Button from '../../ui/button/Button/Button';
 import TagForm from '../../form/Tag/TagForm';
@@ -16,7 +21,6 @@ class TabForm extends Component {
         groups: []
     }
 
-
     form = React.createRef();
 
     handle_onChange = (target, value) => {
@@ -27,7 +31,15 @@ class TabForm extends Component {
     }
     handle_onFormConfirm = () => {
         if (this.form.current.reportValidity() && (this.state.tags.length > 0 || this.state.groups.length > 0) && this.state.collection.length > 0) {
-            this.props.onConfirm({...this.state});
+            let tab = create.tabViewModel(utility.createHashId(0), {
+                collection: this.state.collection,
+                date: Date.now(),
+                groups: this.state.groups,
+                name: this.state.name,
+                tags: this.state.tags
+            });
+            this.props.patchTab_async(this.props.select_token, this.props.select_userId, tab);
+            this.props.onConfirm(tab);
         }
     }
     //  Coll  //
@@ -119,4 +131,18 @@ class TabForm extends Component {
     }
 }
 
-export default TabForm;
+
+const mapStateToProps = state => {
+    return {
+        select_token: select.authToken(state),
+        select_userId: select.authUser(state)
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        patchTab_async: (token, user, tab) => dispatch(actions.patchTab_async(token, user, tab))
+    };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(TabForm);

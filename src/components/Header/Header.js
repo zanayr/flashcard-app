@@ -21,9 +21,9 @@ class Header extends Component {
         selected: this.props.selected
     }
 
-    handle_onClick = (event) => {
-        event.stopPropagation();
-        this.props.actions.closeAside();
+    handle_onClick = (e) => {
+        e.stopPropagation();
+        this.props.onClick();
     }
 
     handle_onSelectedDelete = () => {
@@ -33,7 +33,7 @@ class Header extends Component {
             'Delete', 'Cancel')
         .then(response => {
             this.props.deleteManyItems_async(this.props.select_token, this.props.selected.slice());
-            this.props.actions.deleteItems();
+            this.props.actions.delete();
         }).catch(() => {}); // Eat user cancel
     };
 
@@ -62,7 +62,7 @@ class Header extends Component {
                 groups: groups,
                 meta: {},
                 notes: '',
-                owner: this.props.select_user.id,
+                owner: this.props.select_userId.id,
                 primary: 'New Merged Deck',
                 secondary: '',
                 tags: tags,
@@ -70,7 +70,7 @@ class Header extends Component {
             });
 
             this.props.patchItem_async(this.props.select_token, merged);
-            this.props.actions.createItems([merged]);
+            this.props.actions.create([merged]);
         }).catch(() => {}); // Eat user cancel
     };
 
@@ -90,7 +90,7 @@ class Header extends Component {
                 cloned.push(create.itemViewModel(utility.createHashId(i), item));
             });
             this.props.patchManyItems_async(this.props.select_token, cloned);
-            this.props.actions.createItems(cloned);
+            this.props.actions.create(cloned);
         }).catch(() => {}); // Eat user cancel
     };
 
@@ -105,18 +105,18 @@ class Header extends Component {
                     <Toolbar
                         single={this.props.selected.length}
                         merge={this.props.selected.length > 1 && this.props.selected[0].type === 'deck'}
-                        onA={() => this.props.actions.toggleAside(2)}
-                        onB={() => this.props.actions.toggleAside(3)}
+                        onA={() => this.props.actions.toggle(2)}
+                        onB={() => this.props.actions.toggle(3)}
                         onC={this.handle_onSelectedDelete}
                         onD={this.handle_onSelectedMerge}
                         onE={this.handle_onSelectedClone}
-                        onAA={() => this.props.actions.sortCollection(sortTypes.ALPHA_ASC)}
-                        onAD={() => this.props.actions.sortCollection(sortTypes.ALPHA_DSC)}
-                        onDA={() => this.props.actions.sortCollection(sortTypes.DATE_ASC)}
-                        onDD={() => this.props.actions.sortCollection(sortTypes.DATE_DSC)}
+                        onAA={() => this.props.actions.sort(sortTypes.ALPHA_ASC)}
+                        onAD={() => this.props.actions.sort(sortTypes.ALPHA_DSC)}
+                        onDA={() => this.props.actions.sort(sortTypes.DATE_ASC)}
+                        onDD={() => this.props.actions.sort(sortTypes.DATE_DSC)}
                         />
                     <Dashboard
-                        onNavigation={() => this.props.actions.toggleAside(1)}/>
+                        onNavigation={() => this.props.actions.toggle(1)}/>
                 </div>
             </header>
         );
@@ -127,7 +127,7 @@ class Header extends Component {
 const mapStateToProps = state => {
     return {
         select_token: select.authToken(state),
-        select_user: select.user(state)
+        select_userId: select.authUser(state)
     }
 }
 const mapDispatchToProps = dispatch => {

@@ -278,7 +278,7 @@ class Collections extends Component {
             current: tab
         }));
     }
-    setTabs (tabs) {
+    resetTabs (tabs) {
         this.setState(prev => ({
             ...prev,
             tabs: {
@@ -405,29 +405,29 @@ class Collections extends Component {
         }
     }
 
-    checkForNewTags (category, tags) {
-        const newTags = tags.filter(tag => this.state[category].indexOf(tag) < 0);
-        let allTags;
-        if (newTags.length) {
-            allTags = this.state[category].concat(newTags);
-            this.setTags(category, allTags);
-            this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
-        }
-    }
+    // checkForNewTags (category, tags) {
+    //     const newTags = tags.filter(tag => this.state[category].indexOf(tag) < 0);
+    //     let allTags;
+    //     if (newTags.length) {
+    //         allTags = this.state[category].concat(newTags);
+    //         this.setTags(category, allTags);
+    //         this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
+    //     }
+    // }
 
     handle_onItemChange = (item, payload) => {
         this.setItemValue(item, payload.target, payload.value);
     }
-    handle_onItemReset = () => {
-        const undo = {
-            action: this.state.undo.action,
-            data: this.state.undo.data
-        }
-        this.setItem(undo.data);
-        this.clearUndo();
-        this.clearQuick('u');
-        this.props.putItem_async(this.props.token, undo.data);
-    }
+    // handle_onItemReset = () => {
+    //     const undo = {
+    //         action: this.state.undo.action,
+    //         data: this.state.undo.data
+    //     }
+    //     this.setItem(undo.data);
+    //     this.clearUndo();
+    //     this.clearQuick('u');
+    //     this.props.putItem_async(this.props.token, undo.data);
+    // }
     handle_onItemInspect = (item) => {
         this.toggleAside(99);
         this.setAsideData({
@@ -468,47 +468,45 @@ class Collections extends Component {
 
     //  TABS  ---------------------------------------------------------------  TABS  //
     //  Create Tab  //
-    handle_onTabCreate = (tab) => {
-        const id = utility.createHashId(0);
-        const newTab = create.tabViewModel(id, {
-            ...tab,
-            date: Date.now()
-        });
+    // handle_onTabCreate = (tab) => {
+    //     const id = utility.createHashId(0);
+    //     const newTab = create.tabViewModel(id, {
+    //         ...tab,
+    //         date: Date.now()
+    //     });
+    //     this.checkForNewTags('tags', tab.tags);
+    //     this.checkForNewTags('groups', tab.groups);
 
-        this.checkForNewTags('tags', tab.tags);
-        this.checkForNewTags('groups', tab.groups);
+    // const handle_onTabCreated = (tab) => {
+    //     this.props.patchTab_async(this.props.token, this.props.user.id, create.tabViewModel(utility.createHashId(0), {
+    //         ...tab,
+    //         date: Date.now()
+    //     }));
+    // }
         
-        
-        this.setFilters('groups', tab);
-        this.setFilters('tags', tab);
-        this.setCurrent(id);
-        this.setCollection(tab.collection);
-        this.addTab(newTab);
-        this.props.patchTab_async(this.props.token, this.props.user.id, newTab);
-    }
+    //     this.setFilters('groups', tab);
+    //     this.setFilters('tags', tab);
+    //     this.setCurrent(id);
+    //     this.setCollection(tab.collection);
+    //     this.addTab(newTab);
+    //     this.props.patchTab_async(this.props.token, this.props.user.id, newTab);
+    // }
 
     //  Add Tab  //
-    handle_onTabAdd = () => {
-        this.setCurrent('add');
-    }
+    // handle_onTabAdd = () => {
+    //     this.setCurrent('add');
+    // }
 
     //  Remove Tab  //
-    handle_onTabRemove = (tab) => {
-        let tabs = this.state.tabs;
-        delete tabs[tab];
-        this.setTabs(tabs);
-        this.props.deleteTab_async(this.props.token, this.props.user.id, tab);
-    }
+    // handle_onTabRemove = (tab) => {
+    //     let tabs = this.state.tabs;
+    //     delete tabs[tab];
+    //     this.setTabs(tabs);
+    //     this.props.deleteTab_async(this.props.token, this.props.user.id, tab);
+    // }
 
     //  Tab Toggle  //
-    handle_onTabToggle = (tab) => {
-        this.setCurrent(tab);
-        this.setCollection(this.state.tabs[tab].collection);
-        this.setFilters('groups', this.state.tabs[tab]);
-        this.setFilters('tags', this.state.tabs[tab]);
-        this.clearSelected();
-        this.clearQuick('s');
-    }
+    
 
     // handle_onTabBarClick = () => {
     //     //  Do something...
@@ -626,9 +624,7 @@ class Collections extends Component {
     //     this.clearQuick('s');
     // }
 
-    handle_onSortChange = (sort) => {
-        this.setSort(sort);
-    }
+    
 
     handle_onMainClick = () => {
         this.handle_onAsideClose();
@@ -636,6 +632,17 @@ class Collections extends Component {
         this.clearQuick('s');
     }
 
+
+    
+    _checkForNewTags (category, tags) {
+        const newTags = tags.filter(tag => this.state[category].indexOf(tag) < 0);
+        let allTags;
+        if (newTags.length) {
+            allTags = this.state[category].concat(newTags);
+            this.setTags(category, allTags);
+            this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
+        }
+    }
     _recoverDeletedItems = () => {
         const deleted = this.state.undo.data.items;
         const recovered = {}
@@ -647,17 +654,25 @@ class Collections extends Component {
         this.clearUndo();
         this.props.patchManyItems_async(deleted);
     }
-    handle_onItemsCreated = (items) => {
+    _findTheNextTab = (tab) => {
+        //  Do something...
+    }
+
+    //  EVENT HANDLERS  //
+    //  List Item  -------------------------------------------------  List Item EHs  //
+    handle_onCollectionSort = (sort) => {
+        this.setSort(sort);
+    }
+    handle_onItemsCreate = (items) => {
         const created = {};
         items.forEach(item => {
             created[item.id] = item;
         });
-        console.log(created);
         this.setManyItems(this.state.collection, created);
         this.clearSelected();
         this.clearQuick('s');
     }
-    handle_onItemsDeleted = () => {
+    handle_onItemsDelete = () => {
         const collection = this.state[this.state.collection];
         this.state.selected.slice().forEach(item => {
             delete collection[item.id];
@@ -674,55 +689,80 @@ class Collections extends Component {
         this.clearQuick('s');
         this.clearSelected();
     }
+    
+    
+    //  Tab  -------------------------------------------------------------  Tab EHs  //
+    handle_onTabDelete = (tab) => {
+        let tabs = this.state.tabs;
+        if (this.state.current = tab.id) {
+            this.handle_onTabToggle(this.state.tabs['deck']);
+        }
+        delete tabs[tab.id];
+        this.resetTabs(tabs);
+    }
+    handle_onTabToggle = (tab) => {
+        this.setFilters('groups', tab);
+        this.setFilters('tags', tab);
+        this.setCurrent(tab.id);
+        this.setCollection(tab.collection);
+        this.clearSelected();
+        this.clearQuick('s');
+    }
+    handle_onTabCreate = (tab) => {
+        this._checkForNewTags('groups', tab.groups);
+        this._checkForNewTags('tags', tab.tags);
+        this.addTab(tab);
+        this.handle_onTabToggle(tab);
+    }
 
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
         let mainContent = null;
-        if (this.state.tabs[this.state.current]) {
-            let tab = this.state.tabs[this.state.current];
-            mainContent = (
-                <List
-                    backingCollection={utility.sortBy(this.state.sort, this.state[tab.collection])}
-                    filters={this.state.filters}
-                    selected={this.state.selected}
-                    onConfirm={this.handle_onItemsDeleted}
-                    onInspect={this.handle_onItemInspect}
-                    onSelect={this.handle_onItemSelect}/>
-            );
-        } else {
+        if (this.state.current === 'add') {
             mainContent = (
                 <TabForm
                     tags={this.state.tags}
                     groups={this.state.groups}
                     onConfirm={this.handle_onTabCreate}/>
             );
+            
+        } else {
+            let tab = this.state.tabs[this.state.current];
+            mainContent = (
+                <List
+                    backingCollection={utility.sortBy(this.state.sort, this.state[tab.collection])}
+                    filters={this.state.filters}
+                    selected={this.state.selected}
+                    onConfirm={this.handle_onItemsDelete}
+                    onInspect={this.handle_onItemInspect}
+                    onSelect={this.handle_onItemSelect}/>
+            );
         }
         return (
             <Aux>
                 <Header
                     actions={{
-                        createItems: this.handle_onItemsCreated,
-                        deleteItems: this.handle_onItemsDeleted,
-                        sortCollection: this.handle_onCollectionSort,
-                        toggleAside: this.handle_onAsideToggle,
-                        closeAside: this.handle_onAsideClose
+                        create: this.handle_onItemsCreate,
+                        delete: this.handle_onItemsDelete,
+                        sort: this.handle_onCollectionSort,
+                        toggle: this.handle_onAsideToggle
                     }}
                     collection={this.state.collection}
-                    selected={this.state.selected}/>
+                    selected={this.state.selected}
+                    onClick={this.handle_onAsideClose}/>
                 <main
                     className={styles.Main}
                     onClick={this.handle_onMainClick}>
                     <div>
                         <TabBar
                             actions={{
-                                onCreate: this.handle_onTabAdd,
-                                onClick: this.handle_onAsideClose,
-                                onRemove: this.handle_onTabRemove,
-                                onToggle: this.handle_onTabToggle,
+                                delete: this.handle_onTabDelete,
+                                toggle: this.handle_onTabToggle,
                             }}
                             backingCollection={this.state.tabs}
-                            current={this.state.current}/>
+                            current={this.state.current}
+                            onClick={this.handle_onAsideClose}/>
                         {mainContent}
                         <ActionButton
                             onClick={this.handle_onActionClick}

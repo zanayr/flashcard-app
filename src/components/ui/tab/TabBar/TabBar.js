@@ -1,7 +1,10 @@
 import React from 'react';
+import {connect} from 'react-redux';
 
-import * as utility from '../../../../utility/utility';
+import * as actions from '../../../../store/actions/index';
+import * as select from '../../../../store/reducers/root';
 import * as sortTypes from '../../../../utility/sortTypes';
+import * as utility from '../../../../utility/utility';
 
 import QuickTab from '../QuickTab/QuickTab';
 
@@ -9,13 +12,21 @@ import styles from '../Tab.module.css';
 
 
 const tabBar = (props) => {
-    const handle_onBarClick = (e) => {
+    const handle_onClick = (e) => {
         e.stopPropagation();
-        props.actions.onClick();
+        props.onClick();
     }
-    const handle_onCreateClick = (e) => {
+    const handle_onTabDelete = (tab) => {
+        props.deleteTab_async(props.select_token, props.select_userId, tab);
+        props.actions.delete(tab);
+    }
+    const handle_onAddTabClick = (e) => {
         e.stopPropagation();
-        props.actions.onCreate();
+        props.actions.toggle({
+            groups: [],
+            id: 'add',
+            tags: []
+        });
     }
     let tabs = utility.sortBy(sortTypes.DATE_ASC, props.backingCollection).map(tab => {
         return (
@@ -23,34 +34,45 @@ const tabBar = (props) => {
                 active={tab.id === props.current}
                 delete={tab.delete}
                 key={tab.id}
-                onClick={() => props.actions.onToggle(tab.id)}
-                onClose={() => props.actions.onRemove(tab.id)}>
+                onClick={() => props.actions.toggle(tab)}
+                onClose={() => handle_onTabDelete(tab)}>
                 {tab.name}
             </QuickTab>
         );
     });
-    let add = null;
-    if (Object.keys(props.backingCollection).length < 12) {
-        add = (
-            <div className={[styles.QuickTab, styles.AddTab].join(' ')}>
-                <div>
-                    <button onClick={(e) => handle_onCreateClick(e)}>+</button>
-                </div>
-            </div>
-        );
-    }
 
     return (
         <section
             className={styles.TabBar}
-            onClick={(e) => handle_onBarClick(e)}>
+            onClick={(e) => handle_onClick(e)}>
             <div>
                 {tabs}
-                {add}
+                <div className={[styles.QuickTab, styles.AddTab].join(' ')}>
+                    <div>
+                        <button
+                            disabled={Object.keys(props.backingCollection).length >= 12}
+                            onClick={(e) => handle_onAddTabClick(e)}>
+                            Add
+                        </button>
+                    </div>
+                </div>
             </div>
         </section>
     )
 }
 
 
-export default tabBar;
+const mapStateToProps = state => {
+    return {
+        select_token: select.authToken(state),
+        select_userId: select.authUser(state)
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        deleteTab_async: (token, user, tab) => dispatch(actions.deleteTab_async(token, user, tab))
+    };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(tabBar);
