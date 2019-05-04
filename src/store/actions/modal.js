@@ -1,16 +1,5 @@
 import * as actionTypes from './actionTypes';
-import {createHashId} from '../../utility';
 
-
-// export const displayModal = (type, data) => {
-//     return {
-//         type: actionTypes.DISPLAY_MODAL,
-//         payload: {
-//             data: data,
-//             type: type
-//         }
-//     };
-// };
 export const clearModal = payload => {
     return {
         type: actionTypes.CLEAR_MODAL,
@@ -40,19 +29,3 @@ export const displayModal_async = (type, message, confirm='OK', cancel) => {
         });
     }
 }
-
-
-/*
-export const getAllItems_async = (url, token, user) => {
-    return dispatch => {
-        dispatch(getAllItems_init(url));
-        axios.get('/' + url + '.json?auth=' + token + '&orderBy="owner"&equalTo="' + user + '"')
-        .then(response => {
-            dispatch(getAllItems_success(url, response.data));
-        })
-        .catch(error => {
-            dispatch(getAllItems_fail(url, error));
-        });
-    };
-};
-*/

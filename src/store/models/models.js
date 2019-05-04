@@ -77,6 +77,7 @@ export function userModel (id, model) {
                 date: 1,
                 delete: false,
                 groups: [],
+                id: 1,
                 name: 'Cards',
                 tags: []
             },
@@ -85,6 +86,7 @@ export function userModel (id, model) {
                 date: 0,
                 delete: false,
                 groups: [],
+                id: 0,
                 name: 'Decks',
                 tags: []
             },

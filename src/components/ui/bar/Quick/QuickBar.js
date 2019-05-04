@@ -1,6 +1,6 @@
 import React from 'react';
 
-import * as utility from '../../../../utility';
+import * as utility from '../../../../utility/utility';
 
 import QuickButton from '../../button/Quick/QuickButton';
 

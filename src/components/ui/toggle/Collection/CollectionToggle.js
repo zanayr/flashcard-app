@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
-import * as utility from '../../../../utility';
+import * as utility from '../../../../utility/utility';
+import * as sortTypes from '../../../../utility/sortTypes';
 
 import Tag from '../../../ui/Tag/Tag';
 
@@ -18,7 +19,7 @@ class CollectionToggle extends Component {
     }
     
     render () {
-        let tags = utility.sortAlpha(this.props.backingCollection).map(collection => {
+        let tags = utility.sortBy(sortTypes.DATE_ASC, this.props.backingCollection).map(collection => {
             let isActive = false;
             if (this.state.selectedItem === collection) {
                 isActive = true;

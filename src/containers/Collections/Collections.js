@@ -4,7 +4,8 @@ import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
 import * as select from '../../store/reducers/root';
 import * as create from '../../store/models/models';
-import * as utility from '../../utility';
+import * as utility from '../../utility/utility';
+import * as sortTypes from '../../utility/sortTypes';
 
 
 import withUser from '../../hoc/withUser/withUser';
@@ -546,7 +547,7 @@ class Collections extends Component {
             let tab = this.state.tabs[this.state.current];
             mainContent = (
                 <List
-                    backingCollection={utility.sortCollectionByDateAsc(this.state[tab.collection])}
+                    backingCollection={utility.sortBy(sortTypes.ALPHA_ASC, this.state[tab.collection])}
                     filters={this.state.filters}
                     selected={this.state.selected}
                     onConfirm={this.handle_onItemDelete}

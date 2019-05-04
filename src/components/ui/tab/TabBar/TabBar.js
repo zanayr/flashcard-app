@@ -1,6 +1,7 @@
 import React from 'react';
 
-import * as utility from '../../../../utility';
+import * as utility from '../../../../utility/utility';
+import * as sortTypes from '../../../../utility/sortTypes';
 
 import QuickTab from '../QuickTab/QuickTab';
 
@@ -16,21 +17,14 @@ const tabBar = (props) => {
         e.stopPropagation();
         props.actions.onCreate();
     }
-    let tabs = utility.sortAscByProp(props.backingCollection, 'date').map((orderedTab, i) => {
-        let name = orderedTab[0];
-        let tab = props.backingCollection[name];
-        let isActive = false;
-        if (name === props.current) {
-            isActive = true;
-        }
-
+    let tabs = utility.sortBy(sortTypes.DATE_ASC, props.backingCollection).map(tab => {
         return (
             <QuickTab
-                active={isActive}
+                active={tab.name === props.current}
                 delete={tab.delete}
-                key={i}
-                onClick={() => props.actions.onToggle(name)}
-                onClose={() => props.actions.onRemove(name)}>
+                key={tab.id}
+                onClick={() => props.actions.onToggle(tab.name)}
+                onClose={() => props.actions.onRemove(tab.name)}>
                 {tab.name}
             </QuickTab>
         );

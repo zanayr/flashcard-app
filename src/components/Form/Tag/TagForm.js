@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import * as utility from '../../../utility';
+import * as utility from '../../../utility/utility';
 
 import Tag from '../../ui/Tag/Tag';
 import TagField from '../../ui/input/Tag/TagField';
@@ -35,7 +35,7 @@ class TagForm extends Component {
 
 
     render () {
-        let tags = utility.sortAlpha(this.state.tags).map((tag, i) => {
+        let tags = utility.sortByAlpha_asc(this.state.tags).map((tag, i) => {
             return (
                 <Tag
                     active={this.props.activeCollection.indexOf(tag) > -1}
