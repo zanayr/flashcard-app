@@ -32,13 +32,13 @@ function _sortByAlpha_dsc (arr) {
 //  Date Ascending  //
 function _sortByDate_asc (arr) {
     return arr.sort((a, b) => {
-        return b.date - a.date;
+        return a.date - b.date;
     });
 }
 //  Date Descending  //
 function _sortByDate_dsc (arr) {
     return arr.sort((a, b) => {
-        return a.date - b.date;
+        return b.date - a.date;
     });
 }
 
@@ -50,7 +50,7 @@ export function sortBy (type, collection) {
     switch (type) {
         case sortTypes.ALPHA_ASC:
             return _sortByAlpha_asc(arr);
-        case sortTypes.ALPHA_DEC:
+        case sortTypes.ALPHA_DSC:
             return _sortByAlpha_dsc(arr);
         case sortTypes.DATE_ASC:
             return _sortByDate_asc(arr);;

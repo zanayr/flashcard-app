@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
 import * as modalTypes from '../modal/Modal/modalTypes';
+import * as sortTypes from '../../utility/sortTypes';
 
 import ReturnLink from '../ui/link/Return/ReturnLink';
 import Search from '../ui/input/Search/Search';
@@ -68,7 +69,12 @@ const header = (props) => {
                     onB={() => props.actions.toggleAside(3)}
                     onC={handle_onDelete}
                     onD={handle_onMerge}
-                    onE={handle_onClone}/>
+                    onE={handle_onClone}
+                    onAA={() => props.actions.onSortChange(sortTypes.ALPHA_ASC)}
+                    onAD={() => props.actions.onSortChange(sortTypes.ALPHA_DSC)}
+                    onDA={() => props.actions.onSortChange(sortTypes.DATE_ASC)}
+                    onDD={() => props.actions.onSortChange(sortTypes.DATE_DSC)}
+                    />
                 <Dashboard
                     onNavigation={() => props.actions.toggleAside(1)}/>
             </div>

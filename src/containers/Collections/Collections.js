@@ -39,6 +39,7 @@ class Collections extends Component {
         groups: this.props.user.groups,
         quick: [],
         selected: [],
+        sort: sortTypes.ALPHA_ASC,
         tabs: this.props.user.tabs,
         tags: this.props.user.tags,
         undo: {
@@ -539,6 +540,13 @@ class Collections extends Component {
         this.handle_onItemSelectClear();
     }
 
+    handle_onSortChange = (sort) => {
+        this.setState(prev => ({
+            ...prev,
+            sort: sort
+        }));
+    }
+
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
@@ -547,7 +555,7 @@ class Collections extends Component {
             let tab = this.state.tabs[this.state.current];
             mainContent = (
                 <List
-                    backingCollection={utility.sortBy(sortTypes.ALPHA_ASC, this.state[tab.collection])}
+                    backingCollection={utility.sortBy(this.state.sort, this.state[tab.collection])}
                     filters={this.state.filters}
                     selected={this.state.selected}
                     onConfirm={this.handle_onItemDelete}
@@ -569,6 +577,7 @@ class Collections extends Component {
                         onDelete: this.handle_onBulkDelete,
                         onMerge: this.handle_onDeckMerge,
                         onClone: this.handle_onItemClone,
+                        onSortChange: this.handle_onSortChange,
                         toggleAside: this.handle_onAsideToggle,
                         closeAside: this.handle_onAsideClose
                     }}

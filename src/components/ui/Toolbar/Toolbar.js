@@ -18,6 +18,10 @@ const toolbar = (props) => {
                 <IconButton
                     disabled={!props.clone}
                     onClick={props.onE}>C</IconButton>
+                <IconButton onClick={props.onAA}>AA</IconButton>
+                <IconButton onClick={props.onAD}>AD</IconButton>
+                <IconButton onClick={props.onDA}>DA</IconButton>
+                <IconButton onClick={props.onDD}>DD</IconButton>
             </div>
         </div>
     );
