@@ -101,65 +101,6 @@ class Collections extends Component {
             }));
         }
     }
-
-    //  List  ---------------------------------------------------------------  List  //
-    addSelectedID (id) {
-        this.setState(prev => ({
-            ...prev,
-            selected: prev.selected.concat(id)
-        }));
-    }
-    removeSelectedID (id) {
-        this.setState(prev => ({
-            ...prev,
-            selected: prev.selected.filter(i => i !== id)
-        }));
-    }
-
-    //  Closes any open confrim context action button
-    closeConfirmCA () {
-        this.setState(prev => ({
-            ...prev,
-            confirm: false
-        }));
-    }
-    toggleConfirm () {
-        this.setState(prev => ({
-            ...prev,
-            confirm: !prev.confirm
-        }));
-    }
-
-    createItem (item) {
-        this.setState(prev => ({
-            ...prev,
-            [item.type]: {
-                ...prev[item.type],
-                [item.id]: item
-            }
-        }));
-    }
-    removeItem (item) {
-        
-    }
-    updateItem (id, target, value) {
-        this.setState(prev => ({
-            ...prev,
-            [this.state.state]: {
-                ...prev[this.state.state],
-                [id]: {
-                    ...prev[this.state.state][id],
-                    [target]: value
-                }
-            }
-        }));
-    }
-    getItemById (id) {
-        return {
-            ...this.state.decks[id],
-            id: id
-        }
-    }
  
 
     setUndo (data) {
@@ -170,24 +111,7 @@ class Collections extends Component {
             }
         }));
     }
-    toggleTabs (tab) {
-        const tabs = this.state.tabs;
-        Object.keys(tabs).forEach(t => {
-            if (t === tab) {
-                tabs[t].isActive = true;
-            } else if (tabs[t].isActive) {
-                tabs[t].isActive = false;
-            }
-        });
-        this.setState(prev => ({
-            ...prev,
-            tabs: {
-                ...tabs
-            }
-        }));
-    }
 
-    //  EVENT HANDLERS v2  //
     handle_onActionClick = () => {
         //  This is all temporary  //
         let id = utility.createHashId(0);
@@ -218,7 +142,13 @@ class Collections extends Component {
             }
         }
         item = create.itemViewModel(id, item);
-        this.createItem(item);
+        this.setState(prev => ({
+            ...prev,
+            [item.type]: {
+                ...prev[item.type],
+                [item.id]: item
+            }
+        }));
         this.props.patchItem_async(this.props.token, item);
     }
 
@@ -274,7 +204,8 @@ class Collections extends Component {
             filters: {
                 groups: [],
                 tags: []
-            }
+            },
+            quick: prev.quick.filter(q => q.value !== '✕')
         }));
     }
     handle_onFilterSelect = (category, tag) => {
@@ -346,9 +277,6 @@ class Collections extends Component {
         }
     }
 
-    //  List  ---------------------------------------------------------------  List  //
-
-    //  Check for new user tags and groups
     checkForNewTags (category, tags) {
         const newTags = tags.filter(tag => this.state[category].indexOf(tag) < 0);
         let allTags;
@@ -408,19 +336,37 @@ class Collections extends Component {
             action: this.handle_onItemReset,
             data: item
         });
-        
     }
-    
+    handle_onItemSelectClear = () => {
+        this.setState(prev => ({
+            ...prev,
+            quick: prev.quick.filter(q => q.value !== '⚬'),
+            selected: []
+        }));
+    }
     handle_onItemSelect = (item) => {
-        if (this.state.selected.find(i => i.id == item.id)) {
-            this.setState(prev => ({
-                ...prev,
-                selected: prev.selected.filter(i => i.id !== item.id)
-            }));
+        let selected = this.state.selected.slice();
+        if (selected.find(i => i.id === item.id)) {
+            selected = selected.filter(i => i.id !== item.id);
+        } else {
+            selected = selected.concat(item);
+        }
+        this.setState(prev => ({
+            ...prev,
+            selected: selected
+        }));
+        if (selected.length) {
+            if (!this.state.quick.find(q => q.value === '⚬')) {
+                this.setState(prev => ({
+                    quick: prev.quick.concat({
+                        action: this.handle_onItemSelectClear,
+                        value: '⚬'
+                    })
+                }));
+            }
         } else {
             this.setState(prev => ({
-                ...prev,
-                selected: prev.selected.concat(item)
+                quick: prev.quick.filter(q => q.value !== '⚬')
             }));
         }
         if (this.state.aside.state === 99) {
@@ -454,7 +400,6 @@ class Collections extends Component {
                 [id]: newTab
             }
         }));
-        console.log(newTab);
         this.props.patchTab_async(this.props.token, this.props.user.id, newTab);
     }
 
@@ -515,6 +460,7 @@ class Collections extends Component {
                 <List
                     backingCollection={utility.sortCollectionByDateAsc(this.state[tab.collection])}
                     filters={this.state.filters}
+                    selected={this.state.selected}
                     onConfirm={this.handle_onItemDelete}
                     onInspect={this.handle_onItemInspect}
                     onSelect={this.handle_onItemSelect}/>

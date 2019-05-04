@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 
-import * as utility from '../../utility';
-
 import ListItem from '../ui/ListItem/ListItem';
 import ContextAction from '../ui/button/Context/ContextAction';
 import ContextConfirm from '../ui/button/Context/ContextConfirm';
@@ -10,28 +8,7 @@ import listStyles from './List.module.css';
 
 class List extends Component {
     state = {
-        selected: [],
         confirm: false
-    }
-
-
-    addSelected (id) {
-        this.setState(prev => ({
-            ...prev,
-            selected: prev.selected.concat(id)
-        }));
-    }
-    // clearAllSelected () {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         selected: []
-    //     }));
-    // }
-    removeSelected (key) {
-        this.setState(prev => ({
-            ...prev,
-            selected: prev.selected.filter(k => k !== key)
-        }));
     }
 
     showConfirm () {
@@ -52,15 +29,9 @@ class List extends Component {
         this.showConfirm();
     }
     onItemConfirm = (item) => {
-        this.removeSelected(item.id);
         this.props.onConfirm(item);
     }
     onItemSelect = (item) => {
-        if (this.state.selected.indexOf(item.id) > -1) {
-            this.removeSelected(item.id);
-        } else {
-            this.addSelected(item.id)
-        }
         this.hideConfirm();
         this.props.onSelect(item);
     }
@@ -87,8 +58,8 @@ class List extends Component {
 
     render () {
         let listItems = this.props.backingCollection.map(item => {
-            let isSelected = this.state.selected.indexOf(item.id) > -1;
-            let isActive = isSelected && this.state.selected.length === 1;
+            let isSelected = typeof this.props.selected.find(i => i.id === item.id) === 'object';
+            let isActive = isSelected && this.props.selected.length === 1;
             if (this.checkFilter(item)) {
                 return (
                     <ListItem
