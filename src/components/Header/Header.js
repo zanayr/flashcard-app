@@ -32,12 +32,24 @@ const header = (props) => {
 
     const handle_onMerge = () => {
         props.displayModal_async(
-            modalTypes.WARNING,
+            modalTypes.DEFAULT,
             'Are you sure you wish to merge these decks into one deck?',
             'Merge', 'Cancel')
         .then(response => {
             if (response) {
                 props.actions.onMerge();
+            }
+        });
+    };
+
+    const handle_onClone = () => {
+        props.displayModal_async(
+            modalTypes.DEFAULT,
+            'Are you sure you wish to close these items?',
+            'Clone', 'Cancel')
+        .then(response => {
+            if (response) {
+                props.actions.onClone();
             }
         });
     };
@@ -50,11 +62,13 @@ const header = (props) => {
                 <ReturnLink/>
                 <Search/>
                 <Toolbar
+                    clone={props.selected.length}
                     merge={props.selected.length > 1 && props.selected[0].type === 'deck'}
                     onA={() => props.actions.toggleAside(2)}
                     onB={() => props.actions.toggleAside(3)}
                     onC={handle_onDelete}
-                    onD={handle_onMerge}/>
+                    onD={handle_onMerge}
+                    onE={handle_onClone}/>
                 <Dashboard
                     onNavigation={() => props.actions.toggleAside(1)}/>
             </div>

@@ -514,7 +514,28 @@ class Collections extends Component {
         this.handle_onItemSelectClear(item);
     }
     handle_onItemClone = () => {
+        const items = {};
+        this.state.selected.map((item, i) => {
+           let id = utility.createHashId(i);
+           let clone = create.itemViewModel(id, {
+               ...item,
+               primary: 'Clone of ' + item.primary
+           });
+           items[id] = clone;
+        });
 
+        this.props.patchManyItems_async(this.props.token, Object.keys(items).map(key => {
+            return items[key];
+        }));
+
+        this.setState(prev => ({
+            ...prev,
+            [this.state.tabs[this.state.current].collection]: {
+                ...prev[this.state.tabs[this.state.current].collection],
+                ...items
+            }
+        }));
+        this.handle_onItemSelectClear();
     }
 
 
@@ -597,6 +618,7 @@ const mapDispatchToProps = dispatch => {
         deleteTab_async: (token, user, id) => dispatch(actions.deleteTab_async(token, user, id)),
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
         patchItem_async: (token, item) => dispatch(actions.patchItem_async(token, item)),
+        patchManyItems_async: (token, items) => dispatch(actions.patchManyItems_async(token, items)),
         putTag_async: (url, token, user, data) => dispatch(actions.putTag_async(url, token, user, data)),
         patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data)),
         putItem_async: (token, item) => dispatch(actions.putItem_async(token, item)),

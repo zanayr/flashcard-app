@@ -15,6 +15,9 @@ const toolbar = (props) => {
                 <IconButton
                     disabled={!props.merge}
                     onClick={props.onD}>M</IconButton>
+                <IconButton
+                    disabled={!props.clone}
+                    onClick={props.onE}>C</IconButton>
             </div>
         </div>
     );

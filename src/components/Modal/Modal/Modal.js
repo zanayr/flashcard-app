@@ -17,6 +17,10 @@ const modal = (props) => {
     let icon;
     let title;
     switch (props.type) {
+        case modalTypes.DEFAULT:
+            icon = (<span className={ModalCSS.DefaultIcon}></span>);
+            title= ('Hello');
+            break;
         case modalTypes.WARNING:
             icon = (<span className={ModalCSS.WarningIcon}></span>);
             title= ('Warning!');

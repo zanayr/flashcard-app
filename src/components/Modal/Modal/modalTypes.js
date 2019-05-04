@@ -1,3 +1,2 @@
-export const DELETE = 'DELETE';
-export const DIALOG = 'DIALOG';
+export const DEFAULT = 'DEFAULT';
 export const WARNING = 'WARNING';

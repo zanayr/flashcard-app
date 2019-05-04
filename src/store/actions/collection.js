@@ -127,6 +127,15 @@ export const patchItem_async = (token, data) => {
         });
     };
 };
+export const patchManyItems_async = (token, data) => {
+    return dispatch => {
+        data.forEach(item => {
+            dispatch(patchItem_async(token, item));
+        });
+    }
+};
+
+//  Pute  ---------------------------------------------------------------  Put Async //
 export const putItem_async = (token, data) => {
     return dispatch => {
         axios.put('/' + data.type + '/' + data.id + '.json?auth=' + token, create.itemModel(data))

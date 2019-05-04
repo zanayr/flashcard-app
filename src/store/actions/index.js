@@ -9,6 +9,7 @@ export {
     deleteManyItems_async,
     getAllItems_async,
     patchItem_async,
+    patchManyItems_async,
     putItem_async
 } from './collection';
 
