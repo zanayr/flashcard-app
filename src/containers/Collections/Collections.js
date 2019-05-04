@@ -48,6 +48,29 @@ class Collections extends Component {
         },
     }
 
+    //  Quick Action  ------------------------------------------------  Quick Action //
+    clearQuick (value) {
+        this.setState(prev => ({
+            ...prev,
+            quick: prev.quick.filter(q => q !== value)
+        }))
+    }
+    setQuick (value) {
+        if (!this.state.quick.includes(value)) {
+            this.setState(prev => ({
+                ...prev,
+                quick: prev.quick.concat(value)
+            }));
+        }
+    }
+    // toggleQuick (value) {
+    //     if (this.state.quick.includes(value)) {
+    //         clearQuick(value);
+    //     } else {
+    //         setQuick(value);
+    //     }
+    // }
+
 
     //  STATE SETTERS v2  //
     //  Aside  -------------------------------------------------------------  Aside  //
@@ -155,7 +178,6 @@ class Collections extends Component {
     }
 
 
-
     //  Aside  -------------------------------------------------------------  Aside  //
     handle_onAsideClose = () => {
         const aside = {
@@ -170,15 +192,7 @@ class Collections extends Component {
                         this.checkForNewTags('tags', this.state[item.type][item.id].tags);
                         this.checkForNewTags('groups', this.state[item.type][item.id].groups);
                         this.props.putItem_async(this.props.token, item);
-                        if (!this.state.quick.find(q => q.value === '↺')) {
-                            this.setState(prev => ({
-                                ...prev,
-                                quick: prev.quick.concat({
-                                    action: this.state.undo.action,
-                                    value: '↺'
-                                })
-                            }));
-                        }
+                        this.setQuick('u');
                     }
                     break;
                 default:
@@ -208,9 +222,9 @@ class Collections extends Component {
             filters: {
                 groups: [],
                 tags: []
-            },
-            quick: prev.quick.filter(q => q.value !== '✕')
+            }
         }));
+        this.clearQuick('f');
     }
     handle_onFilterSelect = (category, tag) => {
         const filters = {...this.state.filters};
@@ -234,18 +248,9 @@ class Collections extends Component {
             }
         }));
         if (filters.tags.length || filters.groups.length) {
-            if (!this.state.quick.find(q => q.value === '✕')) {
-                this.setState(prev => ({
-                    quick: prev.quick.concat({
-                        action: this.handle_onFilterClear,
-                        value: '✕'
-                    })
-                }));
-            }
+            this.setQuick('f');
         } else {
-            this.setState(prev => ({
-                quick: prev.quick.filter(q => q.value !== '✕')
-            }));
+            this.clearQuick('f');
         }
     }
 
@@ -317,13 +322,13 @@ class Collections extends Component {
                 ...prev[undo.data.type],
                 [undo.data.id]: {...undo.data}
             },
-            quick: prev.quick.filter(q => q.value !== '↺'),
             undo: {
                 ...prev.undo,
                 action: null,
                 data: {}
             }
         }));
+        this.clearQuick('u');
         this.props.putItem_async(this.props.token, undo.data);
     }
     handle_onItemInspect = (item) => {
@@ -345,16 +350,15 @@ class Collections extends Component {
         if (typeof item === 'undefined') {
             this.setState(prev => ({
                 ...prev,
-                quick: prev.quick.filter(q => q.value !== '⚬'),
                 selected: []
             }));
         } else {
             this.setState(prev => ({
                 ...prev,
-                quick: prev.quick.filter(q => q.value !== '⚬'),
                 selected: [item]
             }));
         }
+        this.clearQuick('s');
     }
     handle_onItemSelect = (item) => {
         let selected = this.state.selected.slice();
@@ -368,18 +372,9 @@ class Collections extends Component {
             selected: selected
         }));
         if (selected.length) {
-            if (!this.state.quick.find(q => q.value === '⚬')) {
-                this.setState(prev => ({
-                    quick: prev.quick.concat({
-                        action: this.handle_onItemSelectClear,
-                        value: '⚬'
-                    })
-                }));
-            }
+            this.setQuick('s');
         } else {
-            this.setState(prev => ({
-                quick: prev.quick.filter(q => q.value !== '⚬')
-            }));
+            this.clearQuick('s');
         }
         if (this.state.aside.state === 99) {
             this.handle_onAsideClose();
@@ -460,7 +455,7 @@ class Collections extends Component {
     //             ...prev[item.type],
     //             [item.id]: item
     //         },
-    //         quick: prev.quick.filter(q => q.value !== '↺'),
+    //         quick: prev.quick.filter(q => q.value !== 'u'),
     //         undo: {
     //             ...prev.undo,
     //             action: null,
@@ -480,12 +475,12 @@ class Collections extends Component {
         //     action: this.handle_onItemRecover,
         //     data: item
         // });
-        // if (!this.state.quick.find(q => q.value === '↺')) {
+        // if (!this.state.quick.find(q => q.value === 'u')) {
         //     this.setState(prev => ({
         //         ...prev,
         //         quick: prev.quick.concat({
         //             action: this.state.undo.action,
-        //             value: '↺'
+        //             value: 'u'
         //         })
         //     }));
         // }
@@ -633,7 +628,13 @@ class Collections extends Component {
                             onClick={this.handle_onActionClick}
                             state={0}
                             values={['Create', 'Study']}/>
-                        <QuickBar data={this.state.quick}/>
+                        <QuickBar
+                            actions={{
+                                onUndo: this.state.undo.action,
+                                onFilterClear: this.handle_onFilterClear,
+                                onSelectClear: this.handle_onItemSelectClear
+                            }}
+                            data={this.state.quick}/>
                     </div>
                 </main>
                 <Aside
