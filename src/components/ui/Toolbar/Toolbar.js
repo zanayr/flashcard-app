@@ -11,12 +11,14 @@ const toolbar = (props) => {
             <div className={AppCSS.Inner}>
                 <IconButton onClick={props.onA}>T</IconButton>
                 <IconButton onClick={props.onB}>G</IconButton>
-                <IconButton onClick={props.onC}>D</IconButton>
+                <IconButton
+                    disabled={!props.single}
+                    onClick={props.onC}>D</IconButton>
                 <IconButton
                     disabled={!props.merge}
                     onClick={props.onD}>M</IconButton>
                 <IconButton
-                    disabled={!props.clone}
+                    disabled={!props.single}
                     onClick={props.onE}>C</IconButton>
                 <IconButton onClick={props.onAA}>AA</IconButton>
                 <IconButton onClick={props.onAD}>AD</IconButton>

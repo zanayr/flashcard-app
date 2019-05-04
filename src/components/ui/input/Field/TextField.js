@@ -15,7 +15,8 @@ const textField = (props) => {
                 type='text'
                 {...props.config}/>
     );
-    if (props.requierd) {
+    if (props.required) {
+        
         input = (
             <input
                 className={InputCSS.Text_Field}

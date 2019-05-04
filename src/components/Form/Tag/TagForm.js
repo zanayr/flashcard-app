@@ -18,7 +18,7 @@ class TagForm extends Component {
 
 
     handle_onConfirm = value => {
-        if (this.form.current.reportValidity() && value.length > 0) {
+        if (this.form.current.reportValidity()) {
             this.setState(prev => ({
                 tag: '',
                 tags: prev.tags.concat(value)

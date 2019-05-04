@@ -12,6 +12,7 @@ const tagField = (props) => {
                 maxLength={24}
                 onChange={(e) => props.onChange(e.target.value)}
                 placeholder={props.placeholder}
+                required
                 type='text'
                 value={props.value}/>
         </div>
