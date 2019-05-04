@@ -469,18 +469,6 @@ class Collections extends Component {
         this.setFilters('tags', tab);
         this.setCurrentTab(id);
         this.addTab(newTab);
-        // this.setState(prev => ({
-        //     ...prev,
-        //     current: id,
-        //     filters: {
-        //         groups: tab.groups,
-        //         tags: tab.tags
-        //     },
-        //     tabs: {
-        //         ...prev.tabs,
-        //         [id]: newTab
-        //     }
-        // }));
         this.props.patchTab_async(this.props.token, this.props.user.id, newTab);
     }
 
