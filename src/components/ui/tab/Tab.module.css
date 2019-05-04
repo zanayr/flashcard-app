@@ -11,7 +11,7 @@
 
 .QuickTab {
     background-color: indigo;
-    width: 64px;
+    width: auto;
     height: 32px;
 }
 .QuickTab.Active {
@@ -24,7 +24,7 @@
     justify-content: space-between;
 }
 
-.AddButton {
+.QuickTab.AddButton {
     background-color: lightsalmon;
     width: 64px;
     height: 32px;

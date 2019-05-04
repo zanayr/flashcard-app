@@ -20,7 +20,7 @@ const tabBar = (props) => {
     let tabs = utility.sortBy(sortTypes.DATE_ASC, props.backingCollection).map(tab => {
         return (
             <QuickTab
-                active={tab.name === props.current}
+                active={tab.id === props.current}
                 delete={tab.delete}
                 key={tab.id}
                 onClick={() => props.actions.onToggle(tab.id)}
@@ -29,7 +29,6 @@ const tabBar = (props) => {
             </QuickTab>
         );
     });
-
     let add = null;
     if (Object.keys(props.backingCollection).length < 12) {
         add = (
