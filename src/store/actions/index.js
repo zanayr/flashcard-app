@@ -22,5 +22,6 @@ export {
 
 export {
     displayModal,
-    clearModal
+    clearModal,
+    displayModal_async
 } from './modal';

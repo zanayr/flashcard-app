@@ -18,10 +18,10 @@
     height: 32px;
     width: 32px;
 }
-.Modal span.Default_Icon {
+.Modal span.DefaultIcon {
     background-color: blue;
 }
-.Modal span.Delete_Icon {
+.Modal span.WarningIcon {
     background-color: coral;
 }
 

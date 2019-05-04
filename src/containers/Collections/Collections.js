@@ -477,7 +477,7 @@ class Collections extends Component {
             <Aux>
                 <Header
                     actions={{
-                        deleteItem: this.handle_onItemDelete,
+                        onDelete: this.handle_onItemDelete,
                         toggleAside: this.handle_onAsideToggle,
                         closeAside: this.handle_onAsideClose
                     }}

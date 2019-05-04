@@ -18,23 +18,28 @@ const header = (props) => {
         props.actions.closeAside();
     }
 
-    const handle_onBulkDelete = () => {
-        const titles = [];
-        const collection = Object.keys(props.collection).map(key => {
-            return props.collection[key];
-        })
-        props.selected.forEach(id => {
-            titles.push(collection.find(i => i.id == id).title);
-        });
-        props.displayModal(modalTypes.DELETE, titles);
-    };
-    
-
-
-
-    // const handle_onFilterBy = (filter) => {
-    //     props.actions.openFilter(filter);
+    // const reply = (value) => {
+    //     console.log(value);
     // }
+
+    const handle_onBulkDelete = () => {
+        // props.displayModal(modalTypes.DELETE, {
+        //     action: props.actions.onDelete,
+        //     data: props.selected.slice()
+        // });
+        props.displayModal_async(
+            modalTypes.WARNING,
+            'Once you delete an item, it cannot be recovered. Are you sure you wish to delete these items?',
+            'Delete', 'Cancel')
+        .then(response => {
+            console.log(response);
+            if (response) {
+                console.log('Deleteing items...');
+            } else {
+                console.log('Nevermind...');
+            }
+        });
+    };
 
     return (
         <header
@@ -58,7 +63,7 @@ const header = (props) => {
 const mapDispatchToProps = dispatch => {
     return {
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
-
+        displayModal_async: (type, message, confirm, cancel) => dispatch(actions.displayModal_async(type, message, confirm, cancel))
     };
 };
 

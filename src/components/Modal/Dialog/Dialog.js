@@ -14,6 +14,11 @@ import ModalCSS from '../Modal/Modal.module.css';
 const deleteSingleModal = (props) => {
     //  EVENT HANDLERS  //
     const handle_onClear = () => {
+        props.data.success(true);
+        props.onClear();
+    }
+    const handle_onCancel = () => {
+        props.data.failure(false);
         props.onClear();
     }
 
@@ -32,6 +37,7 @@ const deleteSingleModal = (props) => {
             <p>{props.data.message}</p>
             <Row just='Center'>
                 <Button onClick={handle_onClear}>Ok</Button>
+                <Button onClick={handle_onCancel}>Cancel</Button>
             </Row>
         </Aux>
     );

@@ -5,42 +5,35 @@ import * as actions from '../../../store/actions/index';
 import * as modalTypes from './modalTypes';
 
 import Aux from '../../../hoc/Aux/Aux';
-import DeleteModal from '../Delete/DeleteModal';
-import Dialog from '../Dialog/Dialog';
+import Button from '../../ui/button/Button/Button';
 import Overlay from '../Overlay/Overlay';
+import Row from '../../../hoc/Row/Row';
 
 import AppCSS from '../../../App.module.css';
 import ModalCSS from './Modal.module.css';
 
 
 const modal = (props) => {
-    const handle_onClear = () => {
-        props.clearModal({key: props.uniqueId});
-    }
-    // const handle_onConfirm = () => {
-    //     if (props.actions.callback) {
-    //         props.actions.callback();
-    //     }
-    //     props.actions.onConfirm({key: props.data.key});
-    //     props.clearModal({key: props.uniqueId});
-    // }
-    let modal;
+    let icon;
+    let title;
     switch (props.type) {
-        case modalTypes.DELETE:
-            modal = (
-                <DeleteModal
-                    data={props.data}
-                    onClear={handle_onClear}/>
-            );
+        case modalTypes.WARNING:
+            icon = (<span className={ModalCSS.WarningIcon}></span>);
+            title= ('Warning!');
             break;
         default:
-            modal = (
-                <Dialog 
-                    data={'Something went wrong...'}
-                    type={'default'}
-                    onClear={handle_onClear}/>
-            )
+            icon = (<span className={ModalCSS.DefaultIcon}></span>);
+            title= (props.data.type);
             break;
+    }
+
+    const handle_onCancel = () => {
+        props.data.onResponse(false);
+        props.clearModal({key: props.uniqueId});
+    }
+    const handle_onConfirm = () => {
+        props.data.onResponse(true);
+        props.clearModal({key: props.uniqueId});
     }
 
     return (
@@ -50,8 +43,16 @@ const modal = (props) => {
             <div className={ModalCSS.Modal}
                 key={props.uniqueId}>
                 <div className={AppCSS.Inner}>
-                    {modal}
-                </div>
+                    <Row just='Start' align='Center'>
+                        {icon}
+                        <h3>{title}</h3>
+                    </Row>
+                    <p>{props.data.message}</p>
+                    <Row just={props.data.cancel ? 'Between' : 'Center'}>
+                        {props.data.cancel ? <Button onClick={handle_onCancel}>{props.data.cancel}</Button> : null}
+                        <Button onClick={handle_onConfirm}>{props.data.confirm}</Button>
+                    </Row>
+                    </div>
             </div>
         </Aux>
     );

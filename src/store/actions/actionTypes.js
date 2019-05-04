@@ -21,6 +21,7 @@ export const PUT_ITEM_SUCC = 'PUT_ITEM_SUCC';
 //  Modal Store  //
 export const DISPLAY_MODAL = 'DISPLAY_MODAL';
 export const CLEAR_MODAL = 'CLEAR_MODAL';
+export const DISPLAY_MODAL2 = 'DISPLAY_MODAL2';
 
 
 //  User  //
