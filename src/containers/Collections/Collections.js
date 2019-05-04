@@ -32,6 +32,7 @@ class Collections extends Component {
         deck: this.props.select_decks,
         card: this.props.select_cards,
         current: 'deck',
+        collection: 'deck',
         filters: {
             groups: [],
             tags: []
@@ -267,7 +268,13 @@ class Collections extends Component {
             }
         }));
     }
-    setCurrentTab (tab) {
+    setCollection (collection) {
+        this.setState(prev => ({
+            ...prev,
+            collection: collection
+        }));
+    }
+    setCurrent (tab) {
         this.setState(prev => ({
             ...prev,
             current: tab
@@ -295,7 +302,7 @@ class Collections extends Component {
         //  This is all temporary  //
         let id = utility.createHashId(0);
         let item;
-        if (this.state.tabs[this.state.current].collection === 'deck') {
+        if (this.state.collection === 'deck') {
             item = {
                 date: Date.now(),
                 groups: [...this.state.filters.groups],
@@ -476,14 +483,15 @@ class Collections extends Component {
         
         this.setFilters('groups', tab);
         this.setFilters('tags', tab);
-        this.setCurrentTab(id);
+        this.setCurrent(id);
+        this.setCollection(tab.collection);
         this.addTab(newTab);
         this.props.patchTab_async(this.props.token, this.props.user.id, newTab);
     }
 
     //  Add Tab  //
     handle_onTabAdd = () => {
-        this.setCurrentTab('add');
+        this.setCurrent('add');
     }
 
     //  Remove Tab  //
@@ -496,7 +504,8 @@ class Collections extends Component {
 
     //  Tab Toggle  //
     handle_onTabToggle = (tab) => {
-        this.setCurrentTab(tab);
+        this.setCurrent(tab);
+        this.setCollection(this.state.tabs[tab].collection);
         this.setFilters('groups', this.state.tabs[tab]);
         this.setFilters('tags', this.state.tabs[tab]);
         this.clearSelected();
@@ -610,8 +619,8 @@ class Collections extends Component {
 
         this.setState(prev => ({
             ...prev,
-            [this.state.tabs[this.state.current].collection]: {
-                ...prev[this.state.tabs[this.state.current].collection],
+            [this.state.collection]: {
+                ...prev[this.state.collection],
                 ...items
             }
         }));
