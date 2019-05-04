@@ -172,6 +172,15 @@ class Collections extends Component {
             }
         }));
     }
+    setManyItems (collection, items) {
+        this.setState(prev => ({
+            ...prev,
+            [collection]: {
+                ...prev[collection],
+                ...items
+            }
+        }));
+    }
     setItemValue (item, target, value) {
         this.setState(prev => ({
             ...prev,
@@ -497,40 +506,36 @@ class Collections extends Component {
     handle_onTabBarClick = () => {
         //  Do something...
     }
-    // handle_onItemRecover = () => {
-    //     const item = this.state.undo.data;
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         [item.type]: {
-    //             ...prev[item.type],
-    //             [item.id]: item
-    //         },
-    //         quick: prev.quick.filter(q => q.value !== 'u'),
-    //         undo: {
-    //             ...prev.undo,
-    //             action: null,
-    //             data: {}
-    //         }
-    //     }));
-    //     this.props.patchItem_async(this.props.token, item);
-    // }
+
+    handle_onItemRecover = () => {
+        const item = this.state.undo.data;
+        this.setItem(item);
+        this.clearQuick('u');
+        this.clearUndo();
+        this.clearSelected();
+        this.props.patchItem_async(this.props.token, item);
+    }
+    handle_onManyItemsRecover = () => {
+        const itemsArr = this.state.undo.data;
+        const items = {}
+        itemsArr.map(item => {
+            items[item.id] = item
+        });
+        this.setManyItems('deck', items);
+        this.clearQuick('u');
+        this.clearUndo();
+        this.clearSelected();
+        this.props.patchManyItems_async(this.props.token, itemsArr);
+    }
     handle_onItemDelete = (item) => {
         const collection = {...this.state[item.type]};
         delete collection[item.id];
+        this.setUndo({
+            action: this.handle_onItemRecover,
+            data: item
+        });
         this.setCollection(item.type, collection);
-        // this.setUndo({
-        //     action: this.handle_onItemRecover,
-        //     data: item
-        // });
-        // if (!this.state.quick.find(q => q.value === 'u')) {
-        //     this.setState(prev => ({
-        //         ...prev,
-        //         quick: prev.quick.concat({
-        //             action: this.state.undo.action,
-        //             value: 'u'
-        //         })
-        //     }));
-        // }
+        this.setQuick('u');
         this.props.deleteItem_async(this.props.token, item);
     }
     handle_onBulkDelete = () => {
@@ -540,6 +545,11 @@ class Collections extends Component {
         selected.forEach(item => {
             delete collection[item.id];
         });
+        this.setUndo({
+            action: this.handle_onManyItemsRecover,
+            data: selected
+        });
+        this.setQuick('u');
         this.setCollection(type, collection);
         this.clearSelected();
         this.clearQuick('s');
