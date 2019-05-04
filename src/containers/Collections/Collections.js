@@ -48,7 +48,7 @@ class Collections extends Component {
         },
     }
 
-    //  Quick Action  ------------------------------------------------  Quick Action //
+    //  Quicks  ------------------------------------------------------------  Quicks //
     clearQuick (value) {
         this.setState(prev => ({
             ...prev,
@@ -63,17 +63,19 @@ class Collections extends Component {
             }));
         }
     }
-    // toggleQuick (value) {
-    //     if (this.state.quick.includes(value)) {
-    //         clearQuick(value);
-    //     } else {
-    //         setQuick(value);
-    //     }
-    // }
 
-
-    //  STATE SETTERS v2  //
     //  Aside  -------------------------------------------------------------  Aside  //
+    clearAside () {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                actions: {},
+                data: {},
+                state: 0
+            }
+        }));
+    }
     setAsideData (data) {
         this.setState(prev => ({
             ...prev,
@@ -85,7 +87,7 @@ class Collections extends Component {
             }
         }));
     }
-    setAsideAction (actions) {
+    setAsideActions (actions) {
         this.setState(prev => ({
             ...prev,
             aside: {
@@ -97,7 +99,7 @@ class Collections extends Component {
         }));
     }
     toggleAside (state) {
-        if (this.state.aside.isActive) {
+        if (this.state.aside.state) {
             if (state !== this.state.aside.state && this.state.aside.isActive) {
                 this.setState(prev => ({
                     ...prev,
@@ -111,7 +113,7 @@ class Collections extends Component {
                     ...prev,
                     aside: {
                         ...prev.aside,
-                        isActive: false
+                        isActive: 0
                     }
                 }));
             }
@@ -120,14 +122,22 @@ class Collections extends Component {
                 ...prev,
                 aside: {
                     ...prev.aside,
-                    isActive: true,
                     state: state
                 }
             }));
         }
     }
  
-
+    //  Undo  --------------------------------------------------------------  Undo  //
+    clearUndo () {
+        this.setState(prev => ({
+            ...prev,
+            undo: {
+                action: null,
+                data: {}
+            }
+        }));
+    }
     setUndo (data) {
         this.setState(prev => ({
             ...prev,
@@ -137,6 +147,141 @@ class Collections extends Component {
         }));
     }
 
+    //  Collections  -------------------------------------------------  Collections  //
+    addItem (item) {
+        this.setState(prev => ({
+            ...prev,
+            [item.type]: {
+                ...prev[item.type],
+                [item.id]: item
+            }
+        }));
+    }
+    setCollection (type, collection) {
+        this.setState(prev => ({
+            ...prev,
+            [type]: collection
+        }));
+    }
+    setItem (item) {
+        this.setState(prev => ({
+            ...prev,
+            [item.type]: {
+                ...prev[item.type],
+                [item.id]: {...item}
+            }
+        }));
+    }
+    setItemValue (item, target, value) {
+        this.setState(prev => ({
+            ...prev,
+            [item.type]: {
+                ...prev[item.type],
+                [item.id]: {
+                    ...prev[item.type][item.id],
+                    [target]: value
+                }
+            }
+        }));
+    }
+
+    //  Lists  -------------------------------------------------------------  Lists  //
+    clearSelected (item) {
+        if (typeof item === 'undefined') {
+            this.setState(prev => ({
+                ...prev,
+                selected: []
+            }));
+        } else {
+            this.setState(prev => ({
+                ...prev,
+                selected: [item]
+            }));
+        }
+    }
+    setSelected (selected) {
+        this.setState(prev => ({
+            ...prev,
+            selected: selected
+        }));
+    }
+
+    //  Filters  ---------------------------------------------------------  Filters  //
+    clearFilters () {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                data: {
+                    ...prev.aside.data,
+                    selected: []
+                }
+            },
+            filters: {
+                groups: [],
+                tags: []
+            }
+        }));
+    }
+    setFilters (category, filters) {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                data: {
+                    ...prev.aside.data,
+                    selected: filters[category]
+                }
+            },
+            filters: {
+                ...prev.filters,
+                [category]: filters[category]
+            }
+        }));
+    }
+
+    //  Tags  ---------------------------------------------------------------  Tags  //
+    setTags (category, tags) {
+        this.setState(prev => ({
+            ...prev,
+            [category]: tags
+        }));
+    }
+
+    //  Tabs  ---------------------------------------------------------------  Tabs  //
+    addTab (tab) {
+        this.setState(prev => ({
+            ...prev,
+            tabs: {
+                ...prev.tabs,
+                [tab.id]: tab
+            }
+        }));
+    }
+    setCurrentTab (tab) {
+        this.setState(prev => ({
+            ...prev,
+            current: tab
+        }));
+    }
+    setTabs (tabs) {
+        this.setState(prev => ({
+            ...prev,
+            tabs: {
+                ...tabs
+            }
+        }));
+    }
+
+    //  Sort  ---------------------------------------------------------------  Sort  //
+    setSort (sort) {
+        this.setState(prev => ({
+            ...prev,
+            sort: sort
+        }));
+    }
+
+    //  Action  -----------------------------------------------------------  Action  //
     handle_onActionClick = () => {
         //  This is all temporary  //
         let id = utility.createHashId(0);
@@ -167,13 +312,7 @@ class Collections extends Component {
             }
         }
         item = create.itemViewModel(id, item);
-        this.setState(prev => ({
-            ...prev,
-            [item.type]: {
-                ...prev[item.type],
-                [item.id]: item
-            }
-        }));
+        this.addItem(item);
         this.props.patchItem_async(this.props.token, item);
     }
 
@@ -198,32 +337,11 @@ class Collections extends Component {
                 default:
                     break;
             }
-            this.setState(prev => ({
-                ...prev,
-                aside: {
-                    ...prev.aside,
-                    actions: {},
-                    data: {},
-                    state: 0
-                }
-            }));
+            this.clearAside();
         }
     }
     handle_onFilterClear = () => {
-        this.setState(prev => ({
-            ...prev,
-            aside: {
-                ...prev.aside,
-                data: {
-                    ...prev.aside.data,
-                    selected: []
-                }
-            },
-            filters: {
-                groups: [],
-                tags: []
-            }
-        }));
+        this.clearFilters();
         this.clearQuick('f');
     }
     handle_onFilterSelect = (category, tag) => {
@@ -233,20 +351,7 @@ class Collections extends Component {
         } else {
             filters[category] = filters[category].concat(tag);
         }
-        this.setState(prev => ({
-            ...prev,
-            aside: {
-                ...prev.aside,
-                data: {
-                    ...prev.aside.data,
-                    selected: filters[category]
-                }
-            },
-            filters: {
-                ...prev.filters,
-                [category]: filters[category]
-            }
-        }));
+        this.setFilters(category, filters);
         if (filters.tags.length || filters.groups.length) {
             this.setQuick('f');
         } else {
@@ -263,7 +368,7 @@ class Collections extends Component {
                         selected: this.state.filters.tags,
                         tags: this.state.tags.slice()
                     });
-                    this.setAsideAction({
+                    this.setAsideActions({
                         onSelect: this.handle_onFilterSelect
                     });
                     break;
@@ -273,7 +378,7 @@ class Collections extends Component {
                         selected: this.state.filters.groups,
                         tags: this.state.groups.slice()
                     });
-                    this.setAsideAction({
+                    this.setAsideActions({
                         onSelect: this.handle_onFilterSelect
                     });
                     break;
@@ -291,43 +396,21 @@ class Collections extends Component {
         let allTags;
         if (newTags.length) {
             allTags = this.state[category].concat(newTags);
-            this.setState(prev => ({
-                ...prev,
-                [category]: allTags
-            }));
+            this.setTags(category, allTags);
             this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
         }
     }
 
     handle_onItemChange = (item, payload) => {
-        this.setState(prev => ({
-            ...prev,
-            [item.type]: {
-                ...prev[item.type],
-                [item.id]: {
-                    ...prev[item.type][item.id],
-                    [payload.target]: payload.value
-                }
-            }
-        }));
+        this.setItemValue(item, payload.target, payload.value);
     }
     handle_onItemReset = () => {
         const undo = {
             action: this.state.undo.action,
             data: this.state.undo.data
         }
-        this.setState(prev => ({
-            ...prev,
-            [undo.data.type]: {
-                ...prev[undo.data.type],
-                [undo.data.id]: {...undo.data}
-            },
-            undo: {
-                ...prev.undo,
-                action: null,
-                data: {}
-            }
-        }));
+        this.setItem(undo.data);
+        this.clearUndo();
         this.clearQuick('u');
         this.props.putItem_async(this.props.token, undo.data);
     }
@@ -338,7 +421,7 @@ class Collections extends Component {
             item: item,
             tags: this.state.tags
         });
-        this.setAsideAction({
+        this.setAsideActions({
             onChange: this.handle_onItemChange
         });
         this.setUndo({
@@ -347,17 +430,7 @@ class Collections extends Component {
         });
     }
     handle_onItemSelectClear = (item) => {
-        if (typeof item === 'undefined') {
-            this.setState(prev => ({
-                ...prev,
-                selected: []
-            }));
-        } else {
-            this.setState(prev => ({
-                ...prev,
-                selected: [item]
-            }));
-        }
+        this.clearSelected(item);
         this.clearQuick('s');
     }
     handle_onItemSelect = (item) => {
@@ -367,10 +440,7 @@ class Collections extends Component {
         } else {
             selected = selected.concat(item);
         }
-        this.setState(prev => ({
-            ...prev,
-            selected: selected
-        }));
+        this.setSelected(selected);
         if (selected.length) {
             this.setQuick('s');
         } else {
@@ -394,54 +464,46 @@ class Collections extends Component {
         this.checkForNewTags('tags', tab.tags);
         this.checkForNewTags('groups', tab.groups);
         
-
-        this.setState(prev => ({
-            ...prev,
-            current: id,
-            filters: {
-                groups: tab.groups,
-                tags: tab.tags
-            },
-            tabs: {
-                ...prev.tabs,
-                [id]: newTab
-            }
-        }));
+        
+        this.setFilters('groups', tab);
+        this.setFilters('tags', tab);
+        this.setCurrentTab(id);
+        this.addTab(newTab);
+        // this.setState(prev => ({
+        //     ...prev,
+        //     current: id,
+        //     filters: {
+        //         groups: tab.groups,
+        //         tags: tab.tags
+        //     },
+        //     tabs: {
+        //         ...prev.tabs,
+        //         [id]: newTab
+        //     }
+        // }));
         this.props.patchTab_async(this.props.token, this.props.user.id, newTab);
     }
 
     //  Add Tab  //
     handle_onTabAdd = () => {
-        this.setState(prev => ({
-            ...prev,
-            current: 'add'
-        }));
+        this.setCurrentTab('add');
     }
 
     //  Remove Tab  //
     handle_onTabRemove = (tab) => {
         let tabs = this.state.tabs;
         delete tabs[tab];
-        this.setState(prev => ({
-            ...prev,
-            tabs: {
-                ...tabs
-            }
-        }));
+        this.setTabs(tabs);
         this.props.deleteTab_async(this.props.token, this.props.user.id, tab);
     }
 
     //  Tab Toggle  //
     handle_onTabToggle = (tab) => {
-        this.setState(prev => ({
-            ...prev,
-            current: tab,
-            filters: {
-                groups: this.state.tabs[tab].groups,
-                tags: this.state.tabs[tab].tags
-            }
-        }));
-        this.handle_onItemSelectClear();
+        this.setCurrentTab(tab);
+        this.setFilters('groups', this.state.tabs[tab]);
+        this.setFilters('tags', this.state.tabs[tab]);
+        this.clearSelected();
+        this.clearQuick('s');
     }
 
     handle_onTabBarClick = () => {
@@ -467,10 +529,7 @@ class Collections extends Component {
     handle_onItemDelete = (item) => {
         const collection = {...this.state[item.type]};
         delete collection[item.id];
-        this.setState(prev => ({
-            ...prev,
-            [item.type]: collection
-        }));
+        this.setCollection(item.type, collection);
         // this.setUndo({
         //     action: this.handle_onItemRecover,
         //     data: item
@@ -487,17 +546,16 @@ class Collections extends Component {
         this.props.deleteItem_async(this.props.token, item);
     }
     handle_onBulkDelete = () => {
-        const collection = {...this.state[this.state.tabs[this.state.current].collection]}
-        this.state.selected.slice().forEach(item => {
+        const type = this.state.tabs[this.state.current].collection;
+        const collection = {...this.state[this.state.tabs[this.state.current].collection]};
+        const selected = this.state.selected.slice();
+        selected.forEach(item => {
             delete collection[item.id];
         });
-        this.props.deleteManyItems_async(this.props.token, this.state.selected.slice());
-
-        this.setState(prev => ({
-            ...prev,
-            [collection]: collection
-        }));
-        this.handle_onItemSelectClear();
+        this.setCollection(type, collection);
+        this.clearSelected();
+        this.clearQuick('s');
+        this.props.deleteManyItems_async(this.props.token, selected);
     }
     handle_onDeckMerge = () => {
         //  This is all temporary  //
@@ -533,14 +591,9 @@ class Collections extends Component {
         //  Send to redux and db
         this.props.patchItem_async(this.props.token, item);
         //  Update local state
-        this.setState(prev => ({
-            ...prev,
-            [item.type]: {
-                ...prev[item.type],
-                [item.id]: item
-            }
-        }));
-        this.handle_onItemSelectClear(item);
+        this.setItem(item);
+        this.clearSelected(item);
+        this.clearQuick('s');
     }
     handle_onItemClone = () => {
         const items = {};
@@ -564,14 +617,12 @@ class Collections extends Component {
                 ...items
             }
         }));
-        this.handle_onItemSelectClear();
+        this.clearSelected();
+        this.clearQuick('s');
     }
 
     handle_onSortChange = (sort) => {
-        this.setState(prev => ({
-            ...prev,
-            sort: sort
-        }));
+        this.setSort(sort);
     }
 
 

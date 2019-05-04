@@ -6,6 +6,7 @@ import QuickButton from '../../button/Quick/QuickButton';
 
 import styles from '../Bar.module.css';
 
+
 const quickBar = (props) => {
     let quicks = null;
     let action = null;
