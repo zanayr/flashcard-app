@@ -7,7 +7,7 @@ export const clearModal = payload => {
     };
 };
 
-export const displayModal = (type, data, confirm, cancel, response) => {
+export const displayModal = (type, data, confirm, cancel, response, reject) => {
     return {
         type: actionTypes.DISPLAY_MODAL,
         payload: {
@@ -15,7 +15,8 @@ export const displayModal = (type, data, confirm, cancel, response) => {
                 cancel: cancel,
                 confirm: confirm,
                 message: data,
-                onResponse: response
+                onConfirm: response,
+                onCancel: reject
             },
             type: type
         }
@@ -24,7 +25,7 @@ export const displayModal = (type, data, confirm, cancel, response) => {
 export const displayModal_async = (type, message, confirm='OK', cancel) => {
     return dispatch => {
         return new Promise((resolve, reject) => {
-            dispatch(displayModal(type, message, confirm, cancel, resolve));
+            dispatch(displayModal(type, message, confirm, cancel, resolve, reject));
         });
     }
 }

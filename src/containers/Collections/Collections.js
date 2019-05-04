@@ -2,13 +2,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
-import * as select from '../../store/reducers/root';
 import * as create from '../../store/models/models';
-import * as utility from '../../utility/utility';
+import * as select from '../../store/reducers/root';
 import * as sortTypes from '../../utility/sortTypes';
+import * as utility from '../../utility/utility';
 
-
-import withUser from '../../hoc/withUser/withUser';
 
 import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside from '../../components/aside/Aside/Aside';
@@ -18,9 +16,9 @@ import List from '../../components/List/List';
 import QuickBar from '../../components/ui/bar/Quick/QuickBar';
 import TabBar from '../../components/ui/tab/TabBar/TabBar';
 import TabForm from '../../components/form/Tab/TabForm';
+import withUser from '../../hoc/withUser/withUser';
 
-import AppCSS from '../../App.module.css';
-import CollectionsCSS from './Collections.module.css';
+import styles from './Collections.module.css';
 
 class Collections extends Component {
     state = {
@@ -158,7 +156,7 @@ class Collections extends Component {
             }
         }));
     }
-    setCollection (type, collection) {
+    resetCollection (type, collection) {
         this.setState(prev => ({
             ...prev,
             [type]: collection
@@ -512,124 +510,169 @@ class Collections extends Component {
         this.clearQuick('s');
     }
 
-    handle_onTabBarClick = () => {
-        //  Do something...
-    }
+    // handle_onTabBarClick = () => {
+    //     //  Do something...
+    // }
 
-    handle_onItemRecover = () => {
-        const item = this.state.undo.data;
-        this.setItem(item);
-        this.clearQuick('u');
-        this.clearUndo();
-        this.clearSelected();
-        this.props.patchItem_async(this.props.token, item);
-    }
-    handle_onManyItemsRecover = () => {
-        const itemsArr = this.state.undo.data;
-        const items = {}
-        itemsArr.map(item => {
-            items[item.id] = item
-        });
-        this.setManyItems('deck', items);
-        this.clearQuick('u');
-        this.clearUndo();
-        this.clearSelected();
-        this.props.patchManyItems_async(this.props.token, itemsArr);
-    }
-    handle_onItemDelete = (item) => {
-        const collection = {...this.state[item.type]};
-        delete collection[item.id];
-        this.setUndo({
-            action: this.handle_onItemRecover,
-            data: item
-        });
-        this.setCollection(item.type, collection);
-        this.setQuick('u');
-        this.props.deleteItem_async(this.props.token, item);
-    }
-    handle_onBulkDelete = () => {
-        const type = this.state.tabs[this.state.current].collection;
-        const collection = {...this.state[this.state.tabs[this.state.current].collection]};
-        const selected = this.state.selected.slice();
-        selected.forEach(item => {
-            delete collection[item.id];
-        });
-        this.setUndo({
-            action: this.handle_onManyItemsRecover,
-            data: selected
-        });
-        this.setQuick('u');
-        this.setCollection(type, collection);
-        this.clearSelected();
-        this.clearQuick('s');
-        this.props.deleteManyItems_async(this.props.token, selected);
-    }
-    handle_onDeckMerge = () => {
-        //  This is all temporary  //
-        const tags = [];
-        const groups = [];
-        const id = utility.createHashId(0);
-        let item;
-        //  Get all tags and groups
-        this.state.selected.map(item => {
-            item.tags.forEach(tag => {
-                if (!tags.includes(tag)) {
-                    tags.push(tag);
-                }
-            });
-            item.groups.forEach(tag => {
-                if (!groups.includes(tag)) {
-                    groups.push(tag);
-                }
-            })
-        });
-        //  Create merged deck
-        item = create.itemViewModel(id, {
-            date: Date.now(),
-            groups: groups,
-            meta: {},
-            notes: 'These are notes for this flashcard deck.',
-            owner: this.props.user.id,
-            primary: id + ' New Merged Flashcard Deck',
-            secondary: 'This flashcard decks was merged from...',
-            tags: tags,
-            type: 'deck',
-        });
-        //  Send to redux and db
-        this.props.patchItem_async(this.props.token, item);
-        //  Update local state
-        this.setItem(item);
-        this.clearSelected(item);
-        this.clearQuick('s');
-    }
-    handle_onItemClone = () => {
-        const items = {};
-        this.state.selected.map((item, i) => {
-           let id = utility.createHashId(i);
-           let clone = create.itemViewModel(id, {
-               ...item,
-               primary: 'Clone of ' + item.primary
-           });
-           items[id] = clone;
-        });
+    // handle_onItemRecover = () => {
+    //     const item = this.state.undo.data;
+    //     this.setItem(item);
+    //     this.clearQuick('u');
+    //     this.clearUndo();
+    //     this.clearSelected();
+    //     this.props.patchItem_async(this.props.token, item);
+    // }
+    // handle_onManyItemsRecover = () => {
+    //     const itemsArr = this.state.undo.data;
+    //     const items = {}
+    //     itemsArr.map(item => {
+    //         items[item.id] = item
+    //     });
+    //     this.setManyItems('deck', items);
+    //     this.clearQuick('u');
+    //     this.clearUndo();
+    //     this.clearSelected();
+    //     this.props.patchManyItems_async(this.props.token, itemsArr);
+    // }
+    // handle_onItemDelete = (item) => {
+    //     const collection = {...this.state[item.type]};
+    //     delete collection[item.id];
+    //     this.setUndo({
+    //         action: this.handle_onItemRecover,
+    //         data: item
+    //     });
+    //     this.setCollection(item.type, collection);
+    //     this.setQuick('u');
+    //     this.props.deleteItem_async(this.props.token, item);
+    // }
+    // handle_onBulkDelete = () => {
+    //     const type = this.state.tabs[this.state.current].collection;
+    //     const collection = {...this.state[this.state.tabs[this.state.current].collection]};
+    //     const selected = this.state.selected.slice();
+    //     selected.forEach(item => {
+    //         delete collection[item.id];
+    //     });
+    //     this.setUndo({
+    //         action: this.handle_onManyItemsRecover,
+    //         data: selected
+    //     });
+    //     this.setQuick('u');
+    //     this.setCollection(type, collection);
+    //     this.clearSelected();
+    //     this.clearQuick('s');
+    //     this.props.deleteManyItems_async(this.props.token, selected);
+    // }
+    // handle_onDeckMerge = () => {
+    //     //  This is all temporary  //
+    //     const tags = [];
+    //     const groups = [];
+    //     const id = utility.createHashId(0);
+    //     let item;
+    //     //  Get all tags and groups
+    //     this.state.selected.map(item => {
+    //         item.tags.forEach(tag => {
+    //             if (!tags.includes(tag)) {
+    //                 tags.push(tag);
+    //             }
+    //         });
+    //         item.groups.forEach(tag => {
+    //             if (!groups.includes(tag)) {
+    //                 groups.push(tag);
+    //             }
+    //         })
+    //     });
+    //     //  Create merged deck
+    //     item = create.itemViewModel(id, {
+    //         date: Date.now(),
+    //         groups: groups,
+    //         meta: {},
+    //         notes: 'These are notes for this flashcard deck.',
+    //         owner: this.props.user.id,
+    //         primary: id + ' New Merged Flashcard Deck',
+    //         secondary: 'This flashcard decks was merged from...',
+    //         tags: tags,
+    //         type: 'deck',
+    //     });
+    //     //  Send to redux and db
+    //     this.props.patchItem_async(this.props.token, item);
+    //     //  Update local state
+    //     this.setItem(item);
+    //     this.clearSelected(item);
+    //     this.clearQuick('s');
+    // }
+    // handle_onItemClone = () => {
+    //     const items = {};
+    //     this.state.selected.map((item, i) => {
+    //        let id = utility.createHashId(i);
+    //        let clone = create.itemViewModel(id, {
+    //            ...item,
+    //            primary: 'Clone of ' + item.primary
+    //        });
+    //        items[id] = clone;
+    //     });
 
-        this.props.patchManyItems_async(this.props.token, Object.keys(items).map(key => {
-            return items[key];
-        }));
+    //     this.props.patchManyItems_async(this.props.token, Object.keys(items).map(key => {
+    //         return items[key];
+    //     }));
 
-        this.setState(prev => ({
-            ...prev,
-            [this.state.collection]: {
-                ...prev[this.state.collection],
-                ...items
-            }
-        }));
-        this.clearSelected();
-        this.clearQuick('s');
-    }
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         [this.state.collection]: {
+    //             ...prev[this.state.collection],
+    //             ...items
+    //         }
+    //     }));
+    //     this.clearSelected();
+    //     this.clearQuick('s');
+    // }
 
     handle_onSortChange = (sort) => {
         this.setSort(sort);
+    }
+
+    handle_onMainClick = () => {
+        this.handle_onAsideClose();
+        this.clearSelected();
+        this.clearQuick('s');
+    }
+
+    _recoverDeletedItems = () => {
+        const deleted = this.state.undo.data.items;
+        const recovered = {}
+        deleted.map(item => {
+            recovered[item.id] = item
+        });
+        this.setManyItems(this.state.undo.data.collection, recovered);
+        this.clearQuick('u');
+        this.clearUndo();
+        this.props.patchManyItems_async(deleted);
+    }
+    handle_onItemsCreated = (items) => {
+        const created = {};
+        items.forEach(item => {
+            created[item.id] = item;
+        });
+        console.log(created);
+        this.setManyItems(this.state.collection, created);
+        this.clearSelected();
+        this.clearQuick('s');
+    }
+    handle_onItemsDeleted = () => {
+        const collection = this.state[this.state.collection];
+        this.state.selected.slice().forEach(item => {
+            delete collection[item.id];
+        });
+        this.setUndo({
+            action: this._recoverDeletedItems,
+            data: {
+                items: this.state.selected.slice(),
+                collection: this.state.collection
+            }
+        });
+        this.setQuick('u');
+        this.resetCollection(this.state.collection, collection);
+        this.clearQuick('s');
+        this.clearSelected();
     }
 
 
@@ -643,7 +686,7 @@ class Collections extends Component {
                     backingCollection={utility.sortBy(this.state.sort, this.state[tab.collection])}
                     filters={this.state.filters}
                     selected={this.state.selected}
-                    onConfirm={this.handle_onItemDelete}
+                    onConfirm={this.handle_onItemsDeleted}
                     onInspect={this.handle_onItemInspect}
                     onSelect={this.handle_onItemSelect}/>
             );
@@ -659,23 +702,22 @@ class Collections extends Component {
             <Aux>
                 <Header
                     actions={{
-                        onDelete: this.handle_onBulkDelete,
-                        onMerge: this.handle_onDeckMerge,
-                        onClone: this.handle_onItemClone,
-                        onSortChange: this.handle_onSortChange,
+                        createItems: this.handle_onItemsCreated,
+                        deleteItems: this.handle_onItemsDeleted,
+                        sortCollection: this.handle_onCollectionSort,
                         toggleAside: this.handle_onAsideToggle,
                         closeAside: this.handle_onAsideClose
                     }}
-                    collection={this.state[this.state.state]}
+                    collection={this.state.collection}
                     selected={this.state.selected}/>
                 <main
-                    className={CollectionsCSS.Main}
-                    onClick={this.handle_onAsideClose}>
-                    <div className={[AppCSS.Inner, AppCSS.With_Padding].join(' ')}>
+                    className={styles.Main}
+                    onClick={this.handle_onMainClick}>
+                    <div>
                         <TabBar
                             actions={{
                                 onCreate: this.handle_onTabAdd,
-                                onClick: this.handle_onTabBarClick,
+                                onClick: this.handle_onAsideClose,
                                 onRemove: this.handle_onTabRemove,
                                 onToggle: this.handle_onTabToggle,
                             }}

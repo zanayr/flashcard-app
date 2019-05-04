@@ -32,11 +32,11 @@ const modal = (props) => {
     }
 
     const handle_onCancel = () => {
-        props.data.onResponse(false);
+        props.data.onCancel(false);
         props.clearModal({key: props.uniqueId});
     }
     const handle_onConfirm = () => {
-        props.data.onResponse(true);
+        props.data.onConfirm(true);
         props.clearModal({key: props.uniqueId});
     }
 

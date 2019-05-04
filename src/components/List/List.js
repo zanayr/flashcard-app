@@ -29,7 +29,7 @@ class List extends Component {
         this.showConfirm();
     }
     onItemConfirm = (item) => {
-        this.props.onConfirm(item);
+        this.props.onConfirm([item]);
     }
     onItemSelect = (item) => {
         this.hideConfirm();
