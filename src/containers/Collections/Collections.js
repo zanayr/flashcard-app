@@ -170,13 +170,15 @@ class Collections extends Component {
                         this.checkForNewTags('tags', this.state[item.type][item.id].tags);
                         this.checkForNewTags('groups', this.state[item.type][item.id].groups);
                         this.props.putItem_async(this.props.token, item);
-                        this.setState(prev => ({
-                            ...prev,
-                            quick: prev.quick.concat({
-                                action: this.state.undo.action,
-                                value: '↺'
-                            })
-                        }));
+                        if (!this.state.quick.find(q => q.value === '↺')) {
+                            this.setState(prev => ({
+                                ...prev,
+                                quick: prev.quick.concat({
+                                    action: this.state.undo.action,
+                                    value: '↺'
+                                })
+                            }));
+                        }
                     }
                     break;
                 default:
@@ -450,7 +452,23 @@ class Collections extends Component {
     handle_onTabBarClick = () => {
         //  Do something...
     }
-
+    // handle_onItemRecover = () => {
+    //     const item = this.state.undo.data;
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         [item.type]: {
+    //             ...prev[item.type],
+    //             [item.id]: item
+    //         },
+    //         quick: prev.quick.filter(q => q.value !== '↺'),
+    //         undo: {
+    //             ...prev.undo,
+    //             action: null,
+    //             data: {}
+    //         }
+    //     }));
+    //     this.props.patchItem_async(this.props.token, item);
+    // }
     handle_onItemDelete = (item) => {
         const collection = {...this.state[item.type]};
         delete collection[item.id];
@@ -458,6 +476,19 @@ class Collections extends Component {
             ...prev,
             [item.type]: collection
         }));
+        // this.setUndo({
+        //     action: this.handle_onItemRecover,
+        //     data: item
+        // });
+        // if (!this.state.quick.find(q => q.value === '↺')) {
+        //     this.setState(prev => ({
+        //         ...prev,
+        //         quick: prev.quick.concat({
+        //             action: this.state.undo.action,
+        //             value: '↺'
+        //         })
+        //     }));
+        // }
         this.props.deleteItem_async(this.props.token, item);
     }
     handle_onBulkDelete = () => {
