@@ -18,7 +18,7 @@ const header = (props) => {
         props.actions.closeAside();
     }
 
-    const handle_onBulkDelete = () => {
+    const handle_onDelete = () => {
         props.displayModal_async(
             modalTypes.WARNING,
             'Once you delete an item, it cannot be recovered. Are you sure you wish to delete these items?',
@@ -26,6 +26,18 @@ const header = (props) => {
         .then(response => {
             if (response) {
                 props.actions.onDelete()
+            }
+        });
+    };
+
+    const handle_onMerge = () => {
+        props.displayModal_async(
+            modalTypes.WARNING,
+            'Are you sure you wish to merge these decks into one deck?',
+            'Merge', 'Cancel')
+        .then(response => {
+            if (response) {
+                props.actions.onMerge();
             }
         });
     };
@@ -38,9 +50,11 @@ const header = (props) => {
                 <ReturnLink/>
                 <Search/>
                 <Toolbar
+                    merge={props.selected.length > 1 && props.selected[0].type === 'deck'}
                     onA={() => props.actions.toggleAside(2)}
                     onB={() => props.actions.toggleAside(3)}
-                    onC={handle_onBulkDelete}/>
+                    onC={handle_onDelete}
+                    onD={handle_onMerge}/>
                 <Dashboard
                     onNavigation={() => props.actions.toggleAside(1)}/>
             </div>

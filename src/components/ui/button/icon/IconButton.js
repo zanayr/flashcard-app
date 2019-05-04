@@ -11,6 +11,7 @@ const iconButton = (props) => {
 
     return (
         <button
+            disabled={props.disabled}
             className={iconButtonCSS.Icon_Button}
             onClick={(e) => handle_onClicked(e)}>
             {props.children}

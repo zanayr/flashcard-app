@@ -337,12 +337,20 @@ class Collections extends Component {
             data: item
         });
     }
-    handle_onItemSelectClear = () => {
-        this.setState(prev => ({
-            ...prev,
-            quick: prev.quick.filter(q => q.value !== '⚬'),
-            selected: []
-        }));
+    handle_onItemSelectClear = (item) => {
+        if (typeof item === 'undefined') {
+            this.setState(prev => ({
+                ...prev,
+                quick: prev.quick.filter(q => q.value !== '⚬'),
+                selected: []
+            }));
+        } else {
+            this.setState(prev => ({
+                ...prev,
+                quick: prev.quick.filter(q => q.value !== '⚬'),
+                selected: [item]
+            }));
+        }
     }
     handle_onItemSelect = (item) => {
         let selected = this.state.selected.slice();
@@ -462,6 +470,52 @@ class Collections extends Component {
         }));
         this.handle_onItemSelectClear();
     }
+    handle_onDeckMerge = () => {
+        //  This is all temporary  //
+        const tags = [];
+        const groups = [];
+        const id = utility.createHashId(0);
+        let item;
+        //  Get all tags and groups
+        this.state.selected.map(item => {
+            item.tags.forEach(tag => {
+                if (!tags.includes(tag)) {
+                    tags.push(tag);
+                }
+            });
+            item.groups.forEach(tag => {
+                if (!groups.includes(tag)) {
+                    groups.push(tag);
+                }
+            })
+        });
+        //  Create merged deck
+        item = create.itemViewModel(id, {
+            date: Date.now(),
+            groups: groups,
+            meta: {},
+            notes: 'These are notes for this flashcard deck.',
+            owner: this.props.user.id,
+            primary: id + ' New Merged Flashcard Deck',
+            secondary: 'This flashcard decks was merged from...',
+            tags: tags,
+            type: 'deck',
+        });
+        //  Send to redux and db
+        this.props.patchItem_async(this.props.token, item);
+        //  Update local state
+        this.setState(prev => ({
+            ...prev,
+            [item.type]: {
+                ...prev[item.type],
+                [item.id]: item
+            }
+        }));
+        this.handle_onItemSelectClear(item);
+    }
+    handle_onItemClone = () => {
+
+    }
 
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
@@ -491,7 +545,8 @@ class Collections extends Component {
                 <Header
                     actions={{
                         onDelete: this.handle_onBulkDelete,
-                        onMerge: this.handle_onBulkMerge,
+                        onMerge: this.handle_onDeckMerge,
+                        onClone: this.handle_onItemClone,
                         toggleAside: this.handle_onAsideToggle,
                         closeAside: this.handle_onAsideClose
                     }}

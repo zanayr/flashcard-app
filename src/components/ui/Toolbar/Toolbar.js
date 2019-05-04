@@ -6,23 +6,15 @@ import AppCSS from '../../../App.module.css';
 import ToolbarCSS from './Toolbar.module.css';
 
 const toolbar = (props) => {
-    //  EVENT HANDLERS  -------------------------------------------  EVENT HANDLERS  //
-    // const handle_onAClick = () => {
-    //     props.onA();
-    // }
-    // const handle_onBClick = () => {
-    //     props.onB();
-    // }
-    // const handle_onCClick = () => {
-    //     props.onC();
-    // }
-
     return (
         <div className={ToolbarCSS.Toolbar}>
             <div className={AppCSS.Inner}>
                 <IconButton onClick={props.onA}>T</IconButton>
                 <IconButton onClick={props.onB}>G</IconButton>
                 <IconButton onClick={props.onC}>D</IconButton>
+                <IconButton
+                    disabled={!props.merge}
+                    onClick={props.onD}>M</IconButton>
             </div>
         </div>
     );
