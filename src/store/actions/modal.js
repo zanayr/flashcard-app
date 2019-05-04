@@ -22,7 +22,6 @@ export const displayModal = (type, data, confirm, cancel, response) => {
     };
 };
 export const displayModal_async = (type, message, confirm='OK', cancel) => {
-    console.log(confirm, cancel);
     return dispatch => {
         return new Promise((resolve, reject) => {
             dispatch(displayModal(type, message, confirm, cancel, resolve));

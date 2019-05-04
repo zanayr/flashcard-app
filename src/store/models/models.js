@@ -53,10 +53,12 @@ export function tabModel (data) {
 
 //  User Models  //
 export function userModel (id, model) {
-    let tabs = {};
-    Object.keys(model.tabs).map(id => {
-        tabs[id] = tabViewModel(id, model.tabs[id]);
-    });
+    const tabs = {};
+    if (model.tabs) {
+        Object.keys(model.tabs).map(id => {
+            tabs[id] = tabViewModel(id, model.tabs[id]);
+        });
+    }
     return {
         classes: model.classes || [],
         date: model.date,

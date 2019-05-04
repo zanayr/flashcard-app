@@ -57,7 +57,6 @@ export const checkAuth_async = () => {
 }
 export const auth_async = (email, password, isSignUp) => {
     return dispatch => {
-        try {
         dispatch(auth_init());
         const data = {
             email: email,
@@ -70,19 +69,16 @@ export const auth_async = (email, password, isSignUp) => {
         }
 
         axios.post(url, data)
-            .then(response => {
-                const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
-                localStorage.setItem('token', response.data.idToken);
-                localStorage.setItem('expiration', expirationDate);
-                localStorage.setItem('user', response.data.localId);
-                dispatch(auth_success(response.data.idToken, response.data.localId));
-                dispatch(authCheckTimeout_async(response.data.expiresIn));
-            })
-            .catch(error => {
-                dispatch(auth_fail(error));
-            });
-        } catch (e) {
-            console.log(e);
-        }
+        .then(response => {
+            const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+            localStorage.setItem('token', response.data.idToken);
+            localStorage.setItem('expiration', expirationDate);
+            localStorage.setItem('user', response.data.localId);
+            dispatch(auth_success(response.data.idToken, response.data.localId));
+            dispatch(authCheckTimeout_async(response.data.expiresIn));
+        })
+        .catch(error => {
+            dispatch(auth_fail(error));
+        });
     }
 }

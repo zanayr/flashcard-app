@@ -7,7 +7,6 @@ const initialState = {
 
 
 const displayModal = (state, action) => {
-    console.log(action.payload);
     return {
         ...state,
         modals: state.modals.concat(action.payload)
