@@ -24,18 +24,23 @@ class QuickTab extends Component {
             css.push(styles.Active);
         }
         if (this.props.delete) {
+            css.push(styles.WithRemove);
+        }
+        if (this.props.delete) {
             close = (
                 <button
-                    className={styles.Close}
+                    className={styles.RemoveButton}
                     onClick={(e) => this.handle_onTabClose(e)}>
                     x
                 </button>
                 );
         }
         return (
-            <div className={css.join(' ')}>
+            <div
+                className={css.join(' ')}
+                onClick={(e) => this.handle_onTabClick(e)}>
                 <div>
-                    <button onClick={(e) => this.handle_onTabClick(e)}>{this.props.children}</button>
+                    <p><span>{this.props.children}</span></p>
                     {close}
                 </div>
             </div>

@@ -32,7 +32,7 @@ const tabBar = (props) => {
     let add = null;
     if (Object.keys(props.backingCollection).length < 12) {
         add = (
-            <div className={styles.QuickTab}>
+            <div className={[styles.QuickTab, styles.AddTab].join(' ')}>
                 <div>
                     <button onClick={(e) => handle_onCreateClick(e)}>+</button>
                 </div>
