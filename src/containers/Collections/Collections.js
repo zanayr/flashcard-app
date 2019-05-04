@@ -449,6 +449,19 @@ class Collections extends Component {
         }));
         this.props.deleteItem_async(this.props.token, item);
     }
+    handle_onBulkDelete = () => {
+        const collection = {...this.state[this.state.tabs[this.state.current].collection]}
+        this.state.selected.slice().forEach(item => {
+            delete collection[item.id];
+        });
+        this.props.deleteManyItems_async(this.props.token, this.state.selected.slice());
+
+        this.setState(prev => ({
+            ...prev,
+            [collection]: collection
+        }));
+        this.handle_onItemSelectClear();
+    }
 
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
@@ -477,7 +490,8 @@ class Collections extends Component {
             <Aux>
                 <Header
                     actions={{
-                        onDelete: this.handle_onItemDelete,
+                        onDelete: this.handle_onBulkDelete,
+                        onMerge: this.handle_onBulkMerge,
                         toggleAside: this.handle_onAsideToggle,
                         closeAside: this.handle_onAsideClose
                     }}
@@ -524,6 +538,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         deleteItem_async: (token, item) => dispatch(actions.deleteItem_async(token, item)),
+        deleteManyItems_async: (token, items) => dispatch(actions.deleteManyItems_async(token, items)),
         deleteTab_async: (token, user, id) => dispatch(actions.deleteTab_async(token, user, id)),
         displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
         patchItem_async: (token, item) => dispatch(actions.patchItem_async(token, item)),

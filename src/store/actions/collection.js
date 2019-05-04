@@ -82,7 +82,7 @@ export const putItem_success = (data) => {
 //  ASYNC FUNCTIONS  ---------------------------------------------  ASYNC FUNCTIONS  //
 //  Delete  ---------------------------------------------------------  Delete Async  //
 export const deleteItem_async = (token, data) => {
-    try {return dispatch => {
+    return dispatch => {
         axios.delete('/' + data.type + '/' + data.id + '.json?auth=' + token)
         .then(response => {
             dispatch(deleteItem_success(data));
@@ -90,7 +90,14 @@ export const deleteItem_async = (token, data) => {
         .catch(error => {
             dispatch(deleteItem_fail(error));
         });
-    };} catch (e) {console.log(e)}
+    };
+};
+export const deleteManyItems_async = (token, data) => {
+    return dispatch => {
+        data.forEach(item => {
+            dispatch(deleteItem_async(token, item));
+        });
+    }
 };
 
 //  Get  ----------------------------------------------------------------  Get Async //
@@ -106,6 +113,7 @@ export const getAllItems_async = (url, token, user) => {
         });
     };
 };
+
 
 //  Patch  ------------------------------------------------------------  Patch Async //
 export const patchItem_async = (token, data) => {

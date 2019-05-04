@@ -6,6 +6,7 @@ export {
 
 export {
     deleteItem_async,
+    deleteManyItems_async,
     getAllItems_async,
     patchItem_async,
     putItem_async
