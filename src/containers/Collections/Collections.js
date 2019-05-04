@@ -444,6 +444,7 @@ class Collections extends Component {
                 tags: this.state.tabs[tab].tags
             }
         }));
+        this.handle_onItemSelectClear();
     }
 
     handle_onTabBarClick = () => {

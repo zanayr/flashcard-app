@@ -40,17 +40,15 @@ class List extends Component {
     checkFilter (item) {
         let match = true;
         if (this.props.filters.tags.length) {
+            match = false;
             this.props.filters.tags.forEach(tag => {
-                if (item.tags.indexOf(tag) < 0 && match) {
-                    match = false;
-                }
+                match = item.tags.includes(tag) || match;
             });
         }
         if (this.props.filters.groups.length) {
-            this.props.filters.groups.forEach(group => {
-                if (item.groups.indexOf(group) < 0 && match) {
-                    match = false;
-                }
+            match = false;
+            this.props.filters.groups.forEach(tag => {
+                match = item.groups.includes(tag) && match;
             });
         }
         return match;

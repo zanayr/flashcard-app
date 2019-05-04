@@ -23,8 +23,8 @@ const tabBar = (props) => {
                 active={tab.name === props.current}
                 delete={tab.delete}
                 key={tab.id}
-                onClick={() => props.actions.onToggle(tab.name)}
-                onClose={() => props.actions.onRemove(tab.name)}>
+                onClick={() => props.actions.onToggle(tab.id)}
+                onClose={() => props.actions.onRemove(tab.id)}>
                 {tab.name}
             </QuickTab>
         );
