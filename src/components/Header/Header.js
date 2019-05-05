@@ -12,6 +12,7 @@ import ReturnLink from '../ui/link/Return/ReturnLink';
 import Search from '../ui/input/Search/Search';
 import Toolbar from '../ui/Toolbar/Toolbar';
 import Dashboard from '../ui/Dashboard/Dashboard';
+import IconButton from '../ui/button/Icon/IconButton';
 
 import styles from './Header.module.css';
 
@@ -82,12 +83,16 @@ class Header extends Component {
         .then(response => {
             const cloned = [];
             this.props.selected.map((item, i) => {
+                let primary;
                 if (item.primary.length <= 24) {
-                    item.primary = 'Copy of ' + item.primary;
+                    primary = 'Copy of ' + item.primary;
                 } else {
-                    item.primary = 'Copy of ' + item.primary.substr(0, 21) + '...';
+                    primary = 'Copy of ' + item.primary.substr(0, 21) + '...';
                 }
-                cloned.push(create.itemViewModel(utility.createHashId(i), item));
+                cloned.push(create.itemViewModel(utility.createHashId(i), {
+                    ...item,
+                    primary: primary
+                }));
             });
             this.props.patchManyItems_async(this.props.select_token, cloned);
             this.props.actions.create(cloned);
@@ -102,27 +107,33 @@ class Header extends Component {
                 <div>
                     <ReturnLink/>
                     <Search/>
-                    <Toolbar
-                        single={this.props.selected.length}
-                        merge={this.props.selected.length > 1 && this.props.selected[0].type === 'deck'}
-                        onA={() => this.props.actions.toggle(2)}
-                        onB={() => this.props.actions.toggle(3)}
-                        onC={this.handle_onSelectedDelete}
-                        onD={this.handle_onSelectedMerge}
-                        onE={this.handle_onSelectedClone}
-                        onAA={() => this.props.actions.sort(sortTypes.ALPHA_ASC)}
-                        onAD={() => this.props.actions.sort(sortTypes.ALPHA_DSC)}
-                        onDA={() => this.props.actions.sort(sortTypes.DATE_ASC)}
-                        onDD={() => this.props.actions.sort(sortTypes.DATE_DSC)}
-                        />
-                    <Dashboard
-                        onNavigation={() => this.props.actions.toggle(1)}/>
+                    <Toolbar>
+                        <IconButton onClick={() => this.props.actions.toggle(2)}>T</IconButton>
+                        <IconButton onClick={() => this.props.actions.toggle(3)}>G</IconButton>
+                        <IconButton
+                            disabled={!this.props.selected.length}
+                            onClick={this.handle_onSelectedDelete}>D</IconButton>
+                        {this.props.page === 'deck' ? (
+                                <IconButton
+                                    disabled={!(this.props.selected.length > 1)}
+                                    onClick={this.handle_onSelectedMerge}>
+                                    M
+                                </IconButton>
+                            ) : (null)}
+                        <IconButton
+                            disabled={!this.props.selected.length}
+                            onClick={this.handle_onSelectedClone}>C</IconButton>
+                        <IconButton onClick={() => this.props.actions.sort(sortTypes.ALPHA_ASC)}>AA</IconButton>
+                        <IconButton onClick={() => this.props.actions.sort(sortTypes.ALPHA_DSC)}>AD</IconButton>
+                        <IconButton onClick={() => this.props.actions.sort(sortTypes.DATE_ASC)}>DA</IconButton>
+                        <IconButton onClick={() => this.props.actions.sort(sortTypes.DATE_DSC)}>DD</IconButton>
+                    </Toolbar>
+                    <Dashboard onNavigation={() => this.props.actions.toggle(1)}/>
                 </div>
             </header>
         );
     }
 }
-
 
 const mapStateToProps = state => {
     return {

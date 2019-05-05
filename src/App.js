@@ -40,8 +40,8 @@ class App extends Component {
     if (this.props.isAuthenticated) {
       routes = (
         <Switch>
-          <Route path='/u' exact component={Collections}/>
           <Route path='/u/inspect' exact component={Inspector}/>
+          <Route path='/u/:collection' component={Collections}/>
           <Route path='/in' exact component={In}/>
           <Route path='/out' exact component={Out}/>
           <Route path='/auth' exact component={Auth}/>

@@ -15,18 +15,36 @@ const aside = (props) => {
             );
             break;
         case 2:
+            aside = (
+                <FilterAside
+                    onSelect={props.actions.filter}
+                    data={{
+                        ...props.data,
+                        category: 'tags',
+                        tags: props.tags
+                    }}/>
+            );
+            break;
         case 3:
             aside = (
                 <FilterAside
-                    actions={props.actions}
-                    data={props.data}/>
+                    onSelect={props.actions.filter}
+                    data={{
+                        ...props.data,
+                        category: 'groups',
+                        tags: props.groups
+                    }}/>
             );
             break;
         case 99:
             aside = (
                 <QuickInspectAside
-                    actions={props.actions}
-                    data={props.data}/>
+                    onChange={props.actions.change}
+                    data={{
+                        ...props.data,
+                        groups: props.groups,
+                        tags: props.tags
+                    }}/>
             );
             break;
         default:

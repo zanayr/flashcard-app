@@ -28,15 +28,10 @@ class InspectAside extends Component {
                 [target]: value
             }
         }));
-        this.props.actions.onChange(this.state.item, {
+        this.props.onChange(this.state.item, {
             target: target,
             value: value
         });
-    }
-    handle_onConfirm = () => {
-        if (this.form.current.reportValidity()) {
-            this.props.actions.onConfirm(this.state.item);
-        }
     }
 
 

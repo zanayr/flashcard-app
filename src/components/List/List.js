@@ -29,11 +29,11 @@ class List extends Component {
         this.showConfirm();
     }
     onItemConfirm = (item) => {
-        this.props.onConfirm([item]);
+        this.props.actions.delete([item]);
     }
     onItemSelect = (item) => {
         this.hideConfirm();
-        this.props.onSelect(item);
+        this.props.actions.select(item);
     }
 
 
@@ -68,7 +68,7 @@ class List extends Component {
                         selected={isSelected}
                         onSelect={() => this.onItemSelect(item)}>
                         <ContextAction
-                            action={() => this.props.onInspect(item)}
+                            action={() => this.props.actions.inspect(item)}
                             active={isActive}>
                             Inspect
                         </ContextAction>

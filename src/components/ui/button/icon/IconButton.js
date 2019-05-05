@@ -8,7 +8,6 @@ const iconButton = (props) => {
 
         props.onClick();
     }
-
     return (
         <button
             disabled={props.disabled}

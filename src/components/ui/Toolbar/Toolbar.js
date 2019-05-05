@@ -9,21 +9,7 @@ const toolbar = (props) => {
     return (
         <div className={ToolbarCSS.Toolbar}>
             <div className={AppCSS.Inner}>
-                <IconButton onClick={props.onA}>T</IconButton>
-                <IconButton onClick={props.onB}>G</IconButton>
-                <IconButton
-                    disabled={!props.single}
-                    onClick={props.onC}>D</IconButton>
-                <IconButton
-                    disabled={!props.merge}
-                    onClick={props.onD}>M</IconButton>
-                <IconButton
-                    disabled={!props.single}
-                    onClick={props.onE}>C</IconButton>
-                <IconButton onClick={props.onAA}>AA</IconButton>
-                <IconButton onClick={props.onAD}>AD</IconButton>
-                <IconButton onClick={props.onDA}>DA</IconButton>
-                <IconButton onClick={props.onDD}>DD</IconButton>
+                {props.children}
             </div>
         </div>
     );

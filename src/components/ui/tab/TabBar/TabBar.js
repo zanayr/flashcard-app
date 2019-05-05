@@ -29,16 +29,20 @@ const tabBar = (props) => {
         });
     }
     let tabs = utility.sortBy(sortTypes.DATE_ASC, props.backingCollection).map(tab => {
-        return (
-            <QuickTab
-                active={tab.id === props.current}
-                delete={tab.delete}
-                key={tab.id}
-                onClick={() => props.actions.toggle(tab)}
-                onClose={() => handle_onTabDelete(tab)}>
-                {tab.name}
-            </QuickTab>
-        );
+        if (tab.collection === props.page) {
+            return (
+                <QuickTab
+                    active={tab.id === props.current}
+                    delete={tab.delete}
+                    key={tab.id}
+                    onClick={() => props.actions.toggle(tab)}
+                    onClose={() => handle_onTabDelete(tab)}>
+                    {tab.name}
+                </QuickTab>
+            );
+        } else {
+            return null;
+        }
     });
 
     return (

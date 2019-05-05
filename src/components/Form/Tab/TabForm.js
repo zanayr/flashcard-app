@@ -15,7 +15,7 @@ import styles from './TabForm.module.css';
 
 class TabForm extends Component {
     state = {
-        collection: '',
+        // collection: '',
         name: '',
         tags: [],
         groups: []
@@ -30,9 +30,9 @@ class TabForm extends Component {
         }));
     }
     handle_onFormConfirm = () => {
-        if (this.form.current.reportValidity() && (this.state.tags.length > 0 || this.state.groups.length > 0) && this.state.collection.length > 0) {
+        if (this.form.current.reportValidity() && (this.state.tags.length > 0 || this.state.groups.length > 0)) {
             let tab = create.tabViewModel(utility.createHashId(0), {
-                collection: this.state.collection,
+                collection: this.props.page,
                 date: Date.now(),
                 groups: this.state.groups,
                 name: this.state.name,
@@ -43,12 +43,12 @@ class TabForm extends Component {
         }
     }
     //  Coll  //
-    handle_onCollectionSelect = collection => {
-        this.setState(prev => ({
-            ...prev,
-            collection: collection
-        }));
-    }
+    // handle_onCollectionSelect = collection => {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         collection: collection
+    //     }));
+    // }
 
     handle_onTagCreate = (category, tag) => {
         this.setState(prev => ({
@@ -95,10 +95,10 @@ class TabForm extends Component {
                                 target='name'/>
                         </div>
                     </form>
-                    <h4>Collection</h4>
+                    {/* <h4>Collection</h4>
                     <CollectionToggle
                         backingCollection={['deck', 'card']}
-                        toggle={this.handle_onCollectionSelect}/>
+                        toggle={this.handle_onCollectionSelect}/> */}
                     <h4>Tags</h4>
                     <TagForm
                         activeCollection={this.state.tags}

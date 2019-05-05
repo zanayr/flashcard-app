@@ -23,19 +23,20 @@ import styles from './Collections.module.css';
 class Collections extends Component {
     state = {
         aside: {
-            actions: {},
-            data: {},
             state: 0
         },
-        deck: this.props.select_decks,
-        card: this.props.select_cards,
+        // deck: this.props.select_decks,
+        // card: this.props.select_cards,
         current: 'deck',
-        collection: 'deck',
+        // collection: 'deck',
+        collection2: {},
         filters: {
             groups: [],
             tags: []
         },
         groups: this.props.user.groups,
+        inspect: {},
+        page: '',
         quick: [],
         selected: [],
         sort: sortTypes.ALPHA_ASC,
@@ -46,6 +47,28 @@ class Collections extends Component {
             data: {}
         },
     }
+
+    componentDidMount () {
+        let collection;
+        switch (this.props.match.params.collection) {
+            case 'deck':
+                collection = this.props.select_decks;
+                break;
+            case 'card':
+                collection = this.props.select_cardss;
+                break;
+            default:
+                break;
+        }
+        this.setState(prev => ({
+            ...prev,
+            collection2: collection,
+            page: this.props.match.params.collection
+        }));
+    }
+
+
+
 
     //  Quicks  ------------------------------------------------------------  Quicks //
     clearQuick (value) {
@@ -150,46 +173,57 @@ class Collections extends Component {
     addItem (item) {
         this.setState(prev => ({
             ...prev,
-            [item.type]: {
-                ...prev[item.type],
+            collection2: {
+                ...prev.collection2,
                 [item.id]: item
             }
         }));
     }
-    resetCollection (type, collection) {
+    resetCollection (collection) {
         this.setState(prev => ({
             ...prev,
-            [type]: collection
+            collection2: collection
         }));
     }
     setItem (item) {
         this.setState(prev => ({
             ...prev,
-            [item.type]: {
-                ...prev[item.type],
+            collection2: {
+                ...prev.collection2,
                 [item.id]: {...item}
             }
         }));
     }
-    setManyItems (collection, items) {
+    setManyItems (items) {
+        console.log(this.state.collection2);
         this.setState(prev => ({
             ...prev,
-            [collection]: {
-                ...prev[collection],
+            collection2: {
+                ...prev.collection2,
                 ...items
             }
-        }));
+        }), () => {
+            console.log(this.state.collection2);
+        });
     }
     setItemValue (item, target, value) {
         this.setState(prev => ({
             ...prev,
-            [item.type]: {
-                ...prev[item.type],
+            collection2: {
+                ...prev.collection2,
                 [item.id]: {
-                    ...prev[item.type][item.id],
+                    ...prev.collection2[item.id],
                     [target]: value
                 }
             }
+        }));
+    }
+
+    //  Inspected  -----------------------------------------------------  Inspected  //
+    setInspected (item) {
+        this.setState(prev => ({
+            ...prev,
+            inspected: item
         }));
     }
 
@@ -300,7 +334,7 @@ class Collections extends Component {
         //  This is all temporary  //
         let id = utility.createHashId(0);
         let item;
-        if (this.state.collection === 'deck') {
+        if (this.state.page === 'deck') {
             item = {
                 date: Date.now(),
                 groups: [...this.state.filters.groups],
@@ -332,32 +366,23 @@ class Collections extends Component {
 
 
     //  Aside  -------------------------------------------------------------  Aside  //
+    handle_onInspectOut = () => {
+        const original = this.state.aside.data.item;
+        const item = this.state.collection2[original.id];
+        if (JSON.stringify(item) !== JSON.stringify(original)) {
+            this._checkForNewTags('tags', item.tags);
+            this._checkForNewTags('groups', item.groups);
+            this.props.putItem_async(this.props.token, item);
+            this.setQuick('u');
+        }
+    }
     handle_onAsideClose = () => {
-        const aside = {
-            actions: this.state.aside.actions,
-            data: this.state.aside.data
+        if (this.state.aside.state === 99) {
+            this.handle_onInspectOut();
         }
-        if (this.state.aside.state) {
-            switch (this.state.aside.state) {
-                case 99:
-                    const item = this.state[aside.data.item.type][aside.data.item.id];
-                    if (JSON.stringify(item) !== JSON.stringify(aside.data.item)) {
-                        this.checkForNewTags('tags', this.state[item.type][item.id].tags);
-                        this.checkForNewTags('groups', this.state[item.type][item.id].groups);
-                        this.props.putItem_async(this.props.token, item);
-                        this.setQuick('u');
-                    }
-                    break;
-                default:
-                    break;
-            }
-            this.clearAside();
-        }
+        this.clearAside();
     }
-    handle_onFilterClear = () => {
-        this.clearFilters();
-        this.clearQuick('f');
-    }
+    
     handle_onFilterSelect = (category, tag) => {
         const filters = {...this.state.filters};
         if (filters[category].includes(tag)) {
@@ -382,9 +407,6 @@ class Collections extends Component {
                         selected: this.state.filters.tags,
                         tags: this.state.tags.slice()
                     });
-                    this.setAsideActions({
-                        onSelect: this.handle_onFilterSelect
-                    });
                     break;
                 case 3:
                     this.setAsideData({
@@ -392,11 +414,9 @@ class Collections extends Component {
                         selected: this.state.filters.groups,
                         tags: this.state.groups.slice()
                     });
-                    this.setAsideActions({
-                        onSelect: this.handle_onFilterSelect
-                    });
                     break;
                 default:
+                    this.setAsideData({});
                     break;
             }
             this.toggleAside(state);
@@ -405,46 +425,17 @@ class Collections extends Component {
         }
     }
 
-    // checkForNewTags (category, tags) {
-    //     const newTags = tags.filter(tag => this.state[category].indexOf(tag) < 0);
-    //     let allTags;
-    //     if (newTags.length) {
-    //         allTags = this.state[category].concat(newTags);
-    //         this.setTags(category, allTags);
-    //         this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
-    //     }
-    // }
-
     handle_onItemChange = (item, payload) => {
         this.setItemValue(item, payload.target, payload.value);
     }
-    // handle_onItemReset = () => {
-    //     const undo = {
-    //         action: this.state.undo.action,
-    //         data: this.state.undo.data
-    //     }
-    //     this.setItem(undo.data);
-    //     this.clearUndo();
-    //     this.clearQuick('u');
-    //     this.props.putItem_async(this.props.token, undo.data);
-    // }
     handle_onItemInspect = (item) => {
         this.toggleAside(99);
-        this.setAsideData({
-            groups: this.state.groups,
-            item: item,
-            tags: this.state.tags
-        });
-        this.setAsideActions({
-            onChange: this.handle_onItemChange
-        });
+        this.setAsideData(item);
+        this.setAsideActions({change: this.handle_onItemChange});
         this.setUndo({
             action: this.handle_onItemReset,
             data: item
         });
-    }
-    handle_onItemSelectClear = (item) => {
-        this.clearSelected(item);
         this.clearQuick('s');
     }
     handle_onItemSelect = (item) => {
@@ -454,7 +445,6 @@ class Collections extends Component {
         } else {
             selected = selected.concat(item);
         }
-        this.setSelected(selected);
         if (selected.length) {
             this.setQuick('s');
         } else {
@@ -463,177 +453,9 @@ class Collections extends Component {
         if (this.state.aside.state === 99) {
             this.handle_onAsideClose();
         }
+        this.setSelected(selected);
     }
 
-
-    //  TABS  ---------------------------------------------------------------  TABS  //
-    //  Create Tab  //
-    // handle_onTabCreate = (tab) => {
-    //     const id = utility.createHashId(0);
-    //     const newTab = create.tabViewModel(id, {
-    //         ...tab,
-    //         date: Date.now()
-    //     });
-    //     this.checkForNewTags('tags', tab.tags);
-    //     this.checkForNewTags('groups', tab.groups);
-
-    // const handle_onTabCreated = (tab) => {
-    //     this.props.patchTab_async(this.props.token, this.props.user.id, create.tabViewModel(utility.createHashId(0), {
-    //         ...tab,
-    //         date: Date.now()
-    //     }));
-    // }
-        
-    //     this.setFilters('groups', tab);
-    //     this.setFilters('tags', tab);
-    //     this.setCurrent(id);
-    //     this.setCollection(tab.collection);
-    //     this.addTab(newTab);
-    //     this.props.patchTab_async(this.props.token, this.props.user.id, newTab);
-    // }
-
-    //  Add Tab  //
-    // handle_onTabAdd = () => {
-    //     this.setCurrent('add');
-    // }
-
-    //  Remove Tab  //
-    // handle_onTabRemove = (tab) => {
-    //     let tabs = this.state.tabs;
-    //     delete tabs[tab];
-    //     this.setTabs(tabs);
-    //     this.props.deleteTab_async(this.props.token, this.props.user.id, tab);
-    // }
-
-    //  Tab Toggle  //
-    
-
-    // handle_onTabBarClick = () => {
-    //     //  Do something...
-    // }
-
-    // handle_onItemRecover = () => {
-    //     const item = this.state.undo.data;
-    //     this.setItem(item);
-    //     this.clearQuick('u');
-    //     this.clearUndo();
-    //     this.clearSelected();
-    //     this.props.patchItem_async(this.props.token, item);
-    // }
-    // handle_onManyItemsRecover = () => {
-    //     const itemsArr = this.state.undo.data;
-    //     const items = {}
-    //     itemsArr.map(item => {
-    //         items[item.id] = item
-    //     });
-    //     this.setManyItems('deck', items);
-    //     this.clearQuick('u');
-    //     this.clearUndo();
-    //     this.clearSelected();
-    //     this.props.patchManyItems_async(this.props.token, itemsArr);
-    // }
-    // handle_onItemDelete = (item) => {
-    //     const collection = {...this.state[item.type]};
-    //     delete collection[item.id];
-    //     this.setUndo({
-    //         action: this.handle_onItemRecover,
-    //         data: item
-    //     });
-    //     this.setCollection(item.type, collection);
-    //     this.setQuick('u');
-    //     this.props.deleteItem_async(this.props.token, item);
-    // }
-    // handle_onBulkDelete = () => {
-    //     const type = this.state.tabs[this.state.current].collection;
-    //     const collection = {...this.state[this.state.tabs[this.state.current].collection]};
-    //     const selected = this.state.selected.slice();
-    //     selected.forEach(item => {
-    //         delete collection[item.id];
-    //     });
-    //     this.setUndo({
-    //         action: this.handle_onManyItemsRecover,
-    //         data: selected
-    //     });
-    //     this.setQuick('u');
-    //     this.setCollection(type, collection);
-    //     this.clearSelected();
-    //     this.clearQuick('s');
-    //     this.props.deleteManyItems_async(this.props.token, selected);
-    // }
-    // handle_onDeckMerge = () => {
-    //     //  This is all temporary  //
-    //     const tags = [];
-    //     const groups = [];
-    //     const id = utility.createHashId(0);
-    //     let item;
-    //     //  Get all tags and groups
-    //     this.state.selected.map(item => {
-    //         item.tags.forEach(tag => {
-    //             if (!tags.includes(tag)) {
-    //                 tags.push(tag);
-    //             }
-    //         });
-    //         item.groups.forEach(tag => {
-    //             if (!groups.includes(tag)) {
-    //                 groups.push(tag);
-    //             }
-    //         })
-    //     });
-    //     //  Create merged deck
-    //     item = create.itemViewModel(id, {
-    //         date: Date.now(),
-    //         groups: groups,
-    //         meta: {},
-    //         notes: 'These are notes for this flashcard deck.',
-    //         owner: this.props.user.id,
-    //         primary: id + ' New Merged Flashcard Deck',
-    //         secondary: 'This flashcard decks was merged from...',
-    //         tags: tags,
-    //         type: 'deck',
-    //     });
-    //     //  Send to redux and db
-    //     this.props.patchItem_async(this.props.token, item);
-    //     //  Update local state
-    //     this.setItem(item);
-    //     this.clearSelected(item);
-    //     this.clearQuick('s');
-    // }
-    // handle_onItemClone = () => {
-    //     const items = {};
-    //     this.state.selected.map((item, i) => {
-    //        let id = utility.createHashId(i);
-    //        let clone = create.itemViewModel(id, {
-    //            ...item,
-    //            primary: 'Clone of ' + item.primary
-    //        });
-    //        items[id] = clone;
-    //     });
-
-    //     this.props.patchManyItems_async(this.props.token, Object.keys(items).map(key => {
-    //         return items[key];
-    //     }));
-
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         [this.state.collection]: {
-    //             ...prev[this.state.collection],
-    //             ...items
-    //         }
-    //     }));
-    //     this.clearSelected();
-    //     this.clearQuick('s');
-    // }
-
-    
-
-    handle_onMainClick = () => {
-        this.handle_onAsideClose();
-        this.clearSelected();
-        this.clearQuick('s');
-    }
-
-
-    
     _checkForNewTags (category, tags) {
         const newTags = tags.filter(tag => this.state[category].indexOf(tag) < 0);
         let allTags;
@@ -643,23 +465,14 @@ class Collections extends Component {
             this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
         }
     }
-    _recoverDeletedItems = () => {
-        const deleted = this.state.undo.data.items;
-        const recovered = {}
-        deleted.map(item => {
-            recovered[item.id] = item
-        });
-        this.setManyItems(this.state.undo.data.collection, recovered);
-        this.clearQuick('u');
-        this.clearUndo();
-        this.props.patchManyItems_async(deleted);
-    }
-    _findTheNextTab = (tab) => {
-        //  Do something...
+    _findTheNextTab (tab) {
+        const tabs = utility.sortBy(sortTypes.DATE_DSC, this.state.tabs);
+        return tabs[tabs.indexOf(tab) + 1];
     }
 
+
     //  EVENT HANDLERS  //
-    //  List Item  -------------------------------------------------  List Item EHs  //
+    //  Collections  ---------------------------------------------  Collections EHs  //
     handle_onCollectionSort = (sort) => {
         this.setSort(sort);
     }
@@ -668,34 +481,68 @@ class Collections extends Component {
         items.forEach(item => {
             created[item.id] = item;
         });
-        this.setManyItems(this.state.collection, created);
+        console.log(created);
+        this.setManyItems(created);
         this.clearSelected();
         this.clearQuick('s');
     }
     handle_onItemsDelete = () => {
-        const collection = this.state[this.state.collection];
+        const collection = this.state.collection2;
         this.state.selected.slice().forEach(item => {
             delete collection[item.id];
         });
         this.setUndo({
-            action: this._recoverDeletedItems,
-            data: {
-                items: this.state.selected.slice(),
-                collection: this.state.collection
-            }
+            action: this.handle_onItemsRecover,
+            data: this.state.selected.slice()
         });
         this.setQuick('u');
-        this.resetCollection(this.state.collection, collection);
+        this.resetCollection(collection);
         this.clearQuick('s');
         this.clearSelected();
     }
+    handle_onItemsRecover = () => {
+        const deleted = this.state.undo.data;
+        const recovered = {}
+        deleted.map(item => {
+            recovered[item.id] = item
+        });
+        this.setManyItems(recovered);
+        this.clearQuick('u');
+        this.clearUndo();
+        this.props.patchManyItems_async(this.props.select_token, deleted);
+    }
+    handle_onItemReset = () => {
+        const item = this.state.undo.data;
+        this.setItem(item);
+        this.clearQuick('u');
+        this.clearUndo();
+        this.props.patchItem_async(this.props.select_token, item);
+    }
     
-    
+    //  Filters  -----------------------------------------------------  Filters EHs  //
+    handle_onFilterClear = () => {
+        this.clearFilters();
+        this.clearQuick('f');
+    }
+
+    //  Main  -----------------------------------------------------------  Main EHs  //
+    handle_onMainClick = () => {
+        this.handle_onAsideClose();
+        this.clearSelected();
+        this.clearQuick('s');
+    }
+
+    //  Selected  ---------------------------------------------------  Selected EHs  //
+    handle_onItemSelectClear = (item) => {
+        this.clearSelected(item);
+        this.clearQuick('s');
+    }
+
     //  Tab  -------------------------------------------------------------  Tab EHs  //
     handle_onTabDelete = (tab) => {
         let tabs = this.state.tabs;
         if (this.state.current = tab.id) {
-            this.handle_onTabToggle(this.state.tabs['deck']);
+            this.handle_onTabToggle(this._findTheNextTab(tab));
         }
         delete tabs[tab.id];
         this.resetTabs(tabs);
@@ -716,7 +563,6 @@ class Collections extends Component {
     }
 
 
-    //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
         let mainContent = null;
         if (this.state.current === 'add') {
@@ -724,21 +570,25 @@ class Collections extends Component {
                 <TabForm
                     tags={this.state.tags}
                     groups={this.state.groups}
+                    page={this.state.page}
                     onConfirm={this.handle_onTabCreate}/>
             );
             
         } else {
-            let tab = this.state.tabs[this.state.current];
+            //let tab = this.state.tabs[this.state.current];
             mainContent = (
                 <List
-                    backingCollection={utility.sortBy(this.state.sort, this.state[tab.collection])}
+                    actions={{
+                        delete: this.handle_onItemsDelete,
+                        inspect: this.handle_onItemInspect,
+                        select: this.handle_onItemSelect
+                    }}
+                    backingCollection={utility.sortBy(this.state.sort, this.state.collection2)}
                     filters={this.state.filters}
-                    selected={this.state.selected}
-                    onConfirm={this.handle_onItemsDelete}
-                    onInspect={this.handle_onItemInspect}
-                    onSelect={this.handle_onItemSelect}/>
+                    selected={this.state.selected}/>
             );
         }
+
         return (
             <Aux>
                 <Header
@@ -748,7 +598,7 @@ class Collections extends Component {
                         sort: this.handle_onCollectionSort,
                         toggle: this.handle_onAsideToggle
                     }}
-                    collection={this.state.collection}
+                    page={this.props.match.params.collection}
                     selected={this.state.selected}
                     onClick={this.handle_onAsideClose}/>
                 <main
@@ -760,6 +610,7 @@ class Collections extends Component {
                                 delete: this.handle_onTabDelete,
                                 toggle: this.handle_onTabToggle,
                             }}
+                            page={this.state.page}
                             backingCollection={this.state.tabs}
                             current={this.state.current}
                             onClick={this.handle_onAsideClose}/>
@@ -780,6 +631,8 @@ class Collections extends Component {
                 <Aside
                     actions={this.state.aside.actions}
                     data={this.state.aside.data}
+                    tags={this.state.tags}
+                    groups={this.state.groups}
                     state={this.state.aside.state}/>
             </Aux>
         )
