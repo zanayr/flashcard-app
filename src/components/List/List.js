@@ -40,27 +40,40 @@ class List extends Component {
         this.hideConfirm();
         this.props.actions.select(item);
     }
-    _checkFilters (item) {
-        let match = true;
+    _checkTags (item) {
         const tags = this.props.tab.tags.concat(this.props.filters.tags);
-        const groups = this.props.tab.groups.concat(this.props.filters.groups);
         if (tags.length) {
-            match = false;
+            let match = false;
             item.tags.forEach(tag => {
                 match = tags.includes(tag) || match;
             });
+            return match;
+        } else {
+            return true;
         }
-        item.groups.forEach(tag => {
-            match = groups.includes(tag) && match;
-        });
-        return match;
+    }
+    _checkGroups (item) {
+        const groups = this.props.tab.groups.concat(this.props.filters.groups);
+        if (groups.length) {
+            if (item.groups.length) {
+                let match = true;
+                item.groups.forEach(tag => {
+                    match = groups.includes(tag) && match;
+                });
+                return match;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
     }
 
     render () {
         let listItems = this.props.backingCollection.map(item => {
             let isSelected = typeof this.props.selected.find(i => i.id === item.id) === 'object';
             let isActive = isSelected && this.props.selected.length === 1;
-            if (this._checkFilters(item)) {
+            if (this._checkGroups(item) && this._checkTags(item)) {
                 return (
                     <ListItem
                         key={item.id}

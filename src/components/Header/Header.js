@@ -91,9 +91,12 @@ class Header extends Component {
                 }
                 cloned.push(create.itemViewModel(utility.createHashId(i), {
                     ...item,
+                    date: Date.now(),
                     primary: primary
                 }));
+                console.log(item.date);
             });
+            console.log(cloned);
             this.props.patchManyItems_async(this.props.select_token, cloned);
             this.props.actions.create(cloned);
         }).catch(() => {}); // Eat user cancel

@@ -490,7 +490,7 @@ class Collections extends Component {
         }
     }
     _findTheNextTab (tab) {
-        const tabs = utility.sortBy(sortTypes.DATE_DSC, this.state.tabs);
+        const tabs = utility.sortBy(sortTypes.DATE_DSC, this.state.tabs).filter(tab => tab.collection === this.state.page);
         return tabs[tabs.indexOf(tab) + 1];
     }
 
@@ -568,7 +568,7 @@ class Collections extends Component {
     //  Tab  -------------------------------------------------------------  Tab EHs  //
     handle_onTabDelete = (tab) => {
         let tabs = this.state.tabs;
-        if (this.state.current = tab.id) {
+        if (this.state.current.id === tab.id) {
             this.handle_onTabToggle(this._findTheNextTab(tab));
         }
         delete tabs[tab.id];
@@ -585,7 +585,6 @@ class Collections extends Component {
     handle_onTabCreate = (tab) => {
         this._checkForNewTags('groups', tab.groups);
         this._checkForNewTags('tags', tab.tags);
-        console.log('here');
         this.addTab(tab);
         this.handle_onTabToggle(tab);
     }
