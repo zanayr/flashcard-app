@@ -27,7 +27,7 @@ class Collections extends Component {
         },
         // deck: this.props.select_decks,
         // card: this.props.select_cards,
-        current: 'deck',
+        current: this.props.user.tabs['deck'],
         // collection: 'deck',
         collection2: {},
         filters: {
@@ -105,6 +105,18 @@ class Collections extends Component {
                 ...prev.aside,
                 data: {
                     ...data
+                }
+            }
+        }));
+    }
+    updateAsideData (property, data) {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                data: {
+                    ...prev.aside.data,
+                    [property]: data
                 }
             }
         }));
@@ -391,6 +403,7 @@ class Collections extends Component {
             filters[category] = filters[category].concat(tag);
         }
         this.setFilters(category, filters);
+        this.updateAsideData('filters', filters);
         if (filters.tags.length || filters.groups.length) {
             this.setQuick('f');
         } else {
@@ -400,25 +413,44 @@ class Collections extends Component {
 
     handle_onAsideToggle = (state) => {
         if (this.state.aside.state !== state) {
-            switch (state) {
-                case 2:
-                    this.setAsideData({
-                        category: 'tags',
-                        selected: this.state.filters.tags,
-                        tags: this.state.tags.slice()
-                    });
-                    break;
-                case 3:
-                    this.setAsideData({
-                        category: 'groups',
-                        selected: this.state.filters.groups,
-                        tags: this.state.groups.slice()
-                    });
-                    break;
-                default:
-                    this.setAsideData({});
-                    break;
+            if (state === 2 || state === 3) {
+                this.setAsideActions({
+                    filter: this.handle_onFilterSelect
+                });
+                this.setAsideData({
+                    current: this.state.current,
+                    filters: this.state.filters,
+                    groups: this.state.groups,
+                    tags: this.state.tags
+                });
             }
+            // switch (state) {
+            //     case 2:
+            //         this.setAsideData({
+            //             category: 'tags',
+            //             selected: this.state.filters.tags,
+            //             static: this.state.current.tags,
+            //             tags: this.state.tags,
+            //         });
+            //         this.setAsideActions({
+            //             filter: this.handle_onFilterSelect
+            //         });
+            //         break;
+            //     case 3:
+            //         this.setAsideData({
+            //             category: 'groups',
+            //             selected: this.state.filters.groups,
+            //             static: this.state.current.groups,
+            //             tags: this.state.groups,
+            //         });
+            //         this.setAsideActions({
+            //             filter: this.handle_onFilterSelect
+            //         });
+            //         break;
+            //     default:
+            //         this.setAsideData({});
+            //         break;
+            // }
             this.toggleAside(state);
         } else {
             this.handle_onAsideClose();
@@ -430,7 +462,11 @@ class Collections extends Component {
     }
     handle_onItemInspect = (item) => {
         this.toggleAside(99);
-        this.setAsideData(item);
+        this.setAsideData({
+            groups: this.state.groups,
+            item: item,
+            tags: this.state.tags
+        });
         this.setAsideActions({change: this.handle_onItemChange});
         this.setUndo({
             action: this.handle_onItemReset,
@@ -481,7 +517,6 @@ class Collections extends Component {
         items.forEach(item => {
             created[item.id] = item;
         });
-        console.log(created);
         this.setManyItems(created);
         this.clearSelected();
         this.clearQuick('s');
@@ -523,6 +558,10 @@ class Collections extends Component {
     handle_onFilterClear = () => {
         this.clearFilters();
         this.clearQuick('f');
+        this.updateAsideData('filters', {
+            groups: [],
+            tags:[]
+        });
     }
 
     //  Main  -----------------------------------------------------------  Main EHs  //
@@ -548,9 +587,12 @@ class Collections extends Component {
         this.resetTabs(tabs);
     }
     handle_onTabToggle = (tab) => {
-        this.setFilters('groups', tab);
-        this.setFilters('tags', tab);
-        this.setCurrent(tab.id);
+        // this.setFilters('groups', tab);
+        // this.setFilters('tags', tab);
+        this.setCurrent(tab);
+        if (this.state.aside.state && this.state.aside.state === 2 || this.state.aside.state === 3) {
+            this.updateAsideData('current', tab);
+        }
         this.setCollection(tab.collection);
         this.clearSelected();
         this.clearQuick('s');
@@ -565,7 +607,7 @@ class Collections extends Component {
 
     render () {
         let mainContent = null;
-        if (this.state.current === 'add') {
+        if (this.state.current.id === 'add') {
             mainContent = (
                 <TabForm
                     tags={this.state.tags}
@@ -575,7 +617,6 @@ class Collections extends Component {
             );
             
         } else {
-            //let tab = this.state.tabs[this.state.current];
             mainContent = (
                 <List
                     actions={{
@@ -585,6 +626,7 @@ class Collections extends Component {
                     }}
                     backingCollection={utility.sortBy(this.state.sort, this.state.collection2)}
                     filters={this.state.filters}
+                    tab={this.state.current}
                     selected={this.state.selected}/>
             );
         }
@@ -612,7 +654,7 @@ class Collections extends Component {
                             }}
                             page={this.state.page}
                             backingCollection={this.state.tabs}
-                            current={this.state.current}
+                            active={this.state.current.id}
                             onClick={this.handle_onAsideClose}/>
                         {mainContent}
                         <ActionButton
@@ -631,8 +673,7 @@ class Collections extends Component {
                 <Aside
                     actions={this.state.aside.actions}
                     data={this.state.aside.data}
-                    tags={this.state.tags}
-                    groups={this.state.groups}
+                    page={this.state.page}
                     state={this.state.aside.state}/>
             </Aux>
         )

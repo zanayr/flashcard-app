@@ -17,34 +17,29 @@ const aside = (props) => {
         case 2:
             aside = (
                 <FilterAside
-                    onSelect={props.actions.filter}
+                    actions={props.actions}
                     data={{
                         ...props.data,
-                        category: 'tags',
-                        tags: props.tags
-                    }}/>
+                        category: 'tags'
+                    }}
+                    filters={props.filters}/>
             );
             break;
         case 3:
             aside = (
                 <FilterAside
-                    onSelect={props.actions.filter}
+                    actions={props.actions}
                     data={{
                         ...props.data,
-                        category: 'groups',
-                        tags: props.groups
+                        category: 'groups'
                     }}/>
             );
             break;
         case 99:
             aside = (
                 <QuickInspectAside
-                    onChange={props.actions.change}
-                    data={{
-                        ...props.data,
-                        groups: props.groups,
-                        tags: props.tags
-                    }}/>
+                    actions={props.actions}
+                    data={props.data}/>
             );
             break;
         default:

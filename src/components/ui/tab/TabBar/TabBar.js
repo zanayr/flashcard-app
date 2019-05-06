@@ -32,7 +32,7 @@ const tabBar = (props) => {
         if (tab.collection === props.page) {
             return (
                 <QuickTab
-                    active={tab.id === props.current}
+                    active={tab.id === props.active}
                     delete={tab.delete}
                     key={tab.id}
                     onClick={() => props.actions.toggle(tab)}

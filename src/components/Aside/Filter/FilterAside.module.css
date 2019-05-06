@@ -13,3 +13,7 @@
 .FilterButton.Active {
     background-color: coral;
 }
+
+.FilterButton.Static {
+    background-color: gray;
+}

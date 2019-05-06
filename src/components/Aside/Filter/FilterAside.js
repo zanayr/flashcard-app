@@ -1,25 +1,40 @@
 import React, {Component} from 'react';
-//import * as utility from '../../../utility';
-
-import Aux from '../../../hoc/Aux/Aux';
-import Row from '../../../hoc/Row/Row';
-import IconButton from '../../ui/button/Icon/IconButton';
-import BarButton from '../../ui/button/Bar/BarButton';
 
 import styles from '../Aside.module.css';
 
 class FilterAside extends Component {
     handle_onSelect = (tag) => {
-        this.props.actions.onSelect(this.props.data.category, tag);
+        this.props.actions.filter(this.props.data.category, tag);
     }
 
     render () {
-        const tagButtons = this.props.data.tags.map((tag, i) => {
+        console.log(this.props.data.filters);
+        const tagButtons = this.props.data[this.props.data.category].map((tag, i) => {
             let css = [styles.FilterButton];
-            if (this.props.data.selected.includes(tag)) {
+            if (this.props.data.filters[this.props.data.category].includes(tag)) {
                 css.push(styles.Active);
+                return (
+                    <div
+                        className={css.join(' ')}
+                        key={i}
+                        onClick={() => this.handle_onSelect(tag)}>
+                        <div>
+                            <p>{tag}</p>
+                        </div>
+                    </div>
+                );
+            } else if (this.props.data.current[this.props.data.category].includes(tag)) {
+                css.push(styles.Static);
+                return (
+                    <div
+                        className={css.join(' ')}
+                        key={i}>
+                        <div>
+                            <p>{tag}</p>
+                        </div>
+                    </div>
+                );
             }
-
             return (
                 <div
                     className={css.join(' ')}

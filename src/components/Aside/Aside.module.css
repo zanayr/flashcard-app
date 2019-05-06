@@ -40,6 +40,9 @@
 .FilterButton.Active {
     background-color: coral;
 }
+.FilterButton.Static {
+    background-color: gray;
+}
 
 .Navigation > div {
     display: flex;

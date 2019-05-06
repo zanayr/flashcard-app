@@ -28,13 +28,13 @@ class InspectAside extends Component {
                 [target]: value
             }
         }));
-        this.props.onChange(this.state.item, {
+        this.props.actions.change(this.state.item, {
             target: target,
             value: value
         });
     }
 
-
+    
     //  TAGS  ---------------------------------------------------------------  TAGS  //
     handle_onTagCreate = (category, tag) => {
         const tags = this.state.item[category];
@@ -45,7 +45,7 @@ class InspectAside extends Component {
                 [category]: prev.item[category].concat(tag)
             }
         }));
-        this.props.actions.onChange(this.state.item, {
+        this.props.actions.change(this.state.item, {
             target: category,
             value: tags.concat(tag)
         });
@@ -60,7 +60,7 @@ class InspectAside extends Component {
                     [category]: prev.item[category].filter(t => t !== tag)
                 }
             }));
-            this.props.actions.onChange(this.state.item, {
+            this.props.actions.change(this.state.item, {
                 target: category,
                 value: tags.filter(t => t !== tag)
             });
@@ -72,14 +72,14 @@ class InspectAside extends Component {
                     [category]: prev.item[category].concat(tag)
                 }
             }));
-            this.props.actions.onChange(this.state.item, {
+            this.props.actions.change(this.state.item, {
                 target: category,
                 value: tags.concat(tag)
             });
         }
     }
 
-
+    
 
     render () {
         let form = (
@@ -87,14 +87,13 @@ class InspectAside extends Component {
                 deck={this.state.item}
                 onChange={this.handle_onChange}/>
         );
-        if (this.state.item.type === 'card') {
+        if (this.props.page === 'card') {
             form = (
                 <CardInspectForm
                     card={this.state.item}
                     onChange={this.handle_onChange}/>
             );
         }
-
         return (
             <aside className={[styles.Aside].join(' ')}>
                 <div>
