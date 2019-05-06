@@ -558,7 +558,6 @@ class Collections extends Component {
         if (this.state.aside.state && this.state.aside.state === 2 || this.state.aside.state === 3) {
             this.updateAsideData('current', tab);
         }
-        // this.setCollection(tab.collection);
         this.clearSelected();
         this.clearQuick('s');
     }
