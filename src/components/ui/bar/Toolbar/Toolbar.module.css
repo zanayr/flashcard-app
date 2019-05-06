@@ -1,9 +1,0 @@
-div.Toolbar > div {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-div.Toolbar > div > * {
-    margin: 0px 4px;
-}
