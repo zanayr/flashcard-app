@@ -418,33 +418,6 @@ class Collections extends Component {
                     tags: this.state.tags
                 });
             }
-            // switch (state) {
-            //     case 2:
-            //         this.setAsideData({
-            //             category: 'tags',
-            //             selected: this.state.filters.tags,
-            //             static: this.state.current.tags,
-            //             tags: this.state.tags,
-            //         });
-            //         this.setAsideActions({
-            //             filter: this.handle_onFilterSelect
-            //         });
-            //         break;
-            //     case 3:
-            //         this.setAsideData({
-            //             category: 'groups',
-            //             selected: this.state.filters.groups,
-            //             static: this.state.current.groups,
-            //             tags: this.state.groups,
-            //         });
-            //         this.setAsideActions({
-            //             filter: this.handle_onFilterSelect
-            //         });
-            //         break;
-            //     default:
-            //         this.setAsideData({});
-            //         break;
-            // }
             this.toggleAside(state);
         } else {
             this.handle_onAsideClose();
@@ -581,19 +554,18 @@ class Collections extends Component {
         this.resetTabs(tabs);
     }
     handle_onTabToggle = (tab) => {
-        // this.setFilters('groups', tab);
-        // this.setFilters('tags', tab);
         this.setCurrent(tab);
         if (this.state.aside.state && this.state.aside.state === 2 || this.state.aside.state === 3) {
             this.updateAsideData('current', tab);
         }
-        this.setCollection(tab.collection);
+        // this.setCollection(tab.collection);
         this.clearSelected();
         this.clearQuick('s');
     }
     handle_onTabCreate = (tab) => {
         this._checkForNewTags('groups', tab.groups);
         this._checkForNewTags('tags', tab.tags);
+        console.log('here');
         this.addTab(tab);
         this.handle_onTabToggle(tab);
     }
