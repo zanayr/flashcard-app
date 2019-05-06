@@ -52,7 +52,7 @@ class Collections extends Component {
                 collection = this.props.select_decks;
                 break;
             case 'card':
-                collection = this.props.select_cardss;
+                collection = this.props.select_cards;
                 break;
             default:
                 break;
@@ -62,6 +62,27 @@ class Collections extends Component {
             collection: collection,
             page: this.props.match.params.collection
         }));
+    }
+
+    componentDidUpdate (prevProps, prevState) {
+        let collection;
+        if (prevProps.match.params.collection !== this.props.match.params.collection) {
+            switch (this.props.match.params.collection) {
+                case 'deck':
+                    collection = this.props.select_decks;
+                    break;
+                case 'card':
+                    collection = this.props.select_cards;
+                    break;
+                default:
+                    break;
+            }
+            this.setState(prev => ({
+                ...prev,
+                collection: collection,
+                page: this.props.match.params.collection
+            }));
+        }
     }
 
 

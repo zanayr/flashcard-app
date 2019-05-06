@@ -14,6 +14,22 @@ const navigationAside = (props) => {
             value: 'Sign Out'
         }
     ];
+    switch (props.page) {
+        case 'deck':
+            navigationLinks.unshift({
+                path: '/u/card',
+                value: 'Cards'
+            });
+            break;
+        case 'card':
+            navigationLinks.unshift({
+                path: '/u/deck',
+                value: 'Decks'
+            });
+            break;
+        default:
+            break;
+    }
     const navigationButtons = navigationLinks.map((link, i) => {
         return (
             <BarLink
@@ -26,15 +42,7 @@ const navigationAside = (props) => {
     return (
         <nav className={styles.Aside}>
             <div>
-                <Row just='Between'>
-                    <h3>Navigation</h3>
-                    <IconButton onClick={() => props.onClose()}>X</IconButton>
-                </Row>
-                <div className={styles.Navigation}>
-                    <div>
-                    {navigationButtons}
-                    </div>
-                </div>
+                {navigationButtons}
             </div>
         </nav>
     );

@@ -11,7 +11,8 @@ const aside = (props) => {
             aside = (
                 <NavigationAiside
                     actions={props.actions}
-                    data={props.data}/>
+                    data={props.data}
+                    page={props.page}/>
             );
             break;
         case 2:
