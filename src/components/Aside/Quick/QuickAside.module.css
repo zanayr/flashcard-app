@@ -1,9 +1,0 @@
-.QuickInspect_Aside {
-    height: 100%;
-}
-.QuickInspect_Aside > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-}

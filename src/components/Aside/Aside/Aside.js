@@ -2,7 +2,7 @@ import React from 'react';
 
 import NavigationAiside from '../Nav/NavAside';
 import FilterAside from '../Filter/FilterAside';
-import QuickInspectAside from '../Quick/QuickAside';
+import InspectAside from '../Inspect/InspectAside';
 
 const aside = (props) => {
     let aside = null;
@@ -37,7 +37,7 @@ const aside = (props) => {
             break;
         case 99:
             aside = (
-                <QuickInspectAside
+                <InspectAside
                     actions={props.actions}
                     data={props.data}/>
             );
