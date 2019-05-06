@@ -1,14 +1,3 @@
-.TabBar {
-    background-color: gold;
-    height: 32px;
-}
-.TabBar > div {
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-    justify-content: flex-start;
-}
-
 .QuickTab {
     background-color: indigo;
     height: 32px;
@@ -28,33 +17,6 @@
     justify-content: center;
 }
 
-.QuickTab.AddTab {
-    background-color: lightsalmon;
-    width: 64px;
-    height: 32px;
-}
-.AddTab > div {
-    height: 100%;
-}
-.AddTab button {
-    background-color: transparent;
-    height: 100%;
-    width: 100%;
-}
-
-.TabBar p {
-    color: white;
-    font-size: 11px;
-    text-align: center;
-    width: 100%;
-}
-.TabBar p > span {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    width: 100%;
-    display: block;
-    overflow: hidden
-}
 
 .QuickTab:hover button.RemoveButton {
     display: block;

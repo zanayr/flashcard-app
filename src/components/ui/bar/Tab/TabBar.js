@@ -6,9 +6,9 @@ import * as select from '../../../../store/reducers/root';
 import * as sortTypes from '../../../../utility/sortTypes';
 import * as utility from '../../../../utility/utility';
 
-import QuickTab from '../QuickTab/QuickTab';
+import QuickTab from '../../Tab/QuickTab';
 
-import styles from '../Tab.module.css';
+import styles from '../Bar.module.css';
 
 
 const tabBar = (props) => {

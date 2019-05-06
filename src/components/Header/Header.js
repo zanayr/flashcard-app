@@ -10,7 +10,7 @@ import * as utility from '../../utility/utility';
 
 import ReturnLink from '../ui/link/Return/ReturnLink';
 import Search from '../ui/input/Search/Search';
-import Toolbar from '../ui/Toolbar/Toolbar';
+import Toolbar from '../ui/bar/Toolbar/Toolbar';
 import Dashboard from '../ui/Dashboard/Dashboard';
 import IconButton from '../ui/button/Icon/IconButton';
 

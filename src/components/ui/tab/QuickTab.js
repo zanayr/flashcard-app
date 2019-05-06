@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import styles from '../Tab.module.css';
+import styles from './Tab.module.css';
 
 
 class QuickTab extends Component {
