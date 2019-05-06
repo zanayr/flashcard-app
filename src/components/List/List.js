@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+
+import * as actions from '../../store/actions/index';
+import * as select from '../../store/reducers/root';
 
 import ListItem from '../ui/ListItem/ListItem';
 import ContextAction from '../ui/button/Context/ContextAction';
@@ -29,7 +33,8 @@ class List extends Component {
         this.showConfirm();
     }
     onItemConfirm = (item) => {
-        this.props.actions.delete([item]);
+        this.props.deleteItem_async(this.props.select_token, item);
+        this.props.actions.delete();
     }
     onItemSelect = (item) => {
         this.hideConfirm();
@@ -97,4 +102,16 @@ class List extends Component {
 }
 
 
-export default List;
+const mapStateToProps = state => {
+    return {
+        select_token: select.authToken(state)
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        deleteItem_async: (token, item) => dispatch(actions.deleteItem_async(token, item)),
+    };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(List);

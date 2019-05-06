@@ -25,11 +25,8 @@ class Collections extends Component {
         aside: {
             state: 0
         },
-        // deck: this.props.select_decks,
-        // card: this.props.select_cards,
         current: this.props.user.tabs['deck'],
-        // collection: 'deck',
-        collection2: {},
+        collection: {},
         filters: {
             groups: [],
             tags: []
@@ -62,7 +59,7 @@ class Collections extends Component {
         }
         this.setState(prev => ({
             ...prev,
-            collection2: collection,
+            collection: collection,
             page: this.props.match.params.collection
         }));
     }
@@ -185,8 +182,8 @@ class Collections extends Component {
     addItem (item) {
         this.setState(prev => ({
             ...prev,
-            collection2: {
-                ...prev.collection2,
+            collection: {
+                ...prev.collection,
                 [item.id]: item
             }
         }));
@@ -194,37 +191,34 @@ class Collections extends Component {
     resetCollection (collection) {
         this.setState(prev => ({
             ...prev,
-            collection2: collection
+            collection: collection
         }));
     }
     setItem (item) {
         this.setState(prev => ({
             ...prev,
-            collection2: {
-                ...prev.collection2,
+            collection: {
+                ...prev.collection,
                 [item.id]: {...item}
             }
         }));
     }
     setManyItems (items) {
-        console.log(this.state.collection2);
         this.setState(prev => ({
             ...prev,
-            collection2: {
-                ...prev.collection2,
+            collection: {
+                ...prev.collection,
                 ...items
             }
-        }), () => {
-            console.log(this.state.collection2);
-        });
+        }));
     }
     setItemValue (item, target, value) {
         this.setState(prev => ({
             ...prev,
-            collection2: {
-                ...prev.collection2,
+            collection: {
+                ...prev.collection,
                 [item.id]: {
-                    ...prev.collection2[item.id],
+                    ...prev.collection[item.id],
                     [target]: value
                 }
             }
@@ -380,7 +374,7 @@ class Collections extends Component {
     //  Aside  -------------------------------------------------------------  Aside  //
     handle_onInspectOut = () => {
         const original = this.state.aside.data.item;
-        const item = this.state.collection2[original.id];
+        const item = this.state.collection[original.id];
         if (JSON.stringify(item) !== JSON.stringify(original)) {
             this._checkForNewTags('tags', item.tags);
             this._checkForNewTags('groups', item.groups);
@@ -522,7 +516,7 @@ class Collections extends Component {
         this.clearQuick('s');
     }
     handle_onItemsDelete = () => {
-        const collection = this.state.collection2;
+        const collection = this.state.collection;
         this.state.selected.slice().forEach(item => {
             delete collection[item.id];
         });
@@ -624,7 +618,7 @@ class Collections extends Component {
                         inspect: this.handle_onItemInspect,
                         select: this.handle_onItemSelect
                     }}
-                    backingCollection={utility.sortBy(this.state.sort, this.state.collection2)}
+                    backingCollection={utility.sortBy(this.state.sort, this.state.collection)}
                     filters={this.state.filters}
                     tab={this.state.current}
                     selected={this.state.selected}/>
