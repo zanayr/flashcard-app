@@ -51,7 +51,7 @@ const getAllItems_init = (state, action) => {
 const getAllItems_succ = (state, action) => {
     let collection = {};
     Object.keys(action.payload.data).map(id => {
-        collection[id] = create.itemViewModel(id, action.payload.data[id]);
+        collection[id] = create.collectionViewModel(id, action.payload.data[id]);
     });
     
     return {
@@ -119,6 +119,9 @@ const reducer = (state=initialState, action) => {
 
 
 //  STORE SELECTORS  ---------------------------------------------------  SELECTORS  //
+export function selectCollection (state, store, id) {
+    return state[store].collection[id];
+}
 export function selectCards (state) {
     return state.card.collection
 }

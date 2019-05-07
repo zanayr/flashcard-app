@@ -21,6 +21,15 @@ export const deleteItem_success = (data) => {
 
 
 //  GET  //
+export const getCollection_succ = (store, id) => {
+    return {
+        type: actionTypes.GET_COLL,
+        payload: {
+            id: id,
+            store: store
+        }
+    }
+}
 export const getAllItems_fail = (store, error) => {
     return {
         type: actionTypes.GET_ITEMS_FAIL,
@@ -101,6 +110,11 @@ export const deleteManyItems_async = (url, token, data) => {
 };
 
 //  Get  ----------------------------------------------------------------  Get Async //
+export const getCollection = (store, id) => {
+    return dispatch => {
+        dispatch(getCollection_succ(store, id));
+    };
+}
 export const getAllItems_async = (url, token, user) => {
     return dispatch => {
         dispatch(getAllItems_init(url));
@@ -117,8 +131,9 @@ export const getAllItems_async = (url, token, user) => {
 
 //  Patch  ------------------------------------------------------------  Patch Async //
 export const patchItem_async = (url, token, data) => {
+    console.log(url, data);
     return dispatch => {
-        axios.patch('/' + url + '/' + data.id + '.json?auth=' + token, create.itemModel(data))
+        axios.patch('/' + url + '/' + data.id + '.json?auth=' + token, create.collectionModel(data))
         .then(response => {
             dispatch(patchItem_success(url, data));
         })
@@ -138,7 +153,7 @@ export const patchManyItems_async = (url, token, data) => {
 //  Pute  ---------------------------------------------------------------  Put Async //
 export const putItem_async = (url, token, data) => {
     return dispatch => {
-        axios.put('/' + url + '/' + data.id + '.json?auth=' + token, create.itemModel(data))
+        axios.put('/' + url + '/' + data.id + '.json?auth=' + token, create.collectionModel(data))
         .then(response => {
             dispatch(putItem_success(url, data));
         })

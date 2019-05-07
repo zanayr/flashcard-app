@@ -6,7 +6,7 @@ import * as select from '../../../../store/reducers/root';
 import * as sortTypes from '../../../../utility/sortTypes';
 import * as utility from '../../../../utility/utility';
 
-import QuickTab from '../../Tab/QuickTab';
+import QuickTab from '../../tab/QuickTab';
 
 import styles from '../Bar.module.css';
 

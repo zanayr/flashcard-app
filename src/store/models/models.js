@@ -1,9 +1,10 @@
 //  Item Models  //
-export function itemViewModel (id, model) {
+export function collectionViewModel (id, model) {
     return {
         date: model.date || Date.now(),
         groups: model.groups || [],
         id: id,
+        members: model.members || {},
         meta: model.meta || {},
         notes: model.notes || '',
         owner: model.owner,
@@ -12,10 +13,11 @@ export function itemViewModel (id, model) {
         tags: model.tags || []
     }
 }
-export function itemModel (model) {
+export function collectionModel (model) {
     return {
         date: model.date,
         groups: model.groups,
+        members: model.members,
         meta: model.meta,
         notes: model.notes,
         owner: model.owner,

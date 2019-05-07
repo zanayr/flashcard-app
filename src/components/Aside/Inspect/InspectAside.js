@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 
-import BarButton from '../../ui/button/Bar/BarButton';
 import BarLink from '../../ui/link/Bar/BarLink';
 import CardInspectForm from '../../form/Card/CardInspectForm';
 import DeckInspectForm from '../../form/Deck/DeckInspectForm';
@@ -136,7 +135,7 @@ class InspectAside extends Component {
                         onConfirm={(tag) => this.handle_onTagCreate('groups', tag)}/>
                     </div>
                     <div>
-                        <BarLink path='u/inspect'>Edit</BarLink>
+                        <BarLink path={'/u/' + this.props.page + '/' + this.state.item.id}>Edit</BarLink>
                     </div>
                 </div>
             </aside>

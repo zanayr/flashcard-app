@@ -2,7 +2,6 @@ import React from 'react';
 
 import NavigationAiside from '../Nav/NavAside';
 import FilterAside from '../Filter/FilterAside';
-import CreateAside from '../Create/CreateAside';
 import InspectAside from '../Inspect/InspectAside';
 
 const aside = (props) => {

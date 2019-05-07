@@ -7,6 +7,7 @@ export const AUTH_SUCC = 'AUTH_SUCC';
 
 
 //  Collection  //
+export const GET_COLL = 'GET_COLL';
 export const DELETE_ITEM_FAIL = 'DELETE_ITEM_FAIL';
 export const DELETE_ITEM_SUCC = 'DELETE_ITEM_SUCC';
 export const GET_ITEMS_FAIL = 'GET_ITEMS_FAIL';

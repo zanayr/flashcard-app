@@ -5,6 +5,7 @@ export {
 } from './auth';
 
 export {
+    getCollection,
     deleteItem_async,
     deleteManyItems_async,
     getAllItems_async,

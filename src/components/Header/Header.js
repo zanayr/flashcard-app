@@ -33,7 +33,7 @@ class Header extends Component {
             'Once you delete an item, it cannot be recovered. Are you sure you wish to delete these items?',
             'Delete', 'Cancel')
         .then(response => {
-            this.props.deleteManyItems_async(this.props.select_token, this.props.selected.slice());
+            this.props.deleteManyItems_async(this.props.page, this.props.select_token, this.props.selected.slice());
             this.props.actions.delete();
         }).catch(() => {}); // Eat user cancel
     };
@@ -58,19 +58,15 @@ class Header extends Component {
                     }
                 })
             });
-            let merged = create.itemViewModel(utility.createHashId(0), {
+            let merged = create.collectionViewModel(utility.createHashId(0), {
                 date: Date.now(),
                 groups: groups,
-                meta: {},
-                notes: '',
-                owner: this.props.select_userId.id,
+                owner: this.props.select_userId,
                 primary: 'New Merged Deck',
-                secondary: '',
-                tags: tags,
-                type: 'deck',
+                tags: tags
             });
-
-            this.props.patchItem_async(this.props.select_token, merged);
+            console.log(merged);
+            this.props.patchItem_async(this.props.page, this.props.select_token, merged);
             this.props.actions.create([merged]);
         }).catch(() => {}); // Eat user cancel
     };
@@ -89,7 +85,7 @@ class Header extends Component {
                 } else {
                     primary = 'Copy of ' + item.primary.substr(0, 21) + '...';
                 }
-                cloned.push(create.itemViewModel(utility.createHashId(i), {
+                cloned.push(create.collectionViewModel(utility.createHashId(i), {
                     ...item,
                     date: Date.now(),
                     primary: primary
@@ -97,7 +93,7 @@ class Header extends Component {
                 console.log(item.date);
             });
             console.log(cloned);
-            this.props.patchManyItems_async(this.props.select_token, cloned);
+            this.props.patchManyItems_async(this.props.page, this.props.select_token, cloned);
             this.props.actions.create(cloned);
         }).catch(() => {}); // Eat user cancel
     };
@@ -146,10 +142,10 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        deleteManyItems_async: (token, items) => dispatch(actions.deleteManyItems_async(token, items)),
+        deleteManyItems_async: (url, token, items) => dispatch(actions.deleteManyItems_async(url, token, items)),
         displayModal_async: (type, message, confirm, cancel) => dispatch(actions.displayModal_async(type, message, confirm, cancel)),
-        patchItem_async: (token, item) => dispatch(actions.patchItem_async(token, item)),
-        patchManyItems_async: (token, items) => dispatch(actions.patchManyItems_async(token, items))
+        patchItem_async: (url, token, item) => dispatch(actions.patchItem_async(url, token, item)),
+        patchManyItems_async: (url, token, items) => dispatch(actions.patchManyItems_async(url, token, items))
     };
 };
 

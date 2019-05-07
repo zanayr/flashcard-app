@@ -36,6 +36,9 @@ export function authUser (store) {
 }
 
 //  Collection  ------------------------------------------------ Collection Selectors  //
+export function collection (store, collection, id) {
+    return FromColl.selectCollection(store[COLL], collection, id);
+}
 export function cards (store) {
     return FromColl.selectCards(store[COLL]);
 }

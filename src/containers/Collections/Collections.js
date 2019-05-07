@@ -368,7 +368,7 @@ class Collections extends Component {
 
     //  Action  -----------------------------------------------------------  Action  //
     handle_onActionClick = () => {
-        const item = create.itemViewModel(utility.createHashId(0), {
+        const item = create.collectionViewModel(utility.createHashId(0), {
             owner: this.props.select_user.id
         });
         this.addItem(item);
@@ -619,7 +619,7 @@ class Collections extends Component {
                     selected={this.state.selected}/>
             );
         }
-
+        console.log(this.props.match);
         return (
             <Aux>
                 <Header
