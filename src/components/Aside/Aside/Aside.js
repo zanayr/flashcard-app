@@ -2,9 +2,11 @@ import React from 'react';
 
 import NavigationAiside from '../Nav/NavAside';
 import FilterAside from '../Filter/FilterAside';
+import CreateAside from '../Create/CreateAside';
 import InspectAside from '../Inspect/InspectAside';
 
 const aside = (props) => {
+    console.log(props.state);
     let aside = null;
     switch (props.state) {
         case 1:
@@ -36,11 +38,13 @@ const aside = (props) => {
                     }}/>
             );
             break;
+        case 98:
         case 99:
             aside = (
                 <InspectAside
                     actions={props.actions}
-                    data={props.data}/>
+                    data={props.data}
+                    page={props.page}/>
             );
             break;
         default:

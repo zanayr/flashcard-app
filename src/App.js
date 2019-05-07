@@ -7,6 +7,7 @@ import * as actions from './store/actions/index';
 
 import Auth from './containers/Auth/Auth';
 import Collections from './containers/Collections/Collections';
+import Create from './containers/Create/Create';
 import In from './containers/In/In';
 import Inspector from './containers/Inspector/Inspector';
 import Modal from './components/modal/Modal/Modal';
@@ -42,6 +43,7 @@ class App extends Component {
         <Switch>
           <Route path='/u/inspect' exact component={Inspector}/>
           <Route path='/u/:collection' component={Collections}/>
+          
           <Route path='/in' exact component={In}/>
           <Route path='/out' exact component={Out}/>
           <Route path='/auth' exact component={Auth}/>

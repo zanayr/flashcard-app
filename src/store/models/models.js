@@ -1,16 +1,15 @@
 //  Item Models  //
 export function itemViewModel (id, model) {
     return {
-        date: model.date,
+        date: model.date || Date.now(),
         groups: model.groups || [],
         id: id,
         meta: model.meta || {},
         notes: model.notes || '',
         owner: model.owner,
-        primary: model.primary,
-        secondary: model.secondary,
-        tags: model.tags || [],
-        type: model.type
+        primary: model.primary || '',
+        secondary: model.secondary || '',
+        tags: model.tags || []
     }
 }
 export function itemModel (model) {
@@ -22,8 +21,7 @@ export function itemModel (model) {
         owner: model.owner,
         primary: model.primary,
         secondary: model.secondary,
-        tags: model.tags,
-        type: model.type
+        tags: model.tags
     }
 }
 

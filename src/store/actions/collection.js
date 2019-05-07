@@ -81,21 +81,22 @@ export const putItem_success = (data) => {
 
 //  ASYNC FUNCTIONS  ---------------------------------------------  ASYNC FUNCTIONS  //
 //  Delete  ---------------------------------------------------------  Delete Async  //
-export const deleteItem_async = (token, data) => {
+export const deleteItem_async = (url, token, data) => {
+    console.log(url, data);
     return dispatch => {
-        axios.delete('/' + data.type + '/' + data.id + '.json?auth=' + token)
+        axios.delete('/' + url + '/' + data.id + '.json?auth=' + token)
         .then(response => {
-            dispatch(deleteItem_success(data));
+            dispatch(deleteItem_success(url, data));
         })
         .catch(error => {
             dispatch(deleteItem_fail(error));
         });
     };
 };
-export const deleteManyItems_async = (token, data) => {
+export const deleteManyItems_async = (url, token, data) => {
     return dispatch => {
         data.forEach(item => {
-            dispatch(deleteItem_async(token, item));
+            dispatch(deleteItem_async(url, token, item));
         });
     }
 };
@@ -116,31 +117,31 @@ export const getAllItems_async = (url, token, user) => {
 
 
 //  Patch  ------------------------------------------------------------  Patch Async //
-export const patchItem_async = (token, data) => {
+export const patchItem_async = (url, token, data) => {
     return dispatch => {
-        axios.patch('/' + data.type + '/' + data.id + '.json?auth=' + token, create.itemModel(data))
+        axios.patch('/' + url + '/' + data.id + '.json?auth=' + token, create.itemModel(data))
         .then(response => {
-            dispatch(patchItem_success(data));
+            dispatch(patchItem_success(url, data));
         })
         .catch(error => {
             dispatch(patchItem_fail(error));
         });
     };
 };
-export const patchManyItems_async = (token, data) => {
+export const patchManyItems_async = (url, token, data) => {
     return dispatch => {
         data.forEach(item => {
-            dispatch(patchItem_async(token, item));
+            dispatch(patchItem_async(url, token, item));
         });
     }
 };
 
 //  Pute  ---------------------------------------------------------------  Put Async //
-export const putItem_async = (token, data) => {
+export const putItem_async = (url, token, data) => {
     return dispatch => {
-        axios.put('/' + data.type + '/' + data.id + '.json?auth=' + token, create.itemModel(data))
+        axios.put('/' + url + '/' + data.id + '.json?auth=' + token, create.itemModel(data))
         .then(response => {
-            dispatch(putItem_success(data));
+            dispatch(putItem_success(url, data));
         })
         .catch(error => {
             dispatch(putItem_fail(error));

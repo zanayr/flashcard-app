@@ -33,7 +33,8 @@ class List extends Component {
         this.showConfirm();
     }
     onItemConfirm = (item) => {
-        this.props.deleteItem_async(this.props.select_token, item);
+        console.log(item);
+        this.props.deleteItem_async(this.props.page, this.props.select_token, item);
         this.props.actions.delete();
     }
     onItemSelect = (item) => {
@@ -122,7 +123,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        deleteItem_async: (token, item) => dispatch(actions.deleteItem_async(token, item)),
+        deleteItem_async: (url, token, item) => dispatch(actions.deleteItem_async(url, token, item)),
     };
 };
 

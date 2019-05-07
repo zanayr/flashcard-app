@@ -359,53 +359,76 @@ class Collections extends Component {
     //  Action  -----------------------------------------------------------  Action  //
     handle_onActionClick = () => {
         //  This is all temporary  //
-        let id = utility.createHashId(0);
-        let item;
-        if (this.state.page === 'deck') {
-            item = {
-                date: Date.now(),
-                groups: [...this.state.filters.groups],
-                meta: {},
-                notes: 'These are notes for this flashcard deck.',
-                owner: this.props.user.id,
-                primary: id + ' Flashcard Deck',
-                secondary: 'These are details for this flashcard deck.',
-                tags: [...this.state.filters.tags],
-                type: 'deck',
-            }
-        } else {
-            item = {
-                date: Date.now(),
-                groups: [...this.state.filters.groups],
-                meta: {},
-                notes: 'These are notes for this flashcard',
-                owner: this.props.user.id,
-                primary: id + ' Flashcard Front',
-                secondary: 'Flashcard Back',
-                tags: [...this.state.filters.tags],
-                type: 'card',
-            }
-        }
-        item = create.itemViewModel(id, item);
+        // let id = utility.createHashId(0);
+        // let item;
+        // if (this.state.page === 'deck') {
+        //     item = {
+        //         date: Date.now(),
+        //         groups: [...this.state.filters.groups],
+        //         meta: {},
+        //         notes: 'These are notes for this flashcard deck.',
+        //         owner: this.props.user.id,
+        //         primary: id + ' Flashcard Deck',
+        //         secondary: 'These are details for this flashcard deck.',
+        //         tags: [...this.state.filters.tags],
+        //         type: 'deck',
+        //     }
+        // } else {
+        //     item = {
+        //         date: Date.now(),
+        //         groups: [...this.state.filters.groups],
+        //         meta: {},
+        //         notes: 'These are notes for this flashcard',
+        //         owner: this.props.user.id,
+        //         primary: id + ' Flashcard Front',
+        //         secondary: 'Flashcard Back',
+        //         tags: [...this.state.filters.tags],
+        //         type: 'card',
+        //     }
+        // }
+        // item = create.itemViewModel(id, item);
+        // this.addItem(item);
+        // this.props.patchItem_async(this.props.token, item);
+        const item = create.itemViewModel(utility.createHashId(0), {
+            owner: this.props.select_user.id
+        });
         this.addItem(item);
-        this.props.patchItem_async(this.props.token, item);
+        this.toggleAside(98);
+        this.setAsideData({
+            groups: this.state.groups,
+            item: item,
+            tags: this.state.tags
+        });
+        this.setAsideActions({change: this.handle_onItemChange});
+        this.clearQuick('s');
     }
 
 
     //  Aside  -------------------------------------------------------------  Aside  //
+    handle_onCreateOut = () => {
+        const original = this.state.aside.data.item;
+        const item = this.state.collection[original.id];
+        if (JSON.stringify(item) !== JSON.stringify(original)) {
+            this._checkForNewTags('tags', item.tags);
+            this._checkForNewTags('groups', item.groups);
+            this.props.patchItem_async(this.state.page, this.props.token, item);
+        }
+    }
     handle_onInspectOut = () => {
         const original = this.state.aside.data.item;
         const item = this.state.collection[original.id];
         if (JSON.stringify(item) !== JSON.stringify(original)) {
             this._checkForNewTags('tags', item.tags);
             this._checkForNewTags('groups', item.groups);
-            this.props.putItem_async(this.props.token, item);
+            this.props.putItem_async(this.state.page, this.props.token, item);
             this.setQuick('u');
         }
     }
     handle_onAsideClose = () => {
         if (this.state.aside.state === 99) {
             this.handle_onInspectOut();
+        } else if (this.state.aside.state === 98) {
+            this.handle_onCreateOut();
         }
         this.clearAside();
     }
@@ -532,14 +555,14 @@ class Collections extends Component {
         this.setManyItems(recovered);
         this.clearQuick('u');
         this.clearUndo();
-        this.props.patchManyItems_async(this.props.select_token, deleted);
+        this.props.patchManyItems_async(this.state.page, this.props.select_token, deleted);
     }
     handle_onItemReset = () => {
         const item = this.state.undo.data;
         this.setItem(item);
         this.clearQuick('u');
         this.clearUndo();
-        this.props.patchItem_async(this.props.select_token, item);
+        this.props.patchItem_async(this.state.page, this.props.select_token, item);
     }
     
     //  Filters  -----------------------------------------------------  Filters EHs  //
@@ -612,6 +635,7 @@ class Collections extends Component {
                     backingCollection={utility.sortBy(this.state.sort, this.state.collection)}
                     filters={this.state.filters}
                     tab={this.state.current}
+                    page={this.state.page}
                     selected={this.state.selected}/>
             );
         }
@@ -625,7 +649,7 @@ class Collections extends Component {
                         sort: this.handle_onCollectionSort,
                         toggle: this.handle_onAsideToggle
                     }}
-                    page={this.props.match.params.collection}
+                    page={this.state.page}
                     selected={this.state.selected}
                     onClick={this.handle_onAsideClose}/>
                 <main
@@ -675,15 +699,11 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        deleteItem_async: (token, item) => dispatch(actions.deleteItem_async(token, item)),
-        deleteManyItems_async: (token, items) => dispatch(actions.deleteManyItems_async(token, items)),
-        deleteTab_async: (token, user, id) => dispatch(actions.deleteTab_async(token, user, id)),
-        displayModal: (type, data) => dispatch(actions.displayModal(type, data)),
-        patchItem_async: (token, item) => dispatch(actions.patchItem_async(token, item)),
-        patchManyItems_async: (token, items) => dispatch(actions.patchManyItems_async(token, items)),
-        putTag_async: (url, token, user, data) => dispatch(actions.putTag_async(url, token, user, data)),
-        patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data)),
-        putItem_async: (token, item) => dispatch(actions.putItem_async(token, item)),
+        patchItem_async: (url, token, item) => dispatch(actions.patchItem_async(url, token, item)),
+        patchManyItems_async: (url, token, items) => dispatch(actions.patchManyItems_async(url, token, items)),
+        putItem_async: (url, token, item) => dispatch(actions.putItem_async(url, token, item)),
+        putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
+        patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data))
 
     };
 };

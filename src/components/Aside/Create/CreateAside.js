@@ -3,22 +3,19 @@ import React, {Component} from 'react';
 import BarButton from '../../ui/button/Bar/BarButton';
 import BarLink from '../../ui/link/Bar/BarLink';
 import CardInspectForm from '../../form/Card/CardInspectForm';
-import DeckInspectForm from '../../form/Deck/DeckInspectForm';
+import DeckCreateForm from '../../form/Deck/DeckCreateForm';
 import TagForm from '../../form/Tag/TagForm';
 
 import styles from '../Aside.module.css';
 
 
-class InspectAside extends Component {
+class CreateAside extends Component {
     state = {
         actions: this.props.actions,
-        change: this.props.actions.change ? true : false,
-        groups: this.props.data.groups,
-        item: this.props.data.item,
-        tags: this.props.data.tags
+        groups: [],
+        tags: []
     }
     form = React.createRef();
-
 
     //  FORM  ---------------------------------------------------------------  FORM  //
     handle_onChange = (target, value) => {
@@ -29,12 +26,10 @@ class InspectAside extends Component {
                 [target]: value
             }
         }));
-        if (this.state.change) {
-            this.props.actions.change(this.state.item, {
-                target: target,
-                value: value
-            });
-        }
+        this.props.actions.change(this.state.item, {
+            target: target,
+            value: value
+        });
     }
 
     
@@ -48,12 +43,10 @@ class InspectAside extends Component {
                 [category]: prev.item[category].concat(tag)
             }
         }));
-        if (this.state.change) {
-            this.props.actions.change(this.state.item, {
-                target: category,
-                value: tags.concat(tag)
-            });
-        }
+        this.props.actions.change(this.state.item, {
+            target: category,
+            value: tags.concat(tag)
+        });
     }
     handle_onTagToggle = (category, tag) => {
         const tags = this.state.item[category];
@@ -65,12 +58,10 @@ class InspectAside extends Component {
                     [category]: prev.item[category].filter(t => t !== tag)
                 }
             }));
-            if (this.state.change) {
-                this.props.actions.change(this.state.item, {
-                    target: category,
-                    value: tags.filter(t => t !== tag)
-                });
-            }
+            this.props.actions.change(this.state.item, {
+                target: category,
+                value: tags.filter(t => t !== tag)
+            });
         } else {
             this.setState(prev => ({
                 ...prev,
@@ -79,30 +70,26 @@ class InspectAside extends Component {
                     [category]: prev.item[category].concat(tag)
                 }
             }));
-            if (this.state.change) {
-                this.props.actions.change(this.state.item, {
-                    target: category,
-                    value: tags.concat(tag)
-                });
-            }
+            this.props.actions.change(this.state.item, {
+                target: category,
+                value: tags.concat(tag)
+            });
         }
     }
 
     
 
     render () {
-        let form = (
-            <DeckInspectForm
-                deck={this.state.item}
-                onChange={this.handle_onChange}/>
-        );
-        if (this.props.page === 'card') {
-            form = (
-                <CardInspectForm
-                    card={this.state.item}
-                    onChange={this.handle_onChange}/>
-            );
-        }
+        // let form = (
+        //     <DeckCreateForm onChange={this.handle_onChange}/>
+        // );
+        // if (this.props.page === 'card') {
+        //     form = (
+        //         <CardInspectForm
+        //             card={this.state.item}
+        //             onChange={this.handle_onChange}/>
+        //     );
+        // }
         return (
             <aside className={[styles.Aside].join(' ')}>
                 <div>
@@ -110,14 +97,13 @@ class InspectAside extends Component {
                     <h3>Quick Inspect</h3>
                     <p>Instructions about this aside here.</p>
                     <form
-                        className={styles.QuickForm}
                         ref={this.form}>
-                        {form}
+                        <DeckCreateForm onChange={this.handle_onChange}/>
                     </form>
                     <h4>Tags</h4>
                     <TagForm
-                        activeCollection={this.state.item.tags}
-                        backingCollection={this.state.tags}
+                        activeCollection={this.state.tags}
+                        backingCollection={this.props.data.tags}
                         field={{
                             label: 'Additional Tag',
                             placeholder: 'Verb'
@@ -126,8 +112,8 @@ class InspectAside extends Component {
                         onConfirm={(tag) => this.handle_onTagCreate('tags', tag)}/>
                     <h4>Groups</h4>
                     <TagForm
-                        activeCollection={this.state.item.groups}
-                        backingCollection={this.state.groups}
+                        activeCollection={this.state.groups} 
+                        backingCollection={this.props.data.groups}
                         field={{
                             label: 'Additional Group',
                             placeholder: 'Spanish'
@@ -144,4 +130,4 @@ class InspectAside extends Component {
     }
 }
 
-export default InspectAside;
+export default CreateAside;
