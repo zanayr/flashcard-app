@@ -358,37 +358,6 @@ class Collections extends Component {
 
     //  Action  -----------------------------------------------------------  Action  //
     handle_onActionClick = () => {
-        //  This is all temporary  //
-        // let id = utility.createHashId(0);
-        // let item;
-        // if (this.state.page === 'deck') {
-        //     item = {
-        //         date: Date.now(),
-        //         groups: [...this.state.filters.groups],
-        //         meta: {},
-        //         notes: 'These are notes for this flashcard deck.',
-        //         owner: this.props.user.id,
-        //         primary: id + ' Flashcard Deck',
-        //         secondary: 'These are details for this flashcard deck.',
-        //         tags: [...this.state.filters.tags],
-        //         type: 'deck',
-        //     }
-        // } else {
-        //     item = {
-        //         date: Date.now(),
-        //         groups: [...this.state.filters.groups],
-        //         meta: {},
-        //         notes: 'These are notes for this flashcard',
-        //         owner: this.props.user.id,
-        //         primary: id + ' Flashcard Front',
-        //         secondary: 'Flashcard Back',
-        //         tags: [...this.state.filters.tags],
-        //         type: 'card',
-        //     }
-        // }
-        // item = create.itemViewModel(id, item);
-        // this.addItem(item);
-        // this.props.patchItem_async(this.props.token, item);
         const item = create.itemViewModel(utility.createHashId(0), {
             owner: this.props.select_user.id
         });
@@ -405,30 +374,28 @@ class Collections extends Component {
 
 
     //  Aside  -------------------------------------------------------------  Aside  //
-    handle_onCreateOut = () => {
-        const original = this.state.aside.data.item;
-        const item = this.state.collection[original.id];
-        if (JSON.stringify(item) !== JSON.stringify(original)) {
-            this._checkForNewTags('tags', item.tags);
-            this._checkForNewTags('groups', item.groups);
-            this.props.patchItem_async(this.state.page, this.props.token, item);
-        }
-    }
     handle_onInspectOut = () => {
         const original = this.state.aside.data.item;
         const item = this.state.collection[original.id];
         if (JSON.stringify(item) !== JSON.stringify(original)) {
             this._checkForNewTags('tags', item.tags);
             this._checkForNewTags('groups', item.groups);
-            this.props.putItem_async(this.state.page, this.props.token, item);
-            this.setQuick('u');
+            switch (this.state.aside.state) {
+                case 98:
+                    this.props.patchItem_async(this.state.page, this.props.token, item);
+                    break;
+                case 99:
+                    this.props.putItem_async(this.state.page, this.props.token, item);
+                    this.setQuick('u');
+                    break;
+                default:
+                    break;
+            }
         }
     }
     handle_onAsideClose = () => {
-        if (this.state.aside.state === 99) {
+        if (this.state.aside.state >= 98) {
             this.handle_onInspectOut();
-        } else if (this.state.aside.state === 98) {
-            this.handle_onCreateOut();
         }
         this.clearAside();
     }
