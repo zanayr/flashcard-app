@@ -33,7 +33,6 @@ class List extends Component {
         this.showConfirm();
     }
     onItemConfirm = (item) => {
-        console.log(item);
         this.props.deleteItem_async(this.props.page, this.props.select_token, item);
         this.props.actions.delete();
     }

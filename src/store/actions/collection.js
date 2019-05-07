@@ -82,7 +82,6 @@ export const putItem_success = (data) => {
 //  ASYNC FUNCTIONS  ---------------------------------------------  ASYNC FUNCTIONS  //
 //  Delete  ---------------------------------------------------------  Delete Async  //
 export const deleteItem_async = (url, token, data) => {
-    console.log(url, data);
     return dispatch => {
         axios.delete('/' + url + '/' + data.id + '.json?auth=' + token)
         .then(response => {

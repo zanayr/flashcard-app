@@ -209,6 +209,16 @@ class Collections extends Component {
             }
         }));
     }
+    removeItem (item) {
+        const collection = this.state.collection;
+        delete collection[item.id];
+        this.setState(prev => ({
+            ...prev,
+            collection: {
+                ...collection
+            }
+        }));
+    }
     resetCollection (collection) {
         this.setState(prev => ({
             ...prev,
@@ -369,6 +379,7 @@ class Collections extends Component {
             tags: this.state.tags
         });
         this.setAsideActions({change: this.handle_onItemChange});
+        this.clearSelected();
         this.clearQuick('s');
     }
 
@@ -391,6 +402,8 @@ class Collections extends Component {
                 default:
                     break;
             }
+        } else if (this.state.aside.state === 98) {
+            this.removeItem(item);
         }
     }
     handle_onAsideClose = () => {

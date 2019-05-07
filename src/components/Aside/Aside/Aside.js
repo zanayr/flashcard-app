@@ -6,7 +6,6 @@ import CreateAside from '../Create/CreateAside';
 import InspectAside from '../Inspect/InspectAside';
 
 const aside = (props) => {
-    console.log(props.state);
     let aside = null;
     switch (props.state) {
         case 1:
