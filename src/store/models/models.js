@@ -1,5 +1,11 @@
 //  Item Models  //
 export function collectionViewModel (id, model) {
+    const tabs = {};
+    if (model.tabs) {
+        Object.keys(model.tabs).map(id => {
+            tabs[id] = tabViewModel(id, model.tabs[id]);
+        });
+    }
     return {
         date: model.date || Date.now(),
         groups: model.groups || [],
@@ -10,6 +16,17 @@ export function collectionViewModel (id, model) {
         owner: model.owner,
         primary: model.primary || '',
         secondary: model.secondary || '',
+        tabs: {
+            ...tabs,
+            all: {
+                date: 0,
+                delete: false,
+                groups: [],
+                id: 'deck',
+                name: 'Decks',
+                tags: []
+            }
+        },
         tags: model.tags || []
     }
 }
@@ -72,27 +89,7 @@ export function userModel (id, model) {
         },
         meta: model.meta || {},
         privilage: model.privilage,
-        tabs: {
-            ...tabs,
-            card: {
-                collection: 'card',
-                date: 1,
-                delete: false,
-                groups: [],
-                id: 'card',
-                name: 'Cards',
-                tags: []
-            },
-            deck: {
-                collection: 'deck',
-                date: 0,
-                delete: false,
-                groups: [],
-                id: 'deck',
-                name: 'Decks',
-                tags: []
-            },
-        },
+        tabs: tabs,
         tags: model.tags || []
     }
 }

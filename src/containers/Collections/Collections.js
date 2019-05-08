@@ -25,19 +25,38 @@ class Collections extends Component {
         aside: {
             state: 0
         },
-        current: this.props.user.tabs['deck'],
-        collection: {},
+        current: {
+            collection: this.props.match.params.collection,
+            date: 0,
+            delete: false,
+            groups: [],
+            id: 'all',
+            name: 'All',
+            tags: []
+        },
+        collection: this.selectCollection(this.props.match.params.collection),
         filters: {
             groups: [],
             tags: []
         },
         groups: this.props.user.groups,
         inspect: {},
-        page: '',
+        page: this.props.match.params.collection,
         quick: [],
         selected: [],
-        sort: sortTypes.ALPHA_ASC,
-        tabs: this.props.user.tabs,
+        sort: sortTypes.DATE_ASC,
+        tabs: {
+            ...this.props.user.tabs,
+            all: {
+                collection: this.props.match.params.collection,
+                date: 0,
+                delete: false,
+                groups: [],
+                id: 'all',
+                name: 'All',
+                tags: []
+            }
+        },
         tags: this.props.user.tags,
         undo: {
             action: null,
@@ -45,41 +64,41 @@ class Collections extends Component {
         },
     }
 
-    componentDidMount () {
-        let collection;
-        switch (this.props.match.params.collection) {
+    selectCollection (collection) {
+        switch (collection) {
             case 'deck':
-                collection = this.props.select_decks;
-                break;
+                return this.props.select_decks;
             case 'card':
-                collection = this.props.select_cards;
-                break;
+                return this.props.select_cards;
             default:
                 break;
         }
-        this.setState(prev => ({
-            ...prev,
-            collection: collection,
-            page: this.props.match.params.collection
-        }));
+    }
+
+    componentDidMount () {
+        // let collection;
+        // switch (this.props.match.params.collection) {
+        //     case 'deck':
+        //         collection = this.props.select_decks;
+        //         break;
+        //     case 'card':
+        //         collection = this.props.select_cards;
+        //         break;
+        //     default:
+        //         break;
+        // }
+        // this.setState(prev => ({
+        //     ...prev,
+        //     collection: collection,
+        //     page: this.props.match.params.collection
+        // }));
     }
 
     componentDidUpdate (prevProps, prevState) {
-        let collection;
         if (prevProps.match.params.collection !== this.props.match.params.collection) {
-            switch (this.props.match.params.collection) {
-                case 'deck':
-                    collection = this.props.select_decks;
-                    break;
-                case 'card':
-                    collection = this.props.select_cards;
-                    break;
-                default:
-                    break;
-            }
             this.setState(prev => ({
                 ...prev,
-                collection: collection,
+                collection: this.selectCollection(this.props.match.params.collection),
                 page: this.props.match.params.collection
             }));
         }
@@ -595,6 +614,9 @@ class Collections extends Component {
 
     render () {
         let mainContent = null;
+        // if (this.state.isLoading) {
+        //     mainContent = null;
+        // } else {
         if (this.state.current.id === 'add') {
             mainContent = (
                 <TabForm
@@ -619,7 +641,8 @@ class Collections extends Component {
                     selected={this.state.selected}/>
             );
         }
-        console.log(this.props.match);
+        // }
+        
         return (
             <Aux>
                 <Header

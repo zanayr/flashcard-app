@@ -6,7 +6,10 @@ import BarLinkCSS from './BarLink.module.css';
 const barLink = (props) => {
     return (
         <div className={BarLinkCSS.Bar_Link}>
-            <Link to={props.path}>
+            <Link to={{
+                pathname: props.path,
+                state: props.state
+            }}>
                 <span>{props.children}</span>
             </Link>
         </div>

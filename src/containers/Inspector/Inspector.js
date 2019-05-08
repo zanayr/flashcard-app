@@ -8,6 +8,7 @@ import * as sortTypes from '../../utility/sortTypes';
 import * as utility from '../../utility/utility';
 
 
+import Throbber from '../../components/ui/Throbber/Throbber';
 import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside from '../../components/aside/Aside/Aside';
 import Aux from '../../hoc/Aux/Aux';
@@ -25,8 +26,17 @@ class Inspector extends Component {
         aside: {
             state: 0
         },
-        //current: this.props.user.tabs['deck'],
+        current: {
+            collection: this.props.match.params.id,
+            date: 0,
+            delete: false,
+            groups: [],
+            id: 'all',
+            name: 'All',
+            tags: []
+        },
         collection: {},
+        members: this.props.location.state.data,
         filters: {
             groups: [],
             tags: []
@@ -37,7 +47,17 @@ class Inspector extends Component {
         quick: [],
         selected: [],
         sort: sortTypes.DATE_ASC,
-        // tabs: this.props.user.tabs,
+        tabs: {
+            all: {
+                collection: this.props.match.params.id,
+                date: 0,
+                delete: false,
+                groups: [],
+                id: 'all',
+                name: 'All',
+                tags: []
+            }
+        },
         tags: this.props.user.tags,
         undo: {
             action: null,
@@ -46,43 +66,52 @@ class Inspector extends Component {
     }
 
     componentDidMount () {
-        let collection;
-        switch (this.props.match.url.match('u\/(.*)\/')[1]) {
-            case 'deck':
-                collection = [];
-                break;
-            case 'card':
-                collection = [];
-                break;
-            default:
-                break;
-        }
-        this.setState(prev => ({
-            ...prev,
-            collection: collection,
-            page: this.props.match.params.collection
-        }));
+        // let collection = this.props.select_collection;
+        // let allCards = this.props.select_cards;
+        // let members = {};
+        // Object.keys(allCards).map(id => {
+        //     if (collection.members.includes(id)) {
+        //         members[id] = {...allCards[id]};
+        //     }
+        // });
+
+        // switch (this.props.match.url.match('u\/(.*)\/')[1]) {
+        //     case 'deck':
+        //         collection = this.props.select_collection;
+        //         break;
+        //     // case 'card':
+        //     //     collection = [];
+        //     //     break;
+        //     default:
+        //         break;
+        // }
+        // this.setState(prev => ({
+        //     ...prev,
+        //     collection: collection,
+        //     members: members,
+        //     isLoading: false
+        // }));
     }
 
     componentDidUpdate (prevProps, prevState) {
-        let collection;
-        if (prevProps.match.params.collection !== this.props.match.params.collection) {
-            switch (this.props.match.params.collection) {
-                case 'deck':
-                    collection = this.props.select_decks;
-                    break;
-                case 'card':
-                    collection = this.props.select_cards;
-                    break;
-                default:
-                    break;
-            }
-            this.setState(prev => ({
-                ...prev,
-                collection: collection,
-                page: this.props.match.params.collection
-            }));
-        }
+        // let collection;
+        // if (prevProps.match.params.collection !== this.props.match.params.collection) {
+        //     switch (this.props.match.params.collection) {
+        //         case 'deck':
+        //             collection = this.props.select_decks;
+        //             break;
+        //         case 'card':
+        //             collection = this.props.select_cards;
+        //             break;
+        //         default:
+        //             break;
+        //     }
+        //     this.setState(prev => ({
+        //         ...prev,
+        //         collection: collection,
+        //         page: this.props.match.params.collection
+        //     }));
+        // }
     }
 
 
@@ -594,18 +623,14 @@ class Inspector extends Component {
 
 
     render () {
+        console.log(this.state);
         let mainContent = null;
         //if (this.state.current.id === 'add') {
         if (false) {
-            mainContent = (
-                <TabForm
-                    tags={this.state.tags}
-                    groups={this.state.groups}
-                    page={this.state.page}
-                    onConfirm={this.handle_onTabCreate}/>
-            );
-            
+            console.log('loading');
+            mainContent = (<Throbber/>);
         } else {
+            console.log('loaded');
             mainContent = (
                 <List
                     actions={{
@@ -613,18 +638,20 @@ class Inspector extends Component {
                         inspect: this.handle_onItemInspect,
                         select: this.handle_onItemSelect
                     }}
-                    backingCollection={utility.sortBy(this.state.sort, this.state.collection)}
+                    backingCollection={utility.sortBy(this.state.sort, this.state.members)}
                     filters={this.state.filters}
-                    // tab={this.state.current}
+                    tab={{
+                        tags: [],
+                        groups: []
+                    }}
                     page={this.state.page}
                     selected={this.state.selected}/>
             );
         }
-        console.log(this.props.select_collection);
         return (
             <Aux>
                 <h1>{this.props.match.params.id}</h1>
-                {/* <Header
+                <Header
                     actions={{
                         create: this.handle_onItemsCreate,
                         delete: this.handle_onItemsDelete,
@@ -638,7 +665,7 @@ class Inspector extends Component {
                     className={styles.Main}
                     onClick={this.handle_onMainClick}>
                     <div>
-                        <TabBar
+                        {/* <TabBar
                             actions={{
                                 delete: this.handle_onTabDelete,
                                 toggle: this.handle_onTabToggle,
@@ -646,7 +673,7 @@ class Inspector extends Component {
                             page={this.state.page}
                             backingCollection={this.state.tabs}
                             // active={this.state.current.id}
-                            onClick={this.handle_onAsideClose}/>
+                            onClick={this.handle_onAsideClose}/> */}
                         {mainContent}
                         <ActionButton
                             onClick={this.handle_onActionClick}
@@ -665,7 +692,7 @@ class Inspector extends Component {
                     actions={this.state.aside.actions}
                     data={this.state.aside.data}
                     page={this.state.page}
-                    state={this.state.aside.state}/> */}
+                    state={this.state.aside.state}/>
             </Aux>
         )
     }

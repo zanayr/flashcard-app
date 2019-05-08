@@ -135,7 +135,7 @@ class InspectAside extends Component {
                         onConfirm={(tag) => this.handle_onTagCreate('groups', tag)}/>
                     </div>
                     <div>
-                        <BarLink path={'/u/' + this.props.page + '/' + this.state.item.id}>Edit</BarLink>
+                        <BarLink path={'/u/loading'} state={{collection: this.props.page, id: this.state.item.id}}>Edit</BarLink>
                     </div>
                 </div>
             </aside>

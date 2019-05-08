@@ -28,7 +28,7 @@ const tabBar = (props) => {
             tags: []
         });
     }
-    let tabs = utility.sortBy(sortTypes.DATE_ASC, props.backingCollection).map(tab => {
+    let tabs = utility.sortBy(sortTypes.DATE_DSC, props.backingCollection).map(tab => {
         if (tab.collection === props.page) {
             return (
                 <QuickTab
