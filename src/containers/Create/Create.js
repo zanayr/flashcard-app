@@ -40,6 +40,7 @@ class Create extends Component {
         },
         tag: this.props.select_user.tags
     }
+    basicsForm = React.createRef();
     groupForm = React.createRef();
     tagForm = React.createRef();
 
@@ -93,6 +94,9 @@ class Create extends Component {
             }
         }));
     }
+    handle_onCardCreate = () => {
+        this.basicsForm.current.primary.focus();
+    }
 
     render () {
         let notes = (
@@ -101,6 +105,7 @@ class Create extends Component {
                     label: 'Notes',
                     maxLength: 128,
                     placeholder: 'Notes',
+                    tabIndex: 3,
                     value: ''
                 }}
                 key='notes'
@@ -133,14 +138,18 @@ class Create extends Component {
                     <section className={styles.Editor}>
                         <div>
                             <div className={styles.Wrapper}>
-                                <form className={styles.Basics}>
+                                <form
+                                    className={styles.Basics}
+                                    ref={this.basicsForm}>
                                     <div>
                                         <TextField
                                             config={{
                                                 label: 'Front',
                                                 maxLength: 32,
                                                 minLength: 6,
+                                                name: 'primary',
                                                 placeholder: 'Front',
+                                                tabIndex: 1,
                                                 value: ''
                                             }}
                                             key='primary'
@@ -152,6 +161,7 @@ class Create extends Component {
                                                 label: 'Back',
                                                 maxLength: 64,
                                                 placeholder: 'Back',
+                                                tabIndex: 2,
                                                 value: ''
                                             }}
                                             key='secondary'
@@ -167,6 +177,7 @@ class Create extends Component {
                                     pinned={this.state.pinned.tag}
                                     selected={this.state.card.tag}
                                     state={this.state.states.tag}
+                                    tabIndex={4}
                                     onSelect={this.handle_onTagToggle}
                                     onToggle={() => this.handle_onStateToggle('tag')}>
                                 </PinnableTagForm>
@@ -176,10 +187,15 @@ class Create extends Component {
                                     pinned={this.state.pinned.group}
                                     selected={this.state.card.group}
                                     state={this.state.states.group}
+                                    tabIndex={5}
                                     onSelect={this.handle_onTagToggle}
                                     onToggle={() => this.handle_onStateToggle('group')}>
                                 </PinnableTagForm>
-                                <Button onClick={this.handle_onCardCreate}>Create</Button>
+                                <Button
+                                    tabIndex={6}
+                                    onClick={this.handle_onCardCreate}>
+                                    Create
+                                </Button>
                             </div>
                         </div>
                     </section>

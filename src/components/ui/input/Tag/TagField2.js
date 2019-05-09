@@ -20,11 +20,12 @@ class TagField2 extends Component {
                     <input
                         className={styles.Input}
                         maxLength={24}
+                        name='tag'
                         placeholder={this.props.label}
                         required
                         type='text'
+                        tabIndex={this.props.tabIndex || -1}
                         value={this.state.value}
-                        name='tag'
                         onChange={(e) => this.handle_onChange(e.target.value)}/>
                     {this.props.children}
                     <span><p>{24 - this.state.value.length}</p></span>

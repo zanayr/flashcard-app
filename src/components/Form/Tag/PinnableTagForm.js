@@ -38,9 +38,12 @@ const pinnableTagForm = (props) => {
                     })}
                 </div>
             </div>
-            <TagField2 label={'new ' + props.category}>
+            <TagField2
+                label={'new ' + props.category}
+                tabIndex={-1}>
                 <Button
                     className={styles.AddButton}
+                    tabIndex={-1}
                     onClick={handle_onConfirm}>
                     +
                 </Button>
@@ -52,6 +55,7 @@ const pinnableTagForm = (props) => {
         content = (
             <TagEditor
                 label={props.category}
+                tabIndex={props.tabIndex}
                 value={props.pinned.join(', ')}/>
         );
     }
@@ -63,6 +67,7 @@ const pinnableTagForm = (props) => {
         toggle = (
             <Button
                 className={css.join(' ')}
+                tabIndex={-1}
                 onClick={props.onToggle}>T</Button>
         )
     }
