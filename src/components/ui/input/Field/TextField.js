@@ -7,7 +7,6 @@ const textField = (props) => {
     const handle_onChange = (e) => {
         props.onChange(props.target, e.target.value);
     }
-
     let input = (
         <input
                 className={InputCSS.Text_Field}
@@ -16,7 +15,6 @@ const textField = (props) => {
                 {...props.config}/>
     );
     if (props.required) {
-        
         input = (
             <input
                 className={InputCSS.Text_Field}
@@ -29,8 +27,11 @@ const textField = (props) => {
 
     return (
         <div className={InputCSS.Field}>
-            <label>{props.config.label}</label>
-            {input}
+            <div>
+                <label>{props.config.label}</label>
+                {input}
+                <span><p>{props.config.maxLength - props.config.value.length}</p></span>
+            </div>
         </div>
     );
 }

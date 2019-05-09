@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ButtonCSS from './Button.module.css';
+import styles from './Button.module.css';
 
 const button = (props) => {
     const handle_onClicked = (e) => {
@@ -9,26 +9,27 @@ const button = (props) => {
 
         props.onClick();
     }
-    let buttonClass;
+    let css = [];
 
     switch (props.type) {
         case ('submit'):
-            buttonClass = 'Submit';
+            css.push(styles.Submit);
             break;
         case ('round-icon'):
-            buttonClass = 'Round_Icon';
+            css.push(styles.Round);
             break;
         case ('bar'):
-            buttonClass = 'Bar';
+            css.push(styles.Bar);
             break;
         default:
-            buttonClass = 'Button';
+            css.push(styles.Button);
             break;
     }
+    css.push(props.className);
     return (
         <button
             {...props}
-            className={ButtonCSS[buttonClass]}
+            className={css.join(' ')}
             onClick={(e) => handle_onClicked(e)}>
             {props.children}
         </button>

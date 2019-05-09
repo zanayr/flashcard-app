@@ -24,3 +24,11 @@ button:focus {
   outline: none;
   border: none;
 }
+
+input, textarea {
+  border: none;
+}
+input:focus, textarea:focus {
+  outline: none;
+  border: none;
+}

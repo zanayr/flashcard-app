@@ -1,5 +1,44 @@
-.TagForm > div {
+.TagForm2 {
+    height: 43px;
+}
+.TagForm2 > div {
+    height: 100%;
+}
+
+.TagBar {
+    width: 100%;
+}
+.TagBar > div {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    margin-bottom: 4px;
+}
+
+/*  ADD BUTTON  */
+.AddButton {
+    background-color: blue;
+    color: white;
+    height: 16px;
+    margin-left: 8px;
+    width: 16px;
+}
+
+/*  TOOGLE BUTTON  */
+.ToggleButton {
+    background-color: pink;
+    bottom: 0px;
+    display: none;
+    height: 16px;
+    position: absolute;
+    right: 48px;
+    width: 16px;
+}
+.ToggleButton.Second {
+    bottom: auto;
+    right: 24px;
+    top: 0px;
+}
+.TagForm2:hover .ToggleButton {
+    display: block;
 }

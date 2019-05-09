@@ -25,8 +25,12 @@ const textArea = (props) => {
     }
     return (
         <div className={InputCSS.Field}>
-            <label>{props.config.label}</label>
-            {textarea}
+            <div>
+                <label>{props.config.label}</label>
+                {textarea}
+                <span><p>{props.config.maxLength - props.config.value.length}</p></span>
+                {props.children}
+            </div>
         </div>
     );
 }

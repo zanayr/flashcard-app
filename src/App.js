@@ -12,6 +12,7 @@ import Inspector from './containers/Inspector/Inspector';
 import Modal from './components/modal/Modal/Modal';
 import Out from './containers/Out/Out';
 import Interstitial from './containers/Interstitial/Interstitial';
+import Create from './containers/Create/Create';
 
 import AppCSS from './App.module.css';
 
@@ -41,6 +42,7 @@ class App extends Component {
     if (this.props.isAuthenticated) {
       routes = (
         <Switch>
+          <Route path='/u/create' component={Create}/>
           <Route path='/u/loading' component={Interstitial}/>
           <Route path='/u/deck/:id' component={Inspector}/>
           <Route path='/u/:collection' component={Collections}/>
