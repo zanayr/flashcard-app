@@ -6,131 +6,13 @@ import * as select from '../../store/reducers/root';
 import * as utility from '../../utility/utility';
 
 import Aux from '../../hoc/Aux/Aux';
+import CardStack from '../../components/Stack/CardStack';
 import TextField from '../../components/ui/input/Field/TextField';
 import TextArea from '../../components/ui/input/TextArea/TextArea';
 import Button from '../../components/ui/button/Button/Button';
 import PinnableTagForm from '../../components/form/Tag/PinnableTagForm';
 
 import styles from './Create.module.css';
-
-
-// const Tag2 = (props) => {
-//     const handle_onClick = (e) => {
-//         e.stopPropagation();
-//         props.onToggle(props.children);
-//     }
-//     let css = [styles.Tag2];
-//     if (props.pinned) {
-//         css.push(styles.Pinned);
-//     } else if (props.selected) {
-//         css.push(styles.Selected);
-//     }
-    
-//     return (
-//         <span
-//             className={css.join(' ')}
-//             onClick={(e) => handle_onClick(e)}><p>{props.children}</p></span>
-//     );
-// }
-
-// class TagField2 extends Component {
-//     state = {
-//         value: ''
-//     }
-
-//     handle_onChange = (value) => {
-//         this.setState({value: value})
-//     }
-
-//     render () {
-//         return (
-//             <div className={styles.Field}>
-//                 <div>
-//                     <label>{this.props.label}</label>
-//                     <input
-//                         className={styles.Input}
-//                         maxLength={24}
-//                         placeholder={this.props.label}
-//                         required
-//                         type='text'
-//                         value={this.state.value}
-//                         name='tag'
-//                         onChange={(e) => this.handle_onChange(e.target.value)}/>
-//                 </div>
-//             </div>
-//         );
-//     }
-// }
-
-// class TagEditor extends Component {
-//     state = {
-//         value: this.props.value
-//     }
-
-//     handle_onChange = (value) => {
-//         this.setState({value: value});
-//     }
-
-//     render () {
-//         return (
-//             <div className={styles.Field}>
-//                 <div>
-//                     <label>{this.props.label}</label>
-//                     <textarea
-//                         className={styles.Input}
-//                         placeholder={this.props.label}
-//                         value={this.state.value}
-//                         name='editor'
-//                         onChange={(e) => this.handle_onChange(e.target.value)}/>
-//                     {this.props.children}
-//                 </div>
-//             </div>
-//         );
-//     }
-// }
-
-// class TagForm2 extends Component {
-//     // state = {
-//     //     tag: ''
-//     // }
-//     form = React.createRef();
-
-//     handle_onAddClick = () => {
-//         const tag = this.form.current.elements['tag'].value;
-//         if (this.form.current.reportValidity() && !this.props.collection.includes(tag)) {
-//             this.props.onConfirm(tag);
-//         }
-//     }
-
-//     render () {
-//         let tags = this.props.collection.map((tag, i) => {
-//             return (
-//                 <Tag2
-//                     key={utility.createHashId(i)}
-//                     pinned={this.props.pinned.includes(tag)}
-//                     selected={this.props.selected.includes(tag)}
-//                     onToggle={(tag) => this.props.onToggle(this.props.category, tag)}>
-//                     {tag}
-//                 </Tag2>
-//             )
-//         });
-
-//         return (
-//             <Aux>
-//                 {tags}
-//                 <form
-//                     className={styles.TagForm2}
-//                     ref={this.form}>
-//                     <div>
-//                         <TagField2 lablel={'new ' + this.props.category}/>
-//                         <Button onClick={this.handle_onAddClick}>Add</Button>
-//                     </div>
-//                 </form>
-//                 {this.props.children}
-//             </Aux>
-//         );
-//     }
-// }
 
 class Create extends Component {
     state = {
@@ -141,6 +23,11 @@ class Create extends Component {
             secondary: '',
             tag: []
         },
+        cards: [
+            {primary: 'wwwwwwwwwwwwwwwwwwwww amet, cons', secondary: 'wwwwwwwwwwwwwwwwwwwww amet, consectetuer adipiscing elit. Aenean', id: '3lkj43', tags:['foo', 'bar']},
+            {primary: 'hello', secondary: 'world', id: '8df98s', tags:['foo', 'bar']},
+            {primary: 'fizz', secondary: 'buzz', id: 'd8sf7f', tags:['foo', 'bar']}
+        ],
         group: this.props.select_user.groups,
         pinned: {
             group: [],
@@ -197,15 +84,6 @@ class Create extends Component {
     handle_onTagToggle = (category, tag) => {
         this.toggleTag(category, tag);
     }
-    // handle_onTagFormToggle = (category) => {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         states: {
-    //             ...prev.states,
-    //             [category]: !prev.states[category]
-    //         }
-    //     }));
-    // }
     handle_onStateToggle = (state) => {
         this.setState(prev => ({
             ...prev,
@@ -217,70 +95,6 @@ class Create extends Component {
     }
 
     render () {
-        // let tagsField = null;
-        // let groupsField = null;
-        // if (!this.state.group) {
-        //     groupsField = (
-        //         <form
-        //             className={styles.TextArea}
-        //             key='groups'
-        //             ref={this.groupForm}>
-        //             <div>
-        //                 <TagEditor
-        //                     label='Groups'
-        //                     value={this.state.pinned.groups.join(', ')}>
-        //                     <Button onClick={this.handle_onGroupToggle}>T</Button>
-        //                 </TagEditor>
-        //             </div>
-        //         </form>
-        //     );
-        // } else {
-        //     groupsField = (
-        //             <TagForm2
-        //                 category={'groups'}
-        //                 collection={utility.sortByAlpha_asc(this.state.groups)}
-        //                 key={'groups'}
-        //                 pinned={this.state.pinned.groups}
-        //                 selected={this.state.card.groups}
-        //                 state={this.state.groupState}
-        //                 onConfirm={this.handle_onTagCreate}
-        //                 onToggle={this.handle_onTagToggle}>
-        //                 <Button onClick={this.handle_onGroupToggle}>T</Button>
-        //             </TagForm2>
-                
-        //     )
-        // }
-        // if (!this.state.tag) {
-        //     tagsField = (
-        //         <form
-        //             className={styles.TextArea}
-        //             key='tags'
-        //             ref={this.groupForm}>
-        //             <div>
-        //                 <TagEditor
-        //                     label='Tags'
-        //                     value={this.state.pinned.groups.join(', ')}>
-        //                     <Button onClick={this.handle_onTagToggle}>T</Button>
-        //                 </TagEditor>
-        //             </div>
-        //         </form>
-        //     );
-        // } else {
-        //     tagsField = (
-        //             <TagForm2
-        //                 category={'tags'}
-        //                 collection={utility.sortByAlpha_asc(this.state.groups)}
-        //                 key={'tags'}
-        //                 pinned={this.state.pinned.groups}
-        //                 selected={this.state.card.groups}
-        //                 state={this.state.groupState}
-        //                 onConfirm={this.handle_onTagCreate}
-        //                 onToggle={this.handle_onTagToggle}>
-        //                 <Button onClick={this.handle_onTagToggle}>T</Button>
-        //             </TagForm2>
-                
-        //     )
-        // }
         let notes = (
             <TextArea
                 config={{
@@ -371,11 +185,9 @@ class Create extends Component {
                     </section>
                     <section className={styles.Board}>
                         <div>
-                            <article>
-                                <div>
-                                    <h1>This is a card</h1>
-                                </div>
-                            </article>
+                            <div className={styles.Wrapper}>
+                                <CardStack collection={this.state.cards}/>
+                            </div>
                         </div>
                     </section>
                 </div>

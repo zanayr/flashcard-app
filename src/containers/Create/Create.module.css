@@ -12,14 +12,14 @@
 .Editor {
     width: 50%;
 }
-.Editor > div {
+.Creator section > div {
     align-items: center;
     display: flex;
     flex-direction: column;
     height: 100%;
     justify-content: center;
 }
-.Editor > div > .Wrapper {
+.Wrapper {
     background-color: gold;
     height: auto;
     padding: 16px;

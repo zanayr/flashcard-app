@@ -13,22 +13,35 @@ export function cardModel (model) {
     }
 }
 
-export function cardViewModel (id, model) {
-    //  The default values are a result of
-    //  Google's firebase API deleting null values...
+export function displayCardViewModel (model) {
     return {
-        date: model.date || Date.now(),
-        groups: model.groups || [],
-        id: id,
-        memberOf: model.memberOf || [],
+        flagged: false,
+        flipped: false,
+        id: model.id,
         meta: model.meta || {},
-        notes: model.notes || '',
-        owner: model.owner,
         primary: model.primary,
-        secondary: model.secondary || '',
-        tags: model.tags || []
+        secondary: model.secondary,
+        tags: model.tags || [],
+        top: false
     }
 }
+
+// export function cardViewModel (id, model) {
+//     //  The default values are a result of
+//     //  Google's firebase API deleting null values...
+//     return {
+//         date: model.date || Date.now(),
+//         groups: model.groups || [],
+//         id: id,
+//         memberOf: model.memberOf || [],
+//         meta: model.meta || {},
+//         notes: model.notes || '',
+//         owner: model.owner,
+//         primary: model.primary,
+//         secondary: model.secondary || '',
+//         tags: model.tags || []
+//     }
+// }
 export function collectionViewModel (id, model) {
     const tabs = {};
     if (model.tabs) {
