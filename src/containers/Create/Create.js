@@ -68,9 +68,7 @@ class Create extends Component {
                     ...prev.selected,
                     [category]: prev.selected[category].filter(t => t !== tag)
                 }
-            }), () => {
-                console.log('here');
-            });
+            }));
         }
     }
 
@@ -83,7 +81,6 @@ class Create extends Component {
         }));
     }
     handle_onTagToggle = (category, tag) => {
-        console.log(category, tag);
         this.toggleTag(category, tag);
     }
     handle_onStateToggle = (state) => {
@@ -107,7 +104,6 @@ class Create extends Component {
             }
             if (this.state.states.group && this.groupForm.current.tag.value.length) {
                 groups = this.groupForm.current.tag.value.trim().split(', ');
-                console.log(groups);
                 this._checkForNewTags('group', groups);
             } else {
                 groups = this.state.selected.group.filter(group => !this.state.pinned.group.includes(group)).concat(this.state.pinned.group);
@@ -271,7 +267,6 @@ class Create extends Component {
                 </Aux>
             );
         }
-        console.log(this.state);
         return (
             <main className={styles.Creator}>
                 <div>

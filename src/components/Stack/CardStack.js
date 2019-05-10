@@ -11,7 +11,6 @@ import styles from './CardStack.module.css';
 
 const Card = (props) => {
     let css = [styles.Card];
-    console.log(props.data.top);
     let display = (
         <div>
             <p>{props.data.primary}</p>
@@ -42,7 +41,6 @@ const Card = (props) => {
         e.stopPropagation();
         props.onSelect();
     }
-    console.log(props);
     return (
         <article
             className={css.join(' ')}
@@ -127,7 +125,6 @@ class CardStack extends Component {
                 );
             });
         }
-        console.log(cards);
         return (
             <div
                 className={styles.Stack}
