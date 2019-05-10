@@ -130,6 +130,12 @@ class Create extends Component {
             this.basicsForm.current.primary.focus();
         }
     }
+    handle_onCardDelete = (id) => {
+        this.setState(prev => ({
+            ...prev,
+            cards: prev.cards.filter(card => card.id !== id)
+        }));
+    }
 
     render () {
         let notes = (
@@ -238,7 +244,9 @@ class Create extends Component {
                     <section className={styles.Board}>
                         <div>
                             <div className={styles.Wrapper}>
-                                <CardStack collection={this.state.cards}/>
+                                <CardStack
+                                    collection={this.state.cards}
+                                    onDelete={this.handle_onCardDelete}/>
                             </div>
                         </div>
                     </section>

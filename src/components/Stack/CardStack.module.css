@@ -61,9 +61,14 @@
 .ActionButton {
     background-color: blue;
     color: white;
+    display: none;
     height: 16px;
     position: absolute;
     right: 12px;
     top: 12px;
     width: 16px;
+}
+
+.Stack article:hover .ActionButton {
+    display: block;
 }

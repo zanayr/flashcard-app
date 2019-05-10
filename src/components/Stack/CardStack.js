@@ -120,7 +120,7 @@ class CardStack extends Component {
                         onSelect={() => this.handle_onCardSelect(card.id)}>
                         <Button
                             className={styles.ActionButton}
-                            onClick={() => this.handle_onDelete(card.id)}>
+                            onClick={() => this.props.onDelete(card.id)}>
                             x
                         </Button>
                     </Card>
