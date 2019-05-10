@@ -21,7 +21,7 @@ class TagEditor extends Component {
                         className={styles.Input}
                         placeholder={this.props.label}
                         maxLength={128}
-                        name='editor'
+                        name='tag'
                         tabIndex={this.props.tabIndex || -1}
                         value={this.state.value}
                         onChange={(e) => this.handle_onChange(e.target.value)}/>

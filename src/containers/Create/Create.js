@@ -64,11 +64,13 @@ class Create extends Component {
                     ...prev.pinned,
                     [category]: prev.pinned[category].filter(t => t !== tag)
                 },
-                card: {
+                selected: {
                     ...prev.selected,
                     [category]: prev.selected[category].filter(t => t !== tag)
                 }
-            }));
+            }), () => {
+                console.log('here');
+            });
         }
     }
 
@@ -81,6 +83,7 @@ class Create extends Component {
         }));
     }
     handle_onTagToggle = (category, tag) => {
+        console.log(category, tag);
         this.toggleTag(category, tag);
     }
     handle_onStateToggle = (state) => {
@@ -94,11 +97,26 @@ class Create extends Component {
     }
     handle_onCardCreate = () => {
         if (this.basicsForm.current.reportValidity()) {
+            let tags = [];
+            let groups = [];
+            if (this.state.states.tag && this.tagForm.current.tag.value.length) {
+                tags = this.tagForm.current.tag.value.trim().split(', ');
+                this._checkForNewTags('tag', tags);
+            } else {
+                tags = this.state.selected.tag.filter(tag => !this.state.pinned.tag.includes(tag)).concat(this.state.pinned.tag);
+            }
+            if (this.state.states.group && this.groupForm.current.tag.value.length) {
+                groups = this.groupForm.current.tag.value.trim().split(', ');
+                console.log(groups);
+                this._checkForNewTags('group', groups);
+            } else {
+                groups = this.state.selected.group.filter(group => !this.state.pinned.group.includes(group)).concat(this.state.pinned.group);
+            }
             const card = create.displayCardViewModel({
                 id: utility.createHashId(0),
                 primary: this.basicsForm.current.primary.value,
                 secondary: this.basicsForm.current.secondary.value,
-                tag: this.state.selected.tag.filter(tag => !this.state.pinned.tag.includes(tag)).concat(this.state.pinned.tag)
+                tag: tags
             });
             const cards = this.state.cards.map(c => {
                 c.flipped = false;
@@ -135,6 +153,24 @@ class Create extends Component {
             ...prev,
             cards: prev.cards.filter(card => card.id !== id)
         }));
+    }
+    setTags (category, tags) {
+        this.setState(prev => ({
+            ...prev,
+            [category]: tags
+        }));
+    }
+    _checkForNewTags (category, tags) {
+        const newTags = tags.filter(tag => !this.state[category].includes(tag));
+        let allTags;
+        if (newTags.length) {
+            allTags = this.state[category].concat(newTags);
+            this.setTags(category, allTags);
+            //this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
+        }
+    }
+    handle_onTagAdd = (category, tag) => {
+        this._checkForNewTags(category, tag);
     }
 
     render () {
@@ -210,6 +246,8 @@ class Create extends Component {
                         selected={this.state.selected.tag}
                         state={this.state.states.tag}
                         tabIndex={4}
+                        reference={this.tagForm}
+                        onConfirm={(tag) => this.handle_onTagAdd('tag', tag)}
                         onSelect={this.handle_onTagToggle}
                         onToggle={() => this.handle_onStateToggle('tag')}>
                     </PinnableTagForm>
@@ -220,6 +258,8 @@ class Create extends Component {
                         selected={this.state.selected.group}
                         state={this.state.states.group}
                         tabIndex={5}
+                        reference={this.groupForm}
+                        onConfirm={(tag) => this.handle_onTagAdd('group', tag)}
                         onSelect={this.handle_onTagToggle}
                         onToggle={() => this.handle_onStateToggle('group')}>
                     </PinnableTagForm>
@@ -231,6 +271,7 @@ class Create extends Component {
                 </Aux>
             );
         }
+        console.log(this.state);
         return (
             <main className={styles.Creator}>
                 <div>

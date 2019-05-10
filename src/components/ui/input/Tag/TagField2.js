@@ -9,7 +9,8 @@ class TagField2 extends Component {
     }
 
     handle_onChange = (value) => {
-        this.setState({value: value})
+        this.setState({value: value});
+        this.props.onChange(value);
     }
 
     render () {
@@ -25,7 +26,7 @@ class TagField2 extends Component {
                         required
                         type='text'
                         tabIndex={this.props.tabIndex || -1}
-                        value={this.state.value}
+                        value={this.props.value}
                         onChange={(e) => this.handle_onChange(e.target.value)}/>
                     {this.props.children}
                     <span><p>{24 - this.state.value.length}</p></span>

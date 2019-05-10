@@ -11,79 +11,89 @@ import Button from '../../ui/button/Button/Button';
 import styles from './TagForm.module.css';
 
 
-const pinnableTagForm = (props) => {
-    const form = React.createRef;
-    
-    const handle_onConfirm = () => {
-        const tag = form.current.tag.value;
-        if (form.current.reportValidity() && !props.collection.includes(tag)) {
-            props.onConfirm(tag);
+class PinnableTagForm extends Component {
+    state = {
+        value: ''
+    }
+
+    handle_onChange = (value) => {
+        this.setState({value: value});
+    }
+    handle_onConfirm = () => {
+        const tag = this.props.reference.current.tag.value;
+        if (this.props.reference.current.reportValidity() && !this.props.collection.includes(tag)) {
+            this.setState({value: ''});
+            this.props.onConfirm([tag]);
         }
     }
-    
-    let content = (
-        <Aux>
-            <div className={styles.TagBar}>
-                <div>
-                    {props.collection.map((tag, i) => {
-                        return (
-                            <Tag2
-                                key={utility.createHashId(i)}
-                                pinned={props.pinned.includes(tag)}
-                                selected={props.selected.includes(tag)}
-                                onToggle={(tag) => props.onSelect(props.category, tag)}>
-                                {tag}
-                            </Tag2>
-                        )
-                    })}
+
+    render () {
+        let content = (
+            <Aux>
+                <div className={styles.TagBar}>
+                    <div>
+                        {this.props.collection.map((tag, i) => {
+                            return (
+                                <Tag2
+                                    key={utility.createHashId(i)}
+                                    pinned={this.props.pinned.includes(tag)}
+                                    selected={this.props.selected.includes(tag)}
+                                    onToggle={(tag) => this.props.onSelect(this.props.category, tag)}>
+                                    {tag}
+                                </Tag2>
+                            )
+                        })}
+                    </div>
                 </div>
-            </div>
-            <TagField2
-                label={'new ' + props.category}
-                tabIndex={-1}>
-                <Button
-                    className={styles.AddButton}
+                <TagField2
+                    label={'new ' + this.props.category}
                     tabIndex={-1}
-                    onClick={handle_onConfirm}>
-                    +
-                </Button>
-            </TagField2>
-        </Aux>
-    )
-    let toggle = null;
-    if (props.state) {
-        content = (
-            <TagEditor
-                label={props.category}
-                tabIndex={props.tabIndex}
-                value={props.pinned.join(', ')}/>
+                    value={this.state.value}
+                    onChange={this.handle_onChange}>
+                    <Button
+                        className={styles.AddButton}
+                        tabIndex={-1}
+                        onClick={this.handle_onConfirm}>
+                        +
+                    </Button>
+                </TagField2>
+            </Aux>
+        )
+        let toggle = null;
+        if (this.props.state) {
+            content = (
+                <TagEditor
+                    label={this.props.category}
+                    tabIndex={this.props.tabIndex}
+                    value={this.props.pinned.join(', ')}/>
+            );
+        }
+        if (this.props.onToggle) {
+            let css = [styles.ToggleButton];
+            if (this.props.state) {
+                css.push(styles.Second);
+            }
+            toggle = (
+                <Button
+                    className={css.join(' ')}
+                    tabIndex={-1}
+                    onClick={this.props.onToggle}>T</Button>
+            )
+        }
+        return (
+            <Aux>
+                <form
+                    className={styles.TagForm2}
+                    ref={this.props.reference}>
+                    <div>
+                        {content}
+                        {toggle}
+                    </div>
+                </form>
+            </Aux>
         );
     }
-    if (props.onToggle) {
-        let css = [styles.ToggleButton];
-        if (props.state) {
-            css.push(styles.Second);
-        }
-        toggle = (
-            <Button
-                className={css.join(' ')}
-                tabIndex={-1}
-                onClick={props.onToggle}>T</Button>
-        )
-    }
-    return (
-        <Aux>
-            <form
-                className={styles.TagForm2}
-                ref={form}>
-                <div>
-                    {content}
-                    {toggle}
-                </div>
-            </form>
-        </Aux>
-    );
 }
 
 
-export default pinnableTagForm;
+export default PinnableTagForm;
