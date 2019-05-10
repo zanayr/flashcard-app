@@ -14,7 +14,6 @@ const Card = (props) => {
     let display = (
         <div>
             <p>{props.data.primary}</p>
-            {props.data.top ? props.children : null}
         </div>
     );
     if (props.data.flipped) {
@@ -30,10 +29,10 @@ const Card = (props) => {
             </div>
         );
     }
-    if (props.position && !props.data.top) {
+    if (props.position && !props.data.selected) {
         css.push(styles.Under);
     }
-    if (props.position && props.data.top) {
+    if (props.position && props.data.selected) {
         css.push(styles.Pulled);
     }
 
@@ -41,12 +40,13 @@ const Card = (props) => {
         e.stopPropagation();
         props.onSelect();
     }
+
     return (
         <article
             className={css.join(' ')}
             style={{
                 bottom: props.position * 24,
-                zIndex: props.zIndex}}
+                zIndex: props.data.zIndex}}
             onClick={handle_onClick}>
             {display}
         </article>
@@ -56,79 +56,94 @@ const Card = (props) => {
 class CardStack extends Component {
     state = {
         cards: [],
-        mode: 1,
-        zStack: []
+        max: 4,
+        mode: 1
+    }
+
+    _flipCard (card) {
+        this.setState(prev => ({
+            ...prev,
+            cards: prev.cards.map(c => {
+                if (c.id === card.id) {
+                    c.flipped = !c.flipped;
+                } else {
+                    c.flipped = false;
+                }
+                return c;
+            })
+        }));
+    }
+    _selectCard (card) {
+        this.setState(prev => ({
+            ...prev,
+            cards: prev.cards.map((c, i) => {
+                if (c.id === card.id) {
+                    c.selected = true;
+                } else {
+                    c.selected = false;
+                }
+                return c;
+            })
+        }));
+    }
+
+    handle_onCardSelect = (card) => {
+        if (!card.selected) {
+            this._selectCard(card);
+            if (card.top) {
+                this._flipCard(card);
+            }
+        } else if (card.selected) {
+            this._flipCard(card);
+        }
     }
 
     static getDerivedStateFromProps (nextProps, prevState) {
         if (nextProps.collection.length !== prevState.cards.length) {
+            const cards = nextProps.collection.map(card => {
+                return create.displayCardViewModel(card);
+            }).reverse();
+            cards[0].top = true;
             return {
-                cards: nextProps.collection,
-                zStack: nextProps.collection.map(card => {return card.id}).reverse()
+                cards: cards
             };
         }
         return null;
     }
 
-    handle_onCardSelect = (id) => {
-        if (this.state.zStack.indexOf(id) === this.state.zStack.length - 1) {
-            if (this.state.mode) {
-                this.setState(prev => ({
-                    ...prev,
-                    cards: prev.cards.map(card => {
-                        if (card.id === id) {
-                            card.flipped = !card.flipped;
-                        }
-                        return card;
-                    })
-                }));
-            }
-        } else {
-            let zStack = this.state.zStack.filter(i => i !== id);
-            zStack.push(id);
-            this.setState(prev => ({
-                ...prev,
-                zStack: zStack
-            }));
-            this.setState(prev => ({
-                ...prev,
-                cards: prev.cards.map(card => {
-                    if (card.id === id) {
-                        card.top = true;
-                    } else {
-                        card.top = false;
-                    }
-                    card.flipped = false;
-                    return card
-                })
-            }));
-        }
-    }
-
     render () {
-        let cards = null;
-        if (this.state.cards.length) {
-            cards = this.state.cards.map((card, i) => {
-                return (
+        const cards = [];
+        let count = 0;
+        for (count; count < this.state.cards.length; count++) {
+            const card = this.state.cards[count];
+            if (card.selected) {
+                card.zIndex = this.state.max;
+            } else {
+                card.zIndex = this.state.max - (count + 1);
+            }
+            if (count < this.state.max) {
+                cards.push((
                     <Card
                         data={card}
                         key={card.id}
-                        position={i}
-                        zIndex={this.state.zStack.indexOf(card.id)}
-                        onSelect={() => this.handle_onCardSelect(card.id)}>
+                        position={count}
+                        onSelect={() => this.handle_onCardSelect(card)}>
                         <Button
                             className={styles.ActionButton}
-                            onClick={() => this.props.onDelete(card.id)}>
+                            onClick={() => this.onAction(card)}>
                             x
                         </Button>
                     </Card>
-                );
-            });
+                ));
+            } else {
+                break;
+            }
         }
+
         return (
             <div
                 className={styles.Stack}
-                style={{height: 168 + (this.props.collection.length * 24)}}>
+                style={{height: 168 + (count * 24)}}>
                 {cards}
             </div>
         );

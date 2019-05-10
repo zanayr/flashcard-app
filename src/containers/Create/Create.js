@@ -40,7 +40,7 @@ class Create extends Component {
     groupForm = React.createRef();
     tagForm = React.createRef();
 
-    toggleTag (category, tag) {
+    _toggleTag (category, tag) {
         if (!this.state.selected[category].includes(tag)) {
             this.setState(prev => ({
                 ...prev,
@@ -71,6 +71,22 @@ class Create extends Component {
             }));
         }
     }
+    _setTags (category, tags) {
+        this.setState(prev => ({
+            ...prev,
+            [category]: tags
+        }));
+    }
+
+    _checkForNewTags (category, tags) {
+        const newTags = tags.filter(tag => !this.state[category].includes(tag));
+        let allTags;
+        if (newTags.length) {
+            allTags = this.state[category].concat(newTags);
+            this._setTags(category, allTags);
+            //this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
+        }
+    }
 
    
 
@@ -81,7 +97,7 @@ class Create extends Component {
         }));
     }
     handle_onTagToggle = (category, tag) => {
-        this.toggleTag(category, tag);
+        this._toggleTag(category, tag);
     }
     handle_onStateToggle = (state) => {
         this.setState(prev => ({
@@ -92,6 +108,8 @@ class Create extends Component {
             }
         }));
     }
+    
+
     handle_onCardCreate = () => {
         if (this.basicsForm.current.reportValidity()) {
             let tags = [];
@@ -108,26 +126,33 @@ class Create extends Component {
             } else {
                 groups = this.state.selected.group.filter(group => !this.state.pinned.group.includes(group)).concat(this.state.pinned.group);
             }
-            const card = create.displayCardViewModel({
-                id: utility.createHashId(0),
+            const CARD = create.cardViewModel(utility.createHashId(0), {
+                owner: this.props.select_user.id,
                 primary: this.basicsForm.current.primary.value,
                 secondary: this.basicsForm.current.secondary.value,
                 tag: tags
             });
-            const cards = this.state.cards.map(c => {
-                c.flipped = false;
-                c.top = false;
-                return c
-            });
-            card.top = true;
-            cards.unshift(card);
+
+
+            //  <-- Add to db here
+
+
+            // const cards = this.state.cards.map(c => {
+            //     c.flipped = false;
+            //     c.top = false;
+            //     return c
+            // });
+            // card.top = true;
+            // cards.unshift(card);
+
+
             this.setState(prev => ({
                 ...prev,
                 isReloading: true
             }));
             this.setState(prev => ({
                 ...prev,
-                cards: cards
+                cards: prev.cards.concat(CARD)
             }), () => {
                 this.setState(prev => ({
                     ...prev,
@@ -144,27 +169,13 @@ class Create extends Component {
             this.basicsForm.current.primary.focus();
         }
     }
-    handle_onCardDelete = (id) => {
+    handle_onCardDelete = (card) => {
         this.setState(prev => ({
             ...prev,
-            cards: prev.cards.filter(card => card.id !== id)
+            cards: prev.cards.filter(c => c.id !== card.id)
         }));
     }
-    setTags (category, tags) {
-        this.setState(prev => ({
-            ...prev,
-            [category]: tags
-        }));
-    }
-    _checkForNewTags (category, tags) {
-        const newTags = tags.filter(tag => !this.state[category].includes(tag));
-        let allTags;
-        if (newTags.length) {
-            allTags = this.state[category].concat(newTags);
-            this.setTags(category, allTags);
-            //this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
-        }
-    }
+   
     handle_onTagAdd = (category, tag) => {
         this._checkForNewTags(category, tag);
     }

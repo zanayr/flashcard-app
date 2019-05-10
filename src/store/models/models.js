@@ -17,12 +17,14 @@ export function displayCardViewModel (model) {
     return {
         flagged: false,
         flipped: false,
+        selected: false,
         id: model.id,
         meta: model.meta || {},
         primary: model.primary,
         secondary: model.secondary,
         tag: model.tag || [],
-        top: false
+        top: model.top || false,
+        zIndex: model.zIndex || 0
     }
 }
 
