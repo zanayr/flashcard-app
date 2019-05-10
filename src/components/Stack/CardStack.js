@@ -4,17 +4,18 @@ import * as create from '../../store/models/models';
 import * as utility from '../../utility/utility';
 
 import DisplayTag from '../ui/Tag/DisplayTag';
+import Button from '../ui/button/Button/Button';
 
 import styles from './CardStack.module.css';
 
 
 const Card = (props) => {
     let css = [styles.Card];
-    console.log(props.data.primary);
+    console.log(props.data.top);
     let display = (
         <div>
             <p>{props.data.primary}</p>
-            {props.children}
+            {props.data.top ? props.children : null}
         </div>
     );
     if (props.data.flipped) {
@@ -116,7 +117,13 @@ class CardStack extends Component {
                         key={card.id}
                         position={i}
                         zIndex={this.state.zStack.indexOf(card.id)}
-                        onSelect={() => this.handle_onCardSelect(card.id)}/>
+                        onSelect={() => this.handle_onCardSelect(card.id)}>
+                        <Button
+                            className={styles.ActionButton}
+                            onClick={() => this.handle_onDelete(card.id)}>
+                            x
+                        </Button>
+                    </Card>
                 );
             });
         }

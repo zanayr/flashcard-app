@@ -105,6 +105,7 @@ class Create extends Component {
                 c.top = false;
                 return c
             });
+            card.top = true;
             cards.unshift(card);
             this.setState(prev => ({
                 ...prev,
