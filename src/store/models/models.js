@@ -21,27 +21,29 @@ export function displayCardViewModel (model) {
         meta: model.meta || {},
         primary: model.primary,
         secondary: model.secondary,
-        tags: model.tags || [],
+        tag: model.tag || [],
         top: false
     }
 }
 
-// export function cardViewModel (id, model) {
-//     //  The default values are a result of
-//     //  Google's firebase API deleting null values...
-//     return {
-//         date: model.date || Date.now(),
-//         groups: model.groups || [],
-//         id: id,
-//         memberOf: model.memberOf || [],
-//         meta: model.meta || {},
-//         notes: model.notes || '',
-//         owner: model.owner,
-//         primary: model.primary,
-//         secondary: model.secondary || '',
-//         tags: model.tags || []
-//     }
-// }
+export function cardViewModel (id, model) {
+    //  The default values are a result of
+    //  Google's firebase API deleting null values...
+    return {
+        date: model.date || Date.now(),
+        group: model.group || [],
+        groups: model.groups || [],
+        id: id,
+        memberOf: model.memberOf || [],
+        meta: model.meta || {},
+        notes: model.notes || '',
+        owner: model.owner,
+        primary: model.primary,
+        secondary: model.secondary,
+        tag: model.tag || [],
+        tags: model.tags || []
+    }
+}
 export function collectionViewModel (id, model) {
     const tabs = {};
     if (model.tabs) {

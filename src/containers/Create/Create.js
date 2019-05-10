@@ -2,13 +2,15 @@ import React, {Component, PureComponent} from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
+import * as create from '../../store/models/models';
 import * as select from '../../store/reducers/root';
 import * as utility from '../../utility/utility';
 
 import Aux from '../../hoc/Aux/Aux';
+import Throbber from '../../components/ui/Throbber/Throbber';
 import CardStack from '../../components/Stack/CardStack';
-import TextField from '../../components/ui/input/Field/TextField';
-import TextArea from '../../components/ui/input/TextArea/TextArea';
+import TextField2 from '../../components/ui/input/Field/TextField2';
+import Textarea2 from '../../components/ui/input/TextArea/Textarea2';
 import Button from '../../components/ui/button/Button/Button';
 import PinnableTagForm from '../../components/form/Tag/PinnableTagForm';
 
@@ -16,20 +18,14 @@ import styles from './Create.module.css';
 
 class Create extends Component {
     state = {
-        card: {
+        cards: [],
+        group: this.props.select_user.groups,
+        isReloading: false,
+        pinned: {
             group: [],
-            notes: '',
-            primary: '',
-            secondary: '',
             tag: []
         },
-        cards: [
-            {primary: 'wwwwwwwwwwwwwwwwwwwww amet, cons', secondary: 'wwwwwwwwwwwwwwwwwwwww amet, consectetuer adipiscing elit. Aenean', id: '3lkj43', tags:['foo', 'bar']},
-            {primary: 'hello', secondary: 'world', id: '8df98s', tags:['foo', 'bar']},
-            {primary: 'fizz', secondary: 'buzz', id: 'd8sf7f', tags:['foo', 'bar']}
-        ],
-        group: this.props.select_user.groups,
-        pinned: {
+        selected: {
             group: [],
             tag: []
         },
@@ -45,12 +41,12 @@ class Create extends Component {
     tagForm = React.createRef();
 
     toggleTag (category, tag) {
-        if (!this.state.card[category].includes(tag)) {
+        if (!this.state.selected[category].includes(tag)) {
             this.setState(prev => ({
                 ...prev,
-                card: {
-                    ...prev.card,
-                    [category]: prev.card[category].concat(tag)
+                selected: {
+                    ...prev.selected,
+                    [category]: prev.selected[category].concat(tag)
                 }
             }));
         } else if (!this.state.pinned[category].includes(tag)) {
@@ -69,12 +65,14 @@ class Create extends Component {
                     [category]: prev.pinned[category].filter(t => t !== tag)
                 },
                 card: {
-                    ...prev.card,
-                    [category]: prev.card[category].filter(t => t !== tag)
+                    ...prev.selected,
+                    [category]: prev.selected[category].filter(t => t !== tag)
                 }
             }));
         }
     }
+
+   
 
     handle_onTagCreate = (category, tag) => {
         this.setState(prev => ({
@@ -95,26 +93,59 @@ class Create extends Component {
         }));
     }
     handle_onCardCreate = () => {
-        this.basicsForm.current.primary.focus();
+        if (this.basicsForm.current.reportValidity()) {
+            const card = create.displayCardViewModel({
+                id: utility.createHashId(0),
+                primary: this.basicsForm.current.primary.value,
+                secondary: this.basicsForm.current.secondary.value,
+                tag: this.state.selected.tag.filter(tag => !this.state.pinned.tag.includes(tag)).concat(this.state.pinned.tag)
+            });
+            const cards = this.state.cards.map(c => {
+                c.flipped = false;
+                c.top = false;
+                return c
+            });
+            cards.unshift(card);
+            this.setState(prev => ({
+                ...prev,
+                isReloading: true
+            }));
+            this.setState(prev => ({
+                ...prev,
+                cards: cards
+            }), () => {
+                this.setState(prev => ({
+                    ...prev,
+                    isReloading: false
+                }));
+            });
+            this.setState(prev => ({
+                ...prev,
+                selected: {
+                    group: [],
+                    tag: []
+                }
+            }));
+            this.basicsForm.current.primary.focus();
+        }
     }
 
     render () {
         let notes = (
-            <TextArea
+            <Textarea2
                 config={{
+                    autoComplete: 'off',
                     label: 'Notes',
                     maxLength: 128,
-                    placeholder: 'Notes',
-                    tabIndex: 3,
-                    value: ''
+                    name: 'notes',
+                    tabIndex: 3
                 }}
                 key='notes'
-                onChange={this.handle_onChange}
-                target='notes'>
+                value={''}>
                 <Button
                     className={styles.ToggleButton}
                     onClick={() => this.handle_onStateToggle('note')}>T</Button>
-            </TextArea>
+            </Textarea2>
         );
         if (!this.state.states.note) {
             let notesCss = [styles.ToggleButton];
@@ -132,70 +163,74 @@ class Create extends Component {
                 </div>
             );
         }
+        let form = (<Throbber/>)
+        if (!this.state.isReloading) {
+            form = (
+                <Aux>
+                    <form
+                        className={styles.Basics}
+                        ref={this.basicsForm}>
+                        <div>
+                            <TextField2
+                                config={{
+                                    autoComplete: 'off',
+                                    label: 'Front',
+                                    maxLength: 32,
+                                    name: 'primary',
+                                    tabIndex: 1,
+                                }}
+                                key='primary'
+                                required
+                                value={''}/>
+                            <TextField2
+                                config={{
+                                    autoComplete: 'off',
+                                    label: 'Back',
+                                    maxLength: 64,
+                                    name: 'secondary',
+                                    tabIndex: 2
+                                }}
+                                key='secondary'
+                                required
+                                value={''}/>
+                            {notes}
+                        </div>
+                    </form>
+                    <PinnableTagForm
+                        category='tag'
+                        collection={this.state.tag}
+                        pinned={this.state.pinned.tag}
+                        selected={this.state.selected.tag}
+                        state={this.state.states.tag}
+                        tabIndex={4}
+                        onSelect={this.handle_onTagToggle}
+                        onToggle={() => this.handle_onStateToggle('tag')}>
+                    </PinnableTagForm>
+                    <PinnableTagForm
+                        category='group'
+                        collection={this.state.group}
+                        pinned={this.state.pinned.group}
+                        selected={this.state.selected.group}
+                        state={this.state.states.group}
+                        tabIndex={5}
+                        onSelect={this.handle_onTagToggle}
+                        onToggle={() => this.handle_onStateToggle('group')}>
+                    </PinnableTagForm>
+                    <Button
+                        tabIndex={6}
+                        onClick={this.handle_onCardCreate}>
+                        Create
+                    </Button>
+                </Aux>
+            );
+        }
         return (
             <main className={styles.Creator}>
                 <div>
                     <section className={styles.Editor}>
                         <div>
                             <div className={styles.Wrapper}>
-                                <form
-                                    className={styles.Basics}
-                                    ref={this.basicsForm}>
-                                    <div>
-                                        <TextField
-                                            config={{
-                                                label: 'Front',
-                                                maxLength: 32,
-                                                minLength: 6,
-                                                name: 'primary',
-                                                placeholder: 'Front',
-                                                tabIndex: 1,
-                                                value: ''
-                                            }}
-                                            key='primary'
-                                            onChange={this.handle_onChange}
-                                            required
-                                            target='primary'/>
-                                        <TextField
-                                            config={{
-                                                label: 'Back',
-                                                maxLength: 64,
-                                                placeholder: 'Back',
-                                                tabIndex: 2,
-                                                value: ''
-                                            }}
-                                            key='secondary'
-                                            onChange={this.handle_onChange}
-                                            required
-                                            target='secondary'/>
-                                        {notes}
-                                    </div>
-                                </form>
-                                <PinnableTagForm
-                                    category='tag'
-                                    collection={this.state.tag}
-                                    pinned={this.state.pinned.tag}
-                                    selected={this.state.card.tag}
-                                    state={this.state.states.tag}
-                                    tabIndex={4}
-                                    onSelect={this.handle_onTagToggle}
-                                    onToggle={() => this.handle_onStateToggle('tag')}>
-                                </PinnableTagForm>
-                                <PinnableTagForm
-                                    category='group'
-                                    collection={this.state.group}
-                                    pinned={this.state.pinned.group}
-                                    selected={this.state.card.group}
-                                    state={this.state.states.group}
-                                    tabIndex={5}
-                                    onSelect={this.handle_onTagToggle}
-                                    onToggle={() => this.handle_onStateToggle('group')}>
-                                </PinnableTagForm>
-                                <Button
-                                    tabIndex={6}
-                                    onClick={this.handle_onCardCreate}>
-                                    Create
-                                </Button>
+                                {form}
                             </div>
                         </div>
                     </section>

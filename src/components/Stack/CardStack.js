@@ -10,6 +10,7 @@ import styles from './CardStack.module.css';
 
 const Card = (props) => {
     let css = [styles.Card];
+    console.log(props.data.primary);
     let display = (
         <div>
             <p>{props.data.primary}</p>
@@ -23,7 +24,7 @@ const Card = (props) => {
                 {props.children}
                 <div className={styles.TagList}>
                     <div>
-                        <p>{props.data.tags.join(', ')}</p>
+                        <p>{props.data.tag.join(', ')}</p>
                     </div>
                 </div>
             </div>
@@ -40,7 +41,7 @@ const Card = (props) => {
         e.stopPropagation();
         props.onSelect();
     }
-
+    console.log(props);
     return (
         <article
             className={css.join(' ')}
@@ -55,15 +56,19 @@ const Card = (props) => {
 
 class CardStack extends Component {
     state = {
-        cards: this.props.collection.map((card, i) => {
-            let model = create.displayCardViewModel(card);
-            if (!i) {
-                model.top = true;
-            }
-            return model;
-        }),
+        cards: [],
         mode: 1,
-        zStack: this.props.collection.map(card => {return card.id}).reverse()
+        zStack: []
+    }
+
+    static getDerivedStateFromProps (nextProps, prevState) {
+        if (nextProps.collection.length !== prevState.cards.length) {
+            return {
+                cards: nextProps.collection,
+                zStack: nextProps.collection.map(card => {return card.id}).reverse()
+            };
+        }
+        return null;
     }
 
     handle_onCardSelect = (id) => {
@@ -113,8 +118,9 @@ class CardStack extends Component {
                         zIndex={this.state.zStack.indexOf(card.id)}
                         onSelect={() => this.handle_onCardSelect(card.id)}/>
                 );
-            })
+            });
         }
+        console.log(cards);
         return (
             <div
                 className={styles.Stack}
