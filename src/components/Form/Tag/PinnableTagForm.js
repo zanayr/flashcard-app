@@ -17,7 +17,7 @@ import styles from './TagForm.module.css';
 
 class PinnableTagForm extends Component {
     state = {
-        value: this.props.pinned.join(', ')
+        value: ''
     }
 
     _resetValue () {

@@ -131,7 +131,6 @@ export const getAllItems_async = (url, token, user) => {
 
 //  Patch  ------------------------------------------------------------  Patch Async //
 export const patchItem_async = (url, token, data) => {
-    console.log(url, token, data);
     return dispatch => {
         axios.patch('/' + url + '/' + data.id + '.json?auth=' + token, data.item)
         .then(response => {

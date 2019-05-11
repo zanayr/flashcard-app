@@ -9,6 +9,7 @@ const tagField2 = (props) => {
             <div>
                 <label>{props.label}</label>
                 <input
+                    autoComplete={'off'}
                     className={styles.Input}
                     maxLength={24}
                     name='tag'

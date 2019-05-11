@@ -22,6 +22,7 @@ class TagEditor extends Component {
                 <div>
                     <label>{this.props.label}</label>
                     <textarea
+                        autoComplete={'off'}
                         className={styles.Input}
                         placeholder={this.props.label}
                         maxLength={128}
