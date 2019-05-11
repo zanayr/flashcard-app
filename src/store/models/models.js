@@ -1,53 +1,88 @@
-//  Cards  //
-export function cardModel (model) {
+
+//  MODELS  ---------------------------------------------------------------  MODELS  //
+//  Card  -------------------------------------------------------------  Card Model  //
+export function cardModel (card) {
     return {
-        group: model.group,
-        date: model.date,
-        groups: model.groups,
-        memberOf: model.memberOf,
-        meta: model.meta,
-        notes: model.notes,
-        owner: model.owner,
-        primary: model.primary,
-        secondary: model.secondary,
-        tag: model.tag,
-        tags: model.tags
+        group: card.group,
+        date: card.date,
+        meta: card.meta,
+        notes: card.notes,
+        owner: card.owner,
+        primary: card.primary,
+        secondary: card.secondary,
+        tag: card.tag,
     }
 }
 
-export function displayCardViewModel (model) {
+//  Deck  -------------------------------------------------------------  Deck Model  //
+export function deckModel (deck) {
+    return {
+        group: deck.group,
+        date: deck.date,
+        members: deck.members,
+        meta: deck.meta,
+        notes: deck.notes,
+        owner: deck.owner,
+        primary: deck.primary,
+        secondary: deck.secondary,
+        tag: deck.tag,
+    }
+}
+
+
+//  VIEW MODELS  ------------------------------------------------------------  V.M.  //
+//  Card View Model  ---------------------------------------------------  Card V.M.  //
+export function cardViewModel (id, card) {
+    return {
+        date: card.date || Date.now(),
+        group: card.group || [],
+        id: id,
+        meta: card.meta || {},
+        notes: card.notes || '',
+        owner: card.owner,
+        primary: card.primary,
+        secondary: card.secondary,
+        tag: card.tag || [],
+    }
+}
+
+//  Deck View Model  ---------------------------------------------------  Deck V.M.  //
+export function deckViewModel (id, deck) {
+    return {
+        date: deck.date || Date.now(),
+        group: deck.group || [],
+        groups: deck.groups || [],
+        id: id,
+        memberOf: deck.memberOf || [],
+        meta: deck.meta || {},
+        notes: deck.notes || '',
+        owner: deck.owner,
+        primary: deck.primary,
+        secondary: deck.secondary,
+        tag: deck.tag || [],
+        tags: deck.tags || []
+    }
+}
+
+//  Flashcard View Model  ------------------------------------------  Flashcard V.M.  //
+export function flashcardViewModel (card) {
     return {
         flagged: false,
         flipped: false,
         selected: false,
-        id: model.id,
-        meta: model.meta || {},
-        primary: model.primary,
-        secondary: model.secondary,
-        tag: model.tag || [],
-        top: model.top || false,
-        zIndex: model.zIndex || 0
+        id: card.id,
+        meta: card.meta || {},
+        primary: card.primary,
+        secondary: card.secondary,
+        tag: card.tag || [],
+        zIndex: card.zIndex || 0
     }
 }
 
-export function cardViewModel (id, model) {
-    //  The default values are a result of
-    //  Google's firebase API deleting null values...
-    return {
-        date: model.date || Date.now(),
-        group: model.group || [],
-        groups: model.groups || [],
-        id: id,
-        memberOf: model.memberOf || [],
-        meta: model.meta || {},
-        notes: model.notes || '',
-        owner: model.owner,
-        primary: model.primary,
-        secondary: model.secondary,
-        tag: model.tag || [],
-        tags: model.tags || []
-    }
-}
+
+
+
+
 export function collectionViewModel (id, model) {
     const tabs = {};
     if (model.tabs) {
