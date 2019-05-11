@@ -201,7 +201,6 @@ class Inspector extends Component {
     }
     toggleAside (state) {
         if (this.state.aside.state) {
-            console.log(state, this.state.aside.state, this.state.aside.isActive);
             if (state !== this.state.aside.state && this.state.aside.isActive) {
                 this.setState(prev => ({
                     ...prev,
@@ -666,7 +665,6 @@ class Inspector extends Component {
                     selected={this.state.selected}/>
             );
         }
-        console.log(this.state);
         return (
             <Aux>
                 <h1>{this.props.match.params.id}</h1>

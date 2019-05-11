@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
-import * as create from '../../store/models/models';
 import * as select from '../../store/reducers/root';
 
 import CreateForm from '../../components/form/Create/CreateForm';
@@ -12,10 +11,11 @@ import styles from './Create.module.css';
 
 class Create extends Component {
     state = {
-        cards: [],
-        deck: this.props.location.state.id ? this.props.select_deck : undefined
+        cards: []
     }
 
+    //  STATE SETTERS  ---------------------------------------------------  SETTERS  //
+    //  Cards  --------------------------------------------------------------  Cards //
     _addCard (card) {
         this.setState(prev => ({
             ...prev,
@@ -37,6 +37,8 @@ class Create extends Component {
         }
     }
 
+    //  EVENT HANDLERS  -----------------------------------------------------  E.H.  //
+    //  Cards  --------------------------------------------------------------  Cards //
     handle_onCardCreate = (card) => {
         this._addCard(card);
         this.props.addCard_async(this.props.select_token, card);
@@ -52,6 +54,7 @@ class Create extends Component {
         this._removeCard(card);
     }
 
+    //  RENDER METHOD  ----------------------------------------------------  RENDER  //
     render () {
         return (
             <main className={styles.Creator}>
@@ -85,15 +88,13 @@ class Create extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         select_deck: select.deck(state, ownProps.location.state.id),
-        select_token: select.authToken(state),
-        select_user: select.user(state)
+        select_token: select.authToken(state)
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
         deleteCard_async: (token, card) => dispatch(actions.deleteCard_async(token, card)),
         addCard_async: (token, card) => dispatch(actions.addCard_async(token, card)),
-        putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
         updateDeck_async: (token, deck) => dispatch(actions.updateDeck_async(token, deck))
     };
 };

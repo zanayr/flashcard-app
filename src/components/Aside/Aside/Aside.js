@@ -7,7 +7,6 @@ import CardInspect from '../Inspect/CardInspect';
 
 const aside = (props) => {
     let aside = null;
-    console.log(props.state);
     switch (props.state) {
         case 1:
             aside = (
