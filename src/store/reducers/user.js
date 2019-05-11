@@ -25,7 +25,7 @@ const getUser_init = (state, action) => {
 const getUser_succ = (state, action) => {
     return {
         ...state,
-        user: create.userModel(action.payload.user, action.payload.data),
+        user: create.userViewModel(action.payload.user, action.payload.data),
         error: null,
         isLoading: false
     };

@@ -105,35 +105,35 @@ class InspectAside extends Component {
         return (
             <aside className={[styles.Aside].join(' ')}>
                 <div>
-                    <div>
-                    <h3>Quick Inspect</h3>
-                    <p>Instructions about this aside here.</p>
-                    <form
-                        className={styles.QuickForm}
-                        ref={this.form}>
-                        {form}
-                    </form>
-                    <h4>Tags</h4>
-                    <TagForm
-                        activeCollection={this.state.item.tags}
-                        backingCollection={this.state.tags}
-                        field={{
-                            label: 'Additional Tag',
-                            placeholder: 'Verb'
-                        }}
-                        onClick={(tag) => this.handle_onTagToggle('tags', tag)}
-                        onConfirm={(tag) => this.handle_onTagCreate('tags', tag)}/>
-                    <h4>Groups</h4>
-                    <TagForm
-                        activeCollection={this.state.item.groups}
-                        backingCollection={this.state.groups}
-                        field={{
-                            label: 'Additional Group',
-                            placeholder: 'Spanish'
-                        }}
-                        onClick={(tag) => this.handle_onTagToggle('groups', tag)}
-                        onConfirm={(tag) => this.handle_onTagCreate('groups', tag)}/>
-                    </div>
+                    {/* <div>
+                        <h3>Quick Inspect</h3>
+                        <p>Instructions about this aside here.</p>
+                        <form
+                            className={styles.QuickForm}
+                            ref={this.form}>
+                            {form}
+                        </form>
+                        <h4>Tags</h4>
+                        <TagForm
+                            activeCollection={this.state.item.tags}
+                            backingCollection={this.state.tags}
+                            field={{
+                                label: 'Additional Tag',
+                                placeholder: 'Verb'
+                            }}
+                            onClick={(tag) => this.handle_onTagToggle('tags', tag)}
+                            onConfirm={(tag) => this.handle_onTagCreate('tags', tag)}/>
+                        <h4>Groups</h4>
+                        <TagForm
+                            activeCollection={this.state.item.groups}
+                            backingCollection={this.state.groups}
+                            field={{
+                                label: 'Additional Group',
+                                placeholder: 'Spanish'
+                            }}
+                            onClick={(tag) => this.handle_onTagToggle('groups', tag)}
+                            onConfirm={(tag) => this.handle_onTagCreate('groups', tag)}/>
+                    </div> */}
                     <div>
                         <BarLink path={'/u/create'} state={{}}>Edit</BarLink>
                         {/* <BarLink path={'/u/loading'} state={{collection: this.props.page, id: this.state.item.id}}>Edit</BarLink> */}

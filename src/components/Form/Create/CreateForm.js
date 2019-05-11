@@ -23,7 +23,7 @@ class CreateForm extends Component {
             secondary: '',
             tag: []
         },
-        group: this.props.select_user.groups,
+        group: this.props.select_user.group,
         isReloading: false,
         pinned: {
             group: [],
@@ -35,7 +35,7 @@ class CreateForm extends Component {
             note: false,
             tag: false
         },
-        tag: this.props.select_user.tags
+        tag: this.props.select_user.tag
     }
 
     //  FORM REFERENCES  -----------------------------------------  FORM REFERENCES  //

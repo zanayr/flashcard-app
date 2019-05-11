@@ -614,9 +614,6 @@ class Collections extends Component {
 
     render () {
         let mainContent = null;
-        // if (this.state.isLoading) {
-        //     mainContent = null;
-        // } else {
         if (this.state.current.id === 'add') {
             mainContent = (
                 <TabForm
@@ -641,8 +638,6 @@ class Collections extends Component {
                     selected={this.state.selected}/>
             );
         }
-        // }
-        
         return (
             <Aux>
                 <Header
@@ -659,7 +654,7 @@ class Collections extends Component {
                     className={styles.Main}
                     onClick={this.handle_onMainClick}>
                     <div>
-                        <TabBar
+                        {/* <TabBar
                             actions={{
                                 delete: this.handle_onTabDelete,
                                 toggle: this.handle_onTabToggle,
@@ -667,19 +662,19 @@ class Collections extends Component {
                             page={this.state.page}
                             backingCollection={this.state.tab}
                             active={this.state.current.id}
-                            onClick={this.handle_onAsideClose}/>
+                            onClick={this.handle_onAsideClose}/> */}
                         {mainContent}
                         <ActionButton
                             onClick={this.handle_onActionClick}
                             state={0}
                             values={['Create', 'Study']}/>
-                        <QuickBar
+                        {/* <QuickBar
                             actions={{
                                 onUndo: this.state.undo.action,
                                 onFilterClear: this.handle_onFilterClear,
                                 onSelectClear: this.handle_onItemSelectClear
                             }}
-                            data={this.state.quick}/>
+                            data={this.state.quick}/> */}
                     </div>
                 </main>
                 <Aside
@@ -688,7 +683,7 @@ class Collections extends Component {
                     page={this.state.page}
                     state={this.state.aside.state}/>
             </Aux>
-        )
+        );
     }
 }
 

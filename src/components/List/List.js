@@ -79,7 +79,7 @@ class List extends Component {
                         key={item.id}
                         primary={item.primary}
                         secondary={item.secondary}
-                        tags={item.tags}
+                        tags={item.tag}
                         selected={isSelected}
                         onSelect={() => this.onItemSelect(item)}>
                         <ContextAction
