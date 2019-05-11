@@ -5,6 +5,20 @@ export {
 } from './auth';
 
 export {
+    addCard_async,
+    deleteCard_async,
+    getAllCards_async,
+    updateCard_async
+} from './card';
+
+export {
+    addDeck_async,
+    deleteDeck_async,
+    getAllDecks_async,
+    updateDeck_async
+} from './deck';
+
+export {
     getCollection,
     deleteItem_async,
     deleteManyItems_async,

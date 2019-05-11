@@ -2,7 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 import * as create from '../models/models';
 
 //  ABOUT  ----------------------------------------------------------------  ABOUT  //
-//  This is the deck reducer, it listens for action calls to the redux store
+//  This is the card reducer, it listens for action calls to the redux store
 
 
 //  Initial State  ------------------------------------------------  Initial State  //
@@ -15,7 +15,7 @@ const initialState = {
 
 //  HELPERS  -------------------------------------------------------------  HELPERS  //
 //  Add  ---------------------------------------------------------------------  Add  //
-const addDeck_success = (state, action) => {
+const addCard_success = (state, action) => {
     return {
         collection: {
             ...state.collection,
@@ -27,7 +27,7 @@ const addDeck_success = (state, action) => {
 };
 
 //  Delete  ---------------------------------------------------------------  Delete  //
-const deleteDeck_success = (state, action) => {
+const deleteCard_success = (state, action) => {
     const collection = {...state.collection};
     delete collection[action.payload.id];
     return {
@@ -39,7 +39,7 @@ const deleteDeck_success = (state, action) => {
 }
 
 //  Failure  -------------------------------------------------------------  Failure  //
-const deck_fail = (state, action) => {
+const card_fail = (state, action) => {
     return {
         ...state,
         [action.payload.store]: {
@@ -50,16 +50,16 @@ const deck_fail = (state, action) => {
 }
 
 //  Get  ---------------------------------------------------------------------  Get  //
-const getAllDecks_init = (state, action) => {
+const getAllCards_init = (state, action) => {
     return {
         ...state,
         isLoading: true
     };
 };
-const getAllDecks_success = (state, action) => {
+const getAllCards_success = (state, action) => {
     let collection = {};
     Object.keys(action.payload.data).map(id => {
-        collection[id] = create.deckViewModel(id, action.payload.data[id]);
+        collection[id] = create.cardViewModel(id, action.payload.data[id]);
     });
     return {
         collection: collection,
@@ -69,7 +69,7 @@ const getAllDecks_success = (state, action) => {
 };
 
 //  Update  ---------------------------------------------------------------  Update  //
-const updateDeck_success = (state, action) => {
+const updateCard_success = (state, action) => {
     return {
         collection: {
             ...state.collection,
@@ -84,18 +84,18 @@ const updateDeck_success = (state, action) => {
 //  REDUCER  -------------------------------------------------------------  REDUCER  //
 const reducer = (state=initialState, action) => {
     switch (action.type) {
-        case actionTypes.ADD_DECK_SUCC:
-            return addDeck_success(state, action);
-        case actionTypes.DECK_FAIL:
-            return deck_fail(state, action);
-        case actionTypes.DELETE_DECK_SUCC:
-            return deleteDeck_success(state, action);
-        case actionTypes.GET_ALL_DECKS_INIT:
-            return getAllDecks_init(state, action);
-        case actionTypes.GET_ALL_DECKS_SUCC:
-            return getAllDecks_success(state, action);
-        case actionTypes.UPDATE_DECK_SUCC:
-            return updateDeck_success(state, action);
+        case actionTypes.ADD_CARD_SUCC:
+            return addCard_success(state, action);
+        case actionTypes.CARD_FAIL:
+            return card_fail(state, action);
+        case actionTypes.DELETE_CARD_SUCC:
+            return deleteCard_success(state, action);
+        case actionTypes.GET_ALL_CARDS_INIT:
+            return getAllCards_init(state, action);
+        case actionTypes.GET_ALL_CARDS_SUCC:
+            return getAllCards_success(state, action);
+        case actionTypes.UPDATE_CARD_SUCC:
+            return updateCard_success(state, action);
         default:
             return state;
     }
@@ -103,13 +103,13 @@ const reducer = (state=initialState, action) => {
 
 
 //  SELECTORS  ---------------------------------------------------------  SELECTORS  //
-export function selectDecks (state) {
+export function selectCards (state) {
     return state.collection
 }
-export function selectDecksIsLoading (state) {
+export function selectCardsIsLoading (state) {
     return state.isLoading;
 }
-export function selectDecksError (state) {
+export function selectCardsError (state) {
     return state.error;
 }
 

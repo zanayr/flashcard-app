@@ -6,6 +6,23 @@ export const AUTH_OUT = 'AUTH_OUT';
 export const AUTH_SUCC = 'AUTH_SUCC';
 
 
+//  Card  //
+export const CARD_FAIL = 'CARD_FAIL';
+export const DELETE_CARD_SUCC = 'DELETE_CARD_SUCC';
+export const GET_ALL_CARDS_INIT = 'GET_ALL_CARDS_INIT';
+export const GET_ALL_CARDS_SUCC = 'GET_ALL_CARDS_SUCC';
+export const ADD_CARD_SUCC = 'ADD_CARD_SUCC';
+export const UPDATE_CARD_SUCC = 'UPDATE_CARD_SUCC';
+
+//  Deck  //
+export const DECK_FAIL = 'DECK_FAIL';
+export const DELETE_DECK_SUCC = 'DELETE_DECK_SUCC';
+export const GET_ALL_DECKS_INIT = 'GET_ALL_DECKS_INIT';
+export const GET_ALL_DECKS_SUCC = 'GET_ALL_DECKS_SUCC';
+export const ADD_DECK_SUCC = 'ADD_DECK_SUCC';
+export const UPDATE_DECK_SUCC = 'UPDATE_DECK_SUCC';
+
+
 //  Collection  //
 export const GET_COLL = 'GET_COLL';
 export const DELETE_ITEM_FAIL = 'DELETE_ITEM_FAIL';

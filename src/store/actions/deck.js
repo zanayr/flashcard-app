@@ -1,152 +1,139 @@
 import * as actionTypes from './actionTypes';
+import * as create from '../models/models';
 import axios from '../database';
+
+//  This file holds the action creators for the deck redux
+//  store and interface with the firebase database
 
 
 //  ACTION CREATORS  ---------------------------------------------  ACTION CREATORS  //
-//  Delete  ----------------------------------------------------------  Delete ACs.  //
-const delete_fail = (error, key) => {
+//  Add  -----------------------------------------------------------------  Add A.C. //
+export const addDeck_fail = (error) => {
     return {
-        type: actionTypes.DECKS_DELETE_FAIL,
-        payload: {
-            error: error,
-            key: key
-        }
-    };
-};
-const delete_success = (key) => {
-    return {
-        type: actionTypes.DECKS_DELETE_SUCC,
-        payload: {
-            key: key
-        }
-    };
-};
-
-//  Get  ----------------------------------------------------------------  Get ACs.  //
-const getAll_fail = (error) => {
-    return {
-        type: actionTypes.DECKS_GET_FAIL,
+        type: actionTypes.DECK_FAIL,
         payload: error
     }
 }
-const getAll_init = () => {
+export const addDeck_success = (data) => {
     return {
-        type: actionTypes.DECKS_GET_INIT
-    }
-}
-const getAll_success = (data) => {
-    return {
-        type: actionTypes.DECKS_GET_SUCC,
+        type: actionTypes.ADD_DECK_SUCC,
         payload: data
     }
 }
 
-//  Post  --------------------------------------------------------------  Post ACs.  //
-const post_fail = (error) => {
+//  Delete  -----------------------------------------------------------  Delete A.C. //
+export const deleteDeck_fail = (error) => {
     return {
-        type: actionTypes.DECKS_POST_FAIL,
-        payload: error
-    }
-}
-const post_success = (data) => {
-    return {
-        type: actionTypes.DECKS_POST_SUCC,
-        payload: {
-            data: data,
-            id: data.id
-        }
-    }
-}
-
-//  Put  ----------------------------------------------------------------  Put ACs.  //
-const put_fail = (error) => {
-    return {
-        type: actionTypes.DECKS_PUT_FAIL,
+        type: actionTypes.DECK_FAIL,
         payload: error
     };
 };
-const put_success = (data) => {
+export const deleteDeck_success = (data) => {
     return {
-        type: actionTypes.DECKS_PUT_SUCC,
-        payload: {
-            data: data,
-            id: data.id
-        }
+        type: actionTypes.DELETE_DECK_SUCC,
+        payload: data
+    };
+};
+
+//  Get All  ----------------------------------------------------------  Get All A.C. //
+export const getAllDecks_fail = (error) => {
+    return {
+        type: actionTypes.DECK_FAIL,
+        payload: error
+    }
+}
+export const getAllDecks_init = () => {
+    return {
+        type: actionTypes.GET_ALL_DECKS_INIT,
+        payload: {}
+    }
+}
+export const getAllDecks_success = (data) => {
+    return {
+        type: actionTypes.GET_ALL_DECKS_SUCC,
+        payload: data
+    }
+}
+
+//  Update  -----------------------------------------------------------  Update A.C. //
+export const updateDeck_fail = (error) => {
+    return {
+        type: actionTypes.DECK_FAIL,
+        payload: error
+    };
+};
+export const updateDeck_success = (data) => {
+    return {
+        type: actionTypes.UPDATE_DECK_SUCC,
+        payload: data
     };
 };
 
 
 //  ASYNC FUNCTIONS  ---------------------------------------------  ASYNC FUNCTIONS  //
-//  Delete  ---------------------------------------------------------  Delete Async  //
-export const deleteDeck_async = (token, id) => {
+//  Add  ----------------------------------------------------------------  Add Async //
+export const addDeck_async = (token, data) => {
     return dispatch => {
-        axios.delete('/decks/' + id + '.json?auth=' + token)
+        axios.patch('/deck/' + data.id + '.json?auth=' + token, create.deckModel(data))
         .then(response => {
-            
-            dispatch(delete_success(id));
+            dispatch(addDeck_success(data));
         })
         .catch(error => {
-            dispatch(delete_fail(error));
+            dispatch(addDeck_fail(error));
         });
     };
 };
-//  Pass an array of key strings
-export const deleteManyDecks_async = (token, keys) => {
-    keys.forEach(key => {
-        deleteDeck_async(token, key)
-    });
-}
+export const addManyDecks_async = (token, data) => {
+    return dispatch => {
+        data.forEach(deck => {
+            dispatch(addDeck_async(token, deck));
+        });
+    }
+};
 
-//  Get  ----------------------------------------------------------------  Get Async //
+//  Delete  ---------------------------------------------------------  Delete Async  //
+export const deleteDeck_async = (token, data) => {
+    return dispatch => {
+        axios.delete('/deck/' + data.id + '.json?auth=' + token)
+        .then(response => {
+            dispatch(deleteDeck_success(url, data));
+        })
+        .catch(error => {
+            dispatch(deleteDeck_fail(error));
+        });
+    };
+};
+export const deleteManyDecks_async = (token, data) => {
+    return dispatch => {
+        data.forEach(deck => {
+            dispatch(deleteDeck_async(token, deck));
+        });
+    }
+};
+
+//  Get All  --------------------------------------------------------  Get All Async //
 export const getAllDecks_async = (token, user) => {
     return dispatch => {
-        dispatch(getAll_init());
-        axios.get('/decks.json?auth=' + token + '&orderBy="user"&equalTo="' + user + '"')
+        dispatch(getAllDecks_init());
+        axios.get('/deck.json?auth=' + token + '&orderBy="owner"&equalTo="' + user + '"')
         .then(response => {
-            dispatch(getAll_success({
-                data: response.data
-            }));
+            dispatch(getAllDecks_success(response.data));
         })
         .catch(error => {
-            dispatch(getAll_fail(error));
+            dispatch(getAllDecks_fail(error));
         });
     };
 };
 
-//  Post  --------------------------------------------------------------  Post Async //
-export const postDeck_async = (token, data) => {
+//  Update  ----------------------------------------------------------  Update Async //
+export const updateDeck_async = (token, data) => {
     return dispatch => {
-        axios.patch('/decks/' + data.id + '.json?auth=' + token, data)
+        axios.put('/deck/' + data.id + '.json?auth=' + token, create.deckModel(data))
         .then(response => {
-            dispatch(post_success(response.data));
+            dispatch(updateDeck_success(data));
         })
         .catch(error => {
-            dispatch(post_fail(error));
+            dispatch(updateDeck_fail(error));
         });
     };
 };
-//  Pass an object of deck objects
-export const postManyDecks_async = (token, data) => {
-    Object.keys(data).forEach(key => {
-        postDeck_async(token, data[key]);
-    });
-};
-
-//  Put  ----------------------------------------------------------------  Put Async //
-export const putDeck_async = (token, data) => {
-    return dispatch => {
-        axios.put('/decks/' + data.id + '.json?auth=' + token, data)
-        .then(response => {
-            dispatch(put_success(response.data));
-        })
-        .catch(error => {
-            dispatch(put_fail(error));
-        });
-    };
-};
-//  Pass an object of deck objects
-export const putManyDecks_async = (token, data) => {
-    Object.keys(data).forEach(key => {
-        putDeck_async(token, key, data[key]);
-    })
-}
