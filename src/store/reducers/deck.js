@@ -103,6 +103,9 @@ const reducer = (state=initialState, action) => {
 
 
 //  SELECTORS  ---------------------------------------------------------  SELECTORS  //
+export function selectDeck (state, id) {
+    return state.collection[id];
+}
 export function selectDecks (state) {
     return state.collection
 }

@@ -164,6 +164,9 @@ class CreateForm extends Component {
             } else {
                 tags = this.state.card.tag.filter(tag => !this.state.pinned.tag.includes(tag)).concat(this.state.pinned.tag);
             }
+            if (typeof this.props.deck === 'undefined') {
+                tags.concat('$unassinged');
+            }
             if (this.state.states.group && this.groupForm.current.tag.value.length) {
                 groups = this.groupForm.current.tag.value.trim().split(', ');
                 this._checkTags('group', groups);

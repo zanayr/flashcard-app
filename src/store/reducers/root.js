@@ -51,6 +51,9 @@ export function cardsIsLoading (store) {
 }
 
 //  Deck  -----------------------------------------------------------  Deck Selectors  //
+export function deck (store, id) {
+    return FromDeck.selectDeck(store[DECK], id);
+}
 export function decks (store) {
     return FromDeck.selectDecks(store[DECK]);
 }
@@ -59,9 +62,9 @@ export function decksIsLoading (store) {
 }
 
 //  Collection  ------------------------------------------------ Collection Selectors  //
-export function collection (store, collection, id) {
-    return FromColl.selectCollection(store[COLL], collection, id);
-}
+// export function collection (store, collection, id) {
+//     return FromColl.selectCollection(store[COLL], collection, id);
+// }
 // export function cards (store) {
 //     return FromColl.selectCards(store[COLL]);
 // }

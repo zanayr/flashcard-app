@@ -3,115 +3,99 @@ import * as create from '../models/models';
 import axios from '../database';
 
 //  This file holds the action creators for the deck redux
-//  store and interface with the firebase database
+//  store and interface with the firebase deckbase
 
 
 //  ACTION CREATORS  ---------------------------------------------  ACTION CREATORS  //
-//  Add  -----------------------------------------------------------------  Add A.C. //
-export const addDeck_fail = (error) => {
-    return {
-        type: actionTypes.DECK_FAIL,
-        payload: error
-    }
-}
-export const addDeck_success = (data) => {
+//  Add  ----------------------------------------------------------------  Add A.C.  //
+export const addDeck_success = (deck) => {
     return {
         type: actionTypes.ADD_DECK_SUCC,
-        payload: data
+        payload: deck
     }
 }
 
-//  Delete  -----------------------------------------------------------  Delete A.C. //
-export const deleteDeck_fail = (error) => {
-    return {
-        type: actionTypes.DECK_FAIL,
-        payload: error
-    };
-};
-export const deleteDeck_success = (data) => {
+//  Delete  ----------------------------------------------------------  Delete A.C.  //
+export const deleteDeck_success = (deck) => {
     return {
         type: actionTypes.DELETE_DECK_SUCC,
-        payload: data
+        payload: deck
     };
 };
 
-//  Get All  ----------------------------------------------------------  Get All A.C. //
-export const getAllDecks_fail = (error) => {
+//  Failure  --------------------------------------------------------  Failure A.C.  //
+export const deck_fail = (error) => {
     return {
         type: actionTypes.DECK_FAIL,
         payload: error
-    }
-}
+    };
+};
+
+//  Get All  --------------------------------------------------------  Get All A.C.  //
 export const getAllDecks_init = () => {
     return {
         type: actionTypes.GET_ALL_DECKS_INIT,
         payload: {}
     }
 }
-export const getAllDecks_success = (data) => {
+export const getAllDecks_success = (deck) => {
     return {
         type: actionTypes.GET_ALL_DECKS_SUCC,
-        payload: data
+        payload: deck
     }
 }
 
-//  Update  -----------------------------------------------------------  Update A.C. //
-export const updateDeck_fail = (error) => {
-    return {
-        type: actionTypes.DECK_FAIL,
-        payload: error
-    };
-};
-export const updateDeck_success = (data) => {
+//  Update  ----------------------------------------------------------  Update A.C.  //
+export const updateDeck_success = (deck) => {
     return {
         type: actionTypes.UPDATE_DECK_SUCC,
-        payload: data
+        payload: deck
     };
 };
 
 
 //  ASYNC FUNCTIONS  ---------------------------------------------  ASYNC FUNCTIONS  //
-//  Add  ----------------------------------------------------------------  Add Async //
-export const addDeck_async = (token, data) => {
+//  Add  ---------------------------------------------------------------  Add Async  //
+export const addDeck_async = (token, deck) => {
     return dispatch => {
-        axios.patch('/deck/' + data.id + '.json?auth=' + token, create.deckModel(data))
+        axios.patch('/deck/' + deck.id + '.json?auth=' + token, create.deckModel(deck))
         .then(response => {
-            dispatch(addDeck_success(data));
+            dispatch(addDeck_success(deck));
         })
         .catch(error => {
-            dispatch(addDeck_fail(error));
+            dispatch(deck_fail(error));
         });
     };
 };
-export const addManyDecks_async = (token, data) => {
+export const addManyDecks_async = (token, deck) => {
     return dispatch => {
-        data.forEach(deck => {
+        deck.forEach(deck => {
             dispatch(addDeck_async(token, deck));
         });
     }
 };
 
 //  Delete  ---------------------------------------------------------  Delete Async  //
-export const deleteDeck_async = (token, data) => {
+export const deleteDeck_async = (token, deck) => {
     return dispatch => {
-        axios.delete('/deck/' + data.id + '.json?auth=' + token)
+        axios.delete('/deck/' + deck.id + '.json?auth=' + token)
         .then(response => {
-            dispatch(deleteDeck_success(data));
+            dispatch(deleteDeck_success(deck));
         })
         .catch(error => {
-            dispatch(deleteDeck_fail(error));
+            dispatch(deck_fail(error));
         });
     };
 };
-export const deleteManyDecks_async = (token, data) => {
+export const deleteManyDecks_async = (token, deck) => {
     return dispatch => {
-        data.forEach(deck => {
+        deck.forEach(deck => {
             dispatch(deleteDeck_async(token, deck));
         });
     }
 };
 
-//  Get All  --------------------------------------------------------  Get All Async //
+//  Get All  -------------------------------------------------------  Get All Async  //
 export const getAllDecks_async = (token, user) => {
     return dispatch => {
         dispatch(getAllDecks_init());
@@ -120,20 +104,20 @@ export const getAllDecks_async = (token, user) => {
             dispatch(getAllDecks_success(response.data));
         })
         .catch(error => {
-            dispatch(getAllDecks_fail(error));
+            dispatch(deck_fail(error));
         });
     };
 };
 
-//  Update  ----------------------------------------------------------  Update Async //
-export const updateDeck_async = (token, data) => {
+//  Update  ---------------------------------------------------------  Update Async  //
+export const updateDeck_async = (token, deck) => {
     return dispatch => {
-        axios.put('/deck/' + data.id + '.json?auth=' + token, create.deckModel(data))
+        axios.put('/deck/' + deck.id + '.json?auth=' + token, create.deckModel(deck))
         .then(response => {
-            dispatch(updateDeck_success(data));
+            dispatch(updateDeck_success(deck));
         })
         .catch(error => {
-            dispatch(updateDeck_fail(error));
+            dispatch(deck_fail(error));
         });
     };
 };

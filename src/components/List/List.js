@@ -54,6 +54,7 @@ class List extends Component {
     }
     _checkGroups (item) {
         const groups = this.props.tab.group.concat(this.props.filters.group);
+        console.log(groups);
         if (groups.length) {
             if (item.group.length) {
                 let match = true;
@@ -73,7 +74,9 @@ class List extends Component {
         let listItems = this.props.backingCollection.map(item => {
             let isSelected = typeof this.props.selected.find(i => i.id === item.id) === 'object';
             let isActive = isSelected && this.props.selected.length === 1;
+            console.log(item);
             if (this._checkGroups(item) && this._checkTags(item)) {
+                console.log(item.primary);
                 return (
                     <ListItem
                         key={item.id}

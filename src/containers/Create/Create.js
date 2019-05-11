@@ -12,7 +12,8 @@ import styles from './Create.module.css';
 
 class Create extends Component {
     state = {
-        cards: []
+        cards: [],
+        deck: this.props.location.state.id ? this.props.select_deck : undefined
     }
 
     _addCard (card) {
@@ -27,19 +28,29 @@ class Create extends Component {
             cards: prev.cards.filter(c => c.id !== card.id)
         }));
         this.props.deleteCard_async(this.props.select_token, card);
+        if (typeof this.props.location.state.id !== undefined) {
+            let deck = this.props.select_deck;
+            this.props.updateDeck_async(this.props.select_token, {
+                ...deck,
+                member: deck.member.filter(id => id !== card.id)
+            });
+        }
     }
 
     handle_onCardCreate = (card) => {
         this._addCard(card);
-        this.props.addCard_async(this.props.select_token, {
-            id: card.id,
-            item: create.cardModel(card)
-        });
+        this.props.addCard_async(this.props.select_token, card);
+        if (typeof this.props.location.state.id !== undefined) {
+            let deck = this.props.select_deck;
+            this.props.updateDeck_async(this.props.select_token, {
+                ...deck,
+                member: deck.member.concat(card.id)
+            });
+        }
     }
     handle_onCardDelete = (card) => {
         this._removeCard(card);
     }
-
 
     render () {
         return (
@@ -48,7 +59,9 @@ class Create extends Component {
                     <section className={styles.Editor}>
                         <div>
                             <div className={styles.Wrapper}>
-                                <CreateForm onCreate={this.handle_onCardCreate}/>
+                                <CreateForm
+                                    deck={this.state.deck.id}
+                                    onCreate={this.handle_onCardCreate}/>
                             </div>
                         </div>
                     </section>
@@ -69,17 +82,19 @@ class Create extends Component {
 }
 
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
     return {
+        select_deck: select.deck(state, ownProps.location.state.id),
         select_token: select.authToken(state),
         select_user: select.user(state)
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
-        deleteCard_async: (token, item) => dispatch(actions.deleteCard_async(token, item)),
-        addCard_async: (token, item) => dispatch(actions.addCard_async(token, item)),
+        deleteCard_async: (token, card) => dispatch(actions.deleteCard_async(token, card)),
+        addCard_async: (token, card) => dispatch(actions.addCard_async(token, card)),
         putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
+        updateDeck_async: (token, deck) => dispatch(actions.updateDeck_async(token, deck))
     };
 };
 

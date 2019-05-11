@@ -8,7 +8,7 @@ import TagForm from '../../form/Tag/TagForm';
 import styles from '../Aside.module.css';
 
 
-class InspectAside extends Component {
+class CardInspect extends Component {
     state = {
         actions: this.props.actions,
         change: this.props.actions.change ? true : false,
@@ -135,7 +135,7 @@ class InspectAside extends Component {
                             onConfirm={(tag) => this.handle_onTagCreate('groups', tag)}/>
                     </div> */}
                     <div>
-                        <BarLink path={this.props.path + this.props.data.item.id} state={{}}>Edit</BarLink>
+                        <BarLink path={this.props.path} state={{id: this.props.data.deckId}}>Add many</BarLink>
                         {/* <BarLink path={'/u/loading'} state={{collection: this.props.page, id: this.state.item.id}}>Edit</BarLink> */}
                     </div>
                 </div>
@@ -144,4 +144,4 @@ class InspectAside extends Component {
     }
 }
 
-export default InspectAside;
+export default CardInspect;

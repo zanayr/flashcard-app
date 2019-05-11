@@ -3,9 +3,11 @@ import React from 'react';
 import NavigationAiside from '../Nav/NavAside';
 import FilterAside from '../Filter/FilterAside';
 import InspectAside from '../Inspect/InspectAside';
+import CardInspect from '../Inspect/CardInspect';
 
 const aside = (props) => {
     let aside = null;
+    console.log(props.state);
     switch (props.state) {
         case 1:
             aside = (
@@ -21,7 +23,7 @@ const aside = (props) => {
                     actions={props.actions}
                     data={{
                         ...props.data,
-                        category: 'tags'
+                        category: 'tag'
                     }}
                     filters={props.filters}/>
             );
@@ -32,8 +34,17 @@ const aside = (props) => {
                     actions={props.actions}
                     data={{
                         ...props.data,
-                        category: 'groups'
+                        category: 'group'
                     }}/>
+            );
+            break;
+        case 97:
+            aside = (
+                <CardInspect
+                    actions={props.actions}
+                    data={props.data}
+                    path={'/u/create'}
+                    page={props.page}/>
             );
             break;
         case 98:
@@ -42,6 +53,7 @@ const aside = (props) => {
                 <InspectAside
                     actions={props.actions}
                     data={props.data}
+                    path={'/u/deck/'}
                     page={props.page}/>
             );
             break;

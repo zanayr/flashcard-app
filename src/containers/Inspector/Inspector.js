@@ -30,35 +30,36 @@ class Inspector extends Component {
             collection: this.props.match.params.id,
             date: 0,
             delete: false,
-            groups: [],
+            group: [],
             id: 'all',
             name: 'All',
-            tags: []
+            tag: []
         },
         collection: {},
-        members: this.props.location.state.data,
+        deck: {},
         filters: {
-            groups: [],
-            tags: []
+            group: [],
+            tag: []
         },
-        groups: this.props.user.groups,
+        group: this.props.user.group,
+        isLoading: true,
         inspect: {},
         page: '',
         quick: [],
         selected: [],
         sort: sortTypes.DATE_ASC,
-        tabs: {
+        tab: {
             all: {
                 collection: this.props.match.params.id,
                 date: 0,
                 delete: false,
-                groups: [],
+                group: [],
                 id: 'all',
                 name: 'All',
-                tags: []
+                tag: []
             }
         },
-        tags: this.props.user.tags,
+        tag: this.props.user.tag,
         undo: {
             action: null,
             data: {}
@@ -91,6 +92,25 @@ class Inspector extends Component {
         //     members: members,
         //     isLoading: false
         // }));
+        const cards = this.props.select_cards;
+        const deck = this.props.select_deck;
+        this.setState(prev => ({
+            ...prev,
+            deck: deck
+        }));
+        this.setState(prev => ({
+            ...prev,
+            collection: Object.keys(cards).filter(id => deck.member.includes(id)).map(id => {
+                if (deck.member.includes(id)) {
+                    return create.cardViewModel(id, cards[id]);
+                }
+            })
+        }), () => {
+            this.setState(prev => ({
+                ...prev,
+                isLoading: false
+            }));
+        });
     }
 
     componentDidUpdate (prevProps, prevState) {
@@ -145,69 +165,70 @@ class Inspector extends Component {
     //         }
     //     }));
     // }
-    // setAsideData (data) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             data: {
-    //                 ...data
-    //             }
-    //         }
-    //     }));
-    // }
-    // updateAsideData (property, data) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             data: {
-    //                 ...prev.aside.data,
-    //                 [property]: data
-    //             }
-    //         }
-    //     }));
-    // }
-    // setAsideActions (actions) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             actions: {
-    //                 ...actions
-    //             }
-    //         }
-    //     }));
-    // }
-    // toggleAside (state) {
-    //     if (this.state.aside.state) {
-    //         if (state !== this.state.aside.state && this.state.aside.isActive) {
-    //             this.setState(prev => ({
-    //                 ...prev,
-    //                 aside: {
-    //                     ...prev.aside,
-    //                     state: state
-    //                 }
-    //             }));
-    //         } else {
-    //             this.setState(prev => ({
-    //                 ...prev,
-    //                 aside: {
-    //                     ...prev.aside,
-    //                     isActive: 0
-    //                 }
-    //             }));
-    //         }
-    //     } else {
-    //         this.setState(prev => ({
-    //             ...prev,
-    //             aside: {
-    //                 ...prev.aside,
-    //                 state: state
-    //             }
-    //         }));
-    //     }
-    // }
+    setAsideData (data) {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                data: {
+                    ...data
+                }
+            }
+        }));
+    }
+    updateAsideData (property, data) {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                data: {
+                    ...prev.aside.data,
+                    [property]: data
+                }
+            }
+        }));
+    }
+    setAsideActions (actions) {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                actions: {
+                    ...actions
+                }
+            }
+        }));
+    }
+    toggleAside (state) {
+        if (this.state.aside.state) {
+            console.log(state, this.state.aside.state, this.state.aside.isActive);
+            if (state !== this.state.aside.state && this.state.aside.isActive) {
+                this.setState(prev => ({
+                    ...prev,
+                    aside: {
+                        ...prev.aside,
+                        state: state
+                    }
+                }));
+            } else {
+                this.setState(prev => ({
+                    ...prev,
+                    aside: {
+                        ...prev.aside,
+                        isActive: 0
+                    }
+                }));
+            }
+        } else {
+            this.setState(prev => ({
+                ...prev,
+                aside: {
+                    ...prev.aside,
+                    state: state
+                }
+            }));
+        }
+    }
  
     //  Undo  --------------------------------------------------------------  Undo  //
     // clearUndo () {
@@ -396,21 +417,22 @@ class Inspector extends Component {
     // }
 
     //  Action  -----------------------------------------------------------  Action  //
-    // handle_onActionClick = () => {
-    //     const item = create.itemViewModel(utility.createHashId(0), {
-    //         owner: this.props.select_user.id
-    //     });
-    //     this.addItem(item);
-    //     this.toggleAside(98);
-    //     this.setAsideData({
-    //         groups: this.state.groups,
-    //         item: item,
-    //         tags: this.state.tags
-    //     });
-    //     this.setAsideActions({change: this.handle_onItemChange});
-    //     this.clearSelected();
-    //     this.clearQuick('s');
-    // }
+    handle_onActionClick = () => {
+        const card = create.cardViewModel(utility.createHashId(0), {
+            owner: this.props.select_user.id
+        });
+        //this.addItem(card);
+        this.toggleAside(97);
+        this.setAsideData({
+            group: this.state.group,
+            item: card,
+            deckId: this.state.deck.id,
+            tag: this.state.tag
+        });
+        this.setAsideActions({change: this.handle_onItemChange});
+        // this.clearSelected();
+        // this.clearQuick('s');
+    }
 
 
     //  Aside  -------------------------------------------------------------  Aside  //
@@ -480,37 +502,37 @@ class Inspector extends Component {
     // handle_onItemChange = (item, payload) => {
     //     this.setItemValue(item, payload.target, payload.value);
     // }
-    // handle_onItemInspect = (item) => {
-    //     this.toggleAside(99);
-    //     this.setAsideData({
-    //         groups: this.state.groups,
-    //         item: item,
-    //         tags: this.state.tags
-    //     });
-    //     this.setAsideActions({change: this.handle_onItemChange});
-    //     this.setUndo({
-    //         action: this.handle_onItemReset,
-    //         data: item
-    //     });
-    //     this.clearQuick('s');
-    // }
-    // handle_onItemSelect = (item) => {
-    //     let selected = this.state.selected.slice();
-    //     if (selected.find(i => i.id === item.id)) {
-    //         selected = selected.filter(i => i.id !== item.id);
-    //     } else {
-    //         selected = selected.concat(item);
-    //     }
-    //     if (selected.length) {
-    //         this.setQuick('s');
-    //     } else {
-    //         this.clearQuick('s');
-    //     }
-    //     if (this.state.aside.state === 99) {
-    //         this.handle_onAsideClose();
-    //     }
-    //     this.setSelected(selected);
-    // }
+    handle_onItemInspect = (item) => {
+        // this.toggleAside(99);
+        // this.setAsideData({
+        //     groups: this.state.groups,
+        //     item: item,
+        //     tags: this.state.tags
+        // });
+        // this.setAsideActions({change: this.handle_onItemChange});
+        // this.setUndo({
+        //     action: this.handle_onItemReset,
+        //     data: item
+        // });
+        // this.clearQuick('s');
+    }
+    handle_onItemSelect = (item) => {
+        let selected = this.state.selected.slice();
+        if (selected.find(i => i.id === item.id)) {
+            selected = selected.filter(i => i.id !== item.id);
+        } else {
+            selected = selected.concat(item);
+        }
+        // if (selected.length) {
+        //     this.setQuick('s');
+        // } else {
+        //     this.clearQuick('s');
+        // }
+        // if (this.state.aside.state === 99) {
+        //     this.handle_onAsideClose();
+        // }
+        this.setSelected(selected);
+    }
 
     // _checkForNewTags (category, tags) {
     //     const newTags = tags.filter(tag => this.state[category].indexOf(tag) < 0);
@@ -541,20 +563,20 @@ class Inspector extends Component {
     //     this.clearSelected();
     //     this.clearQuick('s');
     // }
-    // handle_onItemsDelete = () => {
-    //     const collection = this.state.collection;
-    //     this.state.selected.slice().forEach(item => {
-    //         delete collection[item.id];
-    //     });
-    //     this.setUndo({
-    //         action: this.handle_onItemsRecover,
-    //         data: this.state.selected.slice()
-    //     });
-    //     this.setQuick('u');
-    //     this.resetCollection(collection);
-    //     this.clearQuick('s');
-    //     this.clearSelected();
-    // }
+    handle_onItemsDelete = () => {
+        // const collection = this.state.collection;
+        // this.state.selected.slice().forEach(item => {
+        //     delete collection[item.id];
+        // });
+        // this.setUndo({
+        //     action: this.handle_onItemsRecover,
+        //     data: this.state.selected.slice()
+        // });
+        // this.setQuick('u');
+        // this.resetCollection(collection);
+        // this.clearQuick('s');
+        // this.clearSelected();
+    }
     // handle_onItemsRecover = () => {
     //     const deleted = this.state.undo.data;
     //     const recovered = {}
@@ -592,8 +614,8 @@ class Inspector extends Component {
     // }
 
     // //  Selected  ---------------------------------------------------  Selected EHs  //
-    // handle_onItemSelectClear = (item) => {
-    //     this.clearSelected(item);
+    // handle_onItemSelectClear = (card) => {
+    //     this.clearSelected(card);
     //     this.clearQuick('s');
     // }
 
@@ -623,14 +645,10 @@ class Inspector extends Component {
 
 
     render () {
-        console.log(this.state);
         let mainContent = null;
-        //if (this.state.current.id === 'add') {
-        if (false) {
-            console.log('loading');
+        if (this.state.isLoading) {
             mainContent = (<Throbber/>);
         } else {
-            console.log('loaded');
             mainContent = (
                 <List
                     actions={{
@@ -638,16 +656,17 @@ class Inspector extends Component {
                         inspect: this.handle_onItemInspect,
                         select: this.handle_onItemSelect
                     }}
-                    backingCollection={utility.sortBy(this.state.sort, this.state.members)}
+                    backingCollection={utility.sortBy(this.state.sort, this.state.collection)}
                     filters={this.state.filters}
                     tab={{
-                        tags: [],
-                        groups: []
+                        tag: [],
+                        group: []
                     }}
                     page={this.state.page}
                     selected={this.state.selected}/>
             );
         }
+        console.log(this.state);
         return (
             <Aux>
                 <h1>{this.props.match.params.id}</h1>
@@ -679,13 +698,13 @@ class Inspector extends Component {
                             onClick={this.handle_onActionClick}
                             state={0}
                             values={['Create', 'Study']}/>
-                        <QuickBar
+                        {/* <QuickBar
                             actions={{
                                 onUndo: this.state.undo.action,
                                 onFilterClear: this.handle_onFilterClear,
                                 onSelectClear: this.handle_onItemSelectClear
                             }}
-                            data={this.state.quick}/>
+                            data={this.state.quick}/> */}
                     </div>
                 </main>
                 <Aside
@@ -700,7 +719,8 @@ class Inspector extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        select_collection: select.collection(state, ownProps.match.url.match('u\/(.*)\/')[1], ownProps.match.params.id),
+        //select_collection: select.collection(state, ownProps.match.url.match('u\/(.*)\/')[1], ownProps.match.params.id),
+        select_deck: select.deck(state, ownProps.match.params.id),
         select_cards: select.cards(state),
         select_token: select.authToken(state),
         select_user: select.user(state)

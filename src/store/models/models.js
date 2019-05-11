@@ -69,8 +69,8 @@ export function cardViewModel (id, card) {
         meta: card.meta || {},
         note: card.note || '',
         owner: card.owner,
-        primary: card.primary,
-        secondary: card.secondary,
+        primary: card.primary || '',
+        secondary: card.secondary || '',
         tag: card.tag || [],
     }
 }
