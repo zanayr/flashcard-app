@@ -33,7 +33,7 @@ class List extends Component {
         this.showConfirm();
     }
     onItemConfirm = (item) => {
-        this.props.deleteItem_async(this.props.page, this.props.select_token, item);
+        this.props.deleteDeck_async(this.props.select_token, item);
         this.props.actions.delete();
     }
     onItemSelect = (item) => {
@@ -41,10 +41,10 @@ class List extends Component {
         this.props.actions.select(item);
     }
     _checkTags (item) {
-        const tags = this.props.tab.tags.concat(this.props.filters.tags);
+        const tags = this.props.tab.tag.concat(this.props.filters.tag);
         if (tags.length) {
             let match = false;
-            item.tags.forEach(tag => {
+            item.tag.forEach(tag => {
                 match = tags.includes(tag) || match;
             });
             return match;
@@ -53,11 +53,11 @@ class List extends Component {
         }
     }
     _checkGroups (item) {
-        const groups = this.props.tab.groups.concat(this.props.filters.groups);
+        const groups = this.props.tab.group.concat(this.props.filters.group);
         if (groups.length) {
-            if (item.groups.length) {
+            if (item.group.length) {
                 let match = true;
-                item.groups.forEach(tag => {
+                item.group.forEach(tag => {
                     match = groups.includes(tag) && match;
                 });
                 return match;
@@ -122,7 +122,7 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        deleteItem_async: (url, token, item) => dispatch(actions.deleteItem_async(url, token, item)),
+        deleteDeck_async: (token, item) => dispatch(actions.deleteDeck_async(token, item)),
     };
 };
 

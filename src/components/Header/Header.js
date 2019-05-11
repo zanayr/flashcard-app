@@ -33,7 +33,7 @@ class Header extends Component {
             'Once you delete an item, it cannot be recovered. Are you sure you wish to delete these items?',
             'Delete', 'Cancel')
         .then(response => {
-            this.props.deleteManyItems_async(this.props.page, this.props.select_token, this.props.selected.slice());
+            this.props.deleteManyDecks_async(this.props.select_token, this.props.selected.slice());
             this.props.actions.delete();
         }).catch(() => {}); // Eat user cancel
     };
@@ -58,15 +58,14 @@ class Header extends Component {
                     }
                 })
             });
-            let merged = create.collectionViewModel(utility.createHashId(0), {
-                date: Date.now(),
+            let merged = create.deckViewModel(utility.createHashId(0), {
                 groups: groups,
                 owner: this.props.select_userId,
                 primary: 'New Merged Deck',
                 tags: tags
             });
             console.log(merged);
-            this.props.patchItem_async(this.props.page, this.props.select_token, merged);
+            this.props.addDeck_async(this.props.select_token, merged);
             this.props.actions.create([merged]);
         }).catch(() => {}); // Eat user cancel
     };
@@ -85,15 +84,14 @@ class Header extends Component {
                 } else {
                     primary = 'Copy of ' + item.primary.substr(0, 21) + '...';
                 }
-                cloned.push(create.collectionViewModel(utility.createHashId(i), {
+                cloned.push(create.deckViewModel(utility.createHashId(i), {
                     ...item,
-                    date: Date.now(),
                     primary: primary
                 }));
                 console.log(item.date);
             });
             console.log(cloned);
-            this.props.patchManyItems_async(this.props.page, this.props.select_token, cloned);
+            this.props.addManyDecks_async(this.props.select_token, cloned);
             this.props.actions.create(cloned);
         }).catch(() => {}); // Eat user cancel
     };
@@ -142,10 +140,10 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        deleteManyItems_async: (url, token, items) => dispatch(actions.deleteManyItems_async(url, token, items)),
+        deleteManyDecks_async: (token, items) => dispatch(actions.deleteManyDecks_async(token, items)),
         displayModal_async: (type, message, confirm, cancel) => dispatch(actions.displayModal_async(type, message, confirm, cancel)),
-        patchItem_async: (url, token, item) => dispatch(actions.patchItem_async(url, token, item)),
-        patchManyItems_async: (url, token, items) => dispatch(actions.patchManyItems_async(url, token, items))
+        addDeck_async: (token, item) => dispatch(actions.addDeck_async(token, item)),
+        addManyDecks_async: (token, items) => dispatch(actions.addManyDecks_async(token, items))
     };
 };
 

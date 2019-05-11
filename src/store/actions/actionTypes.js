@@ -23,23 +23,21 @@ export const ADD_DECK_SUCC = 'ADD_DECK_SUCC';
 export const UPDATE_DECK_SUCC = 'UPDATE_DECK_SUCC';
 
 
-//  Collection  //
-export const GET_COLL = 'GET_COLL';
-export const DELETE_ITEM_FAIL = 'DELETE_ITEM_FAIL';
-export const DELETE_ITEM_SUCC = 'DELETE_ITEM_SUCC';
-export const GET_ITEMS_FAIL = 'GET_ITEMS_FAIL';
-export const GET_ITEMS_INIT = 'GET_ITEMS_INIT';
-export const GET_ITEMS_SUCC = 'GET_ITEMS_SUCC';
-export const PATCH_ITEM_FAIL = 'PATCH_ITEM_FAIL';
-export const PATCH_ITEM_SUCC = 'PATCH_ITEM_SUCC';
-export const PUT_ITEM_FAIL = 'PUT_ITEM_FAIL';
-export const PUT_ITEM_SUCC = 'PUT_ITEM_SUCC';
-
-
 //  Modal Store  //
 export const DISPLAY_MODAL = 'DISPLAY_MODAL';
 export const CLEAR_MODAL = 'CLEAR_MODAL';
 export const DISPLAY_MODAL2 = 'DISPLAY_MODAL2';
+
+//  Student  //
+export const ADD_STUDENT_SUCC = 'ADD_STUDENT_SUCC';
+export const ADD_STUDENT_TAB_SUCC = 'ADD_STUDENT_TAB_SUCC';
+export const DELETE_STUDENT_SUCC = 'DELETE_STUDENT_SUCC';
+export const DELETE_STUDENT_TAB_SUCC = 'DELETE_STUDENT_TAB_SUCC';
+export const GET_ALL_STUDENTS_INIT = 'GET_ALL_STUDENTS_INIT';
+export const GET_ALL_STUDENTS_SUCC = 'GET_ALL_STUDENTS_SUCC';
+export const STUDENT_FAIL = 'STUDENT_FAIL';
+export const UPDATE_STUDENT_SUCC = 'PUT_STUDENT_SUCC';
+export const UPDATE_STUDENT_TAG_SUCC = 'UPDATE_STUDENT_TAG_SUCC';
 
 
 //  User  //

@@ -422,10 +422,10 @@ class Inspector extends Component {
     //         this._checkForNewTags('groups', item.groups);
     //         switch (this.state.aside.state) {
     //             case 98:
-    //                 this.props.patchItem_async(this.state.page, this.props.token, item);
+    //                 this.props.addCard_async(this.props.token, item);
     //                 break;
     //             case 99:
-    //                 this.props.putItem_async(this.state.page, this.props.token, item);
+    //                 this.props.updateCard_async(this.props.token, item);
     //                 this.setQuick('u');
     //                 break;
     //             default:
@@ -564,14 +564,14 @@ class Inspector extends Component {
     //     this.setManyItems(recovered);
     //     this.clearQuick('u');
     //     this.clearUndo();
-    //     this.props.patchManyItems_async(this.state.page, this.props.select_token, deleted);
+    //     this.props.addManyCards_async(this.props.select_token, deleted);
     // }
     // handle_onItemReset = () => {
     //     const item = this.state.undo.data;
     //     this.setItem(item);
     //     this.clearQuick('u');
     //     this.clearUndo();
-    //     this.props.patchItem_async(this.state.page, this.props.select_token, item);
+    //     this.props.addCard_async(this.props.select_token, item);
     // }
     
     // //  Filters  -----------------------------------------------------  Filters EHs  //
@@ -708,9 +708,9 @@ const mapStateToProps = (state, ownProps) => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        patchItem_async: (url, token, item) => dispatch(actions.patchItem_async(url, token, item)),
-        patchManyItems_async: (url, token, items) => dispatch(actions.patchManyItems_async(url, token, items)),
-        putItem_async: (url, token, item) => dispatch(actions.putItem_async(url, token, item)),
+        addCard_async: (token, item) => dispatch(actions.addCard_async(token, item)),
+        addManyCards_async: (token, items) => dispatch(actions.addManyCards_async(token, items)),
+        updateCard_async: (token, item) => dispatch(actions.updateCard_async(token, item)),
         putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
         patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data))
 

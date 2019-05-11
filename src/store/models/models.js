@@ -6,7 +6,7 @@ export function cardModel (card) {
         group: card.group,
         date: card.date,
         meta: card.meta,
-        notes: card.notes,
+        note: card.note,
         owner: card.owner,
         primary: card.primary,
         secondary: card.secondary,
@@ -17,15 +17,44 @@ export function cardModel (card) {
 //  Deck  -------------------------------------------------------------  Deck Model  //
 export function deckModel (deck) {
     return {
-        group: deck.group,
         date: deck.date,
-        members: deck.members,
+        group: deck.group,
+        member: deck.member,
         meta: deck.meta,
-        notes: deck.notes,
+        note: deck.note,
         owner: deck.owner,
         primary: deck.primary,
         secondary: deck.secondary,
-        tag: deck.tag,
+        tab: deck.tab,
+        tag: deck.tag
+    }
+}
+
+//  Tab  ---------------------------------------------------------------  Tab Model  //
+export function tabModel (tab) {
+    return {
+        collection: tab.collection,
+        date: tab.date,
+        group: tab.group,
+        name: tab.name,
+        tag: tab.tag
+    }
+}
+
+//  Student  -------------------------------------------------------  Student Model  //
+export function userModel (student) {
+    return {
+        date: student.date,
+        group: student.group,
+        info: {
+            email: student.info.email,
+            first: student.info.first,
+            last: student.info.last,
+            user: student.info.user
+        },
+        meta: student.meta,
+        tab: student.tab,
+        tag: student.tag
     }
 }
 
@@ -38,7 +67,7 @@ export function cardViewModel (id, card) {
         group: card.group || [],
         id: id,
         meta: card.meta || {},
-        notes: card.notes || '',
+        note: card.note || '',
         owner: card.owner,
         primary: card.primary,
         secondary: card.secondary,
@@ -48,19 +77,34 @@ export function cardViewModel (id, card) {
 
 //  Deck View Model  ---------------------------------------------------  Deck V.M.  //
 export function deckViewModel (id, deck) {
+    const tab = {};
+    if (deck.tab) {
+        Object.keys(deck.tab).map(id => {
+            tab[id] = tabViewModel(id, deck.tab[id]);
+        });
+    }
     return {
         date: deck.date || Date.now(),
         group: deck.group || [],
-        groups: deck.groups || [],
         id: id,
-        memberOf: deck.memberOf || [],
+        member: deck.member || {},
         meta: deck.meta || {},
-        notes: deck.notes || '',
+        note: deck.note || '',
         owner: deck.owner,
-        primary: deck.primary,
-        secondary: deck.secondary,
-        tag: deck.tag || [],
-        tags: deck.tags || []
+        primary: deck.primary || '',
+        secondary: deck.secondary || '',
+        tab: {
+            ...tab,
+            all: {
+                date: 0,
+                delete: false,
+                group: [],
+                id: 'deck',
+                name: 'Decks',
+                tag: []
+            }
+        },
+        tag: deck.tag || []
     }
 }
 
@@ -79,101 +123,40 @@ export function flashcardViewModel (card) {
     }
 }
 
-
-
-
-
-export function collectionViewModel (id, model) {
-    const tabs = {};
-    if (model.tabs) {
-        Object.keys(model.tabs).map(id => {
-            tabs[id] = tabViewModel(id, model.tabs[id]);
-        });
-    }
-    return {
-        date: model.date || Date.now(),
-        groups: model.groups || [],
-        id: id,
-        members: model.members || {},
-        meta: model.meta || {},
-        notes: model.notes || '',
-        owner: model.owner,
-        primary: model.primary || '',
-        secondary: model.secondary || '',
-        tabs: {
-            ...tabs,
-            all: {
-                date: 0,
-                delete: false,
-                groups: [],
-                id: 'deck',
-                name: 'Decks',
-                tags: []
-            }
-        },
-        tags: model.tags || []
-    }
-}
-export function collectionModel (model) {
-    return {
-        date: model.date,
-        groups: model.groups,
-        members: model.members,
-        meta: model.meta,
-        notes: model.notes,
-        owner: model.owner,
-        primary: model.primary,
-        secondary: model.secondary,
-        tags: model.tags
-    }
-}
-
-
-//  Tab Models  //
+//  Tab View Model  -----------------------------------------------------  Tab V.M.  //
 export function tabViewModel (id, data) {
     return {
         collection: data.collection,
         date: data.date,
         delete: true,
-        groups: data.groups || [],
+        group: data.group || [],
         id: id,
         name: data.name,
-        tags: data.tags || []
-    }
-}
-export function tabModel (data) {
-    return {
-        collection: data.collection,
-        date: data.date,
-        groups: data.groups,
-        name: data.name,
-        tags: data.tags
+        tag: data.tag || []
     }
 }
 
-
-//  User Models  //
-export function userModel (id, model) {
-    const tabs = {};
-    if (model.tabs) {
-        Object.keys(model.tabs).map(id => {
-            tabs[id] = tabViewModel(id, model.tabs[id]);
+//  Student View Model  ---------------------------------------------  Student V.M.  //
+export function userViewModel (id, student) {
+    const tab = {};
+    if (student.tab) {
+        Object.keys(student.tab).map(id => {
+            tab[id] = tabViewModel(id, student.tab[id]);
         });
     }
     return {
-        classes: model.classes || [],
-        date: model.date,
-        groups: model.groups || [],
+        date: student.date || Date.now(),
+        group: student.group || [],
         id: id,
         info: {
-            email: model.info.email,
-            first: model.info.first,
-            last: model.info.last,
-            user: model.info.user
+            email: student.info.email,
+            first: student.info.first,
+            last: student.info.last,
+            user: student.info.user || id
         },
-        meta: model.meta || {},
-        privilage: model.privilage,
-        tabs: tabs,
-        tags: model.tags || []
+        meta: student.meta || {},
+        privilage: 0,
+        tab: tab,
+        tag: student.tag || []
     }
 }

@@ -29,35 +29,35 @@ class Collections extends Component {
             collection: this.props.match.params.collection,
             date: 0,
             delete: false,
-            groups: [],
+            group: [],
             id: 'all',
             name: 'All',
-            tags: []
+            tag: []
         },
         collection: this.selectCollection(this.props.match.params.collection),
         filters: {
-            groups: [],
-            tags: []
+            group: [],
+            tag: []
         },
-        groups: this.props.user.groups,
+        group: this.props.user.group,
         inspect: {},
         page: this.props.match.params.collection,
         quick: [],
         selected: [],
         sort: sortTypes.DATE_ASC,
-        tabs: {
-            ...this.props.user.tabs,
+        tab: {
+            ...this.props.user.tab,
             all: {
                 collection: this.props.match.params.collection,
                 date: 0,
                 delete: false,
-                groups: [],
+                group: [],
                 id: 'all',
                 name: 'All',
-                tags: []
+                tag: []
             }
         },
-        tags: this.props.user.tags,
+        tag: this.props.user.tag,
         undo: {
             action: null,
             data: {}
@@ -316,8 +316,8 @@ class Collections extends Component {
                 }
             },
             filters: {
-                groups: [],
-                tags: []
+                group: [],
+                tag: []
             }
         }));
     }
@@ -339,10 +339,10 @@ class Collections extends Component {
     }
 
     //  Tags  ---------------------------------------------------------------  Tags  //
-    setTags (category, tags) {
+    setTags (category, tag) {
         this.setState(prev => ({
             ...prev,
-            [category]: tags
+            [category]: tag
         }));
     }
 
@@ -350,8 +350,8 @@ class Collections extends Component {
     addTab (tab) {
         this.setState(prev => ({
             ...prev,
-            tabs: {
-                ...prev.tabs,
+            tab: {
+                ...prev.tab,
                 [tab.id]: tab
             }
         }));
@@ -368,11 +368,11 @@ class Collections extends Component {
             current: tab
         }));
     }
-    resetTabs (tabs) {
+    resetTabs (tab) {
         this.setState(prev => ({
             ...prev,
-            tabs: {
-                ...tabs
+            tab: {
+                ...tab
             }
         }));
     }
@@ -387,15 +387,15 @@ class Collections extends Component {
 
     //  Action  -----------------------------------------------------------  Action  //
     handle_onActionClick = () => {
-        const item = create.collectionViewModel(utility.createHashId(0), {
+        const item = create.deckViewModel(utility.createHashId(0), {
             owner: this.props.select_user.id
         });
         this.addItem(item);
         this.toggleAside(98);
         this.setAsideData({
-            groups: this.state.groups,
+            group: this.state.group,
             item: item,
-            tags: this.state.tags
+            tag: this.state.tag
         });
         this.setAsideActions({change: this.handle_onItemChange});
         this.clearSelected();
@@ -408,14 +408,14 @@ class Collections extends Component {
         const original = this.state.aside.data.item;
         const item = this.state.collection[original.id];
         if (JSON.stringify(item) !== JSON.stringify(original)) {
-            this._checkForNewTags('tags', item.tags);
-            this._checkForNewTags('groups', item.groups);
+            this._checkForNewTags('tag', item.tag);
+            this._checkForNewTags('group', item.group);
             switch (this.state.aside.state) {
                 case 98:
-                    this.props.patchItem_async(this.state.page, this.props.token, item);
+                    this.props.addDeck_async(this.props.token, item);
                     break;
                 case 99:
-                    this.props.putItem_async(this.state.page, this.props.token, item);
+                    this.props.updateDeck_async(this.state.page, this.props.token, item);
                     this.setQuick('u');
                     break;
                 default:
@@ -441,7 +441,7 @@ class Collections extends Component {
         }
         this.setFilters(category, filters);
         this.updateAsideData('filters', filters);
-        if (filters.tags.length || filters.groups.length) {
+        if (filters.tag.length || filters.group.length) {
             this.setQuick('f');
         } else {
             this.clearQuick('f');
@@ -457,8 +457,8 @@ class Collections extends Component {
                 this.setAsideData({
                     current: this.state.current,
                     filters: this.state.filters,
-                    groups: this.state.groups,
-                    tags: this.state.tags
+                    group: this.state.group,
+                    tag: this.state.tag
                 });
             }
             this.toggleAside(state);
@@ -473,9 +473,9 @@ class Collections extends Component {
     handle_onItemInspect = (item) => {
         this.toggleAside(99);
         this.setAsideData({
-            groups: this.state.groups,
+            group: this.state.group,
             item: item,
-            tags: this.state.tags
+            tag: this.state.tag
         });
         this.setAsideActions({change: this.handle_onItemChange});
         this.setUndo({
@@ -502,8 +502,8 @@ class Collections extends Component {
         this.setSelected(selected);
     }
 
-    _checkForNewTags (category, tags) {
-        const newTags = tags.filter(tag => this.state[category].indexOf(tag) < 0);
+    _checkForNewTags (category, tag) {
+        const newTags = tag.filter(tag => this.state[category].indexOf(tag) < 0);
         let allTags;
         if (newTags.length) {
             allTags = this.state[category].concat(newTags);
@@ -512,7 +512,7 @@ class Collections extends Component {
         }
     }
     _findTheNextTab (tab) {
-        const tabs = utility.sortBy(sortTypes.DATE_DSC, this.state.tabs).filter(tab => tab.collection === this.state.page);
+        const tabs = utility.sortBy(sortTypes.DATE_DSC, this.state.tab).filter(tab => tab.collection === this.state.page);
         return tabs[tabs.indexOf(tab) + 1];
     }
 
@@ -554,14 +554,14 @@ class Collections extends Component {
         this.setManyItems(recovered);
         this.clearQuick('u');
         this.clearUndo();
-        this.props.patchManyItems_async(this.state.page, this.props.select_token, deleted);
+        this.props.addManyDecks_async(this.props.select_token, deleted);
     }
     handle_onItemReset = () => {
         const item = this.state.undo.data;
         this.setItem(item);
         this.clearQuick('u');
         this.clearUndo();
-        this.props.patchItem_async(this.state.page, this.props.select_token, item);
+        this.props.addDeck_async(this.props.select_token, item);
     }
     
     //  Filters  -----------------------------------------------------  Filters EHs  //
@@ -569,8 +569,8 @@ class Collections extends Component {
         this.clearFilters();
         this.clearQuick('f');
         this.updateAsideData('filters', {
-            groups: [],
-            tags:[]
+            group: [],
+            tag:[]
         });
     }
 
@@ -589,11 +589,11 @@ class Collections extends Component {
 
     //  Tab  -------------------------------------------------------------  Tab EHs  //
     handle_onTabDelete = (tab) => {
-        let tabs = this.state.tabs;
+        let tabs = this.state.tab;
         if (this.state.current.id === tab.id) {
-            this.handle_onTabToggle(this._findTheNextTab(tab));
+            this.handle_onTabToggle(this._findTheNextTab(tabs));
         }
-        delete tabs[tab.id];
+        delete tab[tab.id];
         this.resetTabs(tabs);
     }
     handle_onTabToggle = (tab) => {
@@ -605,8 +605,8 @@ class Collections extends Component {
         this.clearQuick('s');
     }
     handle_onTabCreate = (tab) => {
-        this._checkForNewTags('groups', tab.groups);
-        this._checkForNewTags('tags', tab.tags);
+        this._checkForNewTags('group', tab.group);
+        this._checkForNewTags('tag', tab.tag);
         this.addTab(tab);
         this.handle_onTabToggle(tab);
     }
@@ -620,8 +620,8 @@ class Collections extends Component {
         if (this.state.current.id === 'add') {
             mainContent = (
                 <TabForm
-                    tags={this.state.tags}
-                    groups={this.state.groups}
+                    tag={this.state.tag}
+                    group={this.state.group}
                     page={this.state.page}
                     onConfirm={this.handle_onTabCreate}/>
             );
@@ -665,7 +665,7 @@ class Collections extends Component {
                                 toggle: this.handle_onTabToggle,
                             }}
                             page={this.state.page}
-                            backingCollection={this.state.tabs}
+                            backingCollection={this.state.tab}
                             active={this.state.current.id}
                             onClick={this.handle_onAsideClose}/>
                         {mainContent}
@@ -702,9 +702,10 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        patchItem_async: (url, token, item) => dispatch(actions.patchItem_async(url, token, item)),
-        patchManyItems_async: (url, token, items) => dispatch(actions.patchManyItems_async(url, token, items)),
-        putItem_async: (url, token, item) => dispatch(actions.putItem_async(url, token, item)),
+        // addDeck_async: (url, token, item) => dispatch(actions.addDeck_async(url, token, item)),
+        addDeck_async: (token, deck) => dispatch(actions.addDeck_async(token, deck)),
+        addManyDecks_async: (token, decks) => dispatch(actions.addManyDecks_async(token, decks)),
+        updateDeck_async: (token, item) => dispatch(actions.updateDeck_async(token, item)),
         putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
         patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data))
 

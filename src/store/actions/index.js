@@ -6,27 +6,31 @@ export {
 
 export {
     addCard_async,
+    addManyCards_async,
     deleteCard_async,
+    deleteManyCards_async,
     getAllCards_async,
     updateCard_async
 } from './card';
 
 export {
     addDeck_async,
+    addManyDecks_async,
     deleteDeck_async,
+    deleteManyDecks_async,
     getAllDecks_async,
     updateDeck_async
 } from './deck';
 
-export {
-    getCollection,
-    deleteItem_async,
-    deleteManyItems_async,
-    getAllItems_async,
-    patchItem_async,
-    patchManyItems_async,
-    putItem_async
-} from './collection';
+// export {
+//     getCollection,
+//     deleteItem_async,
+//     deleteManyItems_async,
+//     getAllItems_async,
+//     patchItem_async,
+//     patchManyItems_async,
+//     putItem_async
+// } from './collection';
 
 export {
     deleteTab_async,

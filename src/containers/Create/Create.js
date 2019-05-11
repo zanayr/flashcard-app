@@ -26,12 +26,12 @@ class Create extends Component {
             ...prev,
             cards: prev.cards.filter(c => c.id !== card.id)
         }));
-        this.props.deleteItem_async('card', this.props.select_token, card);
+        this.props.deleteCard_async(this.props.select_token, card);
     }
 
     handle_onCardCreate = (card) => {
         this._addCard(card);
-        this.props.patchItem_async('card', this.props.select_token, {
+        this.props.addCard_async(this.props.select_token, {
             id: card.id,
             item: create.cardModel(card)
         });
@@ -77,8 +77,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        deleteItem_async: (url, token, item) => dispatch(actions.deleteItem_async(url, token, item)),
-        patchItem_async: (url, token, item) => dispatch(actions.patchItem_async(url, token, item)),
+        deleteCard_async: (token, item) => dispatch(actions.deleteCard_async(token, item)),
+        addCard_async: (token, item) => dispatch(actions.addCard_async(token, item)),
         putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
     };
 };

@@ -42,7 +42,6 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        getAllItems_async: (url, token, user) => dispatch(actions.getAllItems_async(url, token, user)),
         getAllCards_async: (token, user) => dispatch(actions.getAllCards_async(token, user)),
         getAllDecks_async: (token, user) => dispatch(actions.getAllDecks_async(token, user)),
         getUser_async: (token, auth) => dispatch(actions.getUser_async(token, auth))
