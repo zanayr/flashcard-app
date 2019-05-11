@@ -13,17 +13,31 @@ import styles from './TagForm.module.css';
 
 class PinnableTagForm extends Component {
     state = {
-        value: ''
+        value: this.props.pinned.join(', ')
+    }
+
+    _resetValue () {
+        this.setState({value: ''});
+    }
+    _checkTags (tags) {
+        //  Check for new tags that are not included in the user defined tags
+        const newTags = tags.filter(tag => !this.props.collection.includes(tag));
+        if (newTags.length) {
+            //  Send new tags to the redux store and database
+            //this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
+            return newTags;
+        }
+        return [];
     }
 
     handle_onChange = (value) => {
         this.setState({value: value});
     }
     handle_onConfirm = () => {
-        const tag = this.props.reference.current.tag.value;
-        if (this.props.reference.current.reportValidity() && !this.props.collection.includes(tag)) {
-            this.setState({value: ''});
-            this.props.onConfirm([tag]);
+        const tag = this.props.reference.current.tag.value.split(', ');
+        if (this.props.reference.current.reportValidity()) {
+            this.props.onConfirm(this._checkTags(tag));
+            this._resetValue();
         }
     }
 
@@ -65,7 +79,8 @@ class PinnableTagForm extends Component {
                 <TagEditor
                     label={this.props.category}
                     tabIndex={this.props.tabIndex}
-                    value={this.props.pinned.join(', ')}/>
+                    value={this.props.pinned.join(', ')}
+                    onChange={this.handle_onChange}/>
             );
         }
         if (this.props.onToggle) {

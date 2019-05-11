@@ -8,8 +8,12 @@ class TagEditor extends Component {
         value: this.props.value
     }
 
-    handle_onChange = (value) => {
+    _setValue (value) {
         this.setState({value: value});
+    }
+
+    handle_onChange = (value) => {
+        this._setValue(value);
     }
 
     render () {

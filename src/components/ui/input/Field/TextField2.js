@@ -1,39 +1,29 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import styles from '../Input/Input.module.css';
 
 
-class TextField2 extends Component {
-    state = {
-        value: this.props.value || ''
-    }
-
-    handle_onChange = (value) => {
-        this.setState({value: value})
-    }
-
-    render () {
-        return (
-            <div className={styles.Field}>
-                <div>
-                    <label>{this.props.config.label}</label>
-                    <input
-                        className={styles.Input}
-                        {...this.props.config}
-                        name={this.props.config.name || this.props.target}
-                        placeholder={this.props.config.placeholder || this.props.config.label}
-                        required={this.props.required ? true : false}
-                        type='text'
-                        tabIndex={this.props.config.tabIndex || -1}
-                        value={this.state.value}
-                        onChange={(e) => this.handle_onChange(e.target.value)}/>
-                    {this.props.children}
-                    <span><p>{this.props.config.maxLength - this.state.value.length}</p></span>
-                </div>
+const textField2 = (props) => {
+    return (
+        <div className={styles.Field}>
+            <div>
+                <label>{props.config.label}</label>
+                <input
+                    className={styles.Input}
+                    {...props.config}
+                    name={props.config.name || props.target}
+                    placeholder={props.config.placeholder || props.config.label}
+                    required={props.required ? true : false}
+                    type='text'
+                    tabIndex={props.config.tabIndex || -1}
+                    value={props.value}
+                    onChange={(e) => props.onChange(e.target.value)}/>
+                {props.children}
+                <span><p>{props.config.maxLength - props.value.length}</p></span>
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 
-export default TextField2;
+export default textField2;

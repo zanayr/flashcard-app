@@ -1,63 +1,33 @@
 import React, {Component} from 'react';
 
 import * as create from '../../store/models/models';
-import * as utility from '../../utility/utility';
 
-import DisplayTag from '../ui/Tag/DisplayTag';
 import Button from '../ui/button/Button/Button';
+import Card from '../ui/Card/Card';
 
 import styles from './CardStack.module.css';
 
 
-const Card = (props) => {
-    let css = [styles.Card];
-    let display = (
-        <div>
-            <p>{props.data.primary}</p>
-        </div>
-    );
-    if (props.data.flipped) {
-        display = (
-            <div>
-                <p>{props.data.secondary}</p>
-                {props.children}
-                <div className={styles.TagList}>
-                    <div>
-                        <p>{props.data.tag.join(', ')}</p>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-    if (props.position && !props.data.selected) {
-        css.push(styles.Under);
-    }
-    if (props.position && props.data.selected) {
-        css.push(styles.Pulled);
-    }
-
-    const handle_onClick = (e) => {
-        e.stopPropagation();
-        props.onSelect();
-    }
-
-    return (
-        <article
-            className={css.join(' ')}
-            style={{
-                bottom: props.position * 24,
-                zIndex: props.data.zIndex}}
-            onClick={handle_onClick}>
-            {display}
-        </article>
-    )
-}
-
 class CardStack extends Component {
     state = {
         cards: [],
-        max: 4,
+        max: this.props.max,
         mode: 1
+    }
+
+    static getDerivedStateFromProps (nextProps, prevState) {
+        if (nextProps.collection.length !== prevState.cards.length) {
+            const cards = nextProps.collection.map(card => {
+                return create.displayCardViewModel(card);
+            }).reverse();
+            if (cards.length) {
+                cards[0].selected = true;
+            }
+            return {
+                cards: cards
+            };
+        }
+        return null;
     }
 
     _flipCard (card) {
@@ -90,25 +60,9 @@ class CardStack extends Component {
     handle_onCardSelect = (card) => {
         if (!card.selected) {
             this._selectCard(card);
-            if (card.top) {
-                this._flipCard(card);
-            }
         } else if (card.selected) {
             this._flipCard(card);
         }
-    }
-
-    static getDerivedStateFromProps (nextProps, prevState) {
-        if (nextProps.collection.length !== prevState.cards.length) {
-            const cards = nextProps.collection.map(card => {
-                return create.displayCardViewModel(card);
-            }).reverse();
-            cards[0].top = true;
-            return {
-                cards: cards
-            };
-        }
-        return null;
     }
 
     render () {
@@ -130,7 +84,7 @@ class CardStack extends Component {
                         onSelect={() => this.handle_onCardSelect(card)}>
                         <Button
                             className={styles.ActionButton}
-                            onClick={() => this.onAction(card)}>
+                            onClick={() => this.props.onAction(card)}>
                             x
                         </Button>
                     </Card>
