@@ -43,7 +43,7 @@ const card_fail = (state, action) => {
     return {
         ...state,
         [action.payload.store]: {
-            error: action.payload.error,
+            error: action.payload,
             isLoading: false
         }
     };
