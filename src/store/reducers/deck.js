@@ -58,8 +58,8 @@ const getAllDecks_init = (state, action) => {
 };
 const getAllDecks_success = (state, action) => {
     let collection = {};
-    Object.keys(action.payload.data).map(id => {
-        collection[id] = create.deckViewModel(id, action.payload.data[id]);
+    Object.keys(action.payload).map(id => {
+        collection[id] = create.deckViewModel(id, action.payload[id]);
     });
     return {
         collection: collection,

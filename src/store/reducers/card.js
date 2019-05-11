@@ -58,8 +58,8 @@ const getAllCards_init = (state, action) => {
 };
 const getAllCards_success = (state, action) => {
     let collection = {};
-    Object.keys(action.payload.data).map(id => {
-        collection[id] = create.cardViewModel(id, action.payload.data[id]);
+    Object.keys(action.payload).map(id => {
+        collection[id] = create.cardViewModel(id, action.payload[id]);
     });
     return {
         collection: collection,

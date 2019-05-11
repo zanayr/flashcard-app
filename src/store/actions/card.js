@@ -96,7 +96,7 @@ export const deleteCard_async = (token, data) => {
     return dispatch => {
         axios.delete('/card/' + data.id + '.json?auth=' + token)
         .then(response => {
-            dispatch(deleteCard_success(url, data));
+            dispatch(deleteCard_success(data));
         })
         .catch(error => {
             dispatch(deleteCard_fail(error));

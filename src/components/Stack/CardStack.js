@@ -18,7 +18,7 @@ class CardStack extends Component {
     static getDerivedStateFromProps (nextProps, prevState) {
         if (nextProps.collection.length !== prevState.cards.length) {
             const cards = nextProps.collection.map(card => {
-                return create.displayCardViewModel(card);
+                return create.flashcardViewModel(card);
             }).reverse();
             if (cards.length) {
                 cards[0].selected = true;

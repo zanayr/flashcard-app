@@ -96,7 +96,7 @@ export const deleteDeck_async = (token, data) => {
     return dispatch => {
         axios.delete('/deck/' + data.id + '.json?auth=' + token)
         .then(response => {
-            dispatch(deleteDeck_success(url, data));
+            dispatch(deleteDeck_success(data));
         })
         .catch(error => {
             dispatch(deleteDeck_fail(error));
