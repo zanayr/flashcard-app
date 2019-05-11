@@ -1,4 +1,4 @@
-import React, {Component, PureComponent} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../../../store/actions/index';
@@ -77,7 +77,7 @@ class CreateForm extends Component {
             allTags = this.state[category].concat(newTags);
             this._setTags(category, allTags);
             //  Send new tags to the redux store and database
-            //this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
+            this.props.putTag_async(category, this.props.select_token, this.props.select_user.id, allTags);
         }
     }
     _clearTag (category, tag) {
@@ -183,8 +183,6 @@ class CreateForm extends Component {
 
             //  Send the new card up to the create page
             this.props.onCreate(card);
-            //  Send the new card to the redux store and database
-            //  <-- Do that here
 
             //  Reset the card state, tag forms and form focus
             this._resetTagForms();
@@ -195,10 +193,16 @@ class CreateForm extends Component {
 
     //  TAGS  ---------------------------------------------------------------  TAGS  //
     handle_onTagCreate = (category, tags) => {
-        tags.forEach(tag => {
-            this._selectTag(category, tag);
-        });
-        this._setTags(category, this.state[category].concat(tags));
+
+        if (tags.length) {
+            const allTags = this.state[category].concat(tags);
+            tags.forEach(tag => {
+                this._selectTag(category, tag);
+            });
+            this._setTags(category, allTags);
+            this.props.putTag_async(category, this.props.select_token, this.props.select_user.id, allTags);
+        }
+        
     }
     handle_onTagToggle = (category, tag) => {
         if (!this.state.card[category].includes(tag)) {
@@ -336,7 +340,6 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        patchItem_async: (url, token, item) => dispatch(actions.patchItem_async(url, token, item)),
         putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
     };
 };

@@ -1,6 +1,7 @@
 //  Cards  //
 export function cardModel (model) {
     return {
+        group: model.group,
         date: model.date,
         groups: model.groups,
         memberOf: model.memberOf,
@@ -9,6 +10,7 @@ export function cardModel (model) {
         owner: model.owner,
         primary: model.primary,
         secondary: model.secondary,
+        tag: model.tag,
         tags: model.tags
     }
 }

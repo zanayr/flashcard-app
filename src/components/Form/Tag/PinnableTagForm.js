@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 
+import * as actions from '../../../store/actions/index';
+import * as create from '../../../store/models/models';
+import * as select from '../../../store/reducers/root';
 import * as utility from '../../../utility/utility';
 
 import Aux from '../../../hoc/Aux/Aux';
@@ -24,7 +28,6 @@ class PinnableTagForm extends Component {
         const newTags = tags.filter(tag => !this.props.collection.includes(tag));
         if (newTags.length) {
             //  Send new tags to the redux store and database
-            //this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
             return newTags;
         }
         return [];
@@ -111,4 +114,17 @@ class PinnableTagForm extends Component {
 }
 
 
-export default PinnableTagForm;
+const mapStateToProps = state => {
+    return {
+        select_token: select.authToken(state),
+        select_user: select.user(state)
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
+    };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(PinnableTagForm);
