@@ -1,5 +1,7 @@
 import React from 'react';
 
+import * as asideTypes from './asideTypes';
+
 import NavigationAiside from '../Nav/NavAside';
 import FilterAside from '../Filter/FilterAside';
 import InspectAside from '../Inspect/InspectAside';
@@ -37,7 +39,16 @@ const aside = (props) => {
                     }}/>
             );
             break;
-        case 97:
+        case asideTypes.CREATE_CARD:
+            aside = (
+                <CardInspect
+                    actions={props.actions}
+                    data={props.data}
+                    path={'/u/create'}
+                    page={props.page}/>
+            );
+            break;
+        case asideTypes.INSPECT_CARD:
             aside = (
                 <CardInspect
                     actions={props.actions}
@@ -56,6 +67,12 @@ const aside = (props) => {
                     page={props.page}/>
             );
             break;
+        case asideTypes.CLOSED: {
+            aside = (
+                null
+            );
+            break;
+        }
         default:
             aside = (
                 null

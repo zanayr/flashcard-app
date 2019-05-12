@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
+import * as asideTypes from '../../components/aside/Aside/asideTypes';
 import * as create from '../../store/models/models';
 import * as select from '../../store/reducers/root';
 import * as sortTypes from '../../utility/sortTypes';
@@ -24,7 +25,9 @@ import styles from './Inspector.module.css';
 class Inspector extends Component {
     state = {
         aside: {
-            state: 0
+            actions: {},
+            data: {},
+            state: asideTypes.CLOSED
         },
         current: {
             collection: this.props.match.params.id,
@@ -108,14 +111,31 @@ class Inspector extends Component {
     }
 
     //  Aside  -------------------------------------------------------------  Aside  //
-    clearAside () {
+    _clearAside () {
         this.setState(prev => ({
             ...prev,
             aside: {
                 ...prev.aside,
                 actions: {},
-                data: {},
-                state: 0
+                data: {}
+            }
+        }));
+    }
+    _closeAside () {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                state: asideTypes.CLOSED
+            }
+        }));
+    }
+    _openAside (state) {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                state: state
             }
         }));
     }
@@ -154,32 +174,14 @@ class Inspector extends Component {
         }));
     }
     toggleAside (state) {
-        if (this.state.aside.state) {
-            if (state !== this.state.aside.state && this.state.aside.isActive) {
-                this.setState(prev => ({
-                    ...prev,
-                    aside: {
-                        ...prev.aside,
-                        state: state
-                    }
-                }));
+        if (this.state.aside.state !== asideTypes.CLOSED) {
+            if (state !== this.state.aside.state) {
+                this._openAside(state);
             } else {
-                this.setState(prev => ({
-                    ...prev,
-                    aside: {
-                        ...prev.aside,
-                        isActive: 0
-                    }
-                }));
+                this._closeAside();
             }
         } else {
-            this.setState(prev => ({
-                ...prev,
-                aside: {
-                    ...prev.aside,
-                    state: state
-                }
-            }));
+            this._openAside(state);
         }
     }
  
@@ -212,7 +214,7 @@ class Inspector extends Component {
             }
         }));
     }
-    removeItem (item) {
+    _removeItem (item) {
         const collection = this.state.collection;
         delete collection[item.id];
         this.setState(prev => ({
@@ -248,7 +250,6 @@ class Inspector extends Component {
         }));
     }
     setItemValue (target, value) {
-        console.log(target, value);
         const itemId = this.state.aside.data.item.id;
         this.setState(prev => ({
             ...prev,
@@ -382,7 +383,7 @@ class Inspector extends Component {
             secondary: 'Lorem ipsum'
         });
         this.addCard(card);
-        this.toggleAside(97);
+        this.toggleAside(asideTypes.CREATE_CARD);
         this.setAsideData({
             group: this.state.group,
             item: card,
@@ -403,36 +404,31 @@ class Inspector extends Component {
     }
 
     //  Aside  -------------------------------------------------------------  Aside  //
-    handle_onInspectOut = () => {
-        const original = this.state.aside.data.item;
-        const item = this.state.collection[original.id];
-        if (JSON.stringify(item) !== JSON.stringify(original)) {
-            this._checkTags('tag', item.tag);
-            this._checkTags('group', item.group);
-            switch (this.state.aside.state) {
-                case 97:
+    handle_onAsideClose = () => {
+        const originalData = this.state.aside.data;
+        let item;
+        switch (this.state.aside.state) {
+            case asideTypes.CREATE_CARD:
+                item = this.state.collection[originalData.item.id];
+                if (JSON.stringify(item) !== JSON.stringify(originalData.item)) {
                     this.props.addCard_async(this.props.token, item);
                     this.props.updateDeck_async(this.props.token, {
                         ...this.state.deck,
                         member: this.state.deck.member.concat(item.id)
-                    });
-                    break;
-                case 99:
+                    })
+                } else {
+                    this._removeItem(item);
+                }
+                break;
+            case asideTypes.INSPECT_CARD:
+                item = this.state.collection[originalData.item.id];
+                if (JSON.stringify(item) !== JSON.stringify(originalData.item)) {
                     this.props.updateCard_async(this.props.token, item);
                     this.setQuick('u');
-                    break;
-                default:
-                    break;
-            }
-        } else if (this.state.aside.state === 98) {
-            this.removeItem(item);
+                }
         }
-    }
-    handle_onAsideClose = () => {
-        if (this.state.aside.state >= 97) {
-            this.handle_onInspectOut();
-        }
-        this.clearAside();
+        this._clearAside();
+        this._closeAside();
     }
     
     // handle_onFilterSelect = (category, tag) => {
@@ -474,10 +470,11 @@ class Inspector extends Component {
         this.setItemValue(target, value);
     }
     handle_onItemInspect = (item) => {
-        this.toggleAside(99);
+        this.toggleAside(asideTypes.INSPECT_CARD);
         this.setAsideData({
             groups: this.state.groups,
             item: item,
+            deckId: this.state.deck.id,
             tags: this.state.tags
         });
         this.setAsideActions({change: this.handle_onItemChange});
@@ -499,7 +496,7 @@ class Inspector extends Component {
         } else {
             this.clearQuick('s');
         }
-        if (this.state.aside.state === 99) {
+        if (this.state.aside.state === asideTypes.CREATE_CARD || this.state.aside.state === asideTypes.INSPECT_CARD) {
             this.handle_onAsideClose();
         }
         this.setSelected(selected);
@@ -682,7 +679,6 @@ class Inspector extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        //select_collection: select.collection(state, ownProps.match.url.match('u\/(.*)\/')[1], ownProps.match.params.id),
         select_deck: select.deck(state, ownProps.match.params.id),
         select_cards: select.cards(state),
         select_token: select.authToken(state),

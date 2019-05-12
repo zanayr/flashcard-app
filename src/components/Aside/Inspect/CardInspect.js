@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 
 import BarLink from '../../ui/link/Bar/BarLink';
 import CardInspectForm from '../../form/Card/CardInspectForm';
-import DeckInspectForm from '../../form/Deck/DeckInspectForm';
-import TagForm from '../../form/Tag/TagForm';
 
 import styles from '../Aside.module.css';
 
