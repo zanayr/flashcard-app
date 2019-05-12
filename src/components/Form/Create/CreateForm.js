@@ -24,7 +24,6 @@ class CreateForm extends Component {
             tag: []
         },
         group: this.props.select_user.group,
-        isReloading: false,
         pinned: {
             group: [],
             tag: []
@@ -238,9 +237,9 @@ class CreateForm extends Component {
                         name: 'notes',
                         tabIndex: 3
                     }}
-                    key='notes'
-                    value={this.state.card.notes}
-                    onChange={(value) => this.handle_onCardChange('notes', value)}>
+                    key='note'
+                    value={this.state.card.note}
+                    onChange={(value) => this.handle_onCardChange('note', value)}>
                     <Button
                         className={styles.ToggleButton}
                         onClick={() => this.handle_onStateToggle('note')}>T</Button>

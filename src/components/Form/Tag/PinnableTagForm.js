@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../../../store/actions/index';
-import * as create from '../../../store/models/models';
 import * as select from '../../../store/reducers/root';
 import * as utility from '../../../utility/utility';
 

@@ -1,9 +1,14 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 
+import * as actions from '../../../store/actions/index';
+import * as select from '../../../store/reducers/root';
 import * as utility from '../../../utility/utility';
 
-import Tag from '../../ui/Tag/Tag';
-import TagField from '../../ui/input/Tag/TagField';
+import Aux from '../../../hoc/Aux/Aux';
+import TagField2 from '../../ui/input/Tag/TagField2';
+import TagEditor from '../../ui/input/Tag/TagEditor';
+import Tag2 from '../../ui/Tag/Tag2';
 import Button from '../../ui/button/Button/Button';
 
 import styles from './TagForm.module.css';
@@ -11,67 +16,135 @@ import styles from './TagForm.module.css';
 
 class TagForm extends Component {
     state = {
-        tag: '',
-        tags: this.props.backingCollection
+        state: false,
+        value: ''
     }
-    form = React.createRef();
 
-
-    handle_onConfirm = value => {
-        if (this.form.current.reportValidity()) {
-            this.setState(prev => ({
-                tag: '',
-                tags: prev.tags.concat(value)
-            }));
-            this.props.onConfirm(value);
-        }
+    
+    //  STATE SETTERS  ---------------------------------------------------  SETTERS  //
+    //  Value  -------------------------------------------------------------  Value  //
+    _resetValue () {
+        this.setState({value: ''});
     }
-    handle_onChange = (value) => {
+
+    //  State  -------------------------------------------------------------  State  //
+    _toggleState () {
         this.setState(prev => ({
             ...prev,
-            tag: value
+            state: !prev.state
         }));
     }
 
 
+    //  PRIVATE METHODS  -----------------------------------------  PRIVATE METHODS  //
+    //  Tags  ---------------------------------------------------------------  Tags  //
+    _checkTags (tags) {
+        const newTags = tags.filter(tag => !this.props.collection.includes(tag));
+        if (newTags.length) {
+            return newTags;
+        }
+        return [];
+    }
+
+
+    //  EVENT HANDLERS  -------------------------------------------  EVENT HANDLERS  //
+    //  On Value Change  -----------------------------------------------  On Change  //
+    handle_onChange = (value) => {
+        this.setState({value: value});
+    }
+
+    //  On Form Confirm -----------------------------------------------  On Confirm  //
+    handle_onConfirm = () => {
+        const tag = this.props.reference.current.tag.value.split(', ');
+        if (this.props.reference.current.reportValidity()) {
+            this.props.onConfirm(this._checkTags(tag));
+            this._resetValue();
+        }
+    }
+
+    //  On Form Toggle  ------------------------------------------------  On Toggle  //
+    handle_onToggle = () => {
+        this._toggleState();
+        this.props.onToggle();
+    }
+
+
+    //  RENDER METHOD  ----------------------------------------------------  RENDER  //
     render () {
-        let tags = utility.sortByAlpha_asc(this.state.tags).map((tag, i) => {
-            return (
-                <Tag
-                    active={this.props.activeCollection.indexOf(tag) > -1}
-                    key={utility.createHashId(i)}
-                    onClick={() => this.props.onClick(tag)}>
-                    {tag}
-                </Tag>
-            );
-        });
-        let field = null;
-        if (this.props.field) {
-            field = (
-                <form ref={this.form}>
+        let content = (
+            <Aux>
+                <div className={styles.TagBar}>
                     <div>
-                        <TagField
-                            onChange={this.handle_onChange}
-                            label={this.props.field.label}
-                            placeholder={this.props.field.placeholder}
-                            value={this.state.tag}/>
-                        <Button onClick={() => this.handle_onConfirm(this.state.tag)}>Add</Button>
+                        {this.props.collection.map((tag, i) => {
+                            return (
+                                <Tag2
+                                    key={utility.createHashId(i)}
+                                    selected={this.props.selected.includes(tag)}
+                                    onToggle={(tag) => this.props.onSelect(this.props.category, tag)}>
+                                    {tag}
+                                </Tag2>
+                            )
+                        })}
                     </div>
-                </form>
+                </div>
+                <TagField2
+                    label={'new ' + this.props.category}
+                    tabIndex={-1}
+                    value={this.state.value}
+                    onChange={this.handle_onChange}>
+                    <Button
+                        className={styles.AddButton}
+                        tabIndex={-1}
+                        onClick={this.handle_onConfirm}>
+                        +
+                    </Button>
+                </TagField2>
+            </Aux>
+        )
+        if (this.state.state) {
+            content = (
+                <TagEditor
+                    label={this.props.category}
+                    tabIndex={this.props.tabIndex}
+                    value={''}
+                    onChange={this.handle_onChange}/>
             );
         }
+        //  Set the toggle button's styling
+        let toggleCss = [styles.ToggleButton];
+        if (this.state.state) {
+            toggleCss.push(styles.Second);
+        }
 
-
+        //  Return component
         return (
-            <div className={styles.TagForm}>
+            <form
+                className={styles.TagForm2}
+                ref={this.props.reference}>
                 <div>
-                    {tags}
-                    {field}
+                    {content}
+                    <Button
+                        className={toggleCss.join(' ')}
+                        tabIndex={-1}
+                        onClick={this.handle_onToggle}>T</Button>
                 </div>
-            </div>
+            </form>
         );
     }
 }
 
 
-export default TagForm;
+const mapStateToProps = state => {
+    return {
+        select_token: select.authToken(state),
+        select_user: select.user(state)
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
+    };
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(TagForm);

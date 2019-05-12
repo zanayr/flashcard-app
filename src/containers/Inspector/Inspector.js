@@ -138,33 +138,33 @@ class Inspector extends Component {
 
 
     //  Quicks  ------------------------------------------------------------  Quicks //
-    // clearQuick (value) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         quick: prev.quick.filter(q => q !== value)
-    //     }))
-    // }
-    // setQuick (value) {
-    //     if (!this.state.quick.includes(value)) {
-    //         this.setState(prev => ({
-    //             ...prev,
-    //             quick: prev.quick.concat(value)
-    //         }));
-    //     }
-    // }
+    clearQuick (value) {
+        this.setState(prev => ({
+            ...prev,
+            quick: prev.quick.filter(q => q !== value)
+        }))
+    }
+    setQuick (value) {
+        if (!this.state.quick.includes(value)) {
+            this.setState(prev => ({
+                ...prev,
+                quick: prev.quick.concat(value)
+            }));
+        }
+    }
 
     //  Aside  -------------------------------------------------------------  Aside  //
-    // clearAside () {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             actions: {},
-    //             data: {},
-    //             state: 0
-    //         }
-    //     }));
-    // }
+    clearAside () {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                actions: {},
+                data: {},
+                state: 0
+            }
+        }));
+    }
     setAsideData (data) {
         this.setState(prev => ({
             ...prev,
@@ -249,15 +249,15 @@ class Inspector extends Component {
     // }
 
     //  Inspector  -------------------------------------------------  Inspector  //
-    // addItem (item) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: {
-    //             ...prev.collection,
-    //             [item.id]: item
-    //         }
-    //     }));
-    // }
+    addCard (card) {
+        this.setState(prev => ({
+            ...prev,
+            collection: {
+                ...prev.collection,
+                [card.id]: card
+            }
+        }));
+    }
     // removeItem (item) {
     //     const collection = this.state.collection;
     //     delete collection[item.id];
@@ -292,18 +292,20 @@ class Inspector extends Component {
     //         }
     //     }));
     // }
-    // setItemValue (item, target, value) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: {
-    //             ...prev.collection,
-    //             [item.id]: {
-    //                 ...prev.collection[item.id],
-    //                 [target]: value
-    //             }
-    //         }
-    //     }));
-    // }
+    setItemValue (target, value) {
+        console.log(target, value);
+        const itemId = this.state.aside.data.item.id;
+        this.setState(prev => ({
+            ...prev,
+            collection: {
+                ...prev.collection,
+                [itemId]: {
+                    ...prev.collection[itemId],
+                    [target]: value
+                }
+            }
+        }));
+    }
 
     //  Inspected  -----------------------------------------------------  Inspected  //
     // setInspected (item) {
@@ -314,25 +316,25 @@ class Inspector extends Component {
     // }
 
     //  Lists  -------------------------------------------------------------  Lists  //
-    // clearSelected (item) {
-    //     if (typeof item === 'undefined') {
-    //         this.setState(prev => ({
-    //             ...prev,
-    //             selected: []
-    //         }));
-    //     } else {
-    //         this.setState(prev => ({
-    //             ...prev,
-    //             selected: [item]
-    //         }));
-    //     }
-    // }
-    // setSelected (selected) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         selected: selected
-    //     }));
-    // }
+    clearSelected (item) {
+        if (typeof item === 'undefined') {
+            this.setState(prev => ({
+                ...prev,
+                selected: []
+            }));
+        } else {
+            this.setState(prev => ({
+                ...prev,
+                selected: [item]
+            }));
+        }
+    }
+    setSelected (selected) {
+        this.setState(prev => ({
+            ...prev,
+            selected: selected
+        }));
+    }
 
     //  Filters  ---------------------------------------------------------  Filters  //
     // clearFilters () {
@@ -418,9 +420,11 @@ class Inspector extends Component {
     //  Action  -----------------------------------------------------------  Action  //
     handle_onActionClick = () => {
         const card = create.cardViewModel(utility.createHashId(0), {
-            owner: this.props.select_user.id
+            owner: this.props.select_user.id,
+            primary: 'New Card',
+            secondary: 'Lorem ipsum'
         });
-        //this.addItem(card);
+        this.addCard(card);
         this.toggleAside(97);
         this.setAsideData({
             group: this.state.group,
@@ -429,8 +433,8 @@ class Inspector extends Component {
             tag: this.state.tag
         });
         this.setAsideActions({change: this.handle_onItemChange});
-        // this.clearSelected();
-        // this.clearQuick('s');
+        this.clearSelected();
+        this.clearQuick('s');
     }
 
 
@@ -498,9 +502,9 @@ class Inspector extends Component {
     //     }
     // }
 
-    // handle_onItemChange = (item, payload) => {
-    //     this.setItemValue(item, payload.target, payload.value);
-    // }
+    handle_onItemChange = (target, value) => {
+        this.setItemValue(target, value);
+    }
     handle_onItemInspect = (item) => {
         // this.toggleAside(99);
         // this.setAsideData({
@@ -522,14 +526,14 @@ class Inspector extends Component {
         } else {
             selected = selected.concat(item);
         }
-        // if (selected.length) {
-        //     this.setQuick('s');
-        // } else {
-        //     this.clearQuick('s');
-        // }
-        // if (this.state.aside.state === 99) {
-        //     this.handle_onAsideClose();
-        // }
+        if (selected.length) {
+            this.setQuick('s');
+        } else {
+            this.clearQuick('s');
+        }
+        if (this.state.aside.state === 99) {
+            this.handle_onAsideClose();
+        }
         this.setSelected(selected);
     }
 
@@ -682,27 +686,27 @@ class Inspector extends Component {
                     className={styles.Main}
                     onClick={this.handle_onMainClick}>
                     <div>
-                        {/* <TabBar
+                        <TabBar
                             actions={{
                                 delete: this.handle_onTabDelete,
                                 toggle: this.handle_onTabToggle,
                             }}
                             page={this.state.page}
-                            backingCollection={this.state.tabs}
+                            backingCollection={this.state.tab}
                             // active={this.state.current.id}
-                            onClick={this.handle_onAsideClose}/> */}
+                            onClick={this.handle_onAsideClose}/>
                         {mainContent}
                         <ActionButton
                             onClick={this.handle_onActionClick}
                             state={0}
                             values={['Create', 'Study']}/>
-                        {/* <QuickBar
+                        <QuickBar
                             actions={{
                                 onUndo: this.state.undo.action,
                                 onFilterClear: this.handle_onFilterClear,
                                 onSelectClear: this.handle_onItemSelectClear
                             }}
-                            data={this.state.quick}/> */}
+                            data={this.state.quick}/>
                     </div>
                 </main>
                 <Aside

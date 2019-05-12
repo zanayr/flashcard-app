@@ -12,11 +12,10 @@ class CardInspect extends Component {
     state = {
         actions: this.props.actions,
         change: this.props.actions.change ? true : false,
-        groups: this.props.data.groups,
+        group: this.props.data.group,
         item: this.props.data.item,
-        tags: this.props.data.tags
+        tag: this.props.data.tag
     }
-    form = React.createRef();
 
 
     //  FORM  ---------------------------------------------------------------  FORM  //
@@ -29,10 +28,7 @@ class CardInspect extends Component {
             }
         }));
         if (this.state.change) {
-            this.props.actions.change(this.state.item, {
-                target: target,
-                value: value
-            });
+            this.props.actions.change(target, value);
         }
     }
 
@@ -90,50 +86,13 @@ class CardInspect extends Component {
     
 
     render () {
-        let form = (
-            <DeckInspectForm
-                deck={this.state.item}
-                onChange={this.handle_onChange}/>
-        );
-        if (this.props.page === 'card') {
-            form = (
-                <CardInspectForm
-                    card={this.state.item}
-                    onChange={this.handle_onChange}/>
-            );
-        }
         return (
             <aside className={[styles.Aside].join(' ')}>
                 <div>
-                    {/* <div>
-                        <h3>Quick Inspect</h3>
-                        <p>Instructions about this aside here.</p>
-                        <form
-                            className={styles.QuickForm}
-                            ref={this.form}>
-                            {form}
-                        </form>
-                        <h4>Tags</h4>
-                        <TagForm
-                            activeCollection={this.state.item.tags}
-                            backingCollection={this.state.tags}
-                            field={{
-                                label: 'Additional Tag',
-                                placeholder: 'Verb'
-                            }}
-                            onClick={(tag) => this.handle_onTagToggle('tags', tag)}
-                            onConfirm={(tag) => this.handle_onTagCreate('tags', tag)}/>
-                        <h4>Groups</h4>
-                        <TagForm
-                            activeCollection={this.state.item.groups}
-                            backingCollection={this.state.groups}
-                            field={{
-                                label: 'Additional Group',
-                                placeholder: 'Spanish'
-                            }}
-                            onClick={(tag) => this.handle_onTagToggle('groups', tag)}
-                            onConfirm={(tag) => this.handle_onTagCreate('groups', tag)}/>
-                    </div> */}
+                    <CardInspectForm
+                        card={this.state.item}
+                        onChange={this.handle_onChange}
+                        onConfirm={this.handle_onConfirm}/>
                     <div>
                         <BarLink path={this.props.path} state={{id: this.props.data.deckId}}>Add many</BarLink>
                         {/* <BarLink path={'/u/loading'} state={{collection: this.props.page, id: this.state.item.id}}>Edit</BarLink> */}
