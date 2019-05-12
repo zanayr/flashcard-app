@@ -43,8 +43,6 @@ class Inspector extends Component {
         },
         group: this.props.user.group,
         isLoading: true,
-        inspect: {},
-        page: '',
         quick: [],
         selected: [],
         sort: sortTypes.DATE_ASC,
@@ -67,71 +65,27 @@ class Inspector extends Component {
     }
 
     componentDidMount () {
-        // let collection = this.props.select_collection;
-        // let allCards = this.props.select_cards;
-        // let members = {};
-        // Object.keys(allCards).map(id => {
-        //     if (collection.members.includes(id)) {
-        //         members[id] = {...allCards[id]};
-        //     }
-        // });
-
-        // switch (this.props.match.url.match('u\/(.*)\/')[1]) {
-        //     case 'deck':
-        //         collection = this.props.select_collection;
-        //         break;
-        //     // case 'card':
-        //     //     collection = [];
-        //     //     break;
-        //     default:
-        //         break;
-        // }
-        // this.setState(prev => ({
-        //     ...prev,
-        //     collection: collection,
-        //     members: members,
-        //     isLoading: false
-        // }));
         const cards = this.props.select_cards;
         const deck = this.props.select_deck;
+        const collection = {}
+        Object.keys(cards).filter(id => deck.member.includes(id)).map(id => {
+            if (deck.member.includes(id)) {
+                collection[id] = create.cardViewModel(id, cards[id]);
+            }
+        });
         this.setState(prev => ({
             ...prev,
             deck: deck
         }));
         this.setState(prev => ({
             ...prev,
-            collection: Object.keys(cards).filter(id => deck.member.includes(id)).map(id => {
-                if (deck.member.includes(id)) {
-                    return create.cardViewModel(id, cards[id]);
-                }
-            })
+            collection: collection
         }), () => {
             this.setState(prev => ({
                 ...prev,
                 isLoading: false
             }));
         });
-    }
-
-    componentDidUpdate (prevProps, prevState) {
-        // let collection;
-        // if (prevProps.match.params.collection !== this.props.match.params.collection) {
-        //     switch (this.props.match.params.collection) {
-        //         case 'deck':
-        //             collection = this.props.select_decks;
-        //             break;
-        //         case 'card':
-        //             collection = this.props.select_cards;
-        //             break;
-        //         default:
-        //             break;
-        //     }
-        //     this.setState(prev => ({
-        //         ...prev,
-        //         collection: collection,
-        //         page: this.props.match.params.collection
-        //     }));
-        // }
     }
 
 
@@ -230,23 +184,23 @@ class Inspector extends Component {
     }
  
     //  Undo  --------------------------------------------------------------  Undo  //
-    // clearUndo () {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         undo: {
-    //             action: null,
-    //             data: {}
-    //         }
-    //     }));
-    // }
-    // setUndo (data) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         undo: {
-    //             ...data
-    //         }
-    //     }));
-    // }
+    clearUndo () {
+        this.setState(prev => ({
+            ...prev,
+            undo: {
+                action: null,
+                data: {}
+            }
+        }));
+    }
+    setUndo (data) {
+        this.setState(prev => ({
+            ...prev,
+            undo: {
+                ...data
+            }
+        }));
+    }
 
     //  Inspector  -------------------------------------------------  Inspector  //
     addCard (card) {
@@ -258,40 +212,41 @@ class Inspector extends Component {
             }
         }));
     }
-    // removeItem (item) {
-    //     const collection = this.state.collection;
-    //     delete collection[item.id];
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: {
-    //             ...collection
-    //         }
-    //     }));
-    // }
-    // resetCollection (collection) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: collection
-    //     }));
-    // }
-    // setItem (item) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: {
-    //             ...prev.collection,
-    //             [item.id]: {...item}
-    //         }
-    //     }));
-    // }
-    // setManyItems (items) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: {
-    //             ...prev.collection,
-    //             ...items
-    //         }
-    //     }));
-    // }
+    removeItem (item) {
+        const collection = this.state.collection;
+        delete collection[item.id];
+        this.setState(prev => ({
+            ...prev,
+            collection: {
+                ...collection
+            }
+        }));
+    }
+    resetCollection (collection) {
+        console.log('here');
+        this.setState(prev => ({
+            ...prev,
+            collection: collection
+        }));
+    }
+    setItem (item) {
+        this.setState(prev => ({
+            ...prev,
+            collection: {
+                ...prev.collection,
+                [item.id]: {...item}
+            }
+        }));
+    }
+    setManyItems (items) {
+        this.setState(prev => ({
+            ...prev,
+            collection: {
+                ...prev.collection,
+                ...items
+            }
+        }));
+    }
     setItemValue (target, value) {
         console.log(target, value);
         const itemId = this.state.aside.data.item.id;
@@ -306,14 +261,6 @@ class Inspector extends Component {
             }
         }));
     }
-
-    //  Inspected  -----------------------------------------------------  Inspected  //
-    // setInspected (item) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         inspected: item
-    //     }));
-    // }
 
     //  Lists  -------------------------------------------------------------  Lists  //
     clearSelected (item) {
@@ -417,6 +364,16 @@ class Inspector extends Component {
     //     }));
     // }
 
+    _checkTags (category, tags) {
+        const newTags = tags.filter(tag => this.state[category].indexOf(tag) < 0);
+        let allTags;
+        if (newTags.length) {
+            allTags = this.state[category].concat(newTags);
+            this.setTags(category, allTags);
+            this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
+        }
+    }
+
     //  Action  -----------------------------------------------------------  Action  //
     handle_onActionClick = () => {
         const card = create.cardViewModel(utility.createHashId(0), {
@@ -432,40 +389,51 @@ class Inspector extends Component {
             deckId: this.state.deck.id,
             tag: this.state.tag
         });
-        this.setAsideActions({change: this.handle_onItemChange});
+        this.setAsideActions({
+            change: this.handle_onItemChange,
+            confirm: this.handle_onAsideClose
+        });
         this.clearSelected();
         this.clearQuick('s');
     }
 
 
+    handle_onItemCreate = () => {
+        
+    }
+
     //  Aside  -------------------------------------------------------------  Aside  //
-    // handle_onInspectOut = () => {
-    //     const original = this.state.aside.data.item;
-    //     const item = this.state.collection[original.id];
-    //     if (JSON.stringify(item) !== JSON.stringify(original)) {
-    //         this._checkForNewTags('tags', item.tags);
-    //         this._checkForNewTags('groups', item.groups);
-    //         switch (this.state.aside.state) {
-    //             case 98:
-    //                 this.props.addCard_async(this.props.token, item);
-    //                 break;
-    //             case 99:
-    //                 this.props.updateCard_async(this.props.token, item);
-    //                 this.setQuick('u');
-    //                 break;
-    //             default:
-    //                 break;
-    //         }
-    //     } else if (this.state.aside.state === 98) {
-    //         this.removeItem(item);
-    //     }
-    // }
-    // handle_onAsideClose = () => {
-    //     if (this.state.aside.state >= 98) {
-    //         this.handle_onInspectOut();
-    //     }
-    //     this.clearAside();
-    // }
+    handle_onInspectOut = () => {
+        const original = this.state.aside.data.item;
+        const item = this.state.collection[original.id];
+        if (JSON.stringify(item) !== JSON.stringify(original)) {
+            this._checkTags('tag', item.tag);
+            this._checkTags('group', item.group);
+            switch (this.state.aside.state) {
+                case 97:
+                    this.props.addCard_async(this.props.token, item);
+                    this.props.updateDeck_async(this.props.token, {
+                        ...this.state.deck,
+                        member: this.state.deck.member.concat(item.id)
+                    });
+                    break;
+                case 99:
+                    this.props.updateCard_async(this.props.token, item);
+                    this.setQuick('u');
+                    break;
+                default:
+                    break;
+            }
+        } else if (this.state.aside.state === 98) {
+            this.removeItem(item);
+        }
+    }
+    handle_onAsideClose = () => {
+        if (this.state.aside.state >= 97) {
+            this.handle_onInspectOut();
+        }
+        this.clearAside();
+    }
     
     // handle_onFilterSelect = (category, tag) => {
     //     const filters = {...this.state.filters};
@@ -506,18 +474,18 @@ class Inspector extends Component {
         this.setItemValue(target, value);
     }
     handle_onItemInspect = (item) => {
-        // this.toggleAside(99);
-        // this.setAsideData({
-        //     groups: this.state.groups,
-        //     item: item,
-        //     tags: this.state.tags
-        // });
-        // this.setAsideActions({change: this.handle_onItemChange});
-        // this.setUndo({
-        //     action: this.handle_onItemReset,
-        //     data: item
-        // });
-        // this.clearQuick('s');
+        this.toggleAside(99);
+        this.setAsideData({
+            groups: this.state.groups,
+            item: item,
+            tags: this.state.tags
+        });
+        this.setAsideActions({change: this.handle_onItemChange});
+        this.setUndo({
+            action: this.handle_onItemReset,
+            data: item
+        });
+        this.clearQuick('s');
     }
     handle_onItemSelect = (item) => {
         let selected = this.state.selected.slice();
@@ -537,15 +505,7 @@ class Inspector extends Component {
         this.setSelected(selected);
     }
 
-    // _checkForNewTags (category, tags) {
-    //     const newTags = tags.filter(tag => this.state[category].indexOf(tag) < 0);
-    //     let allTags;
-    //     if (newTags.length) {
-    //         allTags = this.state[category].concat(newTags);
-    //         this.setTags(category, allTags);
-    //         this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
-    //     }
-    // }
+    
     // _findTheNextTab (tab) {
     //     const tabs = utility.sortBy(sortTypes.DATE_DSC, this.state.tabs).filter(tab => tab.collection === this.state.page);
     //     return tabs[tabs.indexOf(tab) + 1];
@@ -567,18 +527,19 @@ class Inspector extends Component {
     //     this.clearQuick('s');
     // }
     handle_onItemsDelete = () => {
-        // const collection = this.state.collection;
-        // this.state.selected.slice().forEach(item => {
-        //     delete collection[item.id];
-        // });
-        // this.setUndo({
-        //     action: this.handle_onItemsRecover,
-        //     data: this.state.selected.slice()
-        // });
-        // this.setQuick('u');
-        // this.resetCollection(collection);
-        // this.clearQuick('s');
-        // this.clearSelected();
+        const collection = this.state.collection;
+        const selected = this.state.selected.slice();
+        selected.forEach(item => {
+            delete collection[item.id];
+        });
+        this.setUndo({
+            action: this.handle_onItemsRecover,
+            data: selected
+        });
+        this.setQuick('u');
+        this.resetCollection(collection);
+        this.clearQuick('s');
+        this.clearSelected();
     }
     // handle_onItemsRecover = () => {
     //     const deleted = this.state.undo.data;
@@ -610,11 +571,11 @@ class Inspector extends Component {
     // }
 
     // //  Main  -----------------------------------------------------------  Main EHs  //
-    // handle_onMainClick = () => {
-    //     this.handle_onAsideClose();
-    //     this.clearSelected();
-    //     this.clearQuick('s');
-    // }
+    handle_onMainClick = () => {
+        this.handle_onAsideClose();
+        this.clearSelected();
+        this.clearQuick('s');
+    }
 
     // //  Selected  ---------------------------------------------------  Selected EHs  //
     // handle_onItemSelectClear = (card) => {
@@ -733,6 +694,7 @@ const mapDispatchToProps = dispatch => {
         addCard_async: (token, item) => dispatch(actions.addCard_async(token, item)),
         addManyCards_async: (token, items) => dispatch(actions.addManyCards_async(token, items)),
         updateCard_async: (token, item) => dispatch(actions.updateCard_async(token, item)),
+        updateDeck_async: (token, deck) => dispatch(actions.updateDeck_async(token, deck)),
         putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
         patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data))
 

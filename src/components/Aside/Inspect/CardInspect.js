@@ -92,7 +92,7 @@ class CardInspect extends Component {
                     <CardInspectForm
                         card={this.state.item}
                         onChange={this.handle_onChange}
-                        onConfirm={this.handle_onConfirm}/>
+                        onConfirm={this.props.actions.confirm}/>
                     <div>
                         <BarLink path={this.props.path} state={{id: this.props.data.deckId}}>Add many</BarLink>
                         {/* <BarLink path={'/u/loading'} state={{collection: this.props.page, id: this.state.item.id}}>Edit</BarLink> */}
