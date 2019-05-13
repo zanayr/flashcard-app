@@ -41,3 +41,30 @@
 .ContextAction.Destructive.Active {
     right: 0px;
 }
+
+
+
+
+
+
+.ContextAction2 {
+    background-color: gold;
+    height: 64px;
+    position: absolute;
+    top: 0px;
+    transition: right 0.333s ease;
+    width: 64px;
+    z-index: 1;
+}
+.ContextAction2 > div {
+    height: 100%;
+}
+.ContextAction2 button {
+    background-color: transparent;
+    height: 100%;
+    width: 100%;
+}
+.ContextAction2.Destructive2 {
+    background-color: coral;
+    color: white;
+}

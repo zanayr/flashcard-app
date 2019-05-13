@@ -22,17 +22,14 @@ const tabBar = (props) => {
     }
     const handle_onAddTabClick = (e) => {
         e.stopPropagation();
-        props.actions.toggle({
-            groups: [],
-            id: 'add',
-            tags: []
-        });
+        props.actions.add();
     }
-    let tabs = utility.sortBy(sortTypes.DATE_DSC, props.backingCollection).map(tab => {
-        if (tab.collection === props.page) {
+    let tabs = null;
+    if (typeof props.collection !== undefined) {
+        tabs = utility.sortBy(sortTypes.DATE_DSC, props.collection).map(tab => {
             return (
                 <QuickTab
-                    active={tab.id === props.active}
+                    active={tab.active}
                     delete={tab.delete}
                     key={tab.id}
                     onClick={() => props.actions.toggle(tab)}
@@ -40,11 +37,8 @@ const tabBar = (props) => {
                     {tab.name}
                 </QuickTab>
             );
-        } else {
-            return null;
-        }
-    });
-
+        });
+    }
     return (
         <section
             className={styles.TabBar}
@@ -54,7 +48,7 @@ const tabBar = (props) => {
                 <div className={[styles.QuickTab, styles.AddTab].join(' ')}>
                     <div>
                         <button
-                            disabled={Object.keys(props.backingCollection).length >= 12}
+                            disabled={Object.keys(props.collection).length >= 12}
                             onClick={(e) => handle_onAddTabClick(e)}>
                             Add
                         </button>

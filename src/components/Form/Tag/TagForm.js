@@ -55,9 +55,9 @@ class TagForm extends Component {
 
     //  On Form Confirm -----------------------------------------------  On Confirm  //
     handle_onConfirm = () => {
-        const tag = this.props.reference.current.tag.value.split(', ');
+        const tags = this.props.reference.current.tag.value.split(', ');
         if (this.props.reference.current.reportValidity()) {
-            this.props.onConfirm(this._checkTags(tag));
+            this.props.onConfirm(this._checkTags(tags));
             this._resetValue();
         }
     }

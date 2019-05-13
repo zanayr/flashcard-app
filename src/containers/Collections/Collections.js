@@ -633,7 +633,7 @@ class Collections extends Component {
                     }}
                     backingCollection={utility.sortBy(this.state.sort, this.state.collection)}
                     filters={this.state.filters}
-                    tab={this.state.current}
+                    current={this.state.current}
                     page={this.state.page}
                     selected={this.state.selected}/>
             );

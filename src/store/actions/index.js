@@ -19,7 +19,8 @@ export {
     deleteDeck_async,
     deleteManyDecks_async,
     getAllDecks_async,
-    updateDeck_async
+    updateDeck_async,
+    updateDeckMember_async
 } from './deck';
 
 // export {

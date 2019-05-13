@@ -2,15 +2,17 @@
 //  MODELS  ---------------------------------------------------------------  MODELS  //
 //  Card  -------------------------------------------------------------  Card Model  //
 export function cardModel (card) {
+    const internal = /^\$[a-zA-Z0-9]*/;
     return {
         group: card.group,
         date: card.date,
+        member: card.member,
         meta: card.meta,
         note: card.note,
         owner: card.owner,
         primary: card.primary,
         secondary: card.secondary,
-        tag: card.tag,
+        tag: card.tag.filter(tag => !tag.match(internal)),
     }
 }
 
@@ -62,16 +64,26 @@ export function userModel (student) {
 //  VIEW MODELS  ------------------------------------------------------------  V.M.  //
 //  Card View Model  ---------------------------------------------------  Card V.M.  //
 export function cardViewModel (id, card) {
+    const date = card.date || Date.now();
+    const member = card.member || [];
+    let tag = card.tag || [];
+    if (!member.length) {
+        tag = tag.concat('$unassigned');
+    }
+    if (Date.now() - date < 604800000) {
+        tag = tag.concat('$new');
+    }
     return {
-        date: card.date || Date.now(),
+        date: date,
         group: card.group || [],
         id: id,
+        member: member,
         meta: card.meta || {},
         note: card.note || '',
         owner: card.owner,
         primary: card.primary || '',
         secondary: card.secondary || '',
-        tag: card.tag || [],
+        tag: tag,
     }
 }
 
@@ -87,7 +99,7 @@ export function deckViewModel (id, deck) {
         date: deck.date || Date.now(),
         group: deck.group || [],
         id: id,
-        member: deck.member || {},
+        member: deck.member || [],
         meta: deck.meta || {},
         note: deck.note || '',
         owner: deck.owner,
@@ -124,15 +136,16 @@ export function flashcardViewModel (card) {
 }
 
 //  Tab View Model  -----------------------------------------------------  Tab V.M.  //
-export function tabViewModel (id, data) {
+export function tabViewModel (id, tab) {
     return {
-        collection: data.collection,
-        date: data.date,
-        delete: true,
-        group: data.group || [],
+        active: tab.active || false,
+        collection: tab.collection,
+        date: tab.date || Date.now(),
+        delete: id === 'default' ? false : true,
+        group: tab.group || [],
         id: id,
-        name: data.name,
-        tag: data.tag || []
+        name: tab.name,
+        tag: tab.tag || []
     }
 }
 

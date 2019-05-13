@@ -63,17 +63,19 @@ class CardInspect extends Component {
         let allTags;
         if (newTags.length) {
             allTags = this.state[category].concat(newTags);
-            this._setTags(category, allTags);
+            this._resetTags(category, allTags);
             //  Send new tags to the redux store and database
             this.props.putTag_async(category, this.props.select_token, this.props.select_user.id, allTags);
         }
     }
     _clearTag (category, tag) {
+        const tags = this.state.card[category].filter(t => t !== tag);
+        this.props.onChange(category, tags);
         this.setState(prev => ({
             ...prev,
             card: {
                 ...prev.card,
-                [category]: prev.card[category].filter(t => t !== tag)
+                [category]: tags
             }
         }));
     }
@@ -89,16 +91,17 @@ class CardInspect extends Component {
         });
     }
     _selectTag (category, tag) {
-        //  Place tag into the cards tag category
+        const tags = this.state.card[category].concat(tag);
+        this.props.onChange(category, tags);
         this.setState(prev => ({
             ...prev,
             card: {
                 ...prev.card,
-                [category]: prev.card[category].concat(tag)
+                [category]: tags
             }
         }));
     }
-    _setTags (category, tags) {
+    _resetTags (category, tags) {
         //  Reset the user defined tags (after a new one is added)
         this.setState(prev => ({
             ...prev,
@@ -142,6 +145,8 @@ class CardInspect extends Component {
                 groups = this.state.card.group;
             }
 
+            console.log(tags, groups);
+
             //  Build the new card
             const card = create.cardViewModel(utility.createHashId(0), {
                 group: groups,
@@ -164,16 +169,14 @@ class CardInspect extends Component {
 
     //  TAGS  ---------------------------------------------------------------  TAGS  //
     handle_onTagCreate = (category, tags) => {
-
         if (tags.length) {
             const allTags = this.state[category].concat(tags);
             tags.forEach(tag => {
                 this._selectTag(category, tag);
             });
-            this._setTags(category, allTags);
+            this._resetTags(category, allTags);
             this.props.putTag_async(category, this.props.select_token, this.props.select_user.id, allTags);
         }
-        
     }
     handle_onTagToggle = (category, tag) => {
         if (!this.state.card[category].includes(tag)) {

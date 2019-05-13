@@ -14,7 +14,7 @@ import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside from '../../components/aside/Aside/Aside';
 import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
-import List from '../../components/List/List';
+import List2 from '../../components/List/List2';
 import QuickBar from '../../components/ui/bar/Quick/QuickBar';
 import TabBar from '../../components/ui/bar/Tab/TabBar';
 import TabForm from '../../components/form/Tab/TabForm';
@@ -30,12 +30,7 @@ class Inspector extends Component {
             state: asideTypes.CLOSED
         },
         current: {
-            collection: this.props.match.params.id,
-            date: 0,
-            delete: false,
             group: [],
-            id: 'all',
-            name: 'All',
             tag: []
         },
         collection: {},
@@ -45,21 +40,11 @@ class Inspector extends Component {
             tag: []
         },
         group: this.props.user.group,
-        isLoading: true,
+        main: 'LOADING',
         quick: [],
         selected: [],
         sort: sortTypes.DATE_ASC,
-        tab: {
-            all: {
-                collection: this.props.match.params.id,
-                date: 0,
-                delete: false,
-                group: [],
-                id: 'all',
-                name: 'All',
-                tag: []
-            }
-        },
+        tab: {},
         tag: this.props.user.tag,
         undo: {
             action: null,
@@ -73,7 +58,7 @@ class Inspector extends Component {
         const collection = {}
         Object.keys(cards).filter(id => deck.member.includes(id)).map(id => {
             if (deck.member.includes(id)) {
-                collection[id] = create.cardViewModel(id, cards[id]);
+                collection[id] = cards[id];
             }
         });
         this.setState(prev => ({
@@ -86,7 +71,7 @@ class Inspector extends Component {
         }), () => {
             this.setState(prev => ({
                 ...prev,
-                isLoading: false
+                main: 'LIST_VIEW'
             }));
         });
     }
@@ -95,13 +80,13 @@ class Inspector extends Component {
 
 
     //  Quicks  ------------------------------------------------------------  Quicks //
-    clearQuick (value) {
+    _clearQuick (value) {
         this.setState(prev => ({
             ...prev,
             quick: prev.quick.filter(q => q !== value)
         }))
     }
-    setQuick (value) {
+    _setQuick (value) {
         if (!this.state.quick.includes(value)) {
             this.setState(prev => ({
                 ...prev,
@@ -150,7 +135,7 @@ class Inspector extends Component {
             }
         }));
     }
-    updateAsideData (property, data) {
+    _updateAsideData (property, data) {
         this.setState(prev => ({
             ...prev,
             aside: {
@@ -184,9 +169,15 @@ class Inspector extends Component {
             this._openAside(state);
         }
     }
- 
+    //  Main  //
+    _toggleMainState (state) {
+        this.setState(prev => ({
+            ...prev,
+            main: state
+        }));
+    }
     //  Undo  --------------------------------------------------------------  Undo  //
-    clearUndo () {
+    _clearUndo () {
         this.setState(prev => ({
             ...prev,
             undo: {
@@ -195,7 +186,7 @@ class Inspector extends Component {
             }
         }));
     }
-    setUndo (data) {
+    _setUndo (data) {
         this.setState(prev => ({
             ...prev,
             undo: {
@@ -214,18 +205,17 @@ class Inspector extends Component {
             }
         }));
     }
-    _removeItem (item) {
-        const collection = this.state.collection;
-        delete collection[item.id];
-        this.setState(prev => ({
-            ...prev,
-            collection: {
-                ...collection
-            }
-        }));
-    }
+    // _removeItem (item) {
+    //     const collection = this.state.collection;
+    //     delete collection[item.id];
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         collection: {
+    //             ...collection
+    //         }
+    //     }));
+    // }
     resetCollection (collection) {
-        console.log('here');
         this.setState(prev => ({
             ...prev,
             collection: collection
@@ -264,7 +254,7 @@ class Inspector extends Component {
     }
 
     //  Lists  -------------------------------------------------------------  Lists  //
-    clearSelected (item) {
+    _clearSelected (item) {
         if (typeof item === 'undefined') {
             this.setState(prev => ({
                 ...prev,
@@ -285,6 +275,14 @@ class Inspector extends Component {
     }
 
     //  Filters  ---------------------------------------------------------  Filters  //
+    _setCurrent (filters) {
+        this.setState(prev => ({
+            current: {
+                group: filters.group.slice(),
+                tag: filters.tag.slice()
+            }
+        }));
+    }
     // clearFilters () {
     //     this.setState(prev => ({
     //         ...prev,
@@ -327,35 +325,71 @@ class Inspector extends Component {
     // }
 
     //  Tabs  ---------------------------------------------------------------  Tabs  //
-    // addTab (tab) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         tabs: {
-    //             ...prev.tabs,
-    //             [tab.id]: tab
-    //         }
-    //     }));
-    // }
+    _addTab (tab) {
+        this.setState(prev => ({
+            ...prev,
+            tab: {
+                ...prev.tab,
+                [tab.id]: tab
+            }
+        }));
+    }
     // setCollection (collection) {
     //     this.setState(prev => ({
     //         ...prev,
     //         collection: collection
     //     }));
     // }
-    // setCurrent (tab) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         current: tab
-    //     }));
-    // }
-    // resetTabs (tabs) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         tabs: {
-    //             ...tabs
-    //         }
-    //     }));
-    // }
+    _closeAllTabs () {
+        const tabs = {};
+        Object.keys(this.state.tab).forEach(id => {
+            this.state.tab[id].active = false;
+            tabs[id] = {...this.state.tab[id]};
+        });
+        this.setState(prev => ({
+            ...prev,
+            tab: tabs
+        }));
+    }
+    _closeAllTabsBut (tab) {
+        const tabs = {};
+        Object.keys(this.state.tab).forEach(id => {
+            if (id === tab.id) {
+                this.state.tab[id].active = true;
+            } else {
+                this.state.tab[id].active = false;
+            }
+            tabs[id] = {...this.state.tab[id]};
+        });
+        this.setState(prev => ({
+            ...prev,
+            tab: tabs
+        }));
+    }
+    _removeDefualtTab () {
+        if (Object.keys(this.state.tab).length === 1) {
+            const tabs = this.state.tab;
+            delete tabs['default'];
+            return tabs;
+        }
+        return this.state.tabs;
+    }
+    _addDefaultTab () {
+        if (!Object.keys(this.state.tab).length) {
+            this._addTab(create.tabViewModel('default', {
+                date: 0,
+                name: 'All',
+            }));
+        }
+    }
+    _resetTabs (tabs) {
+        this.setState(prev => ({
+            ...prev,
+            tabs: {
+                ...tabs
+            }
+        }));
+    }
 
     //  Sort  ---------------------------------------------------------------  Sort  //
     // setSort (sort) {
@@ -376,13 +410,52 @@ class Inspector extends Component {
     }
 
     //  Action  -----------------------------------------------------------  Action  //
+    _addMember (item) {
+        this.setState(prev => ({
+            ...prev,
+            deck: {
+                ...prev.deck,
+                member: prev.deck.member.concat(item.id)
+            }
+        }));
+    }
+    _addManyMembers (items) {
+        this.setState(prev => ({
+            ...prev,
+            deck: {
+                ...prev.deck,
+                member: prev.deck.member.concat(items.map(item => {return item.id}))
+            }
+        }));
+    }
+    _addItem (item) {
+        this.setState(prev => ({
+            ...prev,
+            collection: {
+                ...prev.collection,
+                [item.id]: item
+            }
+        }));
+    }
+    _addManyItems (items) {
+        const collection = this.state.collection;
+        items.forEach(item => {
+            collection[item.id] = item;
+        });
+        this.setState(prev => ({
+            ...prev,
+            collection: collection
+        }));
+    }
+    
     handle_onActionClick = () => {
         const card = create.cardViewModel(utility.createHashId(0), {
+            member: [this.state.deck.id],
             owner: this.props.select_user.id,
             primary: 'New Card',
             secondary: 'Lorem ipsum'
         });
-        this.addCard(card);
+        this._addItem(card);
         this.toggleAside(asideTypes.CREATE_CARD);
         this.setAsideData({
             group: this.state.group,
@@ -394,37 +467,51 @@ class Inspector extends Component {
             change: this.handle_onItemChange,
             confirm: this.handle_onAsideClose
         });
-        this.clearSelected();
-        this.clearQuick('s');
+        this._clearSelected();
+        //this._clearQuick('s');
     }
-
-
-    handle_onItemCreate = () => {
-        
-    }
-
+    
+    // _updateItem (item) {
+    //     this.props.updateCard_async(this.props.token, item);
+    //     this._setQuick('u');
+    // }
     //  Aside  -------------------------------------------------------------  Aside  //
+    _addItem_async (item) {
+        this.props.addCard_async(this.props.token, item);
+        this.props.updateDeck_async(this.props.token, {
+            ...this.state.deck,
+            member: this.state.deck.member.concat(item.id)
+        });
+    }
+    _addManyItems_async (items) {
+        this.props.addManyCards_async(this.props.token, items);
+        this.props.updateDeck_async(this.props.token, {
+            ...this.state.deck,
+            member: this.state.deck.member.concat(items.map(item => {
+                return item.id;
+            }))
+        });
+    }
+
     handle_onAsideClose = () => {
         const originalData = this.state.aside.data;
-        let item;
+        let data;
         switch (this.state.aside.state) {
             case asideTypes.CREATE_CARD:
-                item = this.state.collection[originalData.item.id];
-                if (JSON.stringify(item) !== JSON.stringify(originalData.item)) {
-                    this.props.addCard_async(this.props.token, item);
-                    this.props.updateDeck_async(this.props.token, {
-                        ...this.state.deck,
-                        member: this.state.deck.member.concat(item.id)
-                    })
+                data = this.state.collection[originalData.item.id];
+                console.log(this.state.deck.member);
+                if (JSON.stringify(data) !== JSON.stringify(originalData.item)) {
+                    this._addMember(data);
+                    this._addItem_async(data);
                 } else {
-                    this._removeItem(item);
+                    this._removeItem(data);
                 }
                 break;
             case asideTypes.INSPECT_CARD:
-                item = this.state.collection[originalData.item.id];
-                if (JSON.stringify(item) !== JSON.stringify(originalData.item)) {
-                    this.props.updateCard_async(this.props.token, item);
-                    this.setQuick('u');
+                data = this.state.collection[originalData.item.id];
+                if (JSON.stringify(data) !== JSON.stringify(originalData.item)) {
+                    this.props.updateCard_async(this.props.token, data);
+        this._setQuick('u');
                 }
         }
         this._clearAside();
@@ -441,9 +528,9 @@ class Inspector extends Component {
     //     this.setFilters(category, filters);
     //     this.updateAsideData('filters', filters);
     //     if (filters.tags.length || filters.groups.length) {
-    //         this.setQuick('f');
+    //         this._setQuick('f');
     //     } else {
-    //         this.clearQuick('f');
+    //         this._clearQuick('f');
     //     }
     // }
 
@@ -478,11 +565,11 @@ class Inspector extends Component {
             tags: this.state.tags
         });
         this.setAsideActions({change: this.handle_onItemChange});
-        this.setUndo({
+        this._setUndo({
             action: this.handle_onItemReset,
             data: item
         });
-        this.clearQuick('s');
+        this._clearQuick('s');
     }
     handle_onItemSelect = (item) => {
         let selected = this.state.selected.slice();
@@ -492,9 +579,9 @@ class Inspector extends Component {
             selected = selected.concat(item);
         }
         if (selected.length) {
-            this.setQuick('s');
+            this._setQuick('s');
         } else {
-            this.clearQuick('s');
+            this._clearQuick('s');
         }
         if (this.state.aside.state === asideTypes.CREATE_CARD || this.state.aside.state === asideTypes.INSPECT_CARD) {
             this.handle_onAsideClose();
@@ -520,24 +607,100 @@ class Inspector extends Component {
     //         created[item.id] = item;
     //     });
     //     this.setManyItems(created);
-    //     this.clearSelected();
-    //     this.clearQuick('s');
+    //     this._clearSelected();
+    //     this._clearQuick('s');
     // }
-    handle_onItemsDelete = () => {
+    // _resetDeckMembers (members) {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         deck: {
+    //             ...prev.deck,
+    //             member: members
+    //         }
+    //     }));
+    //     this.props.updateDeck_async(this.props.token, {
+    //         ...this.state.deck,
+    //         member: members
+    //     });
+    // }
+    // _removeItemMember (item, member) {
+    //     this.props.updateCard_async(this.props.select_token, {
+    //         ...item,
+    //         member: member
+    //     });
+    // }
+    _removeItem (item) {
         const collection = this.state.collection;
-        const selected = this.state.selected.slice();
-        selected.forEach(item => {
-            delete collection[item.id];
-        });
-        this.setUndo({
-            action: this.handle_onItemsRecover,
-            data: selected
-        });
-        this.setQuick('u');
-        this.resetCollection(collection);
-        this.clearQuick('s');
-        this.clearSelected();
+        delete collection[item.id];
+        this.setState(prev => ({
+            ...prev,
+            collection: collection
+        }));
+        this.setState(prev => ({
+            ...prev,
+            deck: {
+                ...prev.deck,
+                member: prev.deck.member.filter(id => id !== item.id)
+            }
+        }));
     }
+
+
+    //  Delete Item  ------------------------------------------------------  Delete  //
+    handle_onItemDelete = (item) => {
+        this.props.deleteCard_async(this.props.select_token, item);
+        this.props.updateDeck_async(this.props.select_token, {
+            ...this.state.deck,
+            member: this.state.deck.member.filter(id => id !== item.id)
+        });
+        this._removeItem(item);
+        this._setUndo({
+            action: this.handle_onUndoDelete,
+            data: [item]
+        });
+        this._setQuick('u');
+        this._clearSelected();
+    }
+    //  Delete Many Items  -------------------------------------------  Delete Many  //
+    // handle_onItemsDelete = () => {
+    //     const collection = this.state.collection;
+    //     const selected = this.state.selected.slice();
+    //     const nonmembers = [];
+    //     selected.forEach(item => {
+    //         nonmembers.concat(item.id);
+    //         delete collection[item.id];
+    //         this.props.deleteCard_async(this.props.select_token, item);
+    //     });
+    //     this._removeDeckMembers(nonmembers);
+    //     this._setUndo({
+    //         action: this.handle_onItemsRecover,
+    //         data: selected
+    //     });
+    //     this._setQuick('u');
+    //     this.resetCollection(collection);
+    //     this._clearQuick('s');
+    //     this._clearSelected();
+    // }
+
+    //  Remove Item  -------------------------------------------------  Remove Item  //
+    handle_onItemRemove = (item) => {
+        this.props.updateCard_async(this.props.select_token, {
+            ...item,
+            member: item.member.filter(id => id !== this.state.deck.id)
+        });
+        this.props.updateDeck_async(this.props.select_token, {
+            ...this.state.deck,
+            member: this.state.deck.member.filter(id => id !== item.id)
+        });
+        this._removeItem(item);
+        this._setUndo({
+            action: this.handle_onUndoRemove,
+            data: [item]
+        });
+        this._clearSelected();
+    }
+
+
     // handle_onItemsRecover = () => {
     //     const deleted = this.state.undo.data;
     //     const recovered = {}
@@ -545,22 +708,30 @@ class Inspector extends Component {
     //         recovered[item.id] = item
     //     });
     //     this.setManyItems(recovered);
-    //     this.clearQuick('u');
-    //     this.clearUndo();
+    //     this._clearQuick('u');
+    //     this._clearUndo();
     //     this.props.addManyCards_async(this.props.select_token, deleted);
     // }
+    handle_onUndoDelete = () => {
+        const items = this.state.undo.data.slice();
+        this._addManyItems(items);
+        this._addManyMembers(items);
+        this._addManyItems_async(items);
+        this._clearQuick('u');
+        this._clearUndo();
+    }
     // handle_onItemReset = () => {
     //     const item = this.state.undo.data;
     //     this.setItem(item);
-    //     this.clearQuick('u');
-    //     this.clearUndo();
+    //     this._clearQuick('u');
+    //     this._clearUndo();
     //     this.props.addCard_async(this.props.select_token, item);
     // }
     
     // //  Filters  -----------------------------------------------------  Filters EHs  //
     // handle_onFilterClear = () => {
     //     this.clearFilters();
-    //     this.clearQuick('f');
+    //     this._clearQuick('f');
     //     this.updateAsideData('filters', {
     //         groups: [],
     //         tags:[]
@@ -570,66 +741,93 @@ class Inspector extends Component {
     // //  Main  -----------------------------------------------------------  Main EHs  //
     handle_onMainClick = () => {
         this.handle_onAsideClose();
-        this.clearSelected();
-        this.clearQuick('s');
+        this._clearSelected();
+        this._clearQuick('s');
     }
 
     // //  Selected  ---------------------------------------------------  Selected EHs  //
     // handle_onItemSelectClear = (card) => {
-    //     this.clearSelected(card);
-    //     this.clearQuick('s');
+    //     this._clearSelected(card);
+    //     this._clearQuick('s');
     // }
 
     // //  Tab  -------------------------------------------------------------  Tab EHs  //
-    // handle_onTabDelete = (tab) => {
-    //     let tabs = this.state.tabs;
-    //     if (this.state.current.id === tab.id) {
-    //         this.handle_onTabToggle(this._findTheNextTab(tab));
-    //     }
-    //     delete tabs[tab.id];
-    //     this.resetTabs(tabs);
-    // }
-    // handle_onTabToggle = (tab) => {
-    //     this.setCurrent(tab);
-    //     if (this.state.aside.state && this.state.aside.state === 2 || this.state.aside.state === 3) {
-    //         this.updateAsideData('current', tab);
-    //     }
-    //     this.clearSelected();
-    //     this.clearQuick('s');
-    // }
-    // handle_onTabCreate = (tab) => {
-    //     this._checkForNewTags('groups', tab.groups);
-    //     this._checkForNewTags('tags', tab.tags);
-    //     this.addTab(tab);
-    //     this.handle_onTabToggle(tab);
-    // }
+    handle_onTabAdd = () => {
+        this._toggleMainState('ADD_TAB');
+    }
+    handle_onTabDelete = (tab) => {
+        let tabs = this._removeDefualtTab();
+        if (this.state.current.id === tab.id) {
+            this.handle_onTabToggle(this._findTheNextTab(tab));
+        }
+        delete tabs[tab.id];
+        this._resetTabs(tabs);
+    }
+    handle_onTabToggle = (tab) => {
+        this._closeAllTabsBut(tab);
+        // if (this.state.aside.state === asideTypes.FILTER_TAG || this.state.aside.state === asideTypes.FILTER_GROUP) {
+        //     this._updateAsideData('tab', tab);
+        // }
+        this._setCurrent(tab);
+        this._clearSelected();
+        this._clearQuick('s');
+    }
+    _removeDefualtTab () {
+        if (Object.keys(this.state.tab).length === 1) {
+            this._removeTab('default');
+        }
+    }
+    _addDefaultTab () {
+        if (!Object.keys(this.state.tab).length) {
+            this._addTab(create.tabViewModel('default', {
+                date: 1,
+                name: 'All',
+            }));
+        }
+    }
+    handle_onTabCreate = (tab) => {
+        this._closeAllTabs();
+        this._addDefaultTab();
+        this._addTab(tab);
+        this._toggleMainState('LIST_VIEW');
+        //  Add tab to deck
+    }
 
 
     render () {
-        let mainContent = null;
-        if (this.state.isLoading) {
-            mainContent = (<Throbber/>);
-        } else {
-            mainContent = (
-                <List
+        let content;
+        switch (this.state.main) {
+            case 'LIST_VIEW':
+                content = (
+                    <List2
+
                     actions={{
-                        delete: this.handle_onItemsDelete,
+                        delete: this.handle_onItemDelete,
                         inspect: this.handle_onItemInspect,
+                        remove: this.handle_onItemRemove,
                         select: this.handle_onItemSelect
                     }}
-                    backingCollection={utility.sortBy(this.state.sort, this.state.collection)}
+                    collection={utility.sortBy(this.state.sort, this.state.collection)}
                     filters={this.state.filters}
-                    tab={{
-                        tag: [],
-                        group: []
-                    }}
                     page={this.state.page}
-                    selected={this.state.selected}/>
-            );
+                    selected={this.state.selected}
+                    current={this.state.current}/>
+                );
+                break;
+            case 'ADD_TAB':
+                content = (
+                    <TabForm
+                    tag={this.state.tag}
+                    group={this.state.group}
+                    onConfirm={this.handle_onTabCreate}/>
+                );
+                break;
+            default:
+                content = (<Throbber/>);
+                break;
         }
         return (
             <Aux>
-                <h1>{this.props.match.params.id}</h1>
                 <Header
                     actions={{
                         create: this.handle_onItemsCreate,
@@ -646,14 +844,13 @@ class Inspector extends Component {
                     <div>
                         <TabBar
                             actions={{
+                                add: this.handle_onTabAdd,
                                 delete: this.handle_onTabDelete,
                                 toggle: this.handle_onTabToggle,
                             }}
-                            page={this.state.page}
-                            backingCollection={this.state.tab}
-                            // active={this.state.current.id}
+                            collection={this.state.tab}
                             onClick={this.handle_onAsideClose}/>
-                        {mainContent}
+                        {content}
                         <ActionButton
                             onClick={this.handle_onActionClick}
                             state={0}
@@ -689,8 +886,10 @@ const mapDispatchToProps = dispatch => {
     return {
         addCard_async: (token, item) => dispatch(actions.addCard_async(token, item)),
         addManyCards_async: (token, items) => dispatch(actions.addManyCards_async(token, items)),
+        deleteCard_async: (token, item) => dispatch(actions.deleteCard_async(token, item)),
         updateCard_async: (token, item) => dispatch(actions.updateCard_async(token, item)),
         updateDeck_async: (token, deck) => dispatch(actions.updateDeck_async(token, deck)),
+        updateDeckMember_async: (token, deck, members) => dispatch(actions.updateDeckMember_async(token, deck, members)),
         putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
         patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data))
 
