@@ -221,7 +221,7 @@ class Inspector extends Component {
             collection: collection
         }));
     }
-    setItem (item) {
+    _setItem (item) {
         this.setState(prev => ({
             ...prev,
             collection: {
@@ -254,18 +254,11 @@ class Inspector extends Component {
     }
 
     //  Lists  -------------------------------------------------------------  Lists  //
-    _clearSelected (item) {
-        if (typeof item === 'undefined') {
-            this.setState(prev => ({
-                ...prev,
-                selected: []
-            }));
-        } else {
-            this.setState(prev => ({
-                ...prev,
-                selected: [item]
-            }));
-        }
+    _clearSelected () {
+        this.setState(prev => ({
+            ...prev,
+            selected: []
+        }));
     }
     setSelected (selected) {
         this.setState(prev => ({
@@ -452,8 +445,8 @@ class Inspector extends Component {
         const card = create.cardViewModel(utility.createHashId(0), {
             member: [this.state.deck.id],
             owner: this.props.select_user.id,
-            primary: 'New Card',
-            secondary: 'Lorem ipsum'
+            primary: '',
+            secondary: ''
         });
         this._addItem(card);
         this.toggleAside(asideTypes.CREATE_CARD);
@@ -465,10 +458,10 @@ class Inspector extends Component {
         });
         this.setAsideActions({
             change: this.handle_onItemChange,
-            confirm: this.handle_onAsideClose
+            confirm: () => this.handle_onItemCreate(this.state.collection[card.id])
         });
         this._clearSelected();
-        //this._clearQuick('s');
+        this._clearQuick('s');
     }
     
     // _updateItem (item) {
@@ -493,16 +486,39 @@ class Inspector extends Component {
         });
     }
 
+    // _updateItem_async (item) {
+    //     this.props.updateCard_async(this.props.token, item);
+    // }
+
+    handle_onItemCreate = (item) => {
+        this._addMember(item);
+        this._addItem_async(item);
+        this._clearAside();
+        this._closeAside();
+    }
+    handle_onItemUpdate = () => {
+        const original = this.state.aside.data.item;
+        const item = this.state.collection[original.id];
+        if (JSON.stringify(item) !== JSON.stringify(original)) {
+            this.props.updateCard_async(this.props.token, item);
+            this._setUndo({
+                action: this.handle_onUndoUpdate,
+                data: original
+            });
+            this._setQuick('u');
+        }
+        this._clearAside();
+        this._closeAside();
+    }
+
     handle_onAsideClose = () => {
         const originalData = this.state.aside.data;
         let data;
         switch (this.state.aside.state) {
             case asideTypes.CREATE_CARD:
                 data = this.state.collection[originalData.item.id];
-                console.log(this.state.deck.member);
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item)) {
-                    this._addMember(data);
-                    this._addItem_async(data);
+                    this.handle_onItemCreate(data);
                 } else {
                     this._removeItem(data);
                 }
@@ -511,7 +527,7 @@ class Inspector extends Component {
                 data = this.state.collection[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item)) {
                     this.props.updateCard_async(this.props.token, data);
-        this._setQuick('u');
+                    this._setQuick('u');
                 }
         }
         this._clearAside();
@@ -564,11 +580,14 @@ class Inspector extends Component {
             deckId: this.state.deck.id,
             tags: this.state.tags
         });
-        this.setAsideActions({change: this.handle_onItemChange});
-        this._setUndo({
-            action: this.handle_onItemReset,
-            data: item
+        this.setAsideActions({
+            change: this.handle_onItemChange,
+            confirm: this.handle_onItemUpdate
         });
+        // this._setUndo({
+        //     action: this.handle_onItemReset,
+        //     data: item
+        // });
         this._clearQuick('s');
     }
     handle_onItemSelect = (item) => {
@@ -698,6 +717,7 @@ class Inspector extends Component {
             data: [item]
         });
         this._clearSelected();
+        this._clearQuick('s');
     }
 
 
@@ -712,6 +732,13 @@ class Inspector extends Component {
     //     this._clearUndo();
     //     this.props.addManyCards_async(this.props.select_token, deleted);
     // }
+    handle_onUndoUpdate = () => {
+        const item = this.state.undo.data;
+        this.props.updateCard_async(this.props.token, item);
+        this._setItem(item);
+        this._clearQuick('u');
+        this._clearUndo();
+    }
     handle_onUndoDelete = () => {
         const items = this.state.undo.data.slice();
         this._addManyItems(items);
@@ -746,10 +773,10 @@ class Inspector extends Component {
     }
 
     // //  Selected  ---------------------------------------------------  Selected EHs  //
-    // handle_onItemSelectClear = (card) => {
-    //     this._clearSelected(card);
-    //     this._clearQuick('s');
-    // }
+    handle_onItemSelectClear = () => {
+        this._clearSelected();
+        this._clearQuick('s');
+    }
 
     // //  Tab  -------------------------------------------------------------  Tab EHs  //
     handle_onTabAdd = () => {
@@ -795,6 +822,7 @@ class Inspector extends Component {
 
 
     render () {
+        console.log(this.state.selected);
         let content;
         switch (this.state.main) {
             case 'LIST_VIEW':
