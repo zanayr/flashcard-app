@@ -145,8 +145,6 @@ class CardInspect extends Component {
                 groups = this.state.card.group;
             }
 
-            console.log(tags, groups);
-
             //  Build the new card
             const card = create.cardViewModel(utility.createHashId(0), {
                 group: groups,
@@ -176,6 +174,7 @@ class CardInspect extends Component {
             });
             this._resetTags(category, allTags);
             this.props.putTag_async(category, this.props.select_token, this.props.select_user.id, allTags);
+            //this.props.onTagCreate();
         }
     }
     handle_onTagToggle = (category, tag) => {
@@ -221,6 +220,7 @@ class CardInspect extends Component {
                     onToggle={() => this.handle_onStateToggle('group')}/>
             );
         }
+        console.log(this.state.tag, this.props.select_user.tag);
         return (
             <Aux>
                 <form

@@ -440,6 +440,16 @@ class Inspector extends Component {
             collection: collection
         }));
     }
+    _addTag (category, tag) {
+        this.setState(prev => ({
+            ...prev,
+            [category]: prev[category].concat(tag)
+        }));
+    }
+    handle_onTagCreate = (category, tag) => {
+        console.log(category, tag);
+        this._addTag(category, tag);
+    }
     
     handle_onActionClick = () => {
         const card = create.cardViewModel(utility.createHashId(0), {
@@ -458,7 +468,8 @@ class Inspector extends Component {
         });
         this.setAsideActions({
             change: this.handle_onItemChange,
-            confirm: () => this.handle_onItemCreate(this.state.collection[card.id])
+            confirm: () => this.handle_onItemCreate(this.state.collection[card.id]),
+            create: this.handle_onTagCreate
         });
         this._clearSelected();
         this._clearQuick('s');
@@ -511,13 +522,24 @@ class Inspector extends Component {
         this._closeAside();
     }
 
+    _itemIsValid (item) {
+        let valid = true;
+        if (!item.primary.length > 0 && valid) {
+            valid = false;
+        }
+        if (!item.secondary.length && valid) {
+            valid = false
+        }
+        return valid;
+    }
+
     handle_onAsideClose = () => {
         const originalData = this.state.aside.data;
         let data;
         switch (this.state.aside.state) {
             case asideTypes.CREATE_CARD:
                 data = this.state.collection[originalData.item.id];
-                if (JSON.stringify(data) !== JSON.stringify(originalData.item)) {
+                if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._itemIsValid(data)) {
                     this.handle_onItemCreate(data);
                 } else {
                     this._removeItem(data);
@@ -525,7 +547,7 @@ class Inspector extends Component {
                 break;
             case asideTypes.INSPECT_CARD:
                 data = this.state.collection[originalData.item.id];
-                if (JSON.stringify(data) !== JSON.stringify(originalData.item)) {
+                if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._itemIsValid(data)) {
                     this.props.updateCard_async(this.props.token, data);
                     this._setQuick('u');
                 }
@@ -582,7 +604,8 @@ class Inspector extends Component {
         });
         this.setAsideActions({
             change: this.handle_onItemChange,
-            confirm: this.handle_onItemUpdate
+            confirm: this.handle_onItemUpdate,
+            create: this.handle_onTagCreate
         });
         // this._setUndo({
         //     action: this.handle_onItemReset,

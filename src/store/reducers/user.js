@@ -51,7 +51,7 @@ const putTag_success = (state, action) => {
         ...state,
         user: {
             ...state.user,
-            [action.payload.filter]: [...action.payload.data]
+            [action.payload.category]: [...action.payload.tags]
         }
     }
 }

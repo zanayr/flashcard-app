@@ -59,10 +59,13 @@ export const putTag_fail = (error) => {
         payload: error
     }
 }
-export const putTag_success = (tags) => {
+export const putTag_success = (category, tags) => {
     return {
         type: actionTypes.PUT_TAG_SUCC,
-        payload: tags
+        payload: {
+            category: category,
+            tags: tags
+        }
     }
 }
 
@@ -139,7 +142,7 @@ export const putTag_async = (url, token, user, tags) => {
     return dispatch => {
         axios.put('/user/' + user + '/' + url + '.json?auth=' + token, tags)
         .then(response => {
-            dispatch(putTag_success(tags));
+            dispatch(putTag_success(url, tags));
         })
         .catch(error => {
             dispatch(putTag_fail(error));

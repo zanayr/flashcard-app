@@ -9,7 +9,6 @@ import styles from '../Aside.module.css';
 class CardInspect extends Component {
     state = {
         actions: this.props.actions,
-        change: this.props.actions.change ? true : false,
         group: this.props.data.group,
         item: this.props.data.item,
         tag: this.props.data.tag
@@ -25,9 +24,7 @@ class CardInspect extends Component {
                 [target]: value
             }
         }));
-        if (this.state.change) {
-            this.props.actions.change(target, value);
-        }
+        this.props.actions.change(target, value);
     }
 
     
@@ -41,12 +38,12 @@ class CardInspect extends Component {
                 [category]: prev.item[category].concat(tag)
             }
         }));
-        if (this.state.change) {
-            this.props.actions.change(this.state.item, {
-                target: category,
-                value: tags.concat(tag)
-            });
-        }
+        this.props.actions.change(this.state.item, {
+            target: category,
+            value: tags.concat(tag)
+        });
+        console.log(this.props.actions);
+        this.props.actions.create(category, tag);
     }
     handle_onTagToggle = (category, tag) => {
         const tags = this.state.item[category];
@@ -58,12 +55,10 @@ class CardInspect extends Component {
                     [category]: prev.item[category].filter(t => t !== tag)
                 }
             }));
-            if (this.state.change) {
-                this.props.actions.change(this.state.item, {
-                    target: category,
-                    value: tags.filter(t => t !== tag)
-                });
-            }
+            this.props.actions.change(this.state.item, {
+                target: category,
+                value: tags.filter(t => t !== tag)
+            });
         } else {
             this.setState(prev => ({
                 ...prev,
@@ -72,12 +67,10 @@ class CardInspect extends Component {
                     [category]: prev.item[category].concat(tag)
                 }
             }));
-            if (this.state.change) {
-                this.props.actions.change(this.state.item, {
-                    target: category,
-                    value: tags.concat(tag)
-                });
-            }
+            this.props.actions.change(this.state.item, {
+                target: category,
+                value: tags.concat(tag)
+            });
         }
     }
 
