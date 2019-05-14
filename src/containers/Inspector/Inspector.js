@@ -478,6 +478,7 @@ class Inspector extends Component {
             tag: this.state.tag
         });
         this.setAsideActions({
+            cancel: this.handle_onAsideCancel,
             change: this.handle_onItemChange,
             confirm: () => this.handle_onItemCreate(this.state.collection[card.id]),
             create: this.handle_onTagCreate
@@ -485,11 +486,8 @@ class Inspector extends Component {
         this._clearSelected();
         this._clearQuick('s');
     }
+
     
-    // _updateItem (item) {
-    //     this.props.updateCard_async(this.props.token, item);
-    //     this._setQuick('u');
-    // }
     //  Aside  -------------------------------------------------------------  Aside  //
     _addItem_async (item) {
         this.props.addCard_async(this.props.token, item);
