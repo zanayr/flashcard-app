@@ -29,9 +29,9 @@ class Inspector extends Component {
             data: {},
             state: asideTypes.CLOSED
         },
-        current2: 'all',
         current: {
             group: [],
+            id: 'all',
             tag: []
         },
         collection: {},
@@ -273,22 +273,15 @@ class Inspector extends Component {
     //         }
     //     }));
     // }
-    // setFilters (category, filters) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             data: {
-    //                 ...prev.aside.data,
-    //                 selected: filters[category]
-    //             }
-    //         },
-    //         filters: {
-    //             ...prev.filters,
-    //             [category]: filters[category]
-    //         }
-    //     }));
-    // }
+    _setFilter (category, filter) {
+        this.setState(prev => ({
+            ...prev,
+            filters: {
+                ...prev.filters,
+                [category]: filter
+            }
+        }));
+    }
 
     //  Tags  ---------------------------------------------------------------  Tags  //
 
@@ -492,40 +485,50 @@ class Inspector extends Component {
         this._closeAside();
     }
     
-    // handle_onFilterSelect = (category, tag) => {
-    //     const filters = {...this.state.filters};
-    //     if (filters[category].includes(tag)) {
-    //         filters[category] = filters[category].filter(t => t !== tag);
-    //     } else {
-    //         filters[category] = filters[category].concat(tag);
-    //     }
-    //     this.setFilters(category, filters);
-    //     this.updateAsideData('filters', filters);
-    //     if (filters.tags.length || filters.groups.length) {
-    //         this._setQuick('f');
-    //     } else {
-    //         this._clearQuick('f');
-    //     }
-    // }
+    handle_onFilterToggle = (category, tag) => {
+        let filter = this.state.filters[category].slice();
+        if (filter.includes(tag)) {
+            filter = filter.filter(t => t !== tag);
+        } else {
+            filter = filter.concat(tag);
+        }
+        this._setFilter(category, filter);
+        this._updateAsideData('filter', filter);
+        if (filter.length) {
+            this._setQuick('f');
+        } else {
+            this._clearQuick('f');
+        }
+    }
 
-    // handle_onAsideToggle = (state) => {
-    //     if (this.state.aside.state !== state) {
-    //         if (state === 2 || state === 3) {
-    //             this.setAsideActions({
-    //                 filter: this.handle_onFilterSelect
-    //             });
-    //             this.setAsideData({
-    //                 current: this.state.current,
-    //                 filters: this.state.filters,
-    //                 groups: this.state.groups,
-    //                 tags: this.state.tags
-    //             });
-    //         }
-    //         this.toggleAside(state);
-    //     } else {
-    //         this.handle_onAsideClose();
-    //     }
-    // }
+    handle_onFilterAside (category) {
+        this.setAsideActions({
+            toggle: (tag) => this.handle_onFilterToggle(category, tag)
+        });
+        this.setAsideData({
+            all: this.state[category],
+            filter: this.state.filters[category],
+            tab: this.state.current[category]
+        });
+    }
+
+    handle_onAsideToggle = (state) => {
+        if (this.state.aside.state !== state) {
+            switch (state) {
+                case asideTypes.FILTER_GROUP:
+                    this.handle_onFilterAside('group');
+                    break;
+                case asideTypes.FILTER_TAG:
+                    this.handle_onFilterAside('tag');
+                    break;
+                default:
+                    break;
+            }
+            this.toggleAside(state);
+        } else {
+            this.handle_onAsideClose();
+        }
+    }
 
     handle_onItemChange = (target, value) => {
         this.setItemValue(target, value);
@@ -692,14 +695,13 @@ class Inspector extends Component {
     }
     
     // //  Filters  -----------------------------------------------------  Filters EHs  //
-    // handle_onFilterClear = () => {
-    //     this.clearFilters();
-    //     this._clearQuick('f');
-    //     this.updateAsideData('filters', {
-    //         groups: [],
-    //         tags:[]
-    //     });
-    // }
+    handle_onFilterClear = () => {
+        this._setFilter('group', []);
+        this._setFilter('tag', []);
+        this._updateAsideData('filter', []);
+        this._clearQuick('f');
+        this.handle_onAsideClose();
+    }
 
     // //  Main  -----------------------------------------------------------  Main EHs  //
     handle_onMainClick = () => {
@@ -726,18 +728,18 @@ class Inspector extends Component {
             tab: tabs
         });
         this._resetTab(tabs);
-        if (this.state.current2 === tab.id) {
-            this._setCurrent2({
+        if (this.state.current.id === tab.id) {
+            this._setCurrent({
                 group: [],
                 id: 'all',
                 tag: []
-            })
+            });
         }
     }
-    _setCurrent2 (tab) {
+    _setCurrent (tab) {
         this.setState(prev => ({
             ...prev,
-            current2: tab.id,
+            current: {...tab},
             filters: {
                 group: tab.group.slice(),
                 tag: tab.tag.slice()
@@ -745,9 +747,14 @@ class Inspector extends Component {
         }));
     }
     handle_onTabToggle = (tab) => {
-        this._setCurrent2(tab);
+        this._setCurrent(tab);
         this._clearSelected();
         this._clearQuick('s');
+        // if (this.state.aside.state === asideTypes.FILTER_GROUP) {
+        //     this.handle_onFilterAside('group', tab);
+        // } else if (this.state.aside.state === asideTypes.FILTER_TAG) {
+        //     this.handle_onFilterAside('tag', tab);
+        // }
         if (this.state.main === 'ADD_TAB') {
             this._toggleMainState('LIST_VIEW');
         }
@@ -761,7 +768,12 @@ class Inspector extends Component {
             }
         });
         this._addTab(tab);
-        this._setCurrent2(tab);
+        this._setCurrent(tab);
+        if (this.state.aside.state === asideTypes.FILTER_GROUP) {
+            this.handle_onFilterAside('group', tab);
+        } else if (this.state.aside.state === asideTypes.FILTER_TAG) {
+            this.handle_onFilterAside('tag', tab);
+        }
         this._toggleMainState('LIST_VIEW');
     }
 
@@ -780,16 +792,16 @@ class Inspector extends Component {
                     }}
                     collection={utility.sortBy(this.state.sort, this.state.collection)}
                     filters={this.state.filters}
-                    page={this.state.page}
+                    current={this.state.current}
                     selected={this.state.selected}/>
                 );
                 break;
             case 'ADD_TAB':
                 content = (
                     <TabForm
-                    tag={this.state.tag}
-                    group={this.state.group}
-                    onConfirm={this.handle_onTabCreate}/>
+                        tag={this.state.tag}
+                        group={this.state.group}
+                        onConfirm={this.handle_onTabCreate}/>
                 );
                 break;
             default:
@@ -818,7 +830,7 @@ class Inspector extends Component {
                                 delete: this.handle_onTabDelete,
                                 toggle: this.handle_onTabToggle,
                             }}
-                            active={this.state.current2}
+                            active={this.state.current.id}
                             collection={this.state.tab}
                             onClick={this.handle_onAsideClose}/>
                         {content}

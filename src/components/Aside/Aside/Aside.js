@@ -18,7 +18,7 @@ const aside = (props) => {
                     page={props.page}/>
             );
             break;
-        case 2:
+        case asideTypes.FILTER_TAG:
             aside = (
                 <FilterAside
                     actions={props.actions}
@@ -29,7 +29,7 @@ const aside = (props) => {
                     filters={props.filters}/>
             );
             break;
-        case 3:
+        case asideTypes.FILTER_GROUP:
             aside = (
                 <FilterAside
                     actions={props.actions}

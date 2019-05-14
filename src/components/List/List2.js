@@ -11,32 +11,12 @@ import ContextConfirm from '../ui/button/Context/ContextConfirm';
 import listStyles from './List.module.css';
 
 class List2 extends Component {
-    state = {
-        confirm: false
-    }
-
-    _showConfirm () {
-        this.setState(prev => ({
-            ...prev,
-            confirm: true
-        }));
-    }
-    hideConfirm () {
-        this.setState(prev => ({
-            ...prev,
-            confirm: false
-        }));
-    }
-    onItemSelect = (item) => {
-        //this.hideConfirm();
-        this.props.actions.select(item);
-    }
     _checkTags (item) {
-        const tags = this.props.filters.tag.slice();
+        const tags = this.props.current.tag.concat(this.props.filters.tag);
         if (tags.length) {
             let match = false;
-            item.tag.forEach(tag => {
-                match = tags.includes(tag) || match;
+            tags.forEach(tag => {
+                match = item.tag.includes(tag) || match
             });
             return match;
         } else {
@@ -44,12 +24,12 @@ class List2 extends Component {
         }
     }
     _checkGroups (item) {
-        const groups = this.props.filters.group.slice();
+        const groups = this.props.current.group.concat(this.props.filters.group);
         if (groups.length) {
             if (item.group.length) {
                 let match = true;
-                item.group.forEach(tag => {
-                    match = groups.includes(tag) && match;
+                groups.forEach(tag => {
+                    match = item.group.includes(tag) && match
                 });
                 return match;
             } else {
@@ -58,6 +38,10 @@ class List2 extends Component {
         } else {
             return true;
         }
+    }
+
+    handle_onItemSelect = (item) => {
+        this.props.actions.select(item);
     }
 
     render () {
@@ -86,7 +70,7 @@ class List2 extends Component {
                         secondary={item.secondary}
                         tags={item.tag}
                         selected={isSelected}
-                        onSelect={() => this.onItemSelect(item)}>
+                        onSelect={() => this.handle_onItemSelect(item)}>
                         <ContextAction2
                             action={() => this.props.actions.inspect(item)}
                             active={isActive}

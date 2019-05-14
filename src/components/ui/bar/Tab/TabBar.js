@@ -13,21 +13,11 @@ import styles from '../Bar.module.css';
 
 
 class TabBar extends Component {
-    // state = {
-    //     active: ''
-    // }
-
-    // _setActiveTab (id) {
-    //     this.setState({active: id});
-    // }
-
-
     handle_onClick = (e) => {
         e.stopPropagation();
         this.props.onClick();
     }
     handle_onSelect = (tab) => {
-        // this._setActiveTab(tab.id);
         this.props.actions.toggle(tab);
     }
     handle_onTabDelete = (tab) => {
@@ -67,7 +57,8 @@ class TabBar extends Component {
                 </QuickTab2>
             );
         }
-        console.log(tabs.length);
+
+
         return (
             <section
                 className={styles.TabBar}

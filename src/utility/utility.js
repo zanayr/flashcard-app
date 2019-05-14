@@ -97,3 +97,27 @@ export function sortByAlpha_dsc (arr) {
 export function createHashId (i) {
     return (Date.now().toString(36) + (Math.floor((Date.now() + Math.random() * 10)) + (i * 10)).toString(36).substr(4, 9)).split('').reverse().join('');
 }
+
+
+//  COMPARE TWO ARRAYS  //
+export function compareArrays (a, b) {
+    if (a === b) {
+        return true;
+    }
+    if (a == null || b == null) {
+        return false;
+    }
+    if (a.length != b.length) {
+        return false;
+    }
+
+    let A = sortByAlpha_asc(a.slice());
+    let B = sortByAlpha_asc(b.slice());
+  
+    for (var i = 0; i < A.length; ++i) {
+        if (A[i] !== B[i]) {
+            return false;
+        }
+    }
+    return true;
+  }

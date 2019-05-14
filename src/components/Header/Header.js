@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
+import * as asideTypes from '../aside/Aside/asideTypes';
 import * as modalTypes from '../modal/Modal/modalTypes';
 import * as create from '../../store/models/models';
 import * as select from '../../store/reducers/root';
@@ -64,7 +65,6 @@ class Header extends Component {
                 primary: 'New Merged Deck',
                 tags: tags
             });
-            console.log(merged);
             this.props.addDeck_async(this.props.select_token, merged);
             this.props.actions.create([merged]);
         }).catch(() => {}); // Eat user cancel
@@ -88,9 +88,7 @@ class Header extends Component {
                     ...item,
                     primary: primary
                 }));
-                console.log(item.date);
             });
-            console.log(cloned);
             this.props.addManyDecks_async(this.props.select_token, cloned);
             this.props.actions.create(cloned);
         }).catch(() => {}); // Eat user cancel
@@ -105,8 +103,8 @@ class Header extends Component {
                     <ReturnLink/>
                     <Search/>
                     <Toolbar>
-                        <IconButton onClick={() => this.props.actions.toggle(2)}>T</IconButton>
-                        <IconButton onClick={() => this.props.actions.toggle(3)}>G</IconButton>
+                        <IconButton onClick={() => this.props.actions.toggle(asideTypes.FILTER_TAG)}>T</IconButton>
+                        <IconButton onClick={() => this.props.actions.toggle(asideTypes.FILTER_GROUP)}>G</IconButton>
                         <IconButton
                             disabled={!this.props.selected.length}
                             onClick={this.handle_onSelectedDelete}>D</IconButton>

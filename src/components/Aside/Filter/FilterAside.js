@@ -4,14 +4,13 @@ import styles from '../Aside.module.css';
 
 class FilterAside extends Component {
     handle_onSelect = (tag) => {
-        this.props.actions.filter(this.props.data.category, tag);
+        this.props.actions.toggle(tag);
     }
 
     render () {
-        console.log(this.props.data.filters);
-        const tagButtons = this.props.data[this.props.data.category].map((tag, i) => {
+        const tagButtons = this.props.data.all.map((tag, i) => {
             let css = [styles.FilterButton];
-            if (this.props.data.filters[this.props.data.category].includes(tag)) {
+            if (this.props.data.filter.includes(tag)) {
                 css.push(styles.Active);
                 return (
                     <div
@@ -23,7 +22,7 @@ class FilterAside extends Component {
                         </div>
                     </div>
                 );
-            } else if (this.props.data.current[this.props.data.category].includes(tag)) {
+            } else if (this.props.data.tab.includes(tag)) {
                 css.push(styles.Static);
                 return (
                     <div
