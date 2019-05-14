@@ -32,7 +32,7 @@ class List2 extends Component {
         this.props.actions.select(item);
     }
     _checkTags (item) {
-        const tags = this.props.current.tag.concat(this.props.filters.tag);
+        const tags = this.props.filters.tag.slice();
         if (tags.length) {
             let match = false;
             item.tag.forEach(tag => {
@@ -44,7 +44,7 @@ class List2 extends Component {
         }
     }
     _checkGroups (item) {
-        const groups = this.props.current.group.concat(this.props.filters.group);
+        const groups = this.props.filters.group.slice();
         if (groups.length) {
             if (item.group.length) {
                 let match = true;

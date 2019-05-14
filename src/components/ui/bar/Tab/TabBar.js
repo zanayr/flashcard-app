@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../../../../store/actions/index';
@@ -7,57 +7,87 @@ import * as sortTypes from '../../../../utility/sortTypes';
 import * as utility from '../../../../utility/utility';
 
 import QuickTab from '../../tab/QuickTab';
+import QuickTab2 from '../../tab/QuickTab2';
 
 import styles from '../Bar.module.css';
 
 
-const tabBar = (props) => {
-    const handle_onClick = (e) => {
+class TabBar extends Component {
+    // state = {
+    //     active: ''
+    // }
+
+    // _setActiveTab (id) {
+    //     this.setState({active: id});
+    // }
+
+
+    handle_onClick = (e) => {
         e.stopPropagation();
-        props.onClick();
+        this.props.onClick();
     }
-    const handle_onTabDelete = (tab) => {
-        props.deleteTab_async(props.select_token, props.select_userId, tab);
-        props.actions.delete(tab);
+    handle_onSelect = (tab) => {
+        // this._setActiveTab(tab.id);
+        this.props.actions.toggle(tab);
     }
-    const handle_onAddTabClick = (e) => {
+    handle_onTabDelete = (tab) => {
+        this.props.deleteTab_async(this.props.select_token, this.props.select_userId, tab);
+        this.props.actions.delete(tab);
+    }
+    handle_onAddTabClick = (e) => {
         e.stopPropagation();
-        props.actions.add();
+        this.props.actions.add();
     }
-    let tabs = null;
-    if (typeof props.collection !== undefined) {
-        console.log(props.collection);
-        tabs = utility.sortBy(sortTypes.DATE_DSC, props.collection).map(tab => {
+    render () {
+        let tabs = null;
+        let all = null;
+        tabs = utility.sortBy(sortTypes.DATE_DSC, this.props.collection).map(tab => {
             return (
-                <QuickTab
-                    active={tab.active}
-                    delete={tab.delete}
+                <QuickTab2
+                    active={this.props.active === tab.id}
+                    delete
                     key={tab.id}
-                    onClick={() => props.actions.toggle(tab)}
-                    onClose={() => handle_onTabDelete(tab)}>
+                    onClick={() => this.props.actions.toggle(tab)}
+                    onClose={() => this.handle_onTabDelete(tab)}>
                     {tab.name}
-                </QuickTab>
+                </QuickTab2>
             );
         });
-    }
-    return (
-        <section
-            className={styles.TabBar}
-            onClick={(e) => handle_onClick(e)}>
-            <div>
-                {tabs}
-                <div className={[styles.QuickTab, styles.AddTab].join(' ')}>
-                    <div>
-                        <button
-                            disabled={Object.keys(props.collection).length >= 12}
-                            onClick={(e) => handle_onAddTabClick(e)}>
-                            Add
-                        </button>
+        if (tabs.length) {
+            all = (
+                <QuickTab2
+                    active={this.props.active === 'all'}
+                    key={'all'}
+                    onClick={() => this.props.actions.toggle({
+                        group: [],
+                        id: 'all',
+                        tag: []
+                    })}>
+                    All
+                </QuickTab2>
+            );
+        }
+        console.log(tabs.length);
+        return (
+            <section
+                className={styles.TabBar}
+                onClick={(e) => this.handle_onClick(e)}>
+                <div>
+                    {all}
+                    {tabs}
+                    <div className={[styles.QuickTab, styles.AddTab].join(' ')}>
+                        <div>
+                            <button
+                                disabled={Object.keys(this.props.collection).length >= 12}
+                                onClick={(e) => this.handle_onAddTabClick(e)}>
+                                Add
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
-    )
+            </section>
+        );
+    }
 }
 
 
@@ -74,4 +104,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(tabBar);
+export default connect(mapStateToProps, mapDispatchToProps)(TabBar);

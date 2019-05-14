@@ -101,7 +101,6 @@ export const getAllDecks_async = (token, user) => {
         dispatch(getAllDecks_init());
         axios.get('/deck.json?auth=' + token + '&orderBy="owner"&equalTo="' + user + '"')
         .then(response => {
-            console.log(response.data);
             dispatch(getAllDecks_success(response.data));
         })
         .catch(error => {

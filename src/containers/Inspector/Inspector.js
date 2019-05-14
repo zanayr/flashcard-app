@@ -29,6 +29,7 @@ class Inspector extends Component {
             data: {},
             state: asideTypes.CLOSED
         },
+        current2: 'all',
         current: {
             group: [],
             tag: []
@@ -52,37 +53,26 @@ class Inspector extends Component {
         },
     }
 
+    componentDidUpdate (prevProps, prevState) {
+        //console.log(prevProps, this.props);
+    }
+
     componentDidMount () {
         const cards = this.props.select_cards;
         const deck = this.props.select_deck;
         const collection = {}
-        const tabs = deck.tab;
         Object.keys(cards).filter(id => deck.member.includes(id)).map(id => {
             if (deck.member.includes(id)) {
                 collection[id] = cards[id];
             }
         });
-        if (Object.keys(tabs).length) {
-            tabs['default'] = {
-                active: true,
-                date: 1,
-                group: [],
-                id: 'default',
-                name: 'All',
-                tag: []
-            };
-        }
         this.setState(prev => ({
             ...prev,
             collection: collection,
             deck: deck,
-            tab: tabs
-        }), () => {
-            this.setState(prev => ({
-                ...prev,
-                main: 'LIST_VIEW'
-            }));
-        });
+            main: 'LIST_VIEW',
+            tab: deck.tab
+        }));
     }
 
 
@@ -267,15 +257,6 @@ class Inspector extends Component {
     }
 
     //  Filters  ---------------------------------------------------------  Filters  //
-    _setCurrent (tab) {
-        console.log(tab);
-        this.setState(prev => ({
-            current: {
-                group: tab.group.slice(),
-                tag: tab.tag.slice()
-            }
-        }));
-    }
     // clearFilters () {
     //     this.setState(prev => ({
     //         ...prev,
@@ -313,55 +294,21 @@ class Inspector extends Component {
 
     //  Tabs  ---------------------------------------------------------------  Tabs  //
     _addTab (tab) {
+        const tabs = {...this.state.tab};
+        tabs[tab.id] = tab;
         this.setState(prev => ({
             ...prev,
-            tab: {
-                ...prev.tab,
-                [tab.id]: tab
-            }
-        }));
-    }
-    _closeAllTabs () {
-        const tabs = {};
-        Object.keys(this.state.tab).forEach(id => {
-            this.state.tab[id].active = false;
-            tabs[id] = {...this.state.tab[id]};
-        });
-        this.setState(prev => ({
-            ...prev,
+            deck: {
+                ...prev.deck,
+                tab: tabs
+            },
             tab: tabs
         }));
     }
-    _closeAllTabsBut (tab) {
-        const tabs = {};
-        console.log(this.state.tab, tab.id);
-        Object.keys(this.state.tab).forEach(id => {
-            if (id === tab.id) {
-                this.state.tab[id].active = true;
-            } else {
-                this.state.tab[id].active = false;
-            }
-            tabs[id] = {...this.state.tab[id]};
-        });
+    _resetTab (tabs) {
         this.setState(prev => ({
             ...prev,
             tab: tabs
-        }));
-    }
-    _removeDefualtTab () {
-        if (Object.keys(this.state.tab).length === 2) {
-            const tabs = this.state.tab;
-            delete tabs['default'];
-            return tabs;
-        }
-        return this.state.tab;
-    }
-    _resetTabs (tabs) {
-        this.setState(prev => ({
-            ...prev,
-            tabs: {
-                ...tabs
-            }
         }));
     }
 
@@ -418,7 +365,6 @@ class Inspector extends Component {
         }));
     }
     handle_onTagCreate = (category, tag) => {
-        console.log(category, tag);
         this._addTag(category, tag);
     }
     
@@ -619,9 +565,9 @@ class Inspector extends Component {
     }
 
     
-    _findTheNextTab (tab) {
-        const tabs = utility.sortBy(sortTypes.DATE_DSC, this.state.tab);
-        return tabs[tabs.indexOf(tab) - 1];
+    _findTheNextTab (tab, tabs) {
+        const t = utility.sortBy(sortTypes.DATE_DSC, tabs);
+        return t[t.indexOf(tab) - 1];
     }
 
 
@@ -729,19 +675,6 @@ class Inspector extends Component {
         this._clearSelected();
         this._clearQuick('s');
     }
-
-
-    // handle_onItemsRecover = () => {
-    //     const deleted = this.state.undo.data;
-    //     const recovered = {}
-    //     deleted.map(item => {
-    //         recovered[item.id] = item
-    //     });
-    //     this.setManyItems(recovered);
-    //     this._clearQuick('u');
-    //     this._clearUndo();
-    //     this.props.addManyCards_async(this.props.select_token, deleted);
-    // }
     handle_onUndoUpdate = () => {
         const item = this.state.undo.data;
         this.props.updateCard_async(this.props.token, item);
@@ -757,13 +690,6 @@ class Inspector extends Component {
         this._clearQuick('u');
         this._clearUndo();
     }
-    // handle_onItemReset = () => {
-    //     const item = this.state.undo.data;
-    //     this.setItem(item);
-    //     this._clearQuick('u');
-    //     this._clearUndo();
-    //     this.props.addCard_async(this.props.select_token, item);
-    // }
     
     // //  Filters  -----------------------------------------------------  Filters EHs  //
     // handle_onFilterClear = () => {
@@ -792,72 +718,60 @@ class Inspector extends Component {
     handle_onTabAdd = () => {
         this._toggleMainState('ADD_TAB');
     }
-    _removeCollectionTab_async (tab) {
-        const tabs = {...this.state.tab};
-        delete tabs['default'];  //  Remove the default tab from the tabs object
+    handle_onTabDelete = (tab) => {
+        let tabs = {...this.state.tab};
         delete tabs[tab.id];
         this.props.updateDeck_async(this.props.token, {
             ...this.state.deck,
             tab: tabs
         });
+        this._resetTab(tabs);
+        if (this.state.current2 === tab.id) {
+            this._setCurrent2({
+                group: [],
+                id: 'all',
+                tag: []
+            })
+        }
     }
-    handle_onTabDelete = (tab) => {
-        let tabs = this._removeDefualtTab();
-        // if (tab.active) {
-        //     this.handle_onTabToggle(this._findTheNextTab(tab));
-        // }
-        delete tabs[tab.id];
-        this._removeCollectionTab_async(tab);
-        this._resetTabs(tabs);
+    _setCurrent2 (tab) {
+        this.setState(prev => ({
+            ...prev,
+            current2: tab.id,
+            filters: {
+                group: tab.group.slice(),
+                tag: tab.tag.slice()
+            }
+        }));
     }
     handle_onTabToggle = (tab) => {
-        this._closeAllTabsBut(tab);
-        // if (this.state.aside.state === asideTypes.FILTER_TAG || this.state.aside.state === asideTypes.FILTER_GROUP) {
-        //     this._updateAsideData('tab', tab);
-        // }
-        this._setCurrent(tab);
+        this._setCurrent2(tab);
         this._clearSelected();
         this._clearQuick('s');
-    }
-    // _removeDefualtTab () {
-    //     if (Object.keys(this.state.tab).length === 2) {
-    //         this._removeTab('default');
-    //     }
-    // }
-    _addDefaultTab () {
-        if (!Object.keys(this.state.tab).length) {
-            this._addTab(create.tabViewModel('default', {
-                date: 1,
-                group: [],
-                name: 'All',
-                tag: []
-            }));
+        if (this.state.main === 'ADD_TAB') {
+            this._toggleMainState('LIST_VIEW');
         }
     }
     handle_onTabCreate = (tab) => {
-        this._closeAllTabs();
-        this._addDefaultTab();
-        this._addTab(tab);
-        this._setCurrent(tab);
-        this._toggleMainState('LIST_VIEW');
-        const tabs = this.state.tab;
-        tabs[tab.id] = tab;
-
         this.props.updateDeck_async(this.props.token, {
             ...this.state.deck,
-            tab: tabs
+            tab: {
+                ...this.state.deck.tab,
+                [tab.id]: tab
+            }
         });
+        this._addTab(tab);
+        this._setCurrent2(tab);
+        this._toggleMainState('LIST_VIEW');
     }
 
 
     render () {
-        console.log(this.state.tab);
         let content;
         switch (this.state.main) {
             case 'LIST_VIEW':
                 content = (
                     <List2
-
                     actions={{
                         delete: this.handle_onItemDelete,
                         inspect: this.handle_onItemInspect,
@@ -867,8 +781,7 @@ class Inspector extends Component {
                     collection={utility.sortBy(this.state.sort, this.state.collection)}
                     filters={this.state.filters}
                     page={this.state.page}
-                    selected={this.state.selected}
-                    current={this.state.current}/>
+                    selected={this.state.selected}/>
                 );
                 break;
             case 'ADD_TAB':
@@ -905,6 +818,7 @@ class Inspector extends Component {
                                 delete: this.handle_onTabDelete,
                                 toggle: this.handle_onTabToggle,
                             }}
+                            active={this.state.current2}
                             collection={this.state.tab}
                             onClick={this.handle_onAsideClose}/>
                         {content}
