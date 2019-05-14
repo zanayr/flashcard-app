@@ -306,12 +306,12 @@ class Inspector extends Component {
     }
 
     //  Sort  ---------------------------------------------------------------  Sort  //
-    // setSort (sort) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         sort: sort
-    //     }));
-    // }
+    setSort (sort) {
+        this.setState(prev => ({
+            ...prev,
+            sort: sort
+        }));
+    }
 
     //  Action  -----------------------------------------------------------  Action  //
     _addMember (item) {
@@ -576,9 +576,9 @@ class Inspector extends Component {
 
     //  EVENT HANDLERS  //
     //  Inspector  ---------------------------------------------  Inspector EHs  //
-    // handle_onCollectionSort = (sort) => {
-    //     this.setSort(sort);
-    // }
+    handle_onCollectionSort = (sort) => {
+        this.setSort(sort);
+    }
     // handle_onItemsCreate = (items) => {
     //     const created = {};
     //     items.forEach(item => {
@@ -817,7 +817,6 @@ class Inspector extends Component {
                         sort: this.handle_onCollectionSort,
                         toggle: this.handle_onAsideToggle
                     }}
-                    page={this.state.page}
                     selected={this.state.selected}
                     onClick={this.handle_onAsideClose}/>
                 <main
