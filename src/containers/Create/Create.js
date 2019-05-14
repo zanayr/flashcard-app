@@ -63,7 +63,7 @@ class Create extends Component {
                         <div>
                             <div className={styles.Wrapper}>
                                 <CreateForm
-                                    deck={this.state.deck.id}
+                                    deck={this.props.location.state.id}
                                     onCreate={this.handle_onCardCreate}/>
                             </div>
                         </div>

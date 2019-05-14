@@ -803,9 +803,9 @@ class Inspector extends Component {
     }
     handle_onTabDelete = (tab) => {
         let tabs = this._removeDefualtTab();
-        if (tab.active) {
-            this.handle_onTabToggle(this._findTheNextTab(tab));
-        }
+        // if (tab.active) {
+        //     this.handle_onTabToggle(this._findTheNextTab(tab));
+        // }
         delete tabs[tab.id];
         this._removeCollectionTab_async(tab);
         this._resetTabs(tabs);
