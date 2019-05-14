@@ -214,16 +214,6 @@ class Inspector extends Component {
             }
         }));
     }
-    // _removeItem (item) {
-    //     const collection = this.state.collection;
-    //     delete collection[item.id];
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: {
-    //             ...collection
-    //         }
-    //     }));
-    // }
     resetCollection (collection) {
         this.setState(prev => ({
             ...prev,
@@ -320,12 +310,6 @@ class Inspector extends Component {
     // }
 
     //  Tags  ---------------------------------------------------------------  Tags  //
-    // setTags (category, tags) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         [category]: tags
-    //     }));
-    // }
 
     //  Tabs  ---------------------------------------------------------------  Tabs  //
     _addTab (tab) {
@@ -337,12 +321,6 @@ class Inspector extends Component {
             }
         }));
     }
-    // setCollection (collection) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: collection
-    //     }));
-    // }
     _closeAllTabs () {
         const tabs = {};
         Object.keys(this.state.tab).forEach(id => {
@@ -378,14 +356,6 @@ class Inspector extends Component {
         }
         return this.state.tab;
     }
-    // _addDefaultTab () {
-    //     if (!Object.keys(this.state.tab).length) {
-    //         this._addTab(create.tabViewModel('default', {
-    //             date: 0,
-    //             name: 'All',
-    //         }));
-    //     }
-    // }
     _resetTabs (tabs) {
         this.setState(prev => ({
             ...prev,
@@ -402,16 +372,6 @@ class Inspector extends Component {
     //         sort: sort
     //     }));
     // }
-
-    _checkTags (category, tags) {
-        const newTags = tags.filter(tag => this.state[category].indexOf(tag) < 0);
-        let allTags;
-        if (newTags.length) {
-            allTags = this.state[category].concat(newTags);
-            this.setTags(category, allTags);
-            this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
-        }
-    }
 
     //  Action  -----------------------------------------------------------  Action  //
     _addMember (item) {
@@ -487,7 +447,7 @@ class Inspector extends Component {
         this._clearQuick('s');
     }
 
-    
+
     //  Aside  -------------------------------------------------------------  Aside  //
     _addItem_async (item) {
         this.props.addCard_async(this.props.token, item);
@@ -505,10 +465,6 @@ class Inspector extends Component {
             }))
         });
     }
-
-    // _updateItem_async (item) {
-    //     this.props.updateCard_async(this.props.token, item);
-    // }
 
     handle_onItemCreate = (item) => {
         this._addMember(item);
@@ -642,10 +598,6 @@ class Inspector extends Component {
             confirm: this.handle_onItemUpdate,
             create: this.handle_onTagCreate
         });
-        // this._setUndo({
-        //     action: this.handle_onItemReset,
-        //     data: item
-        // });
         this._clearQuick('s');
     }
     handle_onItemSelect = (item) => {
@@ -667,10 +619,10 @@ class Inspector extends Component {
     }
 
     
-    // _findTheNextTab (tab) {
-    //     const tabs = utility.sortBy(sortTypes.DATE_DSC, this.state.tabs).filter(tab => tab.collection === this.state.page);
-    //     return tabs[tabs.indexOf(tab) + 1];
-    // }
+    _findTheNextTab (tab) {
+        const tabs = utility.sortBy(sortTypes.DATE_DSC, this.state.tab);
+        return tabs[tabs.indexOf(tab) - 1];
+    }
 
 
     //  EVENT HANDLERS  //
@@ -851,7 +803,7 @@ class Inspector extends Component {
     }
     handle_onTabDelete = (tab) => {
         let tabs = this._removeDefualtTab();
-        if (this.state.current.id === tab.id) {
+        if (tab.active) {
             this.handle_onTabToggle(this._findTheNextTab(tab));
         }
         delete tabs[tab.id];
