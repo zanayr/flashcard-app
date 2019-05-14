@@ -56,18 +56,27 @@ class Inspector extends Component {
         const cards = this.props.select_cards;
         const deck = this.props.select_deck;
         const collection = {}
+        const tabs = deck.tab;
         Object.keys(cards).filter(id => deck.member.includes(id)).map(id => {
             if (deck.member.includes(id)) {
                 collection[id] = cards[id];
             }
         });
+        if (Object.keys(tabs).length) {
+            tabs['default'] = {
+                active: true,
+                date: 1,
+                group: [],
+                id: 'default',
+                name: 'All',
+                tag: []
+            };
+        }
         this.setState(prev => ({
             ...prev,
-            deck: deck
-        }));
-        this.setState(prev => ({
-            ...prev,
-            collection: collection
+            collection: collection,
+            deck: deck,
+            tab: tabs
         }), () => {
             this.setState(prev => ({
                 ...prev,
@@ -268,11 +277,12 @@ class Inspector extends Component {
     }
 
     //  Filters  ---------------------------------------------------------  Filters  //
-    _setCurrent (filters) {
+    _setCurrent (tab) {
+        console.log(tab);
         this.setState(prev => ({
             current: {
-                group: filters.group.slice(),
-                tag: filters.tag.slice()
+                group: tab.group.slice(),
+                tag: tab.tag.slice()
             }
         }));
     }
@@ -346,6 +356,7 @@ class Inspector extends Component {
     }
     _closeAllTabsBut (tab) {
         const tabs = {};
+        console.log(this.state.tab, tab.id);
         Object.keys(this.state.tab).forEach(id => {
             if (id === tab.id) {
                 this.state.tab[id].active = true;
@@ -367,14 +378,14 @@ class Inspector extends Component {
         }
         return this.state.tabs;
     }
-    _addDefaultTab () {
-        if (!Object.keys(this.state.tab).length) {
-            this._addTab(create.tabViewModel('default', {
-                date: 0,
-                name: 'All',
-            }));
-        }
-    }
+    // _addDefaultTab () {
+    //     if (!Object.keys(this.state.tab).length) {
+    //         this._addTab(create.tabViewModel('default', {
+    //             date: 0,
+    //             name: 'All',
+    //         }));
+    //     }
+    // }
     _resetTabs (tabs) {
         this.setState(prev => ({
             ...prev,
@@ -831,7 +842,9 @@ class Inspector extends Component {
         if (!Object.keys(this.state.tab).length) {
             this._addTab(create.tabViewModel('default', {
                 date: 1,
+                group: [],
                 name: 'All',
+                tag: []
             }));
         }
     }
@@ -839,13 +852,20 @@ class Inspector extends Component {
         this._closeAllTabs();
         this._addDefaultTab();
         this._addTab(tab);
+        this._setCurrent(tab);
         this._toggleMainState('LIST_VIEW');
-        //  Add tab to deck
+        const tabs = this.state.deck.tab;
+        tabs[tab.id] = tab;
+
+        this.props.updateDeck_async(this.props.token, {
+            ...this.state.deck,
+            tab: tabs
+        });
     }
 
 
     render () {
-        console.log(this.state.selected);
+        console.log(this.state.tab);
         let content;
         switch (this.state.main) {
             case 'LIST_VIEW':

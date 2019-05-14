@@ -18,6 +18,12 @@ export function cardModel (card) {
 
 //  Deck  -------------------------------------------------------------  Deck Model  //
 export function deckModel (deck) {
+    const tab = {};
+    if (deck.tab) {
+        Object.keys(deck.tab).map(id => {
+            tab[id] = tabModel(deck.tab[id]);
+        });
+    }
     return {
         date: deck.date,
         group: deck.group,
@@ -27,7 +33,7 @@ export function deckModel (deck) {
         owner: deck.owner,
         primary: deck.primary,
         secondary: deck.secondary,
-        tab: deck.tab,
+        tab: tab,
         tag: deck.tag
     }
 }
@@ -105,17 +111,7 @@ export function deckViewModel (id, deck) {
         owner: deck.owner,
         primary: deck.primary || '',
         secondary: deck.secondary || '',
-        tab: {
-            ...tab,
-            all: {
-                date: 0,
-                delete: false,
-                group: [],
-                id: 'deck',
-                name: 'Decks',
-                tag: []
-            }
-        },
+        tab: tab,
         tag: deck.tag || []
     }
 }

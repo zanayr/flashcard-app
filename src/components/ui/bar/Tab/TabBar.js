@@ -26,6 +26,7 @@ const tabBar = (props) => {
     }
     let tabs = null;
     if (typeof props.collection !== undefined) {
+        console.log(props.collection);
         tabs = utility.sortBy(sortTypes.DATE_DSC, props.collection).map(tab => {
             return (
                 <QuickTab
