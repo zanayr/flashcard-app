@@ -816,16 +816,22 @@ class Inspector extends Component {
     handle_onTabAdd = () => {
         this._toggleMainState('ADD_TAB');
     }
+    _removeCollectionTab_async (tab) {
+        const tabs = {...this.state.tab};
+        delete tabs['default'];  //  Remove the default tab from the tabs object
+        delete tabs[tab.id];
+        this.props.updateDeck_async(this.props.token, {
+            ...this.state.deck,
+            tab: tabs
+        });
+    }
     handle_onTabDelete = (tab) => {
         let tabs = this._removeDefualtTab();
         if (this.state.current.id === tab.id) {
             this.handle_onTabToggle(this._findTheNextTab(tab));
         }
         delete tabs[tab.id];
-        this.props.updateDeck_async(this.props.token, {
-            ...this.state.deck,
-            tab: tabs
-        });
+        this._removeCollectionTab_async(tab);
         this._resetTabs(tabs);
     }
     handle_onTabToggle = (tab) => {
@@ -858,7 +864,7 @@ class Inspector extends Component {
         this._addTab(tab);
         this._setCurrent(tab);
         this._toggleMainState('LIST_VIEW');
-        const tabs = this.state.deck.tab;
+        const tabs = this.state.tab;
         tabs[tab.id] = tab;
 
         this.props.updateDeck_async(this.props.token, {
