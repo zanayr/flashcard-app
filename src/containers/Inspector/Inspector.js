@@ -371,12 +371,12 @@ class Inspector extends Component {
         }));
     }
     _removeDefualtTab () {
-        if (Object.keys(this.state.tab).length === 1) {
+        if (Object.keys(this.state.tab).length === 2) {
             const tabs = this.state.tab;
             delete tabs['default'];
             return tabs;
         }
-        return this.state.tabs;
+        return this.state.tab;
     }
     // _addDefaultTab () {
     //     if (!Object.keys(this.state.tab).length) {
@@ -822,6 +822,10 @@ class Inspector extends Component {
             this.handle_onTabToggle(this._findTheNextTab(tab));
         }
         delete tabs[tab.id];
+        this.props.updateDeck_async(this.props.token, {
+            ...this.state.deck,
+            tab: tabs
+        });
         this._resetTabs(tabs);
     }
     handle_onTabToggle = (tab) => {
@@ -833,11 +837,11 @@ class Inspector extends Component {
         this._clearSelected();
         this._clearQuick('s');
     }
-    _removeDefualtTab () {
-        if (Object.keys(this.state.tab).length === 1) {
-            this._removeTab('default');
-        }
-    }
+    // _removeDefualtTab () {
+    //     if (Object.keys(this.state.tab).length === 2) {
+    //         this._removeTab('default');
+    //     }
+    // }
     _addDefaultTab () {
         if (!Object.keys(this.state.tab).length) {
             this._addTab(create.tabViewModel('default', {
