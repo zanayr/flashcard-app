@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import BarLink from '../../ui/link/Bar/BarLink';
+import Button from '../../ui/button/Button/Button';
 import CardInspectForm from '../../form/Card/CardInspectForm';
 
 import styles from '../Aside.module.css';
@@ -84,6 +85,7 @@ class CardInspect extends Component {
                         card={this.state.item}
                         onChange={this.handle_onChange}
                         onConfirm={this.props.actions.confirm}/>
+                    <Button onClick={this.props.actions.cancel}>Cancel</Button>
                     <div>
                         <BarLink path={this.props.path} state={{id: this.props.data.deckId}}>Add many</BarLink>
                         {/* <BarLink path={'/u/loading'} state={{collection: this.props.page, id: this.state.item.id}}>Edit</BarLink> */}

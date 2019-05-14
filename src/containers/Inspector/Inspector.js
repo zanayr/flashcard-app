@@ -543,7 +543,25 @@ class Inspector extends Component {
         }
         return valid;
     }
-
+    handle_onAsideCancel = () => {
+        const originalData = this.state.aside.data;
+        let data;
+        switch (this.state.aside.state) {
+            case asideTypes.CREATE_CARD:
+                this._removeItem(this.state.collection[this.state.aside.data.item.id]);
+                break;
+            case asideTypes.INSPECT_CARD:
+                data = this.state.collection[originalData.item.id];
+                if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._itemIsValid(data)) {
+                    this._setItem(originalData.item);
+                }
+                break;
+            default:
+                break;
+        }
+        this._clearAside();
+        this._closeAside();
+    }
     handle_onAsideClose = () => {
         const originalData = this.state.aside.data;
         let data;
@@ -560,8 +578,15 @@ class Inspector extends Component {
                 data = this.state.collection[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._itemIsValid(data)) {
                     this.props.updateCard_async(this.props.token, data);
+                    this._setUndo({
+                        action: this.handle_onUndoUpdate,
+                        data: originalData.item
+                    });
                     this._setQuick('u');
                 }
+                break;
+            default:
+                break;
         }
         this._clearAside();
         this._closeAside();
@@ -614,6 +639,7 @@ class Inspector extends Component {
             tags: this.state.tags
         });
         this.setAsideActions({
+            cancel: this.handle_onAsideCancel,
             change: this.handle_onItemChange,
             confirm: this.handle_onItemUpdate,
             create: this.handle_onTagCreate
