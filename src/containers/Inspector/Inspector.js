@@ -53,6 +53,7 @@ class Inspector extends Component {
             data: {}
         },
     }
+    undoTimeout = null;
 
     componentDidUpdate (prevProps, prevState) {
         //console.log(prevProps, this.props);
@@ -61,7 +62,7 @@ class Inspector extends Component {
     componentDidMount () {
         const cards = this.props.select_cards;
         const deck = this.props.select_deck;
-        const collection = {}
+        const collection = {};
         Object.keys(cards).filter(id => deck.member.includes(id)).map(id => {
             if (deck.member.includes(id)) {
                 collection[id] = cards[id];
@@ -81,13 +82,24 @@ class Inspector extends Component {
 
     //  Quicks  ------------------------------------------------------------  Quicks //
     _clearQuick (value) {
+        if (value === 'u') {
+            clearTimeout(this.undoTimeout);
+            
+        }
         this.setState(prev => ({
             ...prev,
             quick: prev.quick.filter(q => q !== value)
-        }))
+        }));
     }
     _setQuick (value) {
         if (!this.state.quick.includes(value)) {
+            if (value === 'u') {
+                clearTimeout(this.undoTimeout);
+                this.undoTimeout = setTimeout(() => {
+                    this._clearQuick('u');
+                    this._clearUndo();
+                }, 3000);
+            }
             this.setState(prev => ({
                 ...prev,
                 quick: prev.quick.concat(value)

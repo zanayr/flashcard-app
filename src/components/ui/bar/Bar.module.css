@@ -1,7 +1,7 @@
 .QuickBar {
     bottom: 16px;
     left: 0px;
-    position: absolute;
+    position: fixed;
 }
 
 .TabBar {
