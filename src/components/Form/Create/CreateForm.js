@@ -176,6 +176,7 @@ class CreateForm extends Component {
             //  Build the new card
             const card = create.cardViewModel(utility.createHashId(0), {
                 group: groups,
+                member: [this.props.deck],
                 notes: this.state.card.notes,
                 owner: this.props.select_user.id,
                 primary: this.state.card.primary,

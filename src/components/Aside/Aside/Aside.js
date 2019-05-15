@@ -10,7 +10,7 @@ import CardInspect from '../Inspect/CardInspect';
 const aside = (props) => {
     let aside = null;
     switch (props.state) {
-        case 1:
+        case asideTypes.NAVIGATION:
             aside = (
                 <NavigationAiside
                     actions={props.actions}

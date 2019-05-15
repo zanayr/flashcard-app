@@ -5,6 +5,7 @@ import * as actions from '../../store/actions/index';
 import * as create from '../../store/models/models';
 import * as select from '../../store/reducers/root';
 import * as sortTypes from '../../utility/sortTypes';
+import * as headerTypes from '../../components/Header/types';
 import * as utility from '../../utility/utility';
 
 
@@ -649,6 +650,7 @@ class Collections extends Component {
                     }}
                     page={this.state.page}
                     selected={this.state.selected}
+                    state={headerTypes.COLLECTION}
                     onClick={this.handle_onAsideClose}/>
                 <main
                     className={styles.Main}

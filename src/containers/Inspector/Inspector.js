@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
 import * as asideTypes from '../../components/aside/Aside/asideTypes';
+import * as headerTypes from '../../components/Header/types';
 import * as create from '../../store/models/models';
 import * as select from '../../store/reducers/root';
 import * as sortTypes from '../../utility/sortTypes';
@@ -355,7 +356,8 @@ class Inspector extends Component {
             member: [this.state.deck.id],
             owner: this.props.select_user.id,
             primary: '',
-            secondary: ''
+            secondary: '',
+            tag: []
         });
         this._addItem(card);
         this.toggleAside(asideTypes.CREATE_CARD);
@@ -804,6 +806,7 @@ class Inspector extends Component {
                         toggle: this.handle_onAsideToggle
                     }}
                     selected={this.state.selected}
+                    state={headerTypes.INSPECTOR}
                     onClick={this.handle_onAsideClose}/>
                 <main
                     className={styles.Main}

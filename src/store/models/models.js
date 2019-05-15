@@ -71,12 +71,13 @@ export function userModel (student) {
 //  Card View Model  ---------------------------------------------------  Card V.M.  //
 export function cardViewModel (id, card) {
     const date = card.date || Date.now();
+    console.log(card.member);
     const member = card.member || [];
     let tag = card.tag || [];
     if (!member.length) {
         tag = tag.concat('$unassigned');
     }
-    if (Date.now() - date < 604800000 && !card.tag.includes('$new')) {
+    if (Date.now() - date < 604800000 && !tag.includes('$new')) {
         tag = tag.concat('$new');
     }
     return {

@@ -18,7 +18,6 @@ class ListItem extends Component {
             css = [ListItemStyles.ListItem, ListItemStyles.Selected];
         }
         let tags = this.props.tags.map(tag => {
-            console.log(tag);
             return (
                 <div key={tag}><p>{tag}</p></div>
             );

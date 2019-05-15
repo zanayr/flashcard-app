@@ -3,13 +3,16 @@ import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
 import * as asideTypes from '../aside/Aside/asideTypes';
+import * as headerTypes from '../Header/types';
 import * as modalTypes from '../modal/Modal/modalTypes';
 import * as create from '../../store/models/models';
 import * as select from '../../store/reducers/root';
 import * as sortTypes from '../../utility/sortTypes';
 import * as utility from '../../utility/utility';
 
+import Aux from '../../hoc/Aux/Aux';
 import ReturnLink from '../ui/link/Return/ReturnLink';
+import BarLink from '../ui/link/Bar/BarLink';
 import Search from '../ui/input/Search/Search';
 import Toolbar from '../ui/bar/Toolbar/Toolbar';
 import Dashboard from '../ui/Dashboard/Dashboard';
@@ -25,7 +28,10 @@ class Header extends Component {
 
     handle_onClick = (e) => {
         e.stopPropagation();
-        this.props.onClick();
+        console.log(this.props.onClick);
+        if (this.props.onClick) {
+            this.props.onClick();
+        }
     }
 
     handle_onSelectedDelete = () => {
@@ -81,35 +87,84 @@ class Header extends Component {
     };
 
     render () {
+        let content = null;
+        switch (this.props.state) {
+            case headerTypes.COLLECTION:
+                content = (
+                    <Aux>
+                        <Search/>
+                        <Toolbar>
+                            <IconButton onClick={() => this.props.actions.toggle(asideTypes.FILTER_TAG)}>T</IconButton>
+                            <IconButton onClick={() => this.props.actions.toggle(asideTypes.FILTER_GROUP)}>G</IconButton>
+                            <IconButton
+                                disabled={!this.props.selected.length}
+                                onClick={this.handle_onSelectedDelete}>D</IconButton>
+                            {this.props.page === 'deck' ? (
+                                    <IconButton
+                                        disabled={!(this.props.selected.length > 1)}
+                                        onClick={this.handle_onSelectedMerge}>
+                                        M
+                                    </IconButton>
+                                ) : (null)}
+                            <IconButton
+                                disabled={!this.props.selected.length}
+                                onClick={this.handle_onSelectedClone}>C</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(sortTypes.ALPHA_ASC)}>AA</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(sortTypes.ALPHA_DSC)}>AD</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(sortTypes.DATE_ASC)}>DA</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(sortTypes.DATE_DSC)}>DD</IconButton>
+                        </Toolbar>
+                    </Aux>
+                );
+                break;
+            case headerTypes.INSPECTOR:
+                content = (
+                    <Aux>
+                        <Search/>
+                        <Toolbar>
+                            <IconButton onClick={() => this.props.actions.toggle(asideTypes.FILTER_TAG)}>T</IconButton>
+                            <IconButton onClick={() => this.props.actions.toggle(asideTypes.FILTER_GROUP)}>G</IconButton>
+                            <IconButton
+                                disabled={!this.props.selected.length}
+                                onClick={this.handle_onSelectedDelete}>D</IconButton>
+                            {this.props.page === 'deck' ? (
+                                    <IconButton
+                                        disabled={!(this.props.selected.length > 1)}
+                                        onClick={this.handle_onSelectedMerge}>
+                                        M
+                                    </IconButton>
+                                ) : (null)}
+                            <IconButton
+                                disabled={!this.props.selected.length}
+                                onClick={this.handle_onSelectedClone}>C</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(sortTypes.ALPHA_ASC)}>AA</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(sortTypes.ALPHA_DSC)}>AD</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(sortTypes.DATE_ASC)}>DA</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(sortTypes.DATE_DSC)}>DD</IconButton>
+                        </Toolbar>
+                    </Aux>
+                );
+                break;
+            case headerTypes.NAVIGATION:
+                content = (
+                    <Aux>
+                        <BarLink
+                            path={this.props.back}
+                            state={{}}>
+                            Back
+                        </BarLink>
+                    </Aux>
+                );
+                break;
+        }
         return (
             <header
                 className={styles.Header}
                 onClick={(e) => this.handle_onClick(e)}>
                 <div>
                     <ReturnLink/>
-                    <Search/>
-                    <Toolbar>
-                        <IconButton onClick={() => this.props.actions.toggle(asideTypes.FILTER_TAG)}>T</IconButton>
-                        <IconButton onClick={() => this.props.actions.toggle(asideTypes.FILTER_GROUP)}>G</IconButton>
-                        <IconButton
-                            disabled={!this.props.selected.length}
-                            onClick={this.handle_onSelectedDelete}>D</IconButton>
-                        {this.props.page === 'deck' ? (
-                                <IconButton
-                                    disabled={!(this.props.selected.length > 1)}
-                                    onClick={this.handle_onSelectedMerge}>
-                                    M
-                                </IconButton>
-                            ) : (null)}
-                        <IconButton
-                            disabled={!this.props.selected.length}
-                            onClick={this.handle_onSelectedClone}>C</IconButton>
-                        <IconButton onClick={() => this.props.actions.sort(sortTypes.ALPHA_ASC)}>AA</IconButton>
-                        <IconButton onClick={() => this.props.actions.sort(sortTypes.ALPHA_DSC)}>AD</IconButton>
-                        <IconButton onClick={() => this.props.actions.sort(sortTypes.DATE_ASC)}>DA</IconButton>
-                        <IconButton onClick={() => this.props.actions.sort(sortTypes.DATE_DSC)}>DD</IconButton>
-                    </Toolbar>
-                    <Dashboard onNavigation={() => this.props.actions.toggle(1)}/>
+                    {content}
+                    <Dashboard onNavigation={() => this.props.actions.toggle(asideTypes.NAVIGATION)}/>
                 </div>
             </header>
         );

@@ -3,18 +3,57 @@ import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
 import * as select from '../../store/reducers/root';
+import * as asideTypes from '../../components/aside/Aside/asideTypes';
+import * as headerTypes from '../../components/Header/types.js';
 
+import Aside from '../../components/aside/Aside/Aside';
+import Aux from '../../hoc/Aux/Aux';
 import CreateForm from '../../components/form/Create/CreateForm';
 import CardStack from '../../components/Stack/CardStack';
+import Header from '../../components/Header/Header';
 
 import styles from './Create.module.css';
 
 class Create extends Component {
     state = {
-        cards: []
+        cards: [],
+        aside: {
+            state: asideTypes.CLOSED
+        }
     }
 
     //  STATE SETTERS  ---------------------------------------------------  SETTERS  //
+    //  Aside  --------------------------------------------------------------  Aside // 
+    _closeAside () {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                state: asideTypes.CLOSED
+            }
+        }));
+    }
+    _openAside (state) {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                state: state
+            }
+        }));
+    }
+    _toggleAside (state) {
+        if (this.state.aside.state !== asideTypes.CLOSED) {
+            if (this.state.aside.state !== state) {
+                this._openAside(state);
+            } else {
+                this._closeAside();
+            }
+        } else {
+            this._openAside(state);
+        }
+    }
+
     //  Cards  --------------------------------------------------------------  Cards //
     _addCard (card) {
         this.setState(prev => ({
@@ -37,7 +76,16 @@ class Create extends Component {
         }
     }
 
+
     //  EVENT HANDLERS  -----------------------------------------------------  E.H.  //
+    //  Aside  --------------------------------------------------------------  Aside //
+    handle_onAsideToggle = (state) => {
+        this._toggleAside(state);
+    }
+    handle_onAsideClose = () => {
+        this._closeAside();
+    }
+
     //  Cards  --------------------------------------------------------------  Cards //
     handle_onCardCreate = (card) => {
         this._addCard(card);
@@ -54,33 +102,48 @@ class Create extends Component {
         this._removeCard(card);
     }
 
+
     //  RENDER METHOD  ----------------------------------------------------  RENDER  //
     render () {
         return (
-            <main className={styles.Creator}>
-                <div>
-                    <section className={styles.Editor}>
-                        <div>
-                            <div className={styles.Wrapper}>
-                                <CreateForm
-                                    deck={this.props.location.state.id}
-                                    onCreate={this.handle_onCardCreate}/>
+            <Aux>
+                <main
+                    className={styles.Creator}
+                    onClick={this.handle_onAsideClose}>
+                    <div>
+                        <Header
+                            actions={{
+                                toggle: this.handle_onAsideToggle
+                            }}
+                            back={'/u/deck/' + this.props.location.state.id}
+                            state={headerTypes.NAVIGATION}/>
+                        <section className={styles.Editor}>
+                            <div>
+                                <div className={styles.Wrapper}>
+                                    <CreateForm
+                                        deck={this.props.location.state.id}
+                                        onCreate={this.handle_onCardCreate}/>
+                                </div>
                             </div>
-                        </div>
-                    </section>
-                    <section className={styles.Board}>
-                        <div>
-                            <div className={styles.Wrapper}>
-                                <CardStack
-                                    collection={this.state.cards}
-                                    max={21}
-                                    onAction={this.handle_onCardDelete}/>
+                        </section>
+                        <section className={styles.Board}>
+                            <div>
+                                <div className={styles.Wrapper}>
+                                    <CardStack
+                                        collection={this.state.cards}
+                                        max={21}
+                                        onAction={this.handle_onCardDelete}/>
+                                </div>
                             </div>
-                        </div>
-                    </section>
-                </div>
-            </main>
-        )
+                        </section>
+                    </div>
+                </main>
+                <Aside
+                    actions={{}}
+                    data={{}}
+                    state={this.state.aside.state}/>
+            </Aux>
+        );
     }
 }
 
