@@ -34,7 +34,6 @@ class Header extends Component {
             'Once you delete an item, it cannot be recovered. Are you sure you wish to delete these items?',
             'Delete', 'Cancel')
         .then(response => {
-            this.props.deleteManyDecks_async(this.props.select_token, this.props.selected.slice());
             this.props.actions.delete();
         }).catch(() => {}); // Eat user cancel
     };
@@ -76,21 +75,8 @@ class Header extends Component {
             'Are you sure you wish to close these items?',
             'Clone', 'Cancel')
         .then(response => {
-            const cloned = [];
-            this.props.selected.map((item, i) => {
-                let primary;
-                if (item.primary.length <= 24) {
-                    primary = 'Copy of ' + item.primary;
-                } else {
-                    primary = 'Copy of ' + item.primary.substr(0, 21) + '...';
-                }
-                cloned.push(create.deckViewModel(utility.createHashId(i), {
-                    ...item,
-                    primary: primary
-                }));
-            });
-            this.props.addManyDecks_async(this.props.select_token, cloned);
-            this.props.actions.create(cloned);
+            //this.props.addManyDecks_async(this.props.select_token, cloned);
+            this.props.actions.clone();
         }).catch(() => {}); // Eat user cancel
     };
 

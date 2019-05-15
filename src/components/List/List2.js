@@ -56,6 +56,7 @@ class List2 extends Component {
                         action={() => this.props.actions.remove(item)}
                         active={isActive}
                         destructive
+                        key={'remove'}
                         position={1}>
                         Remove
                     </ContextAction2>
@@ -74,6 +75,7 @@ class List2 extends Component {
                         <ContextAction2
                             action={() => this.props.actions.inspect(item)}
                             active={isActive}
+                            key={'inspect'}
                             position={contextPosition}>
                             Inspect
                         </ContextAction2>
@@ -82,6 +84,7 @@ class List2 extends Component {
                             action={() => this.props.actions.delete(item)}
                             active={isActive}
                             destructive
+                            key={'delete'}
                             position={0}>
                             Delete
                         </ContextAction2>

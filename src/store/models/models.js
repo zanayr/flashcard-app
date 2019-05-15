@@ -76,7 +76,7 @@ export function cardViewModel (id, card) {
     if (!member.length) {
         tag = tag.concat('$unassigned');
     }
-    if (Date.now() - date < 604800000) {
+    if (Date.now() - date < 604800000 && !card.tag.includes('$new')) {
         tag = tag.concat('$new');
     }
     return {

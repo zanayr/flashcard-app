@@ -604,6 +604,28 @@ class Inspector extends Component {
 
     }
     //  Delete Many Items  -------------------------------------------  Delete Many  //
+    handle_onManyItemsClone = () => {
+        const cloned = [];
+        const selected = this.state.selected.slice();
+        selected.forEach((item, i) => {
+            let primary;
+            if (item.primary.length <= 24) {
+                primary = 'Copy of ' + item.primary;
+            } else {
+                primary = 'Copy of ' + item.primary.substr(0, 21) + '...';
+            }
+            cloned.push(create.cardViewModel(utility.createHashId(i), {
+                ...item,
+                date: Date.now(),
+                primary: primary
+            }));
+        });
+        this._addManyItems(cloned);
+        this._addManyMembers(cloned);
+        this._addManyItems_async(cloned);
+        this._clearSelected();
+        this._clearQuick('s');
+    }
     handle_onManyItemsDelete = () => {
         const collection = this.state.collection;
         const selected = this.state.selected.slice();
@@ -776,7 +798,7 @@ class Inspector extends Component {
             <Aux>
                 <Header
                     actions={{
-                        create: this.handle_onItemsCreate,
+                        clone: this.handle_onManyItemsClone,
                         delete: this.handle_onManyItemsDelete,
                         sort: this.handle_onCollectionSort,
                         toggle: this.handle_onAsideToggle
