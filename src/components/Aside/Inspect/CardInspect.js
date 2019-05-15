@@ -43,7 +43,6 @@ class CardInspect extends Component {
             target: category,
             value: tags.concat(tag)
         });
-        console.log(this.props.actions);
         this.props.actions.create(category, tag);
     }
     handle_onTagToggle = (category, tag) => {
@@ -88,7 +87,6 @@ class CardInspect extends Component {
                     <Button onClick={this.props.actions.cancel}>Cancel</Button>
                     <div>
                         <BarLink path={this.props.path} state={{id: this.props.data.deckId}}>Add many</BarLink>
-                        {/* <BarLink path={'/u/loading'} state={{collection: this.props.page, id: this.state.item.id}}>Edit</BarLink> */}
                     </div>
                 </div>
             </aside>

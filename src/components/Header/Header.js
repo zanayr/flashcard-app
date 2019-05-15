@@ -28,7 +28,6 @@ class Header extends Component {
 
     handle_onClick = (e) => {
         e.stopPropagation();
-        console.log(this.props.onClick);
         if (this.props.onClick) {
             this.props.onClick();
         }
@@ -40,7 +39,7 @@ class Header extends Component {
             'Once you delete an item, it cannot be recovered. Are you sure you wish to delete these items?',
             'Delete', 'Cancel')
         .then(response => {
-            this.props.actions.delete();
+            this.props.actions.action(0);
         }).catch(() => {}); // Eat user cancel
     };
 
@@ -82,7 +81,7 @@ class Header extends Component {
             'Clone', 'Cancel')
         .then(response => {
             //this.props.addManyDecks_async(this.props.select_token, cloned);
-            this.props.actions.clone();
+            this.props.actions.action(1);
         }).catch(() => {}); // Eat user cancel
     };
 
@@ -94,8 +93,8 @@ class Header extends Component {
                     <Aux>
                         <Search/>
                         <Toolbar>
-                            <IconButton onClick={() => this.props.actions.toggle(asideTypes.FILTER_TAG)}>T</IconButton>
-                            <IconButton onClick={() => this.props.actions.toggle(asideTypes.FILTER_GROUP)}>G</IconButton>
+                            <IconButton onClick={() => this.props.actions.filter(0)}>T</IconButton>
+                            <IconButton onClick={() => this.props.actions.filter(1)}>G</IconButton>
                             <IconButton
                                 disabled={!this.props.selected.length}
                                 onClick={this.handle_onSelectedDelete}>D</IconButton>
@@ -109,10 +108,10 @@ class Header extends Component {
                             <IconButton
                                 disabled={!this.props.selected.length}
                                 onClick={this.handle_onSelectedClone}>C</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(sortTypes.ALPHA_ASC)}>AA</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(sortTypes.ALPHA_DSC)}>AD</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(sortTypes.DATE_ASC)}>DA</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(sortTypes.DATE_DSC)}>DD</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(0)}>AA</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(1)}>AD</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(2)}>DA</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(3)}>DD</IconButton>
                         </Toolbar>
                     </Aux>
                 );
@@ -122,8 +121,8 @@ class Header extends Component {
                     <Aux>
                         <Search/>
                         <Toolbar>
-                            <IconButton onClick={() => this.props.actions.toggle(asideTypes.FILTER_TAG)}>T</IconButton>
-                            <IconButton onClick={() => this.props.actions.toggle(asideTypes.FILTER_GROUP)}>G</IconButton>
+                            <IconButton onClick={() => this.props.actions.filter(0)}>T</IconButton>
+                            <IconButton onClick={() => this.props.actions.filter(1)}>G</IconButton>
                             <IconButton
                                 disabled={!this.props.selected.length}
                                 onClick={this.handle_onSelectedDelete}>D</IconButton>
@@ -137,10 +136,10 @@ class Header extends Component {
                             <IconButton
                                 disabled={!this.props.selected.length}
                                 onClick={this.handle_onSelectedClone}>C</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(sortTypes.ALPHA_ASC)}>AA</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(sortTypes.ALPHA_DSC)}>AD</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(sortTypes.DATE_ASC)}>DA</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(sortTypes.DATE_DSC)}>DD</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(0)}>AA</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(1)}>AD</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(2)}>DA</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(3)}>DD</IconButton>
                         </Toolbar>
                     </Aux>
                 );
@@ -164,7 +163,7 @@ class Header extends Component {
                 <div>
                     <ReturnLink/>
                     {content}
-                    <Dashboard onNavigation={() => this.props.actions.toggle(asideTypes.NAVIGATION)}/>
+                    <Dashboard onNavigation={this.props.actions.navigation}/>
                 </div>
             </header>
         );

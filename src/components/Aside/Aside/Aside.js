@@ -22,21 +22,14 @@ const aside = (props) => {
             aside = (
                 <FilterAside
                     actions={props.actions}
-                    data={{
-                        ...props.data,
-                        category: 'tag'
-                    }}
-                    filters={props.filters}/>
+                    data={props.data}/>
             );
             break;
         case asideTypes.FILTER_GROUP:
             aside = (
                 <FilterAside
                     actions={props.actions}
-                    data={{
-                        ...props.data,
-                        category: 'group'
-                    }}/>
+                    data={props.data}/>
             );
             break;
         case asideTypes.CREATE_CARD:

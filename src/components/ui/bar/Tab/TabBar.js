@@ -18,16 +18,17 @@ class TabBar extends Component {
         this.props.onClick();
     }
     handle_onSelect = (tab) => {
-        this.props.actions.toggle(tab);
+        this.props.action(1, tab);
     }
-    handle_onTabDelete = (tab) => {
+    handle_onDelete = (tab) => {
         this.props.deleteTab_async(this.props.select_token, this.props.select_userId, tab);
-        this.props.actions.delete(tab);
+        this.props.action(2, tab);
     }
-    handle_onAddTabClick = (e) => {
+    handle_onAdd = (e) => {
         e.stopPropagation();
-        this.props.actions.add();
+        this.props.action(0, null);
     }
+
     render () {
         let tabs = null;
         let all = null;
@@ -37,7 +38,7 @@ class TabBar extends Component {
                     active={this.props.active === tab.id}
                     delete
                     key={tab.id}
-                    onClick={() => this.props.actions.toggle(tab)}
+                    onClick={() => this.handle_onSelect(tab)}
                     onClose={() => this.handle_onTabDelete(tab)}>
                     {tab.name}
                 </QuickTab2>
@@ -48,7 +49,7 @@ class TabBar extends Component {
                 <QuickTab2
                     active={this.props.active === 'all'}
                     key={'all'}
-                    onClick={() => this.props.actions.toggle({
+                    onClick={() => this.handle_onSelect({
                         group: [],
                         id: 'all',
                         tag: []
@@ -57,7 +58,6 @@ class TabBar extends Component {
                 </QuickTab2>
             );
         }
-
 
         return (
             <section
@@ -70,7 +70,7 @@ class TabBar extends Component {
                         <div>
                             <button
                                 disabled={Object.keys(this.props.collection).length >= 12}
-                                onClick={(e) => this.handle_onAddTabClick(e)}>
+                                onClick={(e) => this.handle_onAdd(e)}>
                                 Add
                             </button>
                         </div>

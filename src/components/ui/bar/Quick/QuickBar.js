@@ -13,13 +13,13 @@ const quickBar = (props) => {
     quicks = props.data.map((quick, i) => {
         switch (quick) {
             case 'f':
-                action = props.actions.onFilterClear
+                action = () => props.action(0);
                 break;
             case 's':
-                action = props.actions.onSelectClear
+                action = () => props.action(1);
                 break;
             case 'u':
-                action = props.actions.onUndo
+                action = () => props.action(2);
                 break;
             default:
                 break;

@@ -220,7 +220,6 @@ class CardInspect extends Component {
                     onToggle={() => this.handle_onStateToggle('group')}/>
             );
         }
-        console.log(this.state.tag, this.props.select_user.tag);
         return (
             <Aux>
                 <form
