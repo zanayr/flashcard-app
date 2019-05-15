@@ -205,9 +205,14 @@ class Inspector extends Component {
         }));
     }
     resetCollection (collection) {
+        const members = Object.keys(collection).map(id => {return id});
         this.setState(prev => ({
             ...prev,
-            collection: collection
+            collection: collection,
+            deck: {
+                ...prev.deck,
+                member: members
+            }
         }));
     }
     _setItem (item) {
@@ -257,22 +262,6 @@ class Inspector extends Component {
     }
 
     //  Filters  ---------------------------------------------------------  Filters  //
-    // clearFilters () {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             data: {
-    //                 ...prev.aside.data,
-    //                 selected: []
-    //             }
-    //         },
-    //         filters: {
-    //             groups: [],
-    //             tags: []
-    //         }
-    //     }));
-    // }
     _setFilter (category, filter) {
         this.setState(prev => ({
             ...prev,
@@ -579,34 +568,6 @@ class Inspector extends Component {
     handle_onCollectionSort = (sort) => {
         this.setSort(sort);
     }
-    // handle_onItemsCreate = (items) => {
-    //     const created = {};
-    //     items.forEach(item => {
-    //         created[item.id] = item;
-    //     });
-    //     this.setManyItems(created);
-    //     this._clearSelected();
-    //     this._clearQuick('s');
-    // }
-    // _resetDeckMembers (members) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         deck: {
-    //             ...prev.deck,
-    //             member: members
-    //         }
-    //     }));
-    //     this.props.updateDeck_async(this.props.token, {
-    //         ...this.state.deck,
-    //         member: members
-    //     });
-    // }
-    // _removeItemMember (item, member) {
-    //     this.props.updateCard_async(this.props.select_token, {
-    //         ...item,
-    //         member: member
-    //     });
-    // }
     _removeItem (item) {
         const collection = this.state.collection;
         delete collection[item.id];
@@ -639,26 +600,34 @@ class Inspector extends Component {
         this._setQuick('u');
         this._clearSelected();
     }
+    _removeDeckMembers (nonmembers) {
+
+    }
     //  Delete Many Items  -------------------------------------------  Delete Many  //
-    // handle_onItemsDelete = () => {
-    //     const collection = this.state.collection;
-    //     const selected = this.state.selected.slice();
-    //     const nonmembers = [];
-    //     selected.forEach(item => {
-    //         nonmembers.concat(item.id);
-    //         delete collection[item.id];
-    //         this.props.deleteCard_async(this.props.select_token, item);
-    //     });
-    //     this._removeDeckMembers(nonmembers);
-    //     this._setUndo({
-    //         action: this.handle_onItemsRecover,
-    //         data: selected
-    //     });
-    //     this._setQuick('u');
-    //     this.resetCollection(collection);
-    //     this._clearQuick('s');
-    //     this._clearSelected();
-    // }
+    handle_onManyItemsDelete = () => {
+        const collection = this.state.collection;
+        const selected = this.state.selected.slice();
+        const nonmembers = [];
+        selected.forEach(item => {
+            nonmembers.push(item.id);
+            delete collection[item.id];
+            this.props.deleteCard_async(this.props.select_token, item);
+        });
+        this.props.updateDeck_async(this.props.select_token, {
+            ...this.state.deck,
+            member: this.state.deck.member.filter(id => !nonmembers.includes(id))
+        });
+        this.resetCollection(collection);
+
+        this._setUndo({
+            action: this.handle_onUndoDelete,
+            data: selected
+        });
+        this._clearSelected();
+        this._setQuick('u');
+        this._clearQuick('s');
+        
+    }
 
     //  Remove Item  -------------------------------------------------  Remove Item  //
     handle_onItemRemove = (item) => {
@@ -750,11 +719,6 @@ class Inspector extends Component {
         this._setCurrent(tab);
         this._clearSelected();
         this._clearQuick('s');
-        // if (this.state.aside.state === asideTypes.FILTER_GROUP) {
-        //     this.handle_onFilterAside('group', tab);
-        // } else if (this.state.aside.state === asideTypes.FILTER_TAG) {
-        //     this.handle_onFilterAside('tag', tab);
-        // }
         if (this.state.main === 'ADD_TAB') {
             this._toggleMainState('LIST_VIEW');
         }
@@ -813,7 +777,7 @@ class Inspector extends Component {
                 <Header
                     actions={{
                         create: this.handle_onItemsCreate,
-                        delete: this.handle_onItemsDelete,
+                        delete: this.handle_onManyItemsDelete,
                         sort: this.handle_onCollectionSort,
                         toggle: this.handle_onAsideToggle
                     }}
