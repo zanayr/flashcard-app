@@ -179,7 +179,7 @@ class Inspector extends Component {
     }
 
     //  Items  ----------------------------------------------------------  Items SS  //
-    _removeItems (items) {
+    _removeManyItems (items) {
         const collection = this.state.collection;
         const nonmembers = items.map(item => {return item.id});
         items.forEach(item => {
@@ -197,7 +197,7 @@ class Inspector extends Component {
             }
         }));
     }
-    _setItems (items) {
+    _setManyItems (items) {
         const collection = this.state.collection;
         items.forEach(item => {
             collection[item.id] = item;
@@ -207,7 +207,7 @@ class Inspector extends Component {
             collection: collection
         }));
     }
-    _setMembers (items) {
+    _setManyMembers (items) {
         this.setState(prev => ({
             ...prev,
             deck: {
@@ -334,13 +334,13 @@ class Inspector extends Component {
 
     //  PRIVATE METHODS  =========================================  PRIVATE METHODS  //
     //  Aside  ----------------------------------------------------------  Aside PM  //
-    _addItems_async (items) {
-        this.props.addManyCards_async(this.props.token, items);
-        this.props.updateDeck_async(this.props.token, {
-            ...this.state.deck,
-            member: this.state.deck.member.concat(items.map(item => {
-                return item.id;
-            }))
+    _openFilterAside (filter) {
+        this._setAside({
+            toggle: (tag) => this.handle_onAsideFilterToggle(filter, tag)
+        }, {
+            all: this.state[filter],
+            filter: this.state.filter[filter],
+            tab: this.state.current[filter]
         });
     }
     _openInspectAside (data) {
@@ -359,6 +359,23 @@ class Inspector extends Component {
     }
 
     //  Items  ----------------------------------------------------------  Items PM  //
+    _addManyItems = (items) => {
+        this._addManyItems_async(items);
+        this._setManyMembers(items);
+        this._clearAndCloseAside();
+    }
+    _addManyItems_async (items) {
+        this.props.addManyCards_async(this.props.token, items);
+        this.props.updateDeck_async(this.props.token, {
+            ...this.state.deck,
+            member: this.state.deck.member.concat(items.map(item => {
+                return item.id;
+            }))
+        });
+    }
+    _changeItem = (target, value) => {
+        this._setItemValue(target, value);
+    }
     _checkItem (item) {
         let valid = true;
         if (!item.primary.length > 0 && valid) {
@@ -369,31 +386,162 @@ class Inspector extends Component {
         }
         return valid;
     }
+    _cloneManyItems () {
+        const cloned = [];
+        const selected = this.state.selected.slice();
+        selected.forEach((item, i) => {
+            let primary;
+            if (item.primary.length <= 24) {
+                primary = 'Copy of ' + item.primary;
+            } else {
+                primary = 'Copy of ' + item.primary.substr(0, 21) + '...';
+            }
+            cloned.push(create.cardViewModel(utility.createHashId(i), {
+                ...item,
+                date: Date.now(),
+                primary: primary
+            }));
+        });
+        this._addManyItems_async(cloned);
+        this._setManyItems(cloned);
+        this._setManyMembers(cloned);
+        this._clearSelected();
+    }
+    _createItem () {
+        const item = create.cardViewModel(utility.createHashId(0), {
+            member: [this.state.deck.id],
+            owner: this.props.select_user.id,
+            primary: '',
+            secondary: '',
+            tag: []
+        });
+        this._setManyItems([item]);
+        this._openInspectAside({
+            confirm: () => this._addManyItems([this.state.collection[item.id]]),
+            item: item,
+            type: asideTypes.CREATE_CARD
+        });
+        this._clearSelected();
+    }
+    _deleteManyItems () {
+        const collection = this.state.collection;
+        const selected = this.state.selected.slice();
+        const nonmembers = [];
+        selected.forEach(item => {
+            nonmembers.push(item.id);
+            delete collection[item.id];
+            this.props.deleteCard_async(this.props.select_token, item);
+        });
+        this.props.updateDeck_async(this.props.select_token, {
+            ...this.state.deck,
+            member: this.state.deck.member.filter(id => !nonmembers.includes(id))
+        });
+        this._setCollection(collection);
+        this._setUndo({
+            action: this._undoManyItemsDeleted,
+            data: selected
+        });
+        this._clearSelected();
+    }
+    _deleteItem = (item) => {
+        this.props.deleteCard_async(this.props.select_token, item);
+        this.props.updateDeck_async(this.props.select_token, {
+            ...this.state.deck,
+            member: this.state.deck.member.filter(id => id !== item.id)
+        });
+        this._removeManyItems([item]);
+        this._setUndo({
+            action: this._undoManyItemsDeleted,
+            data: [item]
+        });
+        this._clearSelected();
+    }
+    _inspectItem = (item) => {
+        this._openInspectAside({
+            confirm: this.handle_onItemUpdate,
+            item: item,
+            type: asideTypes.INSPECT_CARD
+        });
+        this._clearQuick('s');
+    }
+    _removeItem = (item) => {
+        this.props.updateCard_async(this.props.select_token, {
+            ...item,
+            member: item.member.filter(id => id !== this.state.deck.id)
+        });
+        this.props.updateDeck_async(this.props.select_token, {
+            ...this.state.deck,
+            member: this.state.deck.member.filter(id => id !== item.id)
+        });
+        this._removeManyItems([item]);
+        this._setUndo({
+            action: this._undoManyItemsRemoved,
+            data: [item]
+        });
+        this._clearSelected();
+    }
+    _selectItem = (item) => {
+        let selected = this.state.selected.slice();
+        if (selected.find(i => i.id === item.id)) {
+            selected = selected.filter(i => i.id !== item.id);
+        } else {
+            selected = selected.concat(item);
+        }
+        if (this.state.aside.state === asideTypes.CREATE_CARD || this.state.aside.state === asideTypes.INSPECT_CARD) {
+            this.handle_onAsideClose();
+        }
+        this._setSelected(selected);
+    }
+    _updateItem = () => {
+        const original = this.state.aside.data.item;
+        const item = this.state.collection[original.id];
+        if (JSON.stringify(item) !== JSON.stringify(original)) {
+            this.props.updateCard_async(this.props.token, item);
+            this._setUndo({
+                action: this._undoItemUpdated,
+                data: original
+            });
+        }
+        this._clearAndCloseAside();
+    }
+
+    //  Tab  ------------------------------------------------------------------ Tab  //
+    _deleteTab (tab) {
+        let tabs = {...this.state.tab};
+        delete tabs[tab.id];
+        this.props.updateDeck_async(this.props.token, {
+            ...this.state.deck,
+            tab: tabs
+        });
+        this._setTab(tabs);
+        if (this.state.current.id === tab.id) {
+            this._setCurrent({
+                group: [],
+                id: 'all',
+                tag: []
+            });
+        }
+    }
+    _selectTab (tab) {
+        this._setCurrent(tab);
+        this._clearSelected();
+        if (this.state.main === 'ADD_TAB') {
+            this._setMainState('LIST_VIEW');
+        }
+        if (this.state.aside.state !== asideTypes.CLOSED) {
+            this._clearFilter();
+            this._clearAndCloseAside();
+        }
+    }
 
     //  Undo  -----------------------------------------------------------  Undo  PM  //
-    
-    _undoItemsDelete = () => {
+    _undoManyItemsDeleted = () => {
         const items = this.state.undo.data.slice();
-        this._addItems_async(items);
-        this._setItems(items);
-        this._setMembers(items);
+        this._addManyItems_async(items);
+        this._setManyItems(items);
+        this._setManyMembers(items);
     }
-    /*
-    this.props.updateCard_async(this.props.select_token, {
-        ...item,
-        member: item.member.filter(id => id !== this.state.deck.id)
-    });
-    this.props.updateDeck_async(this.props.select_token, {
-        ...this.state.deck,
-        member: this.state.deck.member.filter(id => id !== item.id)
-    });
-    this._removeItems([item]);
-    this._setUndo({
-        action: this._undoItemRemove,
-        data: [item]
-    });
-    */
-    _undoItemRemove = () => {
+    _undoManyItemsRemoved = () => {
         const items = this.state.undo.data.slice();
         const members = [];
         items.forEach(item => {
@@ -404,32 +552,27 @@ class Inspector extends Component {
             ...this.state.deck,
             member: this.state.deck.member.concat(members)
         });
-        this._setItems(items);
-        this._setMembers(items);
+        this._setManyItems(items);
+        this._setManyMembers(items);
     }
-    _undoItemUpdate = () => {
+    _undoItemUpdated = () => {
         const item = this.state.undo.data;
         this.props.updateCard_async(this.props.token, item);
-        this._setItems([item]);
+        this._setManyItems([item]);
     }
+    
 
     //  EVENT HANDLERS  ===========================================  EVENT HANDLERS  //
     //  Action Button  ------------------------------------------  Action Button EH  //
-    handle_onActionClick = () => {
-        const item = create.cardViewModel(utility.createHashId(0), {
-            member: [this.state.deck.id],
-            owner: this.props.select_user.id,
-            primary: '',
-            secondary: '',
-            tag: []
-        });
-        this._setItems([item]);
-        this._openInspectAside({
-            confirm: () => this.handle_onItemCreate(this.state.collection[item.id]),
-            item: item,
-            type: asideTypes.CREATE_CARD
-        });
-        this._clearSelected();
+    handle_onActionClick = (action) => {
+        switch (active) {
+            case 0:
+                this._createItem();
+            case 1:
+                console.log('Starting study session...');
+            default:
+                break;
+        }
     }
 
 
@@ -439,12 +582,12 @@ class Inspector extends Component {
         let data;
         switch (this.state.aside.state) {
             case asideTypes.CREATE_CARD:
-                this._removeItems([this.state.collection[this.state.aside.data.item.id]]);
+                this._removeManyItems([this.state.collection[this.state.aside.data.item.id]]);
                 break;
             case asideTypes.INSPECT_CARD:
                 data = this.state.collection[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkItem(data)) {
-                    this._setItems([originalData.item]);
+                    this._setManyItems([originalData.item]);
                 }
                 break;
             default:
@@ -459,9 +602,9 @@ class Inspector extends Component {
             case asideTypes.CREATE_CARD:
                 data = this.state.collection[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkItem(data)) {
-                    this.handle_onItemCreate(data);
+                    this._addManyItems([data]);
                 } else {
-                    this._removeItems([data]);
+                    this._removeManyItems([data]);
                 }
                 break;
             case asideTypes.INSPECT_CARD:
@@ -469,7 +612,7 @@ class Inspector extends Component {
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkItem(data)) {
                     this.props.updateCard_async(this.props.token, data);
                     this._setUndo({
-                        action: this._undoItemUpdate,
+                        action: this._undoItemUpdated,
                         data: originalData.item
                     });
                 }
@@ -488,89 +631,17 @@ class Inspector extends Component {
         }
         this._updateAsideData('filter', filter[category]);
         this._setFilter(filter);
-    }  
-
-    //  Items  ----------------------------------------------------------  Items EH  //
-    handle_onItemCreate = (item) => {
-        this._addItems_async([item]);
-        this._setMembers([item]);
-        this._clearAndCloseAside();
     }
-    handle_onItemChange = (target, value) => {
-        this._setItemValue(target, value);
-    }
-    handle_onItemUpdate = () => {
-        const original = this.state.aside.data.item;
-        const item = this.state.collection[original.id];
-        if (JSON.stringify(item) !== JSON.stringify(original)) {
-            this.props.updateCard_async(this.props.token, item);
-            this._setUndo({
-                action: this._undoItemUpdate,
-                data: original
-            });
-        }
-        this._clearAndCloseAside();
-    }
+    
 
     //  Header  --------------------------------------------------------  Header EH  //
-    _deleteItems () {
-        const collection = this.state.collection;
-        const selected = this.state.selected.slice();
-        const nonmembers = [];
-        selected.forEach(item => {
-            nonmembers.push(item.id);
-            delete collection[item.id];
-            this.props.deleteCard_async(this.props.select_token, item);
-        });
-        this.props.updateDeck_async(this.props.select_token, {
-            ...this.state.deck,
-            member: this.state.deck.member.filter(id => !nonmembers.includes(id))
-        });
-        this._setCollection(collection);
-        this._setUndo({
-            action: this._undoItemsDelete,
-            data: selected
-        });
-        this._clearSelected();
-    }
-    _cloneItems () {
-        const cloned = [];
-        const selected = this.state.selected.slice();
-        selected.forEach((item, i) => {
-            let primary;
-            if (item.primary.length <= 24) {
-                primary = 'Copy of ' + item.primary;
-            } else {
-                primary = 'Copy of ' + item.primary.substr(0, 21) + '...';
-            }
-            cloned.push(create.cardViewModel(utility.createHashId(i), {
-                ...item,
-                date: Date.now(),
-                primary: primary
-            }));
-        });
-        this._addItems_async(cloned);
-        this._setItems(cloned);
-        this._setMembers(cloned);
-        this._clearSelected();
-    }
-    _openFilter (filter) {
-        this._setAside({
-            toggle: (tag) => this.handle_onAsideFilterToggle(filter, tag)
-        }, {
-            all: this.state[filter],
-            filter: this.state.filter[filter],
-            tab: this.state.current[filter]
-        });
-    }
-
     handle_onActionToggle = (action) => {
         switch (action) {
             case 0:
-                this._deleteItems();
+                this._deleteManyItems();
                 break;
             case 1:
-                this._cloneItems();
+                this._cloneManyItems();
                 break;
             default:
                 break;
@@ -579,11 +650,11 @@ class Inspector extends Component {
     handle_onFilterToggle = (filter) => {
         switch (filter) {
             case 0:
-                this._openFilter('tag');
+                this._openFilterAside('tag');
                 this._toggleAside(asideTypes.FILTER_TAG)
                 break;
             case 1:
-                this._openFilter('group');
+                this._openFilterAside('group');
                 this._toggleAside(asideTypes.FILTER_GROUP);
                 break;
             default:
@@ -613,57 +684,9 @@ class Inspector extends Component {
     }
 
     //  List  ------------------------------------------------------------  List EH  //
-    _deleteItem = (item) => {
-        this.props.deleteCard_async(this.props.select_token, item);
-        this.props.updateDeck_async(this.props.select_token, {
-            ...this.state.deck,
-            member: this.state.deck.member.filter(id => id !== item.id)
-        });
-        this._removeItems([item]);
-        this._setUndo({
-            action: this._undoItemsDelete,
-            data: [item]
-        });
-        this._clearSelected();
-    }
-    _inspectItem = (item) => {
-        this._openInspectAside({
-            confirm: this.handle_onItemUpdate,
-            item: item,
-            type: asideTypes.INSPECT_CARD
-        });
-        this._clearQuick('s');
-    }
-    _removeItem = (item) => {
-        this.props.updateCard_async(this.props.select_token, {
-            ...item,
-            member: item.member.filter(id => id !== this.state.deck.id)
-        });
-        this.props.updateDeck_async(this.props.select_token, {
-            ...this.state.deck,
-            member: this.state.deck.member.filter(id => id !== item.id)
-        });
-        this._removeItems([item]);
-        this._setUndo({
-            action: this._undoItemRemove,
-            data: [item]
-        });
-        this._clearSelected();
-    }
-    _selectItem = (item) => {
-        let selected = this.state.selected.slice();
-        if (selected.find(i => i.id === item.id)) {
-            selected = selected.filter(i => i.id !== item.id);
-        } else {
-            selected = selected.concat(item);
-        }
-        if (this.state.aside.state === asideTypes.CREATE_CARD || this.state.aside.state === asideTypes.INSPECT_CARD) {
-            this.handle_onAsideClose();
-        }
-        this._setSelected(selected);
-    }
+    
 
-    handle_onListAction = (action, data) => {
+    handle_onListClick = (action, data) => {
         switch (action) {
             case 0:
                 this._selectItem(data);
@@ -676,6 +699,8 @@ class Inspector extends Component {
                 break;
             case 3:
                 this._deleteItem(data);
+                break;
+            default:
                 break;
         }
     }
@@ -706,35 +731,7 @@ class Inspector extends Component {
         }
     }
 
-    // //  Tab  -------------------------------------------------------------  Tab EHs  //
-    _deleteTab (tab) {
-        let tabs = {...this.state.tab};
-        delete tabs[tab.id];
-        this.props.updateDeck_async(this.props.token, {
-            ...this.state.deck,
-            tab: tabs
-        });
-        this._setTab(tabs);
-        if (this.state.current.id === tab.id) {
-            this._setCurrent({
-                group: [],
-                id: 'all',
-                tag: []
-            });
-        }
-    }
-    _selectTab (tab) {
-        this._setCurrent(tab);
-        this._clearSelected();
-        if (this.state.main === 'ADD_TAB') {
-            this._setMainState('LIST_VIEW');
-        }
-        if (this.state.aside.state !== asideTypes.CLOSED) {
-            this._clearFilter();
-            this._clearAndCloseAside();
-        }
-    }
-
+    // Tab  ---------------------------------------------------------------  Tab EH  //
     handle_onTabToggle = (tab, data) => {
         switch (tab) {
             case 0:
@@ -750,7 +747,6 @@ class Inspector extends Component {
                 break;
         }
     }
-    
     handle_onTabCreate = (tab) => {
         const tabs = {...this.state.deck.tab};
         tabs[tab.id] = tab;
@@ -775,7 +771,7 @@ class Inspector extends Component {
             case 'LIST_VIEW':
                 content = (
                     <List2
-                    action={this.handle_onListAction}
+                    action={this.handle_onListClick}
                     collection={utility.sortBy(this.state.sort, this.state.collection)}
                     filters={this.state.filter}
                     current={this.state.current}
