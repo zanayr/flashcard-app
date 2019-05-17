@@ -18,7 +18,7 @@ class ListItem extends Component {
             css = [ListItemStyles.ListItem, ListItemStyles.Selected];
         }
         let tags = this.props.tags.map(tag => {
-            return (
+            return tag.match(/^\$[a-zA-Z0-9]*/) ? null : (
                 <div key={tag}><p>{tag}</p></div>
             );
         })
