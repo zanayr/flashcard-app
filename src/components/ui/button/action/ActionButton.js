@@ -11,7 +11,7 @@ const actionButton = (props) => {
     }
 
     const handle_onClick = () => {
-        props.onClick();
+        props.onClick(props.state);
     }
 
     return (

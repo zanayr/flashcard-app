@@ -565,7 +565,7 @@ class Inspector extends Component {
     //  EVENT HANDLERS  ===========================================  EVENT HANDLERS  //
     //  Action Button  ------------------------------------------  Action Button EH  //
     handle_onActionClick = (action) => {
-        switch (active) {
+        switch (action) {
             case 0:
                 this._createItem();
             case 1:
