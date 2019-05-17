@@ -275,7 +275,7 @@ class Inspector extends Component {
                 this.undoTimeout = setTimeout(() => {
                     this._clearQuick('u');
                     this._clearUndo();
-                }, 3000);
+                }, 60000);
             }
             this.setState(prev => ({
                 ...prev,
@@ -323,13 +323,10 @@ class Inspector extends Component {
         }));
         this._clearQuick('u');
     }
-    _setUndo (action, data) {
+    _setUndo (undo) {
         this.setState(prev => ({
             ...prev,
-            undo: {
-                action: action,
-                data: data
-            }
+            undo: undo
         }));
         this._setQuick('u');
     }
@@ -374,18 +371,47 @@ class Inspector extends Component {
     }
 
     //  Undo  -----------------------------------------------------------  Undo  PM  //
-    _undoItemUpdate = () => {
-        const item = this.state.undo.data;
-        this.props.updateCard_async(this.props.token, item);
-        this._setItems([item]);
-    }
-    _undoItemDelete = () => {
+    
+    _undoItemsDelete = () => {
         const items = this.state.undo.data.slice();
         this._addItems_async(items);
         this._setItems(items);
         this._setMembers(items);
     }
-
+    /*
+    this.props.updateCard_async(this.props.select_token, {
+        ...item,
+        member: item.member.filter(id => id !== this.state.deck.id)
+    });
+    this.props.updateDeck_async(this.props.select_token, {
+        ...this.state.deck,
+        member: this.state.deck.member.filter(id => id !== item.id)
+    });
+    this._removeItems([item]);
+    this._setUndo({
+        action: this._undoItemRemove,
+        data: [item]
+    });
+    */
+    _undoItemRemove = () => {
+        const items = this.state.undo.data.slice();
+        const members = [];
+        items.forEach(item => {
+            members.push(item.id);
+            this.props.updateCard_async(this.props.select_token, item);
+        });
+        this.props.updateDeck_async(this.props.select_token, {
+            ...this.state.deck,
+            member: this.state.deck.member.concat(members)
+        });
+        this._setItems(items);
+        this._setMembers(items);
+    }
+    _undoItemUpdate = () => {
+        const item = this.state.undo.data;
+        this.props.updateCard_async(this.props.token, item);
+        this._setItems([item]);
+    }
 
     //  EVENT HANDLERS  ===========================================  EVENT HANDLERS  //
     //  Action Button  ------------------------------------------  Action Button EH  //
@@ -502,7 +528,7 @@ class Inspector extends Component {
         });
         this._setCollection(collection);
         this._setUndo({
-            action: this._undoItemDelete,
+            action: this._undoItemsDelete,
             data: selected
         });
         this._clearSelected();
@@ -587,7 +613,7 @@ class Inspector extends Component {
     }
 
     //  List  ------------------------------------------------------------  List EH  //
-    handle_onListItemDelete = (item) => {
+    _deleteItem = (item) => {
         this.props.deleteCard_async(this.props.select_token, item);
         this.props.updateDeck_async(this.props.select_token, {
             ...this.state.deck,
@@ -595,12 +621,12 @@ class Inspector extends Component {
         });
         this._removeItems([item]);
         this._setUndo({
-            action: this.handle_onUndoDelete,
+            action: this._undoItemsDelete,
             data: [item]
         });
         this._clearSelected();
     }
-    handle_onListItemInspect = (item) => {
+    _inspectItem = (item) => {
         this._openInspectAside({
             confirm: this.handle_onItemUpdate,
             item: item,
@@ -608,7 +634,7 @@ class Inspector extends Component {
         });
         this._clearQuick('s');
     }
-    handle_onListItemRemove = (item) => {
+    _removeItem = (item) => {
         this.props.updateCard_async(this.props.select_token, {
             ...item,
             member: item.member.filter(id => id !== this.state.deck.id)
@@ -619,12 +645,12 @@ class Inspector extends Component {
         });
         this._removeItems([item]);
         this._setUndo({
-            action: this.handle_onUndoRemove,
+            action: this._undoItemRemove,
             data: [item]
         });
         this._clearSelected();
     }
-    handle_onListItemSelect = (item) => {
+    _selectItem = (item) => {
         let selected = this.state.selected.slice();
         if (selected.find(i => i.id === item.id)) {
             selected = selected.filter(i => i.id !== item.id);
@@ -635,6 +661,23 @@ class Inspector extends Component {
             this.handle_onAsideClose();
         }
         this._setSelected(selected);
+    }
+
+    handle_onListAction = (action, data) => {
+        switch (action) {
+            case 0:
+                this._selectItem(data);
+                break;
+            case 1:
+                this._inspectItem(data);
+                break;
+            case 2:
+                this._removeItem(data);
+                break;
+            case 3:
+                this._deleteItem(data);
+                break;
+        }
     }
 
     // //  Main  -----------------------------------------------------------  Main EHs  //
@@ -732,16 +775,12 @@ class Inspector extends Component {
             case 'LIST_VIEW':
                 content = (
                     <List2
-                    actions={{
-                        delete: this.handle_onListItemDelete,
-                        inspect: this.handle_onListItemInspect,
-                        remove: this.handle_onListItemRemove,
-                        select: this.handle_onListItemSelect
-                    }}
+                    action={this.handle_onListAction}
                     collection={utility.sortBy(this.state.sort, this.state.collection)}
                     filters={this.state.filter}
                     current={this.state.current}
-                    selected={this.state.selected}/>
+                    selected={this.state.selected}
+                    remove/>
                 );
                 break;
             case 'ADD_TAB':

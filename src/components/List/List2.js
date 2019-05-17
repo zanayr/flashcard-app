@@ -41,7 +41,7 @@ class List2 extends Component {
     }
 
     handle_onItemSelect = (item) => {
-        this.props.actions.select(item);
+        this.props.action(0, item);
     }
 
     render () {
@@ -50,10 +50,10 @@ class List2 extends Component {
             let isSelected = typeof this.props.selected.find(i => i.id === item.id) === 'object';
             let isActive = isSelected && this.props.selected.length === 1;
             let contextPosition = 1;
-            if (typeof this.props.actions.remove !== undefined) {
+            if (this.props.remove) {
                 removeContext = (
                     <ContextAction2
-                        action={() => this.props.actions.remove(item)}
+                        action={() => this.props.action(2, item)}
                         active={isActive}
                         destructive
                         key={'remove'}
@@ -73,7 +73,7 @@ class List2 extends Component {
                         selected={isSelected}
                         onSelect={() => this.handle_onItemSelect(item)}>
                         <ContextAction2
-                            action={() => this.props.actions.inspect(item)}
+                            action={() => this.props.action(1, item)}
                             active={isActive}
                             key={'inspect'}
                             position={contextPosition}>
@@ -81,7 +81,7 @@ class List2 extends Component {
                         </ContextAction2>
                         {removeContext}
                         <ContextAction2
-                            action={() => this.props.actions.delete(item)}
+                            action={() => this.props.action(3, item)}
                             active={isActive}
                             destructive
                             key={'delete'}
