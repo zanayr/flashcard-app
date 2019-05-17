@@ -59,13 +59,11 @@ class TabForm extends Component {
     //  Tags  ---------------------------------------------------------------  Tags  //
     _checkTags (category, tags) {
         //  Check for new tags that are not included in the user defined tags
-        console.log(tags);
         const newTags = tags.filter(tag => !this.state[category].includes(tag));
         let allTags;
-        console.log(newTags);
         if (newTags.length) {
             allTags = this.state[category].concat(newTags);
-            this._setTags(category, allTags);
+            this._resetTags(category, allTags);
             //  Send new tags to the redux store and database
             this.props.putTag_async(category, this.props.select_token, this.props.select_user.id, allTags);
         }
@@ -112,13 +110,13 @@ class TabForm extends Component {
 
         if (this.state.states.tag && this.tagForm.current.reportValidity()) {
             tags = this.tagForm.current.tag.value.trim().split(', ');
-            this._checkTags('group', groups);
+            this._checkTags('tag', tags);
         } else {
             tags = this.state.selected.tag;
         }
         if (this.state.states.group && this.groupForm.current.reportValidity()) {
             groups = this.groupForm.current.tag.value.trim().split(', ');
-            this._checkTags('tag', tags);
+            this._checkTags('group', groups);
         } else {
             groups = this.state.selected.group;
         }

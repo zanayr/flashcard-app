@@ -6,7 +6,6 @@ import * as select from '../../../../store/reducers/root';
 import * as sortTypes from '../../../../utility/sortTypes';
 import * as utility from '../../../../utility/utility';
 
-import QuickTab from '../../tab/QuickTab';
 import QuickTab2 from '../../tab/QuickTab2';
 
 import styles from '../Bar.module.css';
@@ -39,7 +38,7 @@ class TabBar extends Component {
                     delete
                     key={tab.id}
                     onClick={() => this.handle_onSelect(tab)}
-                    onClose={() => this.handle_onTabDelete(tab)}>
+                    onClose={() => this.handle_onDelete(tab)}>
                     {tab.name}
                 </QuickTab2>
             );
