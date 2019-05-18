@@ -171,24 +171,24 @@ class Collections extends Component {
     }
 
     //  Collections  ----------------------------------------------------------  Collections SS  //
-    // _removeManyCollections (collections) {
-    //     const collection = this.state.collection;
-    //     const nonmembers = collections.map(collection => {return collection.id});
-    //     collections.forEach(collection => {
-    //         delete collection[collection.id];
-    //     });
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: collection
-    //     }));
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         deck: {
-    //             ...prev.deck,
-    //             member: prev.deck.member.filter(id => !nonmembers.includes(id))
-    //         }
-    //     }));
-    // }
+    _removeManyCollections (collections) {
+        const collection = this.state.collection;
+        // const nonmembers = collections.map(collection => {return collection.id});
+        collections.forEach(coll => {
+            delete collection[coll.id];
+        });
+        this.setState(prev => ({
+            ...prev,
+            collection: collection
+        }));
+        // this.setState(prev => ({
+        //     ...prev,
+        //     deck: {
+        //         ...prev.deck,
+        //         member: prev.deck.member.filter(id => !nonmembers.includes(id))
+        //     }
+        // }));
+    }
     _setManyCollections (collections) {
         const collection = this.state.collection;
         collections.forEach(coll => {
@@ -414,16 +414,16 @@ class Collections extends Component {
     _deleteManyCollections () {
         const collection = this.state.collection;
         const selected = this.state.selected.slice();
-        const nonmembers = [];
+        // const nonmembers = [];
         selected.forEach(collection => {
-            nonmembers.push(collection.id);
+            // nonmembers.push(collection.id);
             delete collection[collection.id];
             this.props.deleteDeck_async(this.props.select_token, collection);
         });
-        this.props.updateDeck_async(this.props.select_token, {
-            ...this.state.deck,
-            member: this.state.deck.member.filter(id => !nonmembers.includes(id))
-        });
+        // this.props.updateDeck_async(this.props.select_token, {
+        //     ...this.state.deck,
+        //     member: this.state.deck.member.filter(id => !nonmembers.includes(id))
+        // });
         this._setCollection(collection);
         this._setUndo({
             action: this._undoManyCollectionsDeleted,
@@ -433,10 +433,10 @@ class Collections extends Component {
     }
     _deleteCollection = (collection) => {
         this.props.deleteDeck_async(this.props.select_token, collection);
-        this.props.updateDeck_async(this.props.select_token, {
-            ...this.state.deck,
-            member: this.state.deck.member.filter(id => id !== collection.id)
-        });
+        // this.props.updateDeck_async(this.props.select_token, {
+        //     ...this.state.deck,
+        //     member: this.state.deck.member.filter(id => id !== collection.id)
+        // });
         this._removeManyCollections([collection]);
         this._setUndo({
             action: this._undoManyCollectionsDeleted,
@@ -1361,9 +1361,10 @@ const mapDispatchToProps = dispatch => {
         // addDeck_async: (url, token, collection) => dispatch(actions.addDeck_async(url, token, collection)),
         addDeck_async: (token, deck) => dispatch(actions.addDeck_async(token, deck)),
         addManyDecks_async: (token, decks) => dispatch(actions.addManyDecks_async(token, decks)),
+        deleteDeck_async: (token, collection) => dispatch(actions.deleteDeck_async(token, collection)),
         updateDeck_async: (token, collection) => dispatch(actions.updateDeck_async(token, collection)),
-        putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
-        patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data))
+        // putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
+        // patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data))
 
     };
 };

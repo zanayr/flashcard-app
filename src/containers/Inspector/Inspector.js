@@ -847,7 +847,7 @@ const mapDispatchToProps = dispatch => {
         deleteCard_async: (token, item) => dispatch(actions.deleteCard_async(token, item)),
         updateCard_async: (token, item) => dispatch(actions.updateCard_async(token, item)),
         updateDeck_async: (token, deck) => dispatch(actions.updateDeck_async(token, deck)),
-        updateDeckMember_async: (token, deck, members) => dispatch(actions.updateDeckMember_async(token, deck, members)),
+        // updateDeckMember_async: (token, deck, members) => dispatch(actions.updateDeckMember_async(token, deck, members)),
         putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
         patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data))
 
