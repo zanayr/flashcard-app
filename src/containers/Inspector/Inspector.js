@@ -9,8 +9,6 @@ import * as select from '../../store/reducers/root';
 import * as sortTypes from '../../utility/sortTypes';
 import * as utility from '../../utility/utility';
 
-
-import Throbber from '../../components/ui/Throbber/Throbber';
 import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside from '../../components/aside/Aside/Aside';
 import Aux from '../../hoc/Aux/Aux';
@@ -19,6 +17,7 @@ import List2 from '../../components/List/List2';
 import QuickBar from '../../components/ui/bar/Quick/QuickBar';
 import TabBar from '../../components/ui/bar/Tab/TabBar';
 import TabForm from '../../components/form/Tab/TabForm';
+import Throbber from '../../components/ui/Throbber/Throbber';
 import withUser from '../../hoc/withUser/withUser';
 
 import styles from './Inspector.module.css';
@@ -55,7 +54,6 @@ class Inspector extends Component {
     }
     undoTimeout = null;
 
-
     componentDidMount () {
         const cards = this.props.select_cards;
         const deck = this.props.select_deck;
@@ -73,6 +71,7 @@ class Inspector extends Component {
             tab: deck.tab
         }));
     }
+
 
     //  STATE SETTERS  ==============================================  STATE SETTERS  //
     //  Aside  -----------------------------------------------------------  Aside SS  //
@@ -565,8 +564,10 @@ class Inspector extends Component {
         switch (action) {
             case 0:
                 this._createItem();
+                break;
             case 1:
                 console.log('Starting study session...');
+                break;
             default:
                 break;
         }

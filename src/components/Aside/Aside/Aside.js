@@ -10,11 +10,32 @@ import CardInspect from '../Inspect/CardInspect';
 const aside = (props) => {
     let aside = null;
     switch (props.state) {
-        case asideTypes.NAVIGATION:
+        case asideTypes.CLOSED:
+            aside = (null);
+            break;
+        case asideTypes.CREATE_CARD:
             aside = (
-                <NavigationAiside
+                <InspectAside
                     actions={props.actions}
-                    data={props.data}
+                    data={{
+                        ...props.data,
+                        primary: 'Front',
+                        secondary: 'Back'
+                    }}
+                    path={'/u/create'}
+                    page={props.page}/>
+            );
+            break;
+        case asideTypes.CREATE_DECK:
+            aside = (
+                <InspectAside
+                    actions={props.actions}
+                    data={{
+                        ...props.data,
+                        primary: 'Title',
+                        secondary: 'Details'
+                    }}
+                    path={'/u/deck'}
                     page={props.page}/>
             );
             break;
@@ -32,40 +53,40 @@ const aside = (props) => {
                     data={props.data}/>
             );
             break;
-        case asideTypes.CREATE_CARD:
-            aside = (
-                <CardInspect
-                    actions={props.actions}
-                    data={props.data}
-                    path={'/u/create'}
-                    page={props.page}/>
-            );
-            break;
         case asideTypes.INSPECT_CARD:
-            aside = (
-                <CardInspect
-                    actions={props.actions}
-                    data={props.data}
-                    path={'/u/create'}
-                    page={props.page}/>
-            );
-            break;
-        case 98:
-        case 99:
             aside = (
                 <InspectAside
                     actions={props.actions}
-                    data={props.data}
-                    path={'/u/deck/'}
+                    data={{
+                        ...props.data,
+                        primary: 'Front',
+                        secondary: 'Back'
+                    }}
+                    path={'/u/create'}
                     page={props.page}/>
             );
             break;
-        case asideTypes.CLOSED: {
+        case asideTypes.INSPECT_DECK:
             aside = (
-                null
+                <InspectAside
+                    actions={props.actions}
+                    data={{
+                        ...props.data,
+                        primary: 'Title',
+                        secondary: 'Details'
+                    }}
+                    path={'/u/deck'}
+                    page={props.page}/>
             );
             break;
-        }
+        case asideTypes.NAVIGATION:
+            aside = (
+                <NavigationAiside
+                    actions={props.actions}
+                    data={props.data}
+                    page={props.page}/>
+            );
+            break;
         default:
             aside = (
                 null

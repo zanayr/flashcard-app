@@ -51,7 +51,6 @@ class App extends Component {
         </Switch>
       );
     }
-
     return (
       <div className={AppCSS.App}>
           {routes}
