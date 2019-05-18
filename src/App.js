@@ -6,7 +6,7 @@ import * as select from './store/reducers/root';
 import * as actions from './store/actions/index';
 
 import Auth from './containers/Auth/Auth';
-import Collections from './containers/Collections/Collections';
+import Collection from './containers/Collection/Collection';
 import In from './containers/In/In';
 import Inspector from './containers/Inspector/Inspector';
 import Modal from './components/modal/Modal/Modal';
@@ -43,7 +43,7 @@ class App extends Component {
         <Switch>
           <Route path='/u/create' component={Create}/>
           <Route path='/u/deck/:id' component={Inspector}/>
-          <Route path='/u/:collection' component={Collections}/>
+          <Route path='/u/:collection' component={Collection}/>
           <Route path='/in' exact component={In}/>
           <Route path='/out' exact component={Out}/>
           <Route path='/auth' exact component={Auth}/>

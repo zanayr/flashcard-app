@@ -19,7 +19,7 @@ import TabBar from '../../components/ui/bar/Tab/TabBar';
 import TabForm from '../../components/form/Tab/TabForm';
 import withUser from '../../hoc/withUser/withUser';
 
-import styles from './Collections.module.css';
+import styles from './Collection.module.css';
 
 class Collections extends Component {
     state = {
