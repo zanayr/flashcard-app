@@ -44,12 +44,13 @@ class Collections extends Component {
         quick: [],
         selected: [],
         sort: sortTypes.DATE_ASC,
-        tab: {},
+        tab: this.props.user.tab || {},
         tag: this.props.user.tag,
         undo: {
             action: null,
             data: {}
         },
+        user: this.props.user
     }
     undoTimeout = null;
 
@@ -173,7 +174,6 @@ class Collections extends Component {
     //  Collections  ----------------------------------------------------------  Collections SS  //
     _removeManyCollections (collections) {
         const collection = this.state.collection;
-        // const nonmembers = collections.map(collection => {return collection.id});
         collections.forEach(coll => {
             delete collection[coll.id];
         });
@@ -181,13 +181,6 @@ class Collections extends Component {
             ...prev,
             collection: collection
         }));
-        // this.setState(prev => ({
-        //     ...prev,
-        //     deck: {
-        //         ...prev.deck,
-        //         member: prev.deck.member.filter(id => !nonmembers.includes(id))
-        //     }
-        // }));
     }
     _setManyCollections (collections) {
         const collection = this.state.collection;
@@ -199,15 +192,6 @@ class Collections extends Component {
             collection: collection
         }));
     }
-    // _setManyMembers (collections) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         deck: {
-    //             ...prev.deck,
-    //             member: prev.deck.member.concat(collections.map(collection => {return collection.id}))
-    //         }
-    //     }));
-    // }
     _setCollectionValue (target, value) {
         const collectionId = this.state.aside.data.item.id;
         this.setState(prev => ({
@@ -353,17 +337,10 @@ class Collections extends Component {
     //  Collections  ----------------------------------------------------------  Collections PM  //
     _addManyCollections = (collections) => {
         this._addManyCollections_async(collections);
-        // this._setManyMembers(collections);
         this._clearAndCloseAside();
     }
     _addManyCollections_async (collections) {
         this.props.addManyDecks_async(this.props.token, collections);
-        // this.props.updateDeck_async(this.props.token, {
-        //     ...this.state.deck,
-        //     member: this.state.deck.member.concat(collections.map(collection => {
-        //         return collection.id;
-        //     }))
-        // });
     }
     _checkCollection (collection) {
         let valid = true;
@@ -393,7 +370,6 @@ class Collections extends Component {
         });
         this._addManyCollections_async(cloned);
         this._setManyCollections(cloned);
-        // this._setManyMembers(cloned);
         this._clearSelected();
     }
     _createCollection () {
@@ -414,16 +390,10 @@ class Collections extends Component {
     _deleteManyCollections () {
         const collection = this.state.collection;
         const selected = this.state.selected.slice();
-        // const nonmembers = [];
         selected.forEach(collection => {
-            // nonmembers.push(collection.id);
             delete collection[collection.id];
             this.props.deleteDeck_async(this.props.select_token, collection);
         });
-        // this.props.updateDeck_async(this.props.select_token, {
-        //     ...this.state.deck,
-        //     member: this.state.deck.member.filter(id => !nonmembers.includes(id))
-        // });
         this._setCollection(collection);
         this._setUndo({
             action: this._undoManyCollectionsDeleted,
@@ -433,10 +403,6 @@ class Collections extends Component {
     }
     _deleteCollection = (collection) => {
         this.props.deleteDeck_async(this.props.select_token, collection);
-        // this.props.updateDeck_async(this.props.select_token, {
-        //     ...this.state.deck,
-        //     member: this.state.deck.member.filter(id => id !== collection.id)
-        // });
         this._removeManyCollections([collection]);
         this._setUndo({
             action: this._undoManyCollectionsDeleted,
@@ -452,22 +418,6 @@ class Collections extends Component {
         });
         this._clearQuick('s');
     }
-    // _removeCollection = (collection) => {
-    //     this.props.updateDeck_async(this.props.select_token, {
-    //         ...collection,
-    //         member: collection.member.filter(id => id !== this.state.deck.id)
-    //     });
-    //     this.props.updateDeck_async(this.props.select_token, {
-    //         ...this.state.deck,
-    //         member: this.state.deck.member.filter(id => id !== collection.id)
-    //     });
-    //     this._removeManyCollections([collection]);
-    //     this._setUndo({
-    //         action: this._undoManyCollectionsRemoved,
-    //         data: [collection]
-    //     });
-    //     this._clearSelected();
-    // }
     _selectCollection = (collection) => {
         let selected = this.state.selected.slice();
         if (selected.find(i => i.id === collection.id)) {
@@ -527,22 +477,7 @@ class Collections extends Component {
         const collections = this.state.undo.data.slice();
         this._addManyCollections_async(collections);
         this._setManyCollections(collections);
-        // this._setManyMembers(collections);
     }
-    // _undoManyCollectionsRemoved = () => {
-    //     const collections = this.state.undo.data.slice();
-    //     const members = [];
-    //     collections.forEach(collection => {
-    //         members.push(collection.id);
-    //         this.props.updateDeck_async(this.props.select_token, collection);
-    //     });
-    //     this.props.updateDeck_async(this.props.select_token, {
-    //         ...this.state.deck,
-    //         member: this.state.deck.member.concat(members)
-    //     });
-    //     this._setManyCollections(collections);
-    //     this._setManyMembers(collections);
-    // }
     _undoCollectionUpdated = () => {
         const collection = this.state.undo.data;
         this.props.updateDeck_async(this.props.token, collection);
@@ -741,12 +676,9 @@ class Collections extends Component {
         }
     }
     handle_onTabCreate = (tab) => {
-        const tabs = {...this.state.deck.tab};
+        const tabs = {...this.state.user.tab};
         tabs[tab.id] = tab;
-        this.props.updateDeck_async(this.props.token, {
-            ...this.state.deck,
-            tab: tabs
-        });
+        this.props.patchTab_async(this.props.token, this.props.user.id, tab);
         this._setTab(tabs);
         this._setCurrent(tab);
         this._setMainState('LIST_VIEW');
@@ -756,532 +688,6 @@ class Collections extends Component {
     handle_onTagCreate = (category, tag) => {
         this._addTag(category, tag);
     }
-
-    // selectCollection (collection) {
-    //     switch (collection) {
-    //         case 'deck':
-    //             return this.props.select_decks;
-    //         case 'deck':
-    //             return this.props.select_decks;
-    //         default:
-    //             break;
-    //     }
-    // }
-
-    // componentDidUpdate (prevProps, prevState) {
-    //     if (prevProps.match.params.collection !== this.props.match.params.collection) {
-    //         this.setState(prev => ({
-    //             ...prev,
-    //             collection: this.selectCollection(this.props.match.params.collection),
-    //             page: this.props.match.params.collection
-    //         }));
-    //     }
-    // }
-
-    // //  Quicks  ------------------------------------------------------------  Quicks //
-    // clearQuick (value) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         quick: prev.quick.filter(q => q !== value)
-    //     }))
-    // }
-    // setQuick (value) {
-    //     if (!this.state.quick.includes(value)) {
-    //         this.setState(prev => ({
-    //             ...prev,
-    //             quick: prev.quick.concat(value)
-    //         }));
-    //     }
-    // }
-
-    // //  Aside  -------------------------------------------------------------  Aside  //
-    // clearAside () {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             actions: {},
-    //             data: {},
-    //             state: 0
-    //         }
-    //     }));
-    // }
-    // setAsideData (data) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             data: {
-    //                 ...data
-    //             }
-    //         }
-    //     }));
-    // }
-    // updateAsideData (property, data) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             data: {
-    //                 ...prev.aside.data,
-    //                 [property]: data
-    //             }
-    //         }
-    //     }));
-    // }
-    // setAsideActions (actions) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             actions: {
-    //                 ...actions
-    //             }
-    //         }
-    //     }));
-    // }
-    // toggleAside (state) {
-    //     if (this.state.aside.state) {
-    //         if (state !== this.state.aside.state && this.state.aside.isActive) {
-    //             this.setState(prev => ({
-    //                 ...prev,
-    //                 aside: {
-    //                     ...prev.aside,
-    //                     state: state
-    //                 }
-    //             }));
-    //         } else {
-    //             this.setState(prev => ({
-    //                 ...prev,
-    //                 aside: {
-    //                     ...prev.aside,
-    //                     isActive: 0
-    //                 }
-    //             }));
-    //         }
-    //     } else {
-    //         this.setState(prev => ({
-    //             ...prev,
-    //             aside: {
-    //                 ...prev.aside,
-    //                 state: state
-    //             }
-    //         }));
-    //     }
-    // }
- 
-    // //  Undo  --------------------------------------------------------------  Undo  //
-    // clearUndo () {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         undo: {
-    //             action: null,
-    //             data: {}
-    //         }
-    //     }));
-    // }
-    // setUndo (data) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         undo: {
-    //             ...data
-    //         }
-    //     }));
-    // }
-
-    // //  Collections  -------------------------------------------------  Collections  //
-    // addCollection (collection) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: {
-    //             ...prev.collection,
-    //             [collection.id]: collection
-    //         }
-    //     }));
-    // }
-    // removeCollection (collection) {
-    //     const collection = this.state.collection;
-    //     delete collection[collection.id];
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: {
-    //             ...collection
-    //         }
-    //     }));
-    // }
-    // resetCollection (collection) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: collection
-    //     }));
-    // }
-    // setCollection (collection) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: {
-    //             ...prev.collection,
-    //             [collection.id]: {...collection}
-    //         }
-    //     }));
-    // }
-    // setManyCollections (collections) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: {
-    //             ...prev.collection,
-    //             ...collections
-    //         }
-    //     }));
-    // }
-    // setCollectionValue (collection, target, value) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: {
-    //             ...prev.collection,
-    //             [collection.id]: {
-    //                 ...prev.collection[collection.id],
-    //                 [target]: value
-    //             }
-    //         }
-    //     }));
-    // }
-
-    // //  Inspected  -----------------------------------------------------  Inspected  //
-    // setInspected (collection) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         inspected: collection
-    //     }));
-    // }
-
-    // //  Lists  -------------------------------------------------------------  Lists  //
-    // clearSelected (collection) {
-    //     if (typeof collection === 'undefined') {
-    //         this.setState(prev => ({
-    //             ...prev,
-    //             selected: []
-    //         }));
-    //     } else {
-    //         this.setState(prev => ({
-    //             ...prev,
-    //             selected: [collection]
-    //         }));
-    //     }
-    // }
-    // setSelected (selected) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         selected: selected
-    //     }));
-    // }
-
-    // //  Filters  ---------------------------------------------------------  Filters  //
-    // clearFilters () {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             data: {
-    //                 ...prev.aside.data,
-    //                 selected: []
-    //             }
-    //         },
-    //         filters: {
-    //             group: [],
-    //             tag: []
-    //         }
-    //     }));
-    // }
-    // setFilters (category, filters) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             data: {
-    //                 ...prev.aside.data,
-    //                 selected: filters[category]
-    //             }
-    //         },
-    //         filters: {
-    //             ...prev.filters,
-    //             [category]: filters[category]
-    //         }
-    //     }));
-    // }
-
-    // //  Tags  ---------------------------------------------------------------  Tags  //
-    // setTags (category, tag) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         [category]: tag
-    //     }));
-    // }
-
-    // //  Tabs  ---------------------------------------------------------------  Tabs  //
-    // addTab (tab) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         tab: {
-    //             ...prev.tab,
-    //             [tab.id]: tab
-    //         }
-    //     }));
-    // }
-    // setCollection (collection) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: collection
-    //     }));
-    // }
-    // setCurrent (tab) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         current: tab
-    //     }));
-    // }
-    // resetTabs (tab) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         tab: {
-    //             ...tab
-    //         }
-    //     }));
-    // }
-
-    // //  Sort  ---------------------------------------------------------------  Sort  //
-    // setSort (sort) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         sort: sort
-    //     }));
-    // }
-
-    // //  Action  -----------------------------------------------------------  Action  //
-    // handle_onActionClick = () => {
-    //     const collection = create.deckViewModel(utility.createHashId(0), {
-    //         owner: this.props.select_user.id
-    //     });
-    //     this.addCollection(collection);
-    //     this.toggleAside(98);
-    //     this.setAsideData({
-    //         group: this.state.group,
-    //         collection: collection,
-    //         tag: this.state.tag
-    //     });
-    //     this.setAsideActions({change: this.handle_onCollectionChange});
-    //     this.clearSelected();
-    //     this.clearQuick('s');
-    // }
-
-
-    // //  Aside  -------------------------------------------------------------  Aside  //
-    // handle_onInspectOut = () => {
-    //     const original = this.state.aside.data.collection;
-    //     const collection = this.state.collection[original.id];
-    //     if (JSON.stringify(collection) !== JSON.stringify(original)) {
-    //         this._checkForNewTags('tag', collection.tag);
-    //         this._checkForNewTags('group', collection.group);
-    //         switch (this.state.aside.state) {
-    //             case 98:
-    //                 this.props.addDeck_async(this.props.token, collection);
-    //                 break;
-    //             case 99:
-    //                 this.props.updateDeck_async(this.state.page, this.props.token, collection);
-    //                 this.setQuick('u');
-    //                 break;
-    //             default:
-    //                 break;
-    //         }
-    //     } else if (this.state.aside.state === 98) {
-    //         this.removeCollection(collection);
-    //     }
-    // }
-    // handle_onAsideClose = () => {
-    //     if (this.state.aside.state >= 98) {
-    //         this.handle_onInspectOut();
-    //     }
-    //     this.clearAside();
-    // }
-    
-    // handle_onFilterSelect = (category, tag) => {
-    //     const filters = {...this.state.filters};
-    //     if (filters[category].includes(tag)) {
-    //         filters[category] = filters[category].filter(t => t !== tag);
-    //     } else {
-    //         filters[category] = filters[category].concat(tag);
-    //     }
-    //     this.setFilters(category, filters);
-    //     this.updateAsideData('filters', filters);
-    //     if (filters.tag.length || filters.group.length) {
-    //         this.setQuick('f');
-    //     } else {
-    //         this.clearQuick('f');
-    //     }
-    // }
-
-    // handle_onAsideToggle = (state) => {
-    //     if (this.state.aside.state !== state) {
-    //         if (state === 2 || state === 3) {
-    //             this.setAsideActions({
-    //                 filter: this.handle_onFilterSelect
-    //             });
-    //             this.setAsideData({
-    //                 current: this.state.current,
-    //                 filters: this.state.filters,
-    //                 group: this.state.group,
-    //                 tag: this.state.tag
-    //             });
-    //         }
-    //         this.toggleAside(state);
-    //     } else {
-    //         this.handle_onAsideClose();
-    //     }
-    // }
-
-    // handle_onCollectionChange = (collection, payload) => {
-    //     this.setCollectionValue(collection, payload.target, payload.value);
-    // }
-    // handle_onCollectionInspect = (collection) => {
-    //     this.toggleAside(99);
-    //     this.setAsideData({
-    //         group: this.state.group,
-    //         collection: collection,
-    //         tag: this.state.tag
-    //     });
-    //     this.setAsideActions({change: this.handle_onCollectionChange});
-    //     this.setUndo({
-    //         action: this.handle_onCollectionReset,
-    //         data: collection
-    //     });
-    //     this.clearQuick('s');
-    // }
-    // handle_onCollectionSelect = (collection) => {
-    //     let selected = this.state.selected.slice();
-    //     if (selected.find(i => i.id === collection.id)) {
-    //         selected = selected.filter(i => i.id !== collection.id);
-    //     } else {
-    //         selected = selected.concat(collection);
-    //     }
-    //     if (selected.length) {
-    //         this.setQuick('s');
-    //     } else {
-    //         this.clearQuick('s');
-    //     }
-    //     if (this.state.aside.state === 99) {
-    //         this.handle_onAsideClose();
-    //     }
-    //     this.setSelected(selected);
-    // }
-
-    // _checkForNewTags (category, tag) {
-    //     const newTags = tag.filter(tag => this.state[category].indexOf(tag) < 0);
-    //     let allTags;
-    //     if (newTags.length) {
-    //         allTags = this.state[category].concat(newTags);
-    //         this.setTags(category, allTags);
-    //         this.props.putTag_async(category, this.props.token, this.props.user.id, allTags);
-    //     }
-    // }
-    // _findTheNextTab (tab) {
-    //     const tabs = utility.sortBy(sortTypes.DATE_DSC, this.state.tab).filter(tab => tab.collection === this.state.page);
-    //     return tabs[tabs.indexOf(tab) + 1];
-    // }
-
-
-    // //  EVENT HANDLERS  //
-    // //  Collections  ---------------------------------------------  Collections EHs  //
-    // handle_onCollectionSort = (sort) => {
-    //     this.setSort(sort);
-    // }
-    // handle_onCollectionsCreate = (collections) => {
-    //     const created = {};
-    //     collections.forEach(collection => {
-    //         created[collection.id] = collection;
-    //     });
-    //     this.setManyCollections(created);
-    //     this.clearSelected();
-    //     this.clearQuick('s');
-    // }
-    // handle_onCollectionsDelete = () => {
-    //     const collection = this.state.collection;
-    //     this.state.selected.slice().forEach(collection => {
-    //         delete collection[collection.id];
-    //     });
-    //     this.setUndo({
-    //         action: this.handle_onCollectionsRecover,
-    //         data: this.state.selected.slice()
-    //     });
-    //     this.setQuick('u');
-    //     this.resetCollection(collection);
-    //     this.clearQuick('s');
-    //     this.clearSelected();
-    // }
-    // handle_onCollectionsRecover = () => {
-    //     const deleted = this.state.undo.data;
-    //     const recovered = {}
-    //     deleted.map(collection => {
-    //         recovered[collection.id] = collection
-    //     });
-    //     this.setManyCollections(recovered);
-    //     this.clearQuick('u');
-    //     this.clearUndo();
-    //     this.props.addManyDecks_async(this.props.select_token, deleted);
-    // }
-    // handle_onCollectionReset = () => {
-    //     const collection = this.state.undo.data;
-    //     this.setCollection(collection);
-    //     this.clearQuick('u');
-    //     this.clearUndo();
-    //     this.props.addDeck_async(this.props.select_token, collection);
-    // }
-    
-    // //  Filters  -----------------------------------------------------  Filters EHs  //
-    // handle_onFilterClear = () => {
-    //     this.clearFilters();
-    //     this.clearQuick('f');
-    //     this.updateAsideData('filters', {
-    //         group: [],
-    //         tag:[]
-    //     });
-    // }
-
-    // //  Main  -----------------------------------------------------------  Main EHs  //
-    // handle_onMainClick = () => {
-    //     this.handle_onAsideClose();
-    //     this.clearSelected();
-    //     this.clearQuick('s');
-    // }
-
-    // //  Selected  ---------------------------------------------------  Selected EHs  //
-    // handle_onCollectionSelectClear = (collection) => {
-    //     this.clearSelected(collection);
-    //     this.clearQuick('s');
-    // }
-
-    // //  Tab  -------------------------------------------------------------  Tab EHs  //
-    // handle_onTabDelete = (tab) => {
-    //     let tabs = this.state.tab;
-    //     if (this.state.current.id === tab.id) {
-    //         this.handle_onTabToggle(this._findTheNextTab(tabs));
-    //     }
-    //     delete tab[tab.id];
-    //     this.resetTabs(tabs);
-    // }
-    // handle_onTabToggle = (tab) => {
-    //     this.setCurrent(tab);
-    //     if (this.state.aside.state && this.state.aside.state === 2 || this.state.aside.state === 3) {
-    //         this.updateAsideData('current', tab);
-    //     }
-    //     this.clearSelected();
-    //     this.clearQuick('s');
-    // }
-    // handle_onTabCreate = (tab) => {
-    //     this._checkForNewTags('group', tab.group);
-    //     this._checkForNewTags('tag', tab.tag);
-    //     this.addTab(tab);
-    //     this.handle_onTabToggle(tab);
-    // }
-
 
     render () {
         let content;
@@ -1358,13 +764,11 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        // addDeck_async: (url, token, collection) => dispatch(actions.addDeck_async(url, token, collection)),
         addDeck_async: (token, deck) => dispatch(actions.addDeck_async(token, deck)),
         addManyDecks_async: (token, decks) => dispatch(actions.addManyDecks_async(token, decks)),
         deleteDeck_async: (token, collection) => dispatch(actions.deleteDeck_async(token, collection)),
         updateDeck_async: (token, collection) => dispatch(actions.updateDeck_async(token, collection)),
-        // putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
-        // patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data))
+        patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data))
 
     };
 };
