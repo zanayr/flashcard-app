@@ -275,7 +275,7 @@ class Inspector extends Component {
                 this.undoTimeout = setTimeout(() => {
                     this._clearQuick('u');
                     this._clearUndo();
-                }, 60000);
+                }, 5000);
             }
             this.setState(prev => ({
                 ...prev,
@@ -373,9 +373,6 @@ class Inspector extends Component {
             }))
         });
     }
-    _changeItem = (target, value) => {
-        this._setItemValue(target, value);
-    }
     _checkItem (item) {
         let valid = true;
         if (!item.primary.length > 0 && valid) {
@@ -458,7 +455,7 @@ class Inspector extends Component {
     }
     _inspectItem = (item) => {
         this._openInspectAside({
-            confirm: this.handle_onItemUpdate,
+            confirm: this._updateItem,
             item: item,
             type: asideTypes.INSPECT_CARD
         });
@@ -682,10 +679,13 @@ class Inspector extends Component {
     handle_onNagivationToggle = () => {
         this._toggleAside(asideTypes.NAVIGATION);
     }
+    
+    //  Item  ------------------------------------------------------------  Item EH  //
+    handle_onItemChange = (target, value) => {
+        this._setItemValue(target, value);
+    }
 
     //  List  ------------------------------------------------------------  List EH  //
-    
-
     handle_onListClick = (action, data) => {
         switch (action) {
             case 0:
