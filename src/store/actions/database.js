@@ -26,6 +26,29 @@ export const failure = (store, error) => {
 };
 
 
+export const add_success = (store, data) => {
+    let type = null;
+    switch (store) {
+        case 'card':
+            type = actionTypes.ADD_CARD_SUCCESS;
+            break;
+        case 'deck':
+            type = actionTypes.ADD_DECK_SUCCESS;
+            break;
+        case 'user':
+            type = actionTypes.ADD_USER_SUCCESS;
+            break;
+        default:
+            type = actionTypes.SUCCESS;
+            break;
+    }
+    return {
+        type: type,
+        payload: data
+    };
+}
+
+
 //  Get  --------------------------------------------------------------------  Get  //
 export const get_success = (store, data) => {
     let type = null;
@@ -114,6 +137,43 @@ export const getAll_init = (store) => {
         payload: {}
     };
 };
+
+
+//  Add  ---------------------------------------------------------------  Add Async  //
+export const add_async = (store, token, viewModel) => {
+    return dispatch => {
+        let model = {};
+        switch (store) {
+            case 'card':
+                model = create.cardModel(viewModel);
+                break;
+            case 'deck':
+                model = create.deckModel(viewModel);
+                break;
+            case 'user':
+                model = create.userModel(viewModel);
+                break;
+            default:
+                break;
+        }
+        console.log(store, model);
+        axios.patch('/' + store + '/' + viewModel.id + '.json?auth=' + token, model)
+        .then(response => {
+            dispatch(add_success(store, viewModel));
+        })
+        .catch(error => {
+            dispatch(failure(store, error));
+        });
+    }
+}
+export const addMany_async = (store, token, viewModels) => {
+    return dispatch => {
+        viewModels.forEach(viewModel => {
+            dispatch(add_async(store, token, viewModel));
+        });
+    }
+}
+
 
 //  Get  ---------------------------------------------------------------  Get Async  //
 export const get_async = (store, token, id) => {

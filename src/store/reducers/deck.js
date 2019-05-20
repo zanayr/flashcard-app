@@ -7,7 +7,7 @@ import * as create from '../models/models';
 
 //  Initial State  ------------------------------------------------  Initial State  //
 const initialState = {
-    decks: {},
+    deck: {},
     error: null,
     isLoading: false
 };
@@ -20,6 +20,16 @@ const deckFailure = (state, action) => {
         isLoading: false
     };
 }
+const addDeckSuccess = (state, action) => {
+    return {
+        ...state,
+        deck: {
+            ...state.deck,
+            [action.payload.id]: action.payload
+        },
+        error: null
+    }
+}
 const getAllDecksInit = (state, action) => {
     return {
         ...state,
@@ -30,7 +40,7 @@ const getAllDecksSuccess = (state, action) => {
     return {
         ...state,
         isLoading: false,
-        decks: action.payload
+        deck: action.payload
     };
 }
 //  ^^^ NEW STUFF ^^^  //
@@ -109,6 +119,8 @@ const reducer = (state=initialState, action) => {
     switch (action.type) {
         case actionTypes.DECK_FAILURE:
             return deckFailure(state, action);
+        case actionTypes.ADD_DECK_SUCCESS:
+            return addDeckSuccess(state, action);
         // case actionTypes.GET_DECK_INIT:
         //     return getDeckInit(state, action);
         // case actionTypes.GET_DECK_SUCCESS:
@@ -138,10 +150,10 @@ const reducer = (state=initialState, action) => {
 
 //  SELECTORS  ---------------------------------------------------------  SELECTORS  //
 export function selectDeck (state, id) {
-    return state.decks[id];
+    return state.deck[id];
 }
 export function selectDecks (state) {
-    return state.decks
+    return state.deck
 }
 export function selectDecksIsLoading (state) {
     return state.isLoading;

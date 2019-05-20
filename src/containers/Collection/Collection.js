@@ -340,7 +340,7 @@ class Collections extends Component {
         this._clearAndCloseAside();
     }
     _addManyCollections_async (collections) {
-        this.props.addManyDecks_async(this.props.token, collections);
+        this.props.addMany_async('deck', this.props.token, collections);
     }
     _checkCollection (collection) {
         let valid = true;
@@ -799,8 +799,10 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        addDeck_async: (token, deck) => dispatch(actions.addDeck_async(token, deck)),
-        addManyDecks_async: (token, decks) => dispatch(actions.addManyDecks_async(token, decks)),
+        // addDeck_async: (token, deck) => dispatch(actions.addDeck_async(token, deck)),
+        // addManyDecks_async: (token, decks) => dispatch(actions.addManyDecks_async(token, decks)),
+        // add_async: (store, token, model) => dispatch(actions.add_async(store, token, model)),
+        addMany_async: (store, token, models) => dispatch(actions.addMany_async(store, token, models)),
         deleteDeck_async: (token, collection) => dispatch(actions.deleteDeck_async(token, collection)),
         updateDeck_async: (token, collection) => dispatch(actions.updateDeck_async(token, collection)),
         patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data))

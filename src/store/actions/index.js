@@ -24,6 +24,8 @@ export {
 } from './deck';
 
 export {
+    add_async,
+    addMany_async,
     get_async,
     getAll_async
 } from './database';

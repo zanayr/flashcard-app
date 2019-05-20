@@ -14,6 +14,10 @@ export const CARD_FAILURE = 'CARD_FAILURE';
 export const DECK_FAILURE = 'DECK_FAILURE';
 export const USER_FAILURE = 'USER_FAILURE';
 
+export const ADD_CARD_SUCCESS = 'ADD_CARD_SUCCESS';
+export const ADD_DECK_SUCCESS = 'ADD_DECK_SUCCESS';
+export const ADD_USER_SUCCESS = 'ADD_USER_SUCCESS';
+
 export const GET_CARD_INIT = 'GET_CARD_INIT';
 export const GET_DECK_INIT = 'GET_DECK_INIT';
 export const GET_USER_INIT = 'GET_USER_INIT';
