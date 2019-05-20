@@ -730,11 +730,11 @@ class Collections extends Component {
             case 'LIST_VIEW':
                 content = (
                     <List2
-                    action={this.handle_onListClick}
-                    collection={utility.sortBy(this.state.sort, this.state.collection)}
-                    filters={this.state.filter}
-                    current={this.state.current}
-                    selected={this.state.selected}/>
+                        action={this.handle_onListClick}
+                        collection={utility.sortBy(this.state.sort, this.state.collection)}
+                        filters={this.state.filter}
+                        current={this.state.current}
+                        selected={this.state.selected}/>
                 );
                 break;
             case 'ADD_TAB':

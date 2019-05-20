@@ -781,12 +781,12 @@ class Inspector extends Component {
             case 'LIST_VIEW':
                 content = (
                     <List2
-                    action={this.handle_onListClick}
-                    collection={utility.sortBy(this.state.sort, this.state.collection)}
-                    filters={this.state.filter}
-                    current={this.state.current}
-                    selected={this.state.selected}
-                    remove/>
+                        action={this.handle_onListClick}
+                        collection={utility.sortBy(this.state.sort, this.state.collection)}
+                        filters={this.state.filter}
+                        current={this.state.current}
+                        selected={this.state.selected}
+                        remove/>
                 );
                 break;
             case 'ADD_TAB':
