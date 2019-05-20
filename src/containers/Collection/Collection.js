@@ -466,7 +466,7 @@ class Collections extends Component {
         const original = this.state.aside.data.item;
         const collection = this.state.collection[original.id];
         if (JSON.stringify(collection) !== JSON.stringify(original)) {
-            this.props.updateDeck_async(this.props.token, collection);
+            this.props.update_async('deck', this.props.token, collection);
             this._setUndo({
                 action: this._undoCollectionUpdated,
                 data: original
@@ -479,7 +479,7 @@ class Collections extends Component {
     _deleteTab (tab) {
         let tabs = {...this.state.tab};
         delete tabs[tab.id];
-        this.props.updateDeck_async(this.props.token, {
+        this.props.update_async('deck', this.props.token, {
             ...this.state.deck,
             tab: tabs
         });
@@ -512,7 +512,7 @@ class Collections extends Component {
     }
     _undoCollectionUpdated = () => {
         const collection = this.state.undo.data;
-        this.props.updateDeck_async(this.props.token, collection);
+        this.props.update_async('deck', this.props.token, collection);
         this._setManyCollections([collection]);
     }
     
@@ -567,7 +567,7 @@ class Collections extends Component {
             case asideTypes.INSPECT_DECK:
                 data = this.state.collection[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
-                    this.props.updateDeck_async(this.props.token, data);
+                    this.props.update_async('deck', this.props.token, data);
                     this._setUndo({
                         action: this._undoCollectionUpdated,
                         data: originalData.item
@@ -804,7 +804,8 @@ const mapDispatchToProps = dispatch => {
         // add_async: (store, token, model) => dispatch(actions.add_async(store, token, model)),
         addMany_async: (store, token, models) => dispatch(actions.addMany_async(store, token, models)),
         deleteDeck_async: (token, collection) => dispatch(actions.deleteDeck_async(token, collection)),
-        updateDeck_async: (token, collection) => dispatch(actions.updateDeck_async(token, collection)),
+        update_async: (store, token, model) => dispatch(actions.update_async(store, token, model)),
+        // updateDeck_async: (token, collection) => dispatch(actions.updateDeck_async(token, collection)),
         patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data))
 
     };

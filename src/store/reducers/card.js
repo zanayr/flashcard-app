@@ -43,6 +43,16 @@ const getAllCardsSuccess = (state, action) => {
         card: action.payload
     };
 }
+const updateCard = (state, action) => {
+    return {
+        ...state,
+        cards: {
+            ...state.cards,
+            [action.payload.id]: action.payload
+        },
+        error: null
+    }
+}
 //  ^^^ NEW STUFF ^^^  //
 
 
@@ -129,6 +139,8 @@ const reducer = (state=initialState, action) => {
             return getAllCardsInit(state, action);
         case actionTypes.GET_ALL_CARDS_SUCCESS:
             return getAllCardsSuccess(state, action);
+        case actionTypes.UPDATE_CARD:
+            return updateCard(state, action);
         //  ^^^ NEW STUFF ^^^  //
         case actionTypes.ADD_CARD_SUCC:
             return addCard_success(state, action);

@@ -27,7 +27,9 @@ export {
     add_async,
     addMany_async,
     get_async,
-    getAll_async
+    getAll_async,
+    update_async,
+    updateMany_async
 } from './database';
 
 export {

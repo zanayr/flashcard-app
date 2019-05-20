@@ -43,6 +43,16 @@ const getAllDecksSuccess = (state, action) => {
         deck: action.payload
     };
 }
+const updateDeck = (state, action) => {
+    return {
+        ...state,
+        deck: {
+            ...state.deck,
+            [action.payload.id]: action.payload
+        },
+        error: null
+    }
+}
 //  ^^^ NEW STUFF ^^^  //
 
 
@@ -129,6 +139,8 @@ const reducer = (state=initialState, action) => {
             return getAllDecksInit(state, action);
         case actionTypes.GET_ALL_DECKS_SUCCESS:
             return getAllDecksSuccess(state, action);
+        case actionTypes.UPDATE_DECK:
+            return updateDeck(state, action);
         //  ^^^ NEW STUFF ^^^  //
         case actionTypes.ADD_DECK_SUCC:
             return addDeck_success(state, action);
