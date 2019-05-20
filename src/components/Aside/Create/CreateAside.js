@@ -78,16 +78,6 @@ class CreateAside extends Component {
     
 
     render () {
-        // let form = (
-        //     <DeckCreateForm onChange={this.handle_onChange}/>
-        // );
-        // if (this.props.page === 'card') {
-        //     form = (
-        //         <CardInspectForm
-        //             card={this.state.item}
-        //             onChange={this.handle_onChange}/>
-        //     );
-        // }
         return (
             <aside className={[styles.Aside].join(' ')}>
                 <div>

@@ -418,6 +418,38 @@ class Collections extends Component {
         });
         this._clearQuick('s');
     }
+    _mergeManyCollections = (response) => {
+        const group = [];
+        const member = [];
+        const tag = [];
+        this.state.selected.forEach(collection => {
+            collection.group.forEach(t => {
+                if (!group.includes(t)) {
+                    group.push(t);
+                }
+            });
+            collection.member.forEach(m => {
+                if (!member.includes(m)) {
+                    member.push(m);
+                }
+            });
+            collection.tag.forEach(t => {
+                if (!tag.includes(t)) {
+                    tag.push(t);
+                }
+            });
+        });
+        let merged = create.deckViewModel(utility.createHashId(0), {
+            group: group,
+            member: member,
+            owner: this.props.user.id,
+            primary: response || 'New Merged Deck',
+            tag: tag
+        });
+        this._addManyCollections_async([merged]);
+        this._setManyCollections([merged]);
+        this._clearSelected();
+    }
     _selectCollection = (collection) => {
         let selected = this.state.selected.slice();
         if (selected.find(i => i.id === collection.id)) {
@@ -560,13 +592,16 @@ class Collections extends Component {
     
 
     //  Header  --------------------------------------------------------  Header EH  //
-    handle_onActionToggle = (action) => {
+    handle_onActionToggle = (action, data) => {
         switch (action) {
             case 0:
                 this._deleteManyCollections();
                 break;
             case 1:
                 this._cloneManyCollections();
+                break;
+            case 2:
+                this._mergeManyCollections(data);
                 break;
             default:
                 break;
@@ -724,7 +759,7 @@ class Collections extends Component {
                         navigation: this.handle_onNagivationToggle
                     }}
                     selected={this.state.selected}
-                    state={headerTypes.INSPECTOR}
+                    state={headerTypes.COLLECTION}
                     onClick={this.handle_onAsideClose}/>
                 <main
                     className={styles.Main}

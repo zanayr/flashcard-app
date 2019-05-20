@@ -11,13 +11,34 @@ import Row from '../../../hoc/Row/Row';
 
 import AppCSS from '../../../App.module.css';
 import ModalCSS from './Modal.module.css';
+import StatefulTextField from '../../ui/input/Field/StatefulTextField';
 
 
 const modal = (props) => {
     let icon;
     let title;
+    let form = null;
+    const responseForm = React.createRef();
+
+
+    const handle_onCancel = () => {
+        props.data.onCancel(false);
+        props.clearModal({key: props.uniqueId});
+    }
+    const handle_onConfirm = () => {
+        if (responseForm.current.response.reportValidity()) {
+            props.data.onConfirm(responseForm.current.response.value);
+            props.clearModal({key: props.uniqueId});
+        }
+    }
+
+
     switch (props.type) {
         case modalTypes.DEFAULT:
+            icon = (<span className={ModalCSS.DefaultIcon}></span>);
+            title= ('Hello');
+            break;
+        case modalTypes.RESPONSE:
             icon = (<span className={ModalCSS.DefaultIcon}></span>);
             title= ('Hello');
             break;
@@ -30,18 +51,27 @@ const modal = (props) => {
             title= (props.data.type);
             break;
     }
-
-    const handle_onCancel = () => {
-        props.data.onCancel(false);
-        props.clearModal({key: props.uniqueId});
+    if (props.type === modalTypes.RESPONSE) {
+        console.log('here');
+        form = (
+            <form
+                ref={responseForm}>
+                <StatefulTextField
+                    config={{
+                        autoComplete: 'off',
+                        label: 'Response',
+                        maxLength: 32,
+                        name: 'response',
+                        placeholder: 'Merged Name',
+                        tabIndex: 1,
+                    }}
+                    key='response'
+                    value={''}/>
+            </form>
+        );
     }
-    const handle_onConfirm = () => {
-        props.data.onConfirm(true);
-        props.clearModal({key: props.uniqueId});
-    }
-
+    
     return (
-        
         <Aux>
             <Overlay active={true}/>
             <div className={ModalCSS.Modal}
@@ -52,6 +82,7 @@ const modal = (props) => {
                         <h3>{title}</h3>
                     </Row>
                     <p>{props.data.message}</p>
+                    {form}
                     <Row just={props.data.cancel ? 'Between' : 'Center'}>
                         {props.data.cancel ? <Button onClick={handle_onCancel}>{props.data.cancel}</Button> : null}
                         <Button onClick={handle_onConfirm}>{props.data.confirm}</Button>
