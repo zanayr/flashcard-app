@@ -10,15 +10,16 @@ class FilterAside extends Component {
     render () {
         const tagButtons = this.props.data.all.map((tag, i) => {
             let css = [styles.FilterButton];
+            let name = tag.replace('$', '');
             if (this.props.data.filter.includes(tag)) {
                 css.push(styles.Active);
                 return (
                     <div
                         className={css.join(' ')}
-                        key={i}
+                        key={i + 1}
                         onClick={() => this.handle_onSelect(tag)}>
                         <div>
-                            <p>{tag}</p>
+                            <p>{name}</p>
                         </div>
                     </div>
                 );
@@ -27,9 +28,9 @@ class FilterAside extends Component {
                 return (
                     <div
                         className={css.join(' ')}
-                        key={i}>
+                        key={i + 1}>
                         <div>
-                            <p>{tag}</p>
+                            <p>{name}</p>
                         </div>
                     </div>
                 );
@@ -37,10 +38,10 @@ class FilterAside extends Component {
             return (
                 <div
                     className={css.join(' ')}
-                    key={i}
+                    key={i + 1}
                     onClick={() => this.handle_onSelect(tag)}>
                     <div>
-                        <p>{tag}</p>
+                        <p>{name}</p>
                     </div>
                 </div>
             );

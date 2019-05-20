@@ -46,7 +46,7 @@ class Inspector extends Component {
         selected: [],
         sort: sortTypes.DATE_ASC,
         tab: {},
-        tag: this.props.user.tag,
+        tag: [],
         undo: {
             action: null,
             data: {}
@@ -58,17 +58,26 @@ class Inspector extends Component {
         const cards = this.props.select_cards;
         const deck = this.props.select_deck;
         const collection = {};
+        let $new = false;
+        let tags = this.props.user.tag.slice();
         Object.keys(cards).filter(id => deck.member.includes(id)).map(id => {
+            if (cards[id].tag.includes('$new')) {
+                $new = true;
+            }
             if (deck.member.includes(id)) {
                 collection[id] = cards[id];
             }
         });
+        if ($new) {
+            tags.push('$new');
+        }
         this.setState(prev => ({
             ...prev,
             collection: collection,
             deck: deck,
             main: 'LIST_VIEW',
-            tab: deck.tab
+            tab: deck.tab,
+            tag: tags
         }));
     }
 

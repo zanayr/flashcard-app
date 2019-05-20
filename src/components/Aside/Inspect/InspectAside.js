@@ -85,7 +85,7 @@ class InspectAside extends Component {
                         onConfirm={this.props.actions.confirm}/>
                     <Button onClick={this.props.actions.cancel}>Cancel</Button>
                     <div>
-                        <BarLink path={this.props.path} state={{id: this.props.data.deckId}}>Add many</BarLink>
+                        <BarLink path={this.props.path + '/' + this.props.data.deckId} state={{id: this.props.data.deckId}}>Add many</BarLink>
                     </div>
                 </div>
             </aside>
