@@ -20,13 +20,22 @@ const cardFailure = (state, action) => {
         isLoading: false
     };
 }
-const addCardSuccess = (state, action) => {
+const addCard = (state, action) => {
     return {
         ...state,
         card: {
             ...state.card,
             [action.payload.id]: action.payload
         },
+        error: null
+    }
+}
+const deleteCard = (state, action) => {
+    const card = {...state.card};
+    delete card[action.payload.id];
+    return {
+        ...state,
+        card: card,
         error: null
     }
 }
@@ -129,8 +138,10 @@ const reducer = (state=initialState, action) => {
     switch (action.type) {
         case actionTypes.CARD_FAILURE:
             return cardFailure(state, action);
-        case actionTypes.ADD_CARD_SUCCESS:
-            return addCardSuccess(state, action);
+        case actionTypes.ADD_CARD:
+            return addCard(state, action);
+        case actionTypes.DELETE_CARD:
+            return deleteCard(state, action);
         // case actionTypes.GET_CARD_INIT:
         //     return getCardInit(state, action);
         // case actionTypes.GET_CARD_SUCCESS:

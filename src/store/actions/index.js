@@ -26,6 +26,8 @@ export {
 export {
     add_async,
     addMany_async,
+    delete_async,
+    deleteMany_async,
     get_async,
     getAll_async,
     update_async,

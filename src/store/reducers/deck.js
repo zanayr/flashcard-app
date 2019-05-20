@@ -20,13 +20,22 @@ const deckFailure = (state, action) => {
         isLoading: false
     };
 }
-const addDeckSuccess = (state, action) => {
+const addDeck = (state, action) => {
     return {
         ...state,
         deck: {
             ...state.deck,
             [action.payload.id]: action.payload
         },
+        error: null
+    }
+}
+const deleteDeck = (state, action) => {
+    const deck = {...state.deck};
+    delete deck[action.payload.id];
+    return {
+        ...state,
+        deck: deck,
         error: null
     }
 }
@@ -129,8 +138,10 @@ const reducer = (state=initialState, action) => {
     switch (action.type) {
         case actionTypes.DECK_FAILURE:
             return deckFailure(state, action);
-        case actionTypes.ADD_DECK_SUCCESS:
-            return addDeckSuccess(state, action);
+        case actionTypes.ADD_DECK:
+            return addDeck(state, action);
+        case actionTypes.DELETE_DECK:
+            return deleteDeck(state, action);
         // case actionTypes.GET_DECK_INIT:
         //     return getDeckInit(state, action);
         // case actionTypes.GET_DECK_SUCCESS:

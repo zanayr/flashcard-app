@@ -31,13 +31,37 @@ export const add_success = (store, data) => {
     let type = null;
     switch (store) {
         case 'card':
-            type = actionTypes.ADD_CARD_SUCCESS;
+            type = actionTypes.ADD_CARD;
             break;
         case 'deck':
-            type = actionTypes.ADD_DECK_SUCCESS;
+            type = actionTypes.ADD_DECK;
             break;
         case 'user':
-            type = actionTypes.ADD_USER_SUCCESS;
+            type = actionTypes.ADD_USER;
+            break;
+        default:
+            type = actionTypes.SUCCESS;
+            break;
+    }
+    return {
+        type: type,
+        payload: data
+    };
+}
+
+
+//  Delete  ---------------------------------------------------------------  Delete  //
+export const delete_success = (store, data) => {
+    let type = null;
+    switch (store) {
+        case 'card':
+            type = actionTypes.DELETE_CARD;
+            break;
+        case 'deck':
+            type = actionTypes.DELETE_DECK;
+            break;
+        case 'user':
+            type = actionTypes.DELETE_USER;
             break;
         default:
             type = actionTypes.SUCCESS;
@@ -194,6 +218,27 @@ export const addMany_async = (store, token, viewModels) => {
     return dispatch => {
         viewModels.forEach(viewModel => {
             dispatch(add_async(store, token, viewModel));
+        });
+    }
+}
+
+
+//  Delete  ---------------------------------------------------------  Delete Async  //
+export const delete_async = (store, token, viewModel) => {
+    return dispatch => {
+        axios.delete('/' + store + '/' + viewModel.id + '.json?auth=' + token)
+        .then(response => {
+            dispatch(delete_success(store, viewModel));
+        })
+        .catch(error => {
+            dispatch(failure(store, error));
+        });
+    }
+}
+export const deleteMany_async = (store, token, viewModels) => {
+    return dispatch => {
+        viewModels.forEach(viewModel => {
+            dispatch(delete_async(store, token, viewModel));
         });
     }
 }

@@ -392,7 +392,7 @@ class Collections extends Component {
         const selected = this.state.selected.slice();
         selected.forEach(collection => {
             delete collection[collection.id];
-            this.props.deleteDeck_async(this.props.select_token, collection);
+            this.props.delete_async('deck', this.props.select_token, collection);
         });
         this._setCollection(collection);
         this._setUndo({
@@ -402,7 +402,7 @@ class Collections extends Component {
         this._clearSelected();
     }
     _deleteCollection = (collection) => {
-        this.props.deleteDeck_async(this.props.select_token, collection);
+        this.props.delete_async('deck', this.props.select_token, collection);
         this._removeManyCollections([collection]);
         this._setUndo({
             action: this._undoManyCollectionsDeleted,
@@ -799,15 +799,10 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        // addDeck_async: (token, deck) => dispatch(actions.addDeck_async(token, deck)),
-        // addManyDecks_async: (token, decks) => dispatch(actions.addManyDecks_async(token, decks)),
-        // add_async: (store, token, model) => dispatch(actions.add_async(store, token, model)),
         addMany_async: (store, token, models) => dispatch(actions.addMany_async(store, token, models)),
-        deleteDeck_async: (token, collection) => dispatch(actions.deleteDeck_async(token, collection)),
+        delete_async: (store, token, model) => dispatch(actions.delete_async(store, token, model)),
         update_async: (store, token, model) => dispatch(actions.update_async(store, token, model)),
-        // updateDeck_async: (token, collection) => dispatch(actions.updateDeck_async(token, collection)),
         patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data))
-
     };
 };
 
