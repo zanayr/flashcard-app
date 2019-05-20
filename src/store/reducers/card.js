@@ -7,10 +7,33 @@ import * as create from '../models/models';
 
 //  Initial State  ------------------------------------------------  Initial State  //
 const initialState = {
-    collection: {},
+    cards: {},
     error: null,
     isLoading: false
 };
+
+
+const cardFailure = (state, action) => {
+    return {
+        ...state,
+        error: action.payload,
+        isLoading: false
+    };
+}
+const getAllCardsInit = (state, action) => {
+    return {
+        ...state,
+        isLoading: true
+    };
+}
+const getAllCardsSuccess = (state, action) => {
+    return {
+        ...state,
+        isLoading: false,
+        cards: action.payload
+    };
+}
+//  ^^^ NEW STUFF ^^^  //
 
 
 //  HELPERS  -------------------------------------------------------------  HELPERS  //
@@ -84,6 +107,17 @@ const updateCard_success = (state, action) => {
 //  REDUCER  -------------------------------------------------------------  REDUCER  //
 const reducer = (state=initialState, action) => {
     switch (action.type) {
+        case actionTypes.CARD_FAILURE:
+            return cardFailure(state, action);
+        // case actionTypes.GET_CARD_INIT:
+        //     return getCardInit(state, action);
+        // case actionTypes.GET_CARD_SUCCESS:
+        //     return getCardSuccess(state, action);
+        case actionTypes.GET_ALL_CARDS_INIT:
+            return getAllCardsInit(state, action);
+        case actionTypes.GET_ALL_CARDS_SUCCESS:
+            return getAllCardsSuccess(state, action);
+        //  ^^^ NEW STUFF ^^^  //
         case actionTypes.ADD_CARD_SUCC:
             return addCard_success(state, action);
         case actionTypes.CARD_FAIL:
@@ -104,7 +138,7 @@ const reducer = (state=initialState, action) => {
 
 //  SELECTORS  ---------------------------------------------------------  SELECTORS  //
 export function selectCards (state) {
-    return state.collection
+    return state.cards
 }
 export function selectCardsIsLoading (state) {
     return state.isLoading;

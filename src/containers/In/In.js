@@ -10,9 +10,14 @@ import Throbber from '../../components/ui/Throbber/Throbber';
 
 class In extends Component {
     componentDidMount() {
-        this.props.getAllCards_async(this.props.select_token, this.props.select_user);
-        this.props.getAllDecks_async(this.props.select_token, this.props.select_user);
-        this.props.getUser_async(this.props.select_token, this.props.select_user);
+        const auth = this.props.select_auth;
+        const token = this.props.select_token;
+        this.props.getAll_async('card', token, auth);
+        this.props.getAll_async('deck', token, auth);
+        this.props.get_async('user', token, auth);
+        // this.props.getAllCards_async(this.props.select_token, this.props.select_user);
+        // this.props.getAllDecks_async(this.props.select_token, this.props.select_user);
+        // this.props.getUser_async(this.props.select_token, this.props.select_user);
     }
 
     
@@ -36,6 +41,7 @@ const mapStateToProps = state => {
         select_decksIsLoading: select.decksIsLoading(state),
         select_token: select.authToken(state),
         select_user: select.authUser(state),
+        select_auth: select.authUser(state),
         select_userIsLoading: select.userIsLoading(state)
     }
 }
@@ -43,7 +49,9 @@ const mapDispatchToProps = dispatch => {
     return {
         getAllCards_async: (token, user) => dispatch(actions.getAllCards_async(token, user)),
         getAllDecks_async: (token, user) => dispatch(actions.getAllDecks_async(token, user)),
-        getUser_async: (token, auth) => dispatch(actions.getUser_async(token, auth))
+        get_async: (store, token, id) => dispatch(actions.get_async(store, token, id)),
+        getAll_async: (store, token, user) => dispatch(actions.getAll_async(store, token, user))
+        // getUser_async: (token, auth) => dispatch(actions.getUser_async(token, auth))
     };
 };
 

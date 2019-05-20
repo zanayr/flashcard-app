@@ -23,15 +23,10 @@ export {
     updateDeckMember_async
 } from './deck';
 
-// export {
-//     getCollection,
-//     deleteItem_async,
-//     deleteManyItems_async,
-//     getAllItems_async,
-//     patchItem_async,
-//     patchManyItems_async,
-//     putItem_async
-// } from './collection';
+export {
+    get_async,
+    getAll_async
+} from './database';
 
 export {
     deleteTab_async,

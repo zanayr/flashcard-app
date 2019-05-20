@@ -7,10 +7,33 @@ import * as create from '../models/models';
 
 //  Initial State  ------------------------------------------------  Initial State  //
 const initialState = {
-    collection: {},
+    decks: {},
     error: null,
     isLoading: false
 };
+
+
+const deckFailure = (state, action) => {
+    return {
+        ...state,
+        error: action.payload,
+        isLoading: false
+    };
+}
+const getAllDecksInit = (state, action) => {
+    return {
+        ...state,
+        isLoading: true
+    };
+}
+const getAllDecksSuccess = (state, action) => {
+    return {
+        ...state,
+        isLoading: false,
+        decks: action.payload
+    };
+}
+//  ^^^ NEW STUFF ^^^  //
 
 
 //  HELPERS  -------------------------------------------------------------  HELPERS  //
@@ -84,16 +107,27 @@ const updateDeck_success = (state, action) => {
 //  REDUCER  -------------------------------------------------------------  REDUCER  //
 const reducer = (state=initialState, action) => {
     switch (action.type) {
+        case actionTypes.DECK_FAILURE:
+            return deckFailure(state, action);
+        // case actionTypes.GET_DECK_INIT:
+        //     return getDeckInit(state, action);
+        // case actionTypes.GET_DECK_SUCCESS:
+        //     return getDeckSuccess(state, action);
+        case actionTypes.GET_ALL_DECKS_INIT:
+            return getAllDecksInit(state, action);
+        case actionTypes.GET_ALL_DECKS_SUCCESS:
+            return getAllDecksSuccess(state, action);
+        //  ^^^ NEW STUFF ^^^  //
         case actionTypes.ADD_DECK_SUCC:
             return addDeck_success(state, action);
         case actionTypes.DECK_FAIL:
             return deck_fail(state, action);
         case actionTypes.DELETE_DECK_SUCC:
             return deleteDeck_success(state, action);
-        case actionTypes.GET_ALL_DECKS_INIT:
-            return getAllDecks_init(state, action);
-        case actionTypes.GET_ALL_DECKS_SUCC:
-            return getAllDecks_success(state, action);
+        // case actionTypes.GET_ALL_DECKS_INIT:
+        //     return getAllDecks_init(state, action);
+        // case actionTypes.GET_ALL_DECKS_SUCC:
+        //     return getAllDecks_success(state, action);
         case actionTypes.UPDATE_DECK_SUCC:
             return updateDeck_success(state, action);
         default:
@@ -104,10 +138,10 @@ const reducer = (state=initialState, action) => {
 
 //  SELECTORS  ---------------------------------------------------------  SELECTORS  //
 export function selectDeck (state, id) {
-    return state.collection[id];
+    return state.decks[id];
 }
 export function selectDecks (state) {
-    return state.collection
+    return state.decks
 }
 export function selectDecksIsLoading (state) {
     return state.isLoading;

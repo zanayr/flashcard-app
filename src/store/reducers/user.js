@@ -3,12 +3,47 @@ import * as create from '../models/models';
 
 
 const initialState = {
-    user: {},
     error: null,
-    isLoading: true
+    isLoading: true,
+    user: {},
+    users: {}
 };
 
 
+const userFailure = (state, action) => {
+    return {
+        ...state,
+        error: action.payload,
+        isLoading: false
+    };
+}
+const getUserInit = (state, action) => {
+    return {
+        ...state,
+        isLoading: true
+    };
+}
+const getUserSuccess = (state, action) => {
+    return {
+        ...state,
+        isLoading: false,
+        user: action.payload
+    };
+}
+const getAllUsersInit = (state, action) => {
+    return {
+        ...state,
+        isLoading: true
+    };
+}
+const getAllUsersSuccess = (state, action) => {
+    return {
+        ...state,
+        isLoading: false,
+        users: action.payload
+    };
+}
+//  ^^^ NEW STUFF ^^^  //
 const service_fail = (state, action) => {
     return {
         ...state,
@@ -86,6 +121,17 @@ const patchTab_succ = (state, action) => {
 //  REDUCER  -------------------------------------------------------------  REDUCER  //
 const reducer = (state=initialState, action) => {
     switch (action.type) {
+        case actionTypes.USER_FAILURE:
+            return userFailure(state, action);
+        case actionTypes.GET_USER_INIT:
+            return getUserInit(state, action);
+        case actionTypes.GET_USER_SUCCESS:
+            return getUserSuccess(state, action);
+        case actionTypes.GET_ALL_USERS_INIT:
+            return getAllUsersInit(state, action);
+        case actionTypes.GET_ALL_USERS_SUCCESS:
+            return getAllUsersSuccess(state, action);
+        //  ^^^ NEW STUFF ^^^  //
         case actionTypes.GET_USER_FAIL:
             return service_fail(state, action);
         case actionTypes.GET_USER_INIT:
