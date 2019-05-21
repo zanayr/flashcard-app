@@ -34,49 +34,48 @@ class Inspector extends Component {
             id: 'all',
             tag: []
         },
+        items: {},
         collection: {},
-        deck: {},
         filter: {
             group: [],
             tag: []
         },
-        group: this.props.user.group,
+        group: this.props.select_user.group,
         main: 'LOADING',
         quick: [],
         selected: [],
         sort: sortTypes.DATE_ASC,
-        tab: {},
+        tab: this.props.select_collection.tab,
         tag: [],
         undo: {
             action: null,
             data: {}
         },
     }
+    page = this.props.match.params.collection === 'deck' ? 'card' : 'student';
     undoTimeout = null;
 
     componentDidMount () {
-        const cards = this.props.select_cards;
-        const deck = this.props.select_deck;
-        const collection = {};
+        const items = {};
+        const collection = {...this.props.select_collection};
         let $new = false;
-        let tags = this.props.user.tag.slice();
-        Object.keys(cards).filter(id => deck.member.includes(id)).map(id => {
-            if (cards[id].tag.includes('$new')) {
+        let tags = this.props.select_user.tag.slice();
+
+        Object.keys(this.props.select_items).filter(id => collection.member.includes(id)).forEach(id => {
+            if (this.props.select_items[id].tag.includes('$new')) {
                 $new = true;
             }
-            if (deck.member.includes(id)) {
-                collection[id] = cards[id];
-            }
+            items[id] = this.props.select_items[id];
         });
         if ($new) {
             tags.push('$new');
         }
+
         this.setState(prev => ({
             ...prev,
+            items: items,
             collection: collection,
-            deck: deck,
             main: 'LIST_VIEW',
-            tab: deck.tab,
             tag: tags
         }));
     }
@@ -143,17 +142,17 @@ class Inspector extends Component {
     }
 
     //  Collection  ------------------------------------------------  Collection SS  //
-    _setCollection (collection) {
-        const members = Object.keys(collection).map(id => {return id});
-        this.setState(prev => ({
-            ...prev,
-            collection: collection,
-            deck: {
-                ...prev.deck,
-                member: members
-            }
-        }));
-    }
+    // _setCollection (collection) {
+    //     const members = Object.keys(collection).map(id => {return id});
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         collection: collection,
+    //         deck: {
+    //             ...prev.deck,
+    //             member: members
+    //         }
+    //     }));
+    // }
 
     //  Current  ------------------------------------------------------  Current SS  //
     _setCurrent (tab) {
@@ -188,50 +187,50 @@ class Inspector extends Component {
 
     //  Items  ----------------------------------------------------------  Items SS  //
     _removeManyItems (items) {
-        const collection = this.state.collection;
+        const i = this.state.items;
         const nonmembers = items.map(item => {return item.id});
         items.forEach(item => {
-            delete collection[item.id];
+            delete i[item.id];
         });
         this.setState(prev => ({
             ...prev,
-            collection: collection
+            items: i
         }));
         this.setState(prev => ({
             ...prev,
-            deck: {
-                ...prev.deck,
-                member: prev.deck.member.filter(id => !nonmembers.includes(id))
+            collection: {
+                ...prev.collection,
+                member: prev.collection.member.filter(id => !nonmembers.includes(id))
             }
         }));
     }
     _setManyItems (items) {
-        const collection = this.state.collection;
+        const i = this.state.items;
         items.forEach(item => {
-            collection[item.id] = item;
+            i[item.id] = item;
         });
         this.setState(prev => ({
             ...prev,
-            collection: collection
+            items: i
         }));
     }
     _setManyMembers (items) {
         this.setState(prev => ({
             ...prev,
-            deck: {
-                ...prev.deck,
-                member: prev.deck.member.concat(items.map(item => {return item.id}))
+            collection: {
+                ...prev.collection,
+                member: prev.collection.member.concat(items.map(item => {return item.id}))
             }
         }));
     }
     _setItemValue (target, value) {
-        const itemId = this.state.aside.data.item.id;
+        const id = this.state.aside.data.item.id;
         this.setState(prev => ({
             ...prev,
-            collection: {
-                ...prev.collection,
-                [itemId]: {
-                    ...prev.collection[itemId],
+            items: {
+                ...prev.items,
+                [id]: {
+                    ...prev.items[id],
                     [target]: value
                 }
             }
@@ -296,8 +295,8 @@ class Inspector extends Component {
     _setTab (tabs) {
         this.setState(prev => ({
             ...prev,
-            deck: {
-                ...prev.deck,
+            collection: {
+                ...prev.collection,
                 tab: tabs
             },
             tab: tabs
@@ -361,7 +360,7 @@ class Inspector extends Component {
         }, {
             group: this.state.group,
             item: data.item,
-            deckId: this.state.deck.id,
+            id: this.state.collection.id,
             tag: this.state.tag
         });
     }
@@ -373,10 +372,10 @@ class Inspector extends Component {
         this._clearAndCloseAside();
     }
     _addManyItems_async (items) {
-        this.props.addManyCards_async(this.props.token, items);
-        this.props.updateDeck_async(this.props.token, {
-            ...this.state.deck,
-            member: this.state.deck.member.concat(items.map(item => {
+        this.props.addMany_async(this.page, this.props.select_authToken, items);
+        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+            ...this.state.collection,
+            member: this.state.collection.member.concat(items.map(item => {
                 return item.id;
             }))
         });
@@ -414,34 +413,35 @@ class Inspector extends Component {
     }
     _createItem () {
         const item = create.cardViewModel(utility.createHashId(0), {
-            member: [this.state.deck.id],
-            owner: this.props.select_user.id,
+            member: [this.state.collection.id],
+            owner: this.props.select_authUser,
             primary: '',
             secondary: '',
             tag: []
         });
         this._setManyItems([item]);
         this._openInspectAside({
-            confirm: () => this._addManyItems([this.state.collection[item.id]]),
+            confirm: () => this._addManyItems([this.state.items[item.id]]),
             item: item,
             type: asideTypes.CREATE_CARD
         });
         this._clearSelected();
     }
     _deleteManyItems () {
-        const collection = this.state.collection;
+        const i = this.state.items;
         const selected = this.state.selected.slice();
         const nonmembers = [];
         selected.forEach(item => {
             nonmembers.push(item.id);
-            delete collection[item.id];
-            this.props.deleteCard_async(this.props.select_token, item);
+            delete i[item.id];
+            this.props.delete_async(this.page, this.props.select_authToken, item);
         });
-        this.props.updateDeck_async(this.props.select_token, {
-            ...this.state.deck,
-            member: this.state.deck.member.filter(id => !nonmembers.includes(id))
+        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+            ...this.state.collection,
+            member: this.state.collection.member.filter(id => !nonmembers.includes(id))
         });
-        this._setCollection(collection);
+        this._setManyItems(i);
+        this._setManyMembers(this.state.collection.member.filter(id => !nonmembers.includes(id)));
         this._setUndo({
             action: this._undoManyItemsDeleted,
             data: selected
@@ -449,10 +449,10 @@ class Inspector extends Component {
         this._clearSelected();
     }
     _deleteItem = (item) => {
-        this.props.deleteCard_async(this.props.select_token, item);
-        this.props.updateDeck_async(this.props.select_token, {
-            ...this.state.deck,
-            member: this.state.deck.member.filter(id => id !== item.id)
+        this.props.delete_async(this.page, this.props.select_authToken, item);
+        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+            ...this.state.collection,
+            member: this.state.collection.member.filter(id => id !== item.id)
         });
         this._removeManyItems([item]);
         this._setUndo({
@@ -470,13 +470,13 @@ class Inspector extends Component {
         this._clearQuick('s');
     }
     _removeItem = (item) => {
-        this.props.updateCard_async(this.props.select_token, {
+        this.props.update_async(this.page, this.props.select_authToken, {
             ...item,
-            member: item.member.filter(id => id !== this.state.deck.id)
+            member: item.member.filter(id => id !== this.state.collection.id)
         });
-        this.props.updateDeck_async(this.props.select_token, {
-            ...this.state.deck,
-            member: this.state.deck.member.filter(id => id !== item.id)
+        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+            ...this.state.collection,
+            member: this.state.collection.member.filter(id => id !== item.id)
         });
         this._removeManyItems([item]);
         this._setUndo({
@@ -499,9 +499,9 @@ class Inspector extends Component {
     }
     _updateItem = () => {
         const original = this.state.aside.data.item;
-        const item = this.state.collection[original.id];
+        const item = this.state.items[original.id];
         if (JSON.stringify(item) !== JSON.stringify(original)) {
-            this.props.updateCard_async(this.props.token, item);
+            this.props.update_async(this.page, this.props.select_authToken, item);
             this._setUndo({
                 action: this._undoItemUpdated,
                 data: original
@@ -514,8 +514,8 @@ class Inspector extends Component {
     _deleteTab (tab) {
         let tabs = {...this.state.tab};
         delete tabs[tab.id];
-        this.props.updateDeck_async(this.props.token, {
-            ...this.state.deck,
+        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+            ...this.state.collection,
             tab: tabs
         });
         this._setTab(tabs);
@@ -551,18 +551,18 @@ class Inspector extends Component {
         const members = [];
         items.forEach(item => {
             members.push(item.id);
-            this.props.updateCard_async(this.props.select_token, item);
+            this.props.update_async(this.page, this.props.select_authToken, item);
         });
-        this.props.updateDeck_async(this.props.select_token, {
-            ...this.state.deck,
-            member: this.state.deck.member.concat(members)
+        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+            ...this.state.collection,
+            member: this.state.collection.member.concat(members)
         });
         this._setManyItems(items);
         this._setManyMembers(items);
     }
     _undoItemUpdated = () => {
         const item = this.state.undo.data;
-        this.props.updateCard_async(this.props.token, item);
+        this.props.update_async(this.page, this.props.select_authToken, item);
         this._setManyItems([item]);
     }
     
@@ -589,10 +589,10 @@ class Inspector extends Component {
         let data;
         switch (this.state.aside.state) {
             case asideTypes.CREATE_CARD:
-                this._removeManyItems([this.state.collection[this.state.aside.data.item.id]]);
+                this._removeManyItems([this.state.items[this.state.aside.data.item.id]]);
                 break;
             case asideTypes.INSPECT_CARD:
-                data = this.state.collection[originalData.item.id];
+                data = this.state.items[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkItem(data)) {
                     this._setManyItems([originalData.item]);
                 }
@@ -607,7 +607,7 @@ class Inspector extends Component {
         let data;
         switch (this.state.aside.state) {
             case asideTypes.CREATE_CARD:
-                data = this.state.collection[originalData.item.id];
+                data = this.state.items[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkItem(data)) {
                     this._addManyItems([data]);
                 } else {
@@ -615,9 +615,9 @@ class Inspector extends Component {
                 }
                 break;
             case asideTypes.INSPECT_CARD:
-                data = this.state.collection[originalData.item.id];
+                data = this.state.items[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkItem(data)) {
-                    this.props.updateCard_async(this.props.token, data);
+                    this.props.update_async(this.page, this.props.select_authToken, data);
                     this._setUndo({
                         action: this._undoItemUpdated,
                         data: originalData.item
@@ -758,10 +758,10 @@ class Inspector extends Component {
         }
     }
     handle_onTabCreate = (tab) => {
-        const tabs = {...this.state.deck.tab};
+        const tabs = {...this.state.collection.tab};
         tabs[tab.id] = tab;
-        this.props.updateDeck_async(this.props.token, {
-            ...this.state.deck,
+        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+            ...this.state.collection,
             tab: tabs
         });
         this._setTab(tabs);
@@ -776,13 +776,14 @@ class Inspector extends Component {
 
 
     render () {
+        console.log(this.state);
         let content;
         switch (this.state.main) {
             case 'LIST_VIEW':
                 content = (
                     <List2
                         action={this.handle_onListClick}
-                        collection={utility.sortBy(this.state.sort, this.state.collection)}
+                        collection={utility.sortBy(this.state.sort, this.state.items)}
                         filters={this.state.filter}
                         current={this.state.current}
                         selected={this.state.selected}
@@ -843,19 +844,19 @@ class Inspector extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        select_deck: select.deck(state, ownProps.match.params.id),
-        select_cards: select.cards(state),
-        select_token: select.authToken(state),
+        select_authToken: select.authToken(state),
+        select_authUser: select.authUser(state),
+        select_collection: select.collection(state, ownProps.match.params.collection, ownProps.match.params.id),
+        select_items: select.items(state, ownProps.match.params.collection === 'deck' ? 'card' : 'student'),
         select_user: select.user(state)
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
-        addManyCards_async: (token, items) => dispatch(actions.addManyCards_async(token, items)),
-        deleteCard_async: (token, item) => dispatch(actions.deleteCard_async(token, item)),
-        updateCard_async: (token, item) => dispatch(actions.updateCard_async(token, item)),
-        updateDeck_async: (token, deck) => dispatch(actions.updateDeck_async(token, deck)),
+        addMany_async: (store, token, items) => dispatch(actions.addMany_async(store, token, items)),
+        delete_async: (store, token, item) => dispatch(actions.delete_async(store, token, item)),
+        update_async: (store, token, model) => dispatch(actions.update_async(store, token, model)),
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withUser(Inspector));
+export default connect(mapStateToProps, mapDispatchToProps)(Inspector);

@@ -809,7 +809,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         select_authToken: select.authToken(state),
         select_authUser: select.authUser(state),
-        select_collection: select.collection(state, ownProps.match.params.collection),
+        select_collection: select.collections(state, ownProps.match.params.collection),
         select_user: select.user(state)
     }
 }

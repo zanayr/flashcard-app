@@ -62,7 +62,7 @@ export function decksIsLoading (store) {
 }
 
 //  Collection  ------------------------------------------------ Collection Selectors  //
-export function collection (store, collection) {
+export function collections (store, collection) {
     switch (collection) {
         case 'deck':
             return FromDeck.selectDecks(store[DECK]);
@@ -72,21 +72,28 @@ export function collection (store, collection) {
             break;
     }
 }
-// export function collection (store, collection, id) {
-//     return FromColl.selectCollection(store[COLL], collection, id);
-// }
-// export function cards (store) {
-//     return FromColl.selectCards(store[COLL]);
-// }
-// export function cardsIsLoading (store) {
-//     return FromColl.selectCardsIsLoading(store[COLL]);
-// }
-// export function decks (store) {
-//     return FromColl.selectDecks(store[COLL]);
-// }
-// export function decksIsLoading (store) {
-//     return FromColl.selectDecksIsLoading(store[COLL]);
-// }
+export function collection (store, collection, id) {
+    switch (collection) {
+        case 'deck':
+            return FromDeck.selectDeck(store[DECK], id);
+        case 'class':
+            break;
+        default:
+            break;
+    }
+}
+
+//  Item  ---------------------------------------------------------- Item Selectors  //
+export function items (store, collection) {
+    switch (collection) {
+        case 'card':
+            return FromCard.selectCards(store[CARD]);
+        case 'student':
+            break;
+        default:
+            break;
+    }
+}
 
 //  Modal  -------------------------------------------------------- Modal Selectors  //
 export function modals (store) {
