@@ -52,7 +52,9 @@ export function tabModel (tab) {
 //  Student  -------------------------------------------------------  Student Model  //
 export function userModel (student) {
     return {
+        class: student.class,
         date: student.date,
+        deck: student.deck,
         group: student.group,
         info: {
             email: student.info.email,
@@ -148,13 +150,27 @@ export function tabViewModel (id, tab) {
 //  Student View Model  ---------------------------------------------  Student V.M.  //
 export function userViewModel (id, student) {
     const tab = {};
+    const classTabs = {};
+    const deckTabs = {};
     if (student.tab) {
         Object.keys(student.tab).map(id => {
             tab[id] = tabViewModel(id, student.tab[id]);
         });
     }
+    if (student.class) {
+        Object.keys(student.class).map(id => {
+            classTabs[id] = tabViewModel(id, student.class[id]);
+        });
+    }
+    if (student.deck) {
+        Object.keys(student.deck).map(id => {
+            deckTabs[id] = tabViewModel(id, student.deck[id]);
+        });
+    }
     return {
+        class: classTabs,
         date: student.date || Date.now(),
+        deck: deckTabs,
         group: student.group || [],
         id: id,
         info: {

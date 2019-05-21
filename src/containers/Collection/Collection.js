@@ -44,7 +44,7 @@ class Collections extends Component {
         quick: [],
         selected: [],
         sort: sortTypes.DATE_ASC,
-        tab: this.props.user.tab || {},
+        tab: {},
         tag: this.props.user.tag,
         undo: {
             action: null,
@@ -52,9 +52,11 @@ class Collections extends Component {
         },
         user: this.props.user
     }
+    collection = this.props.match.params.collection;
     undoTimeout = null;
 
     componentDidMount () {
+        console.log(this.props);
         const decks = this.props.select_decks;
         const collection = {};
         Object.keys(decks).forEach(id => {
@@ -64,7 +66,7 @@ class Collections extends Component {
             ...prev,
             collection: collection,
             main: 'LIST_VIEW',
-            tab: this.props.user.tab
+            tab: this.props.user[this.props.match.params.collection]
         }));
     }
 
@@ -340,7 +342,7 @@ class Collections extends Component {
         this._clearAndCloseAside();
     }
     _addManyCollections_async (collections) {
-        this.props.addMany_async('deck', this.props.token, collections);
+        this.props.addMany_async(this.collection, this.props.token, collections);
     }
     _checkCollection (collection) {
         let valid = true;
@@ -392,7 +394,7 @@ class Collections extends Component {
         const selected = this.state.selected.slice();
         selected.forEach(collection => {
             delete collection[collection.id];
-            this.props.delete_async('deck', this.props.select_token, collection);
+            this.props.delete_async(this.collection, this.props.select_token, collection);
         });
         this._setCollection(collection);
         this._setUndo({
@@ -402,7 +404,7 @@ class Collections extends Component {
         this._clearSelected();
     }
     _deleteCollection = (collection) => {
-        this.props.delete_async('deck', this.props.select_token, collection);
+        this.props.delete_async(this.collection, this.props.select_token, collection);
         this._removeManyCollections([collection]);
         this._setUndo({
             action: this._undoManyCollectionsDeleted,
@@ -466,7 +468,7 @@ class Collections extends Component {
         const original = this.state.aside.data.item;
         const collection = this.state.collection[original.id];
         if (JSON.stringify(collection) !== JSON.stringify(original)) {
-            this.props.update_async('deck', this.props.token, collection);
+            this.props.update_async(this.collection, this.props.token, collection);
             this._setUndo({
                 action: this._undoCollectionUpdated,
                 data: original
@@ -479,7 +481,7 @@ class Collections extends Component {
     _deleteTab (tab) {
         let tabs = {...this.state.tab};
         delete tabs[tab.id];
-        this.props.update_async('deck', this.props.token, {
+        this.props.update_async(this.collection, this.props.token, {
             ...this.state.deck,
             tab: tabs
         });
@@ -512,7 +514,7 @@ class Collections extends Component {
     }
     _undoCollectionUpdated = () => {
         const collection = this.state.undo.data;
-        this.props.update_async('deck', this.props.token, collection);
+        this.props.update_async(this.collection, this.props.token, collection);
         this._setManyCollections([collection]);
     }
     
@@ -567,7 +569,7 @@ class Collections extends Component {
             case asideTypes.INSPECT_DECK:
                 data = this.state.collection[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
-                    this.props.update_async('deck', this.props.token, data);
+                    this.props.update_async(this.collection, this.props.token, data);
                     this._setUndo({
                         action: this._undoCollectionUpdated,
                         data: originalData.item
