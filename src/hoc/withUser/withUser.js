@@ -8,17 +8,9 @@ const withUser = (WrappedComponent) => (props) => {
     return (
         <WrappedComponent
             user={props.select_user}
-            token={props.select_token}
+            token={props.select_authToken}
             {...props}/>
     )
-}
-
-
-const mapStateToProps = state => {
-    return {
-        select_token: select.authToken(state),
-        select_user: select.user(state)
-    }
 }
 
 export default withUser;

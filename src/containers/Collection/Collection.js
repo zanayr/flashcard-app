@@ -39,34 +39,30 @@ class Collections extends Component {
             group: [],
             tag: []
         },
-        group: this.props.user.group,
+        group: this.props.select_user.group,
         main: 'LOADING',
         quick: [],
         selected: [],
         sort: sortTypes.DATE_ASC,
-        tab: {},
-        tag: this.props.user.tag,
+        tab: this.props.select_user[this.props.match.params.collection],
+        tag: this.props.select_user.tag,
         undo: {
             action: null,
             data: {}
         },
-        user: this.props.user
+        user: this.props.select_user
     }
-    collection = this.props.match.params.collection;
     undoTimeout = null;
 
     componentDidMount () {
-        console.log(this.props);
-        const decks = this.props.select_decks;
         const collection = {};
-        Object.keys(decks).forEach(id => {
-            collection[id] = decks[id];
+        Object.keys(this.props.select_collection).forEach(id => {
+            collection[id] = this.props.select_collection[id];
         });
         this.setState(prev => ({
             ...prev,
             collection: collection,
-            main: 'LIST_VIEW',
-            tab: this.props.user[this.props.match.params.collection]
+            main: 'LIST_VIEW'
         }));
     }
 
@@ -133,12 +129,10 @@ class Collections extends Component {
 
     //  Collection  ------------------------------------------------  Collection SS  //
     _setCollection (collection) {
+        console.log(collection);
         this.setState(prev => ({
             ...prev,
-            collection: collection,
-            deck: {
-                ...prev.deck
-            }
+            collection: collection
         }));
     }
 
@@ -266,10 +260,6 @@ class Collections extends Component {
     _setTab (tabs) {
         this.setState(prev => ({
             ...prev,
-            deck: {
-                ...prev.deck,
-                tab: tabs
-            },
             tab: tabs
         }));
     }
@@ -331,7 +321,7 @@ class Collections extends Component {
         }, {
             group: this.state.group,
             item: data.collection,
-            deckId: data.collection.id,
+            id: data.collection.id,
             tag: this.state.tag
         });
     }
@@ -342,7 +332,7 @@ class Collections extends Component {
         this._clearAndCloseAside();
     }
     _addManyCollections_async (collections) {
-        this.props.addMany_async(this.collection, this.props.token, collections);
+        this.props.addMany_async(this.props.match.params.collection, this.props.select_authToken, collections);
     }
     _checkCollection (collection) {
         let valid = true;
@@ -364,23 +354,40 @@ class Collections extends Component {
             } else {
                 primary = 'Copy of ' + collection.primary.substr(0, 21) + '...';
             }
-            cloned.push(create.deckViewModel(utility.createHashId(i), {
-                ...collection,
-                date: Date.now(),
-                primary: primary
-            }));
+            switch (this.props.match.params.collection) {
+                case 'deck':
+                    cloned.push(create.deckViewModel(utility.createHashId(i), {
+                        ...collection,
+                        date: Date.now(),
+                        primary: primary
+                    }));
+                    break;
+                case 'class':
+                    break;
+                default:
+                    break;
+            }
         });
         this._addManyCollections_async(cloned);
         this._setManyCollections(cloned);
         this._clearSelected();
     }
     _createCollection () {
-        const collection = create.deckViewModel(utility.createHashId(0), {
-            owner: this.props.select_user.id,
-            primary: '',
-            secondary: '',
-            tag: []
-        });
+        let collection;
+        switch (this.props.match.params.collection) {
+            case 'deck':
+                collection = create.deckViewModel(utility.createHashId(0), {
+                    owner: this.props.select_authUser,
+                    primary: '',
+                    secondary: '',
+                    tag: []
+                });
+                break;
+            case 'class':
+                break;
+            default:
+                break;
+        }
         this._setManyCollections([collection]);
         this._openInspectAside({
             confirm: () => this._addManyCollections([this.state.collection[collection.id]]),
@@ -390,11 +397,11 @@ class Collections extends Component {
         this._clearSelected();
     }
     _deleteManyCollections () {
-        const collection = this.state.collection;
+        const collection = {...this.state.collection};
         const selected = this.state.selected.slice();
-        selected.forEach(collection => {
-            delete collection[collection.id];
-            this.props.delete_async(this.collection, this.props.select_token, collection);
+        selected.forEach(coll => {
+            delete collection[coll.id];
+            this.props.delete_async(this.props.match.params.collection, this.props.select_authToken, coll);
         });
         this._setCollection(collection);
         this._setUndo({
@@ -404,7 +411,7 @@ class Collections extends Component {
         this._clearSelected();
     }
     _deleteCollection = (collection) => {
-        this.props.delete_async(this.collection, this.props.select_token, collection);
+        this.props.delete_async(this.props.match.params.collection, this.props.select_authToken, collection);
         this._removeManyCollections([collection]);
         this._setUndo({
             action: this._undoManyCollectionsDeleted,
@@ -424,6 +431,7 @@ class Collections extends Component {
         const group = [];
         const member = [];
         const tag = [];
+        let merged;
         this.state.selected.forEach(collection => {
             collection.group.forEach(t => {
                 if (!group.includes(t)) {
@@ -441,13 +449,21 @@ class Collections extends Component {
                 }
             });
         });
-        let merged = create.deckViewModel(utility.createHashId(0), {
-            group: group,
-            member: member,
-            owner: this.props.user.id,
-            primary: response || 'New Merged Deck',
-            tag: tag
-        });
+        switch (this.props.match.params.collection) {
+            case 'deck':
+                merged = create.deckViewModel(utility.createHashId(0), {
+                    group: group,
+                    member: member,
+                    owner: this.props.select_authUser,
+                    primary: response || 'New Merged ' + this.props.match.params.collection.charAt(0).toUpperCase() + this.props.match.params.collection.slice(1),
+                    tag: tag
+                });
+                break;
+            case 'class':
+                break;
+            default:
+                break;
+        }
         this._addManyCollections_async([merged]);
         this._setManyCollections([merged]);
         this._clearSelected();
@@ -468,7 +484,7 @@ class Collections extends Component {
         const original = this.state.aside.data.item;
         const collection = this.state.collection[original.id];
         if (JSON.stringify(collection) !== JSON.stringify(original)) {
-            this.props.update_async(this.collection, this.props.token, collection);
+            this.props.update_async(this.props.match.params.collection, this.props.select_authToken, collection);
             this._setUndo({
                 action: this._undoCollectionUpdated,
                 data: original
@@ -481,10 +497,10 @@ class Collections extends Component {
     _deleteTab (tab) {
         let tabs = {...this.state.tab};
         delete tabs[tab.id];
-        this.props.update_async(this.collection, this.props.token, {
-            ...this.state.deck,
-            tab: tabs
-        });
+        // this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+        //     ...this.state.deck,
+        //     tab: tabs
+        // });
         this._setTab(tabs);
         if (this.state.current.id === tab.id) {
             this._setCurrent({
@@ -514,7 +530,7 @@ class Collections extends Component {
     }
     _undoCollectionUpdated = () => {
         const collection = this.state.undo.data;
-        this.props.update_async(this.collection, this.props.token, collection);
+        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, collection);
         this._setManyCollections([collection]);
     }
     
@@ -569,7 +585,7 @@ class Collections extends Component {
             case asideTypes.INSPECT_DECK:
                 data = this.state.collection[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
-                    this.props.update_async(this.collection, this.props.token, data);
+                    this.props.update_async(this.props.match.params.collection, this.props.select_authToken, data);
                     this._setUndo({
                         action: this._undoCollectionUpdated,
                         data: originalData.item
@@ -713,9 +729,9 @@ class Collections extends Component {
         }
     }
     handle_onTabCreate = (tab) => {
-        const tabs = {...this.state.user.tab};
+        const tabs = {...this.state.tab};
         tabs[tab.id] = tab;
-        this.props.patchTab_async(this.props.token, this.props.user.id, tab);
+        this.props.patchTab_async(this.props.select_authToken, this.props.select_authUser, tab);
         this._setTab(tabs);
         this._setCurrent(tab);
         this._setMainState('LIST_VIEW');
@@ -791,11 +807,11 @@ class Collections extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
     return {
-        select_decks: select.decks(state),
-        select_decks: select.decks(state),
-        select_token: select.authToken(state),
+        select_authToken: select.authToken(state),
+        select_authUser: select.authUser(state),
+        select_collection: select.collection(state, ownProps.match.params.collection),
         select_user: select.user(state)
     }
 }
@@ -808,4 +824,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withUser(Collections));
+export default connect(mapStateToProps, mapDispatchToProps)(Collections);

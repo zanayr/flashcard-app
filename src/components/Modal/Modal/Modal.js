@@ -26,10 +26,12 @@ const modal = (props) => {
         props.clearModal({key: props.uniqueId});
     }
     const handle_onConfirm = () => {
-        if (responseForm.current.response.reportValidity()) {
+        if (responseForm.current) {
             props.data.onConfirm(responseForm.current.response.value);
-            props.clearModal({key: props.uniqueId});
+        } else {
+            props.data.onConfirm(true);
         }
+        props.clearModal({key: props.uniqueId});
     }
 
 
@@ -52,7 +54,6 @@ const modal = (props) => {
             break;
     }
     if (props.type === modalTypes.RESPONSE) {
-        console.log('here');
         form = (
             <form
                 ref={responseForm}>

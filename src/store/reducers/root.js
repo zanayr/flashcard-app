@@ -62,6 +62,16 @@ export function decksIsLoading (store) {
 }
 
 //  Collection  ------------------------------------------------ Collection Selectors  //
+export function collection (store, collection) {
+    switch (collection) {
+        case 'deck':
+            return FromDeck.selectDecks(store[DECK]);
+        case 'class':
+            break;
+        default:
+            break;
+    }
+}
 // export function collection (store, collection, id) {
 //     return FromColl.selectCollection(store[COLL], collection, id);
 // }
