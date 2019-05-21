@@ -400,11 +400,19 @@ class Inspector extends Component {
             } else {
                 primary = 'Copy of ' + item.primary.substr(0, 21) + '...';
             }
-            cloned.push(create.cardViewModel(utility.createHashId(i), {
-                ...item,
-                date: Date.now(),
-                primary: primary
-            }));
+            switch (this.page) {
+                case 'card':
+                        cloned.push(create.cardViewModel(utility.createHashId(i), {
+                            ...item,
+                            date: Date.now(),
+                            primary: primary
+                        }));
+                    break;
+                case 'student':
+                    break;
+                default:
+                    break;
+            }
         });
         this._addManyItems_async(cloned);
         this._setManyItems(cloned);
@@ -412,13 +420,22 @@ class Inspector extends Component {
         this._clearSelected();
     }
     _createItem () {
-        const item = create.cardViewModel(utility.createHashId(0), {
-            member: [this.state.collection.id],
-            owner: this.props.select_authUser,
-            primary: '',
-            secondary: '',
-            tag: []
-        });
+        let item;
+        switch (this.props.match.params.collection) {
+            case 'card':
+                item = create.cardViewModel(utility.createHashId(0), {
+                    member: [this.state.collection.id],
+                    owner: this.props.select_authUser,
+                    primary: '',
+                    secondary: '',
+                    tag: []
+                });
+                break;
+            case 'student':
+                break;
+            default:
+                break;
+        }
         this._setManyItems([item]);
         this._openInspectAside({
             confirm: () => this._addManyItems([this.state.items[item.id]]),
