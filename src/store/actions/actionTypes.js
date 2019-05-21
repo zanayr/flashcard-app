@@ -18,6 +18,9 @@ export const ADD_CARD = 'ADD_CARD';
 export const ADD_DECK = 'ADD_DECK';
 export const ADD_USER = 'ADD_USER';
 
+export const ADD_COLLECTION_TAB = 'ADD_COLLECTION_TAB';
+export const DELETE_COLLECTION_TAB = 'DELETE_COLLECTION_TAB';
+
 export const DELETE_CARD = 'DELETE_CARD';
 export const DELETE_DECK = 'DELETE_DECK';
 export const DELETE_USER = 'DELETE_USER';

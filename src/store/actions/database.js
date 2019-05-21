@@ -27,7 +27,7 @@ export const failure = (store, error) => {
 
 
 //  Add  --------------------------------------------------------------------  Add  //
-export const add_success = (store, data) => {
+export const _add = (store, data) => {
     let type = null;
     switch (store) {
         case 'card':
@@ -50,8 +50,20 @@ export const add_success = (store, data) => {
 }
 
 
+//  Add Tab  -------------------------------------------------------  Add Tab Async  //
+export const _addCollectionTab = (collection, data) => {
+    return {
+        type: actionTypes.ADD_COLLECTION_TAB,
+        payload: {
+            collection: collection,
+            tab: data
+        }
+    };
+}
+
+
 //  Delete  ---------------------------------------------------------------  Delete  //
-export const delete_success = (store, data) => {
+export const _delete = (store, data) => {
     let type = null;
     switch (store) {
         case 'card':
@@ -74,8 +86,20 @@ export const delete_success = (store, data) => {
 }
 
 
+//  Delete Tab  -------------------------------------------------  Delete Tab Async  //
+export const _deleteCollectionTab = (collection, data) => {
+    return {
+        type: actionTypes.DELETE_COLLECTION_TAB,
+        payload: {
+            collection: collection,
+            tab: data
+        }
+    };
+}
+
+
 //  Get  --------------------------------------------------------------------  Get  //
-export const get_success = (store, data) => {
+export const _get_success = (store, data) => {
     let type = null;
     switch (store) {
         case 'card':
@@ -96,7 +120,7 @@ export const get_success = (store, data) => {
         payload: data
     };
 };
-export const get_init = (store) => {
+export const _get_init = (store) => {
     let type = null;
     switch (store) {
         case 'card':
@@ -120,7 +144,7 @@ export const get_init = (store) => {
 
 
 //  Get All  -------------------------------------------------------------  Get All  //
-export const getAll_success = (store, data) => {
+export const _getAll_success = (store, data) => {
     let type = null;
     switch (store) {
         case 'card':
@@ -141,7 +165,7 @@ export const getAll_success = (store, data) => {
         payload: data
     };
 };
-export const getAll_init = (store) => {
+export const _getAll_init = (store) => {
     let type = null;
     switch (store) {
         case 'card':
@@ -165,7 +189,7 @@ export const getAll_init = (store) => {
 
 
 //  Update  ---------------------------------------------------------------  Update  //
-export const update_success = (store, data) => {
+export const _update = (store, data) => {
     let type = null;
     switch (store) {
         case 'card':
@@ -207,7 +231,7 @@ export const add_async = (store, token, viewModel) => {
         }
         axios.patch('/' + store + '/' + viewModel.id + '.json?auth=' + token, model)
         .then(response => {
-            dispatch(add_success(store, viewModel));
+            dispatch(_add(store, viewModel));
         })
         .catch(error => {
             dispatch(failure(store, error));
@@ -223,12 +247,26 @@ export const addMany_async = (store, token, viewModels) => {
 }
 
 
+//  Add Tab  -------------------------------------------------------  Add Tab Async  //
+export const addCollectionTab_async = (collection, token, user, viewModel) => {
+    return dispatch => {
+        axios.patch('/user/' + user + '/' + collection + '/' + viewModel.id + '.json?auth=' + token, create.tabModel(viewModel))
+        .then(response => {
+            dispatch(_addCollectionTab(collection, viewModel));
+        })
+        .catch(error => {
+            dispatch(failure('user', error));
+        });
+    }
+}
+
+
 //  Delete  ---------------------------------------------------------  Delete Async  //
 export const delete_async = (store, token, viewModel) => {
     return dispatch => {
         axios.delete('/' + store + '/' + viewModel.id + '.json?auth=' + token)
         .then(response => {
-            dispatch(delete_success(store, viewModel));
+            dispatch(_delete(store, viewModel));
         })
         .catch(error => {
             dispatch(failure(store, error));
@@ -244,10 +282,24 @@ export const deleteMany_async = (store, token, viewModels) => {
 }
 
 
+//  Delete Tab  -------------------------------------------------  Delete Tab Async  //
+export const deleteCollectionTab_async = (collection, token, user, viewModel) => {
+    return dispatch => {
+        axios.delete('/user/' + user + '/' + collection + '/' + viewModel.id + '.json?auth=' + token)
+        .then(response => {
+            dispatch(_deleteCollectionTab(collection, viewModel));
+        })
+        .catch(error => {
+            dispatch(failure('user', error));
+        });
+    }
+}
+
+
 //  Get  ---------------------------------------------------------------  Get Async  //
 export const get_async = (store, token, id) => {
     return dispatch => {
-        dispatch(get_init(store));
+        dispatch(_get_init(store));
         axios.get('/' + store + '/' + id + '.json?auth=' + token)
         .then(response => {
             let model = {};
@@ -264,7 +316,7 @@ export const get_async = (store, token, id) => {
                 default:
                     break;
             }
-            dispatch(get_success(store, model));
+            dispatch(_get_success(store, model));
         })
         .catch(error => {
             dispatch(failure(store, error));
@@ -276,7 +328,7 @@ export const get_async = (store, token, id) => {
 //  Get All  -------------------------------------------------------  Get All Async  //
 export const getAll_async = (store, token, user) => {
     return dispatch => {
-        dispatch(getAll_init(store));
+        dispatch(_getAll_init(store));
         axios.get('/' + store + '.json?auth=' + token + '&orderBy="owner"&equalTo="' + user + '"')
         .then(response => {
             let models = {};
@@ -299,7 +351,7 @@ export const getAll_async = (store, token, user) => {
                 default:
                     break;
             }
-            dispatch(getAll_success(store, models));
+            dispatch(_getAll_success(store, models));
         })
         .catch(error => {
             dispatch(failure(store, error));
@@ -327,7 +379,7 @@ export const update_async = (store, token, viewModel) => {
         }
         axios.put('/' + store + '/' + viewModel.id + '.json?auth=' + token, model)
         .then(response => {
-            dispatch(update_success(store, viewModel));
+            dispatch(_update(store, viewModel));
         })
         .catch(error => {
             dispatch(failure(store, error));

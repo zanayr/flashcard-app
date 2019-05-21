@@ -22,11 +22,10 @@ const aside = (props) => {
                         primary: 'Front',
                         secondary: 'Back'
                     }}
-                    path={'/u/create'}
-                    page={props.page}/>
+                    path={'/u/create'}/>
             );
             break;
-        case asideTypes.CREATE_DECK:
+        case asideTypes.CREATE_COLLECTION:
             aside = (
                 <InspectAside
                     actions={props.actions}
@@ -35,8 +34,7 @@ const aside = (props) => {
                         primary: 'Title',
                         secondary: 'Details'
                     }}
-                    path={'/u/deck'}
-                    page={props.page}/>
+                    path={'/u/' + props.page}/>
             );
             break;
         case asideTypes.FILTER_TAG:
@@ -62,11 +60,10 @@ const aside = (props) => {
                         primary: 'Front',
                         secondary: 'Back'
                     }}
-                    path={'/u/create'}
-                    page={props.page}/>
+                    path={'/u/create'}/>
             );
             break;
-        case asideTypes.INSPECT_DECK:
+        case asideTypes.INSPECT_COLLECTION:
             aside = (
                 <InspectAside
                     actions={props.actions}
@@ -75,8 +72,7 @@ const aside = (props) => {
                         primary: 'Title',
                         secondary: 'Details'
                     }}
-                    path={'/u/deck'}
-                    page={props.page}/>
+                    path={'/u/' + props.page}/>
             );
             break;
         case asideTypes.NAVIGATION:

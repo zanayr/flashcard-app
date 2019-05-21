@@ -25,8 +25,10 @@ export {
 
 export {
     add_async,
+    addCollectionTab_async,
     addMany_async,
     delete_async,
+    deleteCollectionTab_async,
     deleteMany_async,
     get_async,
     getAll_async,

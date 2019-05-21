@@ -392,7 +392,7 @@ class Collections extends Component {
         this._openInspectAside({
             confirm: () => this._addManyCollections([this.state.collection[collection.id]]),
             collection: collection,
-            type: asideTypes.CREATE_DECK
+            type: asideTypes.CREATE_COLLECTION
         });
         this._clearSelected();
     }
@@ -423,7 +423,7 @@ class Collections extends Component {
         this._openInspectAside({
             confirm: this._updateCollection,
             collection: collection,
-            type: asideTypes.INSPECT_DECK
+            type: asideTypes.INSPECT_COLLECTION
         });
         this._clearQuick('s');
     }
@@ -475,7 +475,7 @@ class Collections extends Component {
         } else {
             selected = selected.concat(collection);
         }
-        if (this.state.aside.state === asideTypes.CREATE_DECK || this.state.aside.state === asideTypes.INSPECT_DECK) {
+        if (this.state.aside.state === asideTypes.CREATE_COLLECTION || this.state.aside.state === asideTypes.INSPECT_COLLECTION) {
             this.handle_onAsideClose();
         }
         this._setSelected(selected);
@@ -497,10 +497,7 @@ class Collections extends Component {
     _deleteTab (tab) {
         let tabs = {...this.state.tab};
         delete tabs[tab.id];
-        // this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
-        //     ...this.state.deck,
-        //     tab: tabs
-        // });
+        this.props.deleteCollectionTab_async(this.props.match.params.collection, this.props.select_authToken, this.props.select_authUser, tab);
         this._setTab(tabs);
         if (this.state.current.id === tab.id) {
             this._setCurrent({
@@ -556,10 +553,10 @@ class Collections extends Component {
         const originalData = this.state.aside.data;
         let data;
         switch (this.state.aside.state) {
-            case asideTypes.CREATE_DECK:
+            case asideTypes.CREATE_COLLECTION:
                 this._removeManyCollections([this.state.collection[this.state.aside.data.item.id]]);
                 break;
-            case asideTypes.INSPECT_DECK:
+            case asideTypes.INSPECT_COLLECTION:
                 data = this.state.collection[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
                     this._setManyCollections([originalData.item]);
@@ -574,7 +571,7 @@ class Collections extends Component {
         const originalData = this.state.aside.data;
         let data;
         switch (this.state.aside.state) {
-            case asideTypes.CREATE_DECK:
+            case asideTypes.CREATE_COLLECTION:
                 data = this.state.collection[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
                     this._addManyCollections([data]);
@@ -582,7 +579,7 @@ class Collections extends Component {
                     this._removeManyCollections([data]);
                 }
                 break;
-            case asideTypes.INSPECT_DECK:
+            case asideTypes.INSPECT_COLLECTION:
                 data = this.state.collection[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
                     this.props.update_async(this.props.match.params.collection, this.props.select_authToken, data);
@@ -731,7 +728,7 @@ class Collections extends Component {
     handle_onTabCreate = (tab) => {
         const tabs = {...this.state.tab};
         tabs[tab.id] = tab;
-        this.props.patchTab_async(this.props.select_authToken, this.props.select_authUser, tab);
+        this.props.addCollectionTab_async(this.props.match.params.collection, this.props.select_authToken, this.props.select_authUser, tab);
         this._setTab(tabs);
         this._setCurrent(tab);
         this._setMainState('LIST_VIEW');
@@ -800,6 +797,7 @@ class Collections extends Component {
                 </main>
                 <Aside
                     actions={this.state.aside.actions}
+                    page={this.props.match.params.collection}
                     data={this.state.aside.data}
                     state={this.state.aside.state}/>
             </Aux>
@@ -817,10 +815,11 @@ const mapStateToProps = (state, ownProps) => {
 }
 const mapDispatchToProps = dispatch => {
     return {
+        addCollectionTab_async: (collection, token, user, model) => dispatch(actions.addCollectionTab_async(collection, token, user, model)),
         addMany_async: (store, token, models) => dispatch(actions.addMany_async(store, token, models)),
         delete_async: (store, token, model) => dispatch(actions.delete_async(store, token, model)),
-        update_async: (store, token, model) => dispatch(actions.update_async(store, token, model)),
-        patchTab_async: (token, user, data) => dispatch(actions.patchTab_async(token, user, data))
+        deleteCollectionTab_async: (collection, token, user, model) => dispatch(actions.deleteCollectionTab_async(collection, token, user, model)),
+        update_async: (store, token, model) => dispatch(actions.update_async(store, token, model))
     };
 };
 
