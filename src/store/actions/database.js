@@ -9,6 +9,9 @@ export const failure = (store, error) => {
         case 'card':
             type = actionTypes.CARD_FAILURE;
             break;
+        case 'class':
+            type = actionTypes.CLASS_FAILURE;
+            break;
         case 'deck':
             type = actionTypes.DECK_FAILURE;
             break;
@@ -33,6 +36,9 @@ export const _add = (store, data) => {
         case 'card':
             type = actionTypes.ADD_CARD;
             break;
+        case 'class':
+            type = actionTypes.ADD_CLASS;
+            break;
         case 'deck':
             type = actionTypes.ADD_DECK;
             break;
@@ -54,6 +60,9 @@ export const _add = (store, data) => {
 export const _addTab = (store, collection, data) => {
     let type = null;
     switch (store) {
+        case 'class':
+            type = actionTypes.ADD_CLASS_TAB;
+            break;
         case 'deck':
             type = actionTypes.ADD_DECK_TAB;
             break;
@@ -81,6 +90,9 @@ export const _delete = (store, data) => {
         case 'card':
             type = actionTypes.DELETE_CARD;
             break;
+        case 'class':
+            type = actionTypes.DELETE_CLASS;
+            break;
         case 'deck':
             type = actionTypes.DELETE_DECK;
             break;
@@ -102,6 +114,9 @@ export const _delete = (store, data) => {
 export const _deleteTab = (store, collection, data) => {
     let type = null;
     switch (store) {
+        case 'class':
+            type = actionTypes.DELETE_CLASS_TAB;
+            break;
         case 'deck':
             type = actionTypes.DELETE_DECK_TAB;
             break;
@@ -174,6 +189,9 @@ export const _getAll_success = (store, data) => {
         case 'card':
             type = actionTypes.GET_ALL_CARDS_SUCCESS;
             break;
+        case 'class':
+            type = actionTypes.GET_ALL_CLASSES_SUCCESS;
+            break;
         case 'deck':
             type = actionTypes.GET_ALL_DECKS_SUCCESS;
             break;
@@ -190,10 +208,14 @@ export const _getAll_success = (store, data) => {
     };
 };
 export const _getAll_init = (store) => {
+    console.log(store);
     let type = null;
     switch (store) {
         case 'card':
             type = actionTypes.GET_ALL_CARDS_INIT;
+            break;
+        case 'class':
+            type = actionTypes.GET_ALL_CLASSES_INIT;
             break;
         case 'deck':
             type = actionTypes.GET_ALL_DECKS_INIT;
@@ -219,6 +241,9 @@ export const _update = (store, data) => {
         case 'card':
             type = actionTypes.UPDATE_CARD;
             break;
+        case 'class':
+            type = actionTypes.UPDATE_CLASS;
+            break;
         case 'deck':
             type = actionTypes.UPDATE_DECK;
             break;
@@ -239,6 +264,9 @@ export const _updateTag = (store, collection, data) => {
     switch (store) {
         case 'card':
             type = actionTypes.UPDATE_CARD_TAG;
+            break;
+        case 'class':
+            type = actionTypes.UPDATE_CLASS_TAG;
             break;
         case 'deck':
             type = actionTypes.UPDATE_DECK_TAG;
@@ -268,6 +296,9 @@ export const add_async = (store, token, viewModel) => {
             case 'card':
                 model = create.itemModel(viewModel);
                 break;
+            case 'class':
+                model = create.collectionModel(viewModel);
+                break;
             case 'deck':
                 model = create.collectionModel(viewModel);
                 break;
@@ -277,6 +308,7 @@ export const add_async = (store, token, viewModel) => {
             default:
                 break;
         }
+        console.log(store, model);
         axios.patch('/' + store + '/' + viewModel.id + '.json?auth=' + token, model)
         .then(response => {
             dispatch(_add(store, viewModel));
@@ -387,6 +419,11 @@ export const getAll_async = (store, token, user) => {
                         models[id] = create.itemViewModel(id, response.data[id]);
                     });
                     break;
+                case 'class':
+                        Object.keys(response.data).forEach(id => {
+                            models[id] = create.collectionViewModel(id, response.data[id]);
+                        });
+                        break;
                 case 'deck':
                     Object.keys(response.data).forEach(id => {
                         models[id] = create.collectionViewModel(id, response.data[id]);
@@ -416,6 +453,9 @@ export const update_async = (store, token, viewModel) => {
         switch (store) {
             case 'card':
                 model = create.itemModel(viewModel);
+                break;
+            case 'class':
+                model = create.collectionModel(viewModel);
                 break;
             case 'deck':
                 model = create.collectionModel(viewModel);

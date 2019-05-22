@@ -9,6 +9,10 @@ const navigationAside = (props) => {
         {
             path: '/logout',
             value: 'Sign Out'
+        },
+        {
+            path: '/u/load/class',
+            value: 'Classes'
         }
     ];
     switch (props.page) {

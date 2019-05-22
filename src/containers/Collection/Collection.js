@@ -56,8 +56,8 @@ class Collections extends Component {
 
     componentDidMount () {
         const collection = {};
-        Object.keys(this.props.select_collection).forEach(id => {
-            collection[id] = this.props.select_collection[id];
+        Object.keys(this.props.select_collections).forEach(id => {
+            collection[id] = this.props.select_collections[id];
         });
         this.setState(prev => ({
             ...prev,
@@ -180,6 +180,7 @@ class Collections extends Component {
     }
     _setManyCollections (collections) {
         const collection = this.state.collection;
+        console.log(collections);
         collections.forEach(coll => {
             collection[coll.id] = coll;
         });
@@ -354,40 +355,23 @@ class Collections extends Component {
             } else {
                 primary = 'Copy of ' + collection.primary.substr(0, 21) + '...';
             }
-            switch (this.props.match.params.collection) {
-                case 'deck':
-                    cloned.push(create.collectionViewModel(utility.createHashId(i), {
-                        ...collection,
-                        date: Date.now(),
-                        primary: primary
-                    }));
-                    break;
-                case 'class':
-                    break;
-                default:
-                    break;
-            }
+            cloned.push(create.collectionViewModel(utility.createHashId(i), {
+                ...collection,
+                date: Date.now(),
+                primary: primary
+            }));
         });
         this._addManyCollections_async(cloned);
         this._setManyCollections(cloned);
         this._clearSelected();
     }
     _createCollection () {
-        let collection;
-        switch (this.props.match.params.collection) {
-            case 'deck':
-                collection = create.collectionViewModel(utility.createHashId(0), {
-                    owner: this.props.select_authUser,
-                    primary: '',
-                    secondary: '',
-                    tag: []
-                });
-                break;
-            case 'class':
-                break;
-            default:
-                break;
-        }
+        const collection = create.collectionViewModel(utility.createHashId(0), {
+            owner: this.props.select_authUser,
+            primary: '',
+            secondary: '',
+            tag: []
+        });
         this._setManyCollections([collection]);
         this._openInspectAside({
             confirm: () => this._addManyCollections([this.state.collection[collection.id]]),
@@ -449,21 +433,13 @@ class Collections extends Component {
                 }
             });
         });
-        switch (this.props.match.params.collection) {
-            case 'deck':
-                merged = create.collectionViewModel(utility.createHashId(0), {
-                    group: group,
-                    member: member,
-                    owner: this.props.select_authUser,
-                    primary: response || 'New Merged ' + this.props.match.params.collection.charAt(0).toUpperCase() + this.props.match.params.collection.slice(1),
-                    tag: tag
-                });
-                break;
-            case 'class':
-                break;
-            default:
-                break;
-        }
+        merged = create.collectionViewModel(utility.createHashId(0), {
+            group: group,
+            member: member,
+            owner: this.props.select_authUser,
+            primary: response || 'New Merged ' + this.props.match.params.collection.charAt(0).toUpperCase() + this.props.match.params.collection.slice(1),
+            tag: tag
+        });
         this._addManyCollections_async([merged]);
         this._setManyCollections([merged]);
         this._clearSelected();
@@ -809,7 +785,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         select_authToken: select.authToken(state),
         select_authUser: select.authUser(state),
-        select_collection: select.collections(state, ownProps.match.params.collection),
+        select_collections: select.collections(state, ownProps.match.params.collection),
         select_user: select.user(state)
     }
 }

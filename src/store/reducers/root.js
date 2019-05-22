@@ -2,8 +2,8 @@ import {combineReducers} from 'redux'
 
 import authReducer, * as FromAuth from './auth';
 import cardReducer, * as FromCard from './card';
+import classReducer, * as FromClass from './class';
 import deckReducer, * as FromDeck from './deck';
-import collReducer, * as FromColl from './collection';
 import modalReducer, * as FromModal from './modal';
 import userReducer, * as FromUser from './user';
 
@@ -11,8 +11,8 @@ import userReducer, * as FromUser from './user';
 //  Store constants
 const AUTH = 'AUTH';
 const CARD = 'CARD';
+const CLASS = 'CLASS';
 const DECK = 'DECK';
-const COLL = 'COLL';
 const MODAL = 'MODAL';
 const USER = 'USER';
 
@@ -20,8 +20,8 @@ const USER = 'USER';
 const rootReducer = combineReducers({
     AUTH: authReducer,
     CARD: cardReducer,
+    CLASS: classReducer,
     DECK: deckReducer,
-    COLL: collReducer,
     MODAL: modalReducer,
     USER: userReducer
 });
@@ -61,9 +61,28 @@ export function decksIsLoading (store) {
     return FromDeck.selectDecksIsLoading(store[DECK]);
 }
 
+
+//  Is Loading  ------------------------------------------------  Is Loading Selector  //
+export function isLoading (store, collection) {
+    switch (collection) {
+        case 'card':
+            return FromCard.selectCardsIsLoading(store[CARD]);
+        case 'class':
+            return FromClass.selectClassesIsLoading(store[CLASS]);
+        case 'deck':
+            return FromDeck.selectDecksIsLoading(store[DECK]);
+        case 'user':
+            return FromUser.selectUserIsLoading(store[USER]);
+            break;
+        default:
+            break;
+    }
+}
 //  Collection  ------------------------------------------------ Collection Selectors  //
 export function collections (store, collection) {
     switch (collection) {
+        case 'class':
+            return FromClass.selectClasses(store[CLASS]);
         case 'deck':
             return FromDeck.selectDecks(store[DECK]);
         case 'class':
