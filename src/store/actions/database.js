@@ -330,6 +330,7 @@ export const add_async = (store, token, viewModel) => {
     }
 }
 export const addMany_async = (store, token, viewModels) => {
+    console.log(store, viewModels);
     return dispatch => {
         viewModels.forEach(viewModel => {
             dispatch(add_async(store, token, viewModel));

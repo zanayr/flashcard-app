@@ -23,7 +23,7 @@ class In extends Component {
     render() {
         let content = (<Throbber/>);
         if (!this.props.select_decksIsLoading && !this.props.select_cardsIsLoading && !this.props.select_userIsLoading) {
-            content = <Redirect to='/u/deck'/>;
+            content = <Redirect to='/0/deck'/>;
         }
 
         return (

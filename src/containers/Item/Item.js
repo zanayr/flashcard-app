@@ -20,61 +20,66 @@ import TabForm from '../../components/form/Tab/TabForm';
 import Throbber from '../../components/ui/Throbber/Throbber';
 import withUser from '../../hoc/withUser/withUser';
 
-import styles from './Inspector.module.css';
+import styles from './Item.module.css';
 
-class Inspector extends Component {
+class Item extends Component {
     state = {
         aside: {
             actions: {},
             data: {},
             state: asideTypes.CLOSED
         },
+        assigned: [],
         current: {
             group: [],
             id: 'all',
             tag: []
         },
         items: {},
-        collection: {},
         filter: {
             group: [],
             tag: []
         },
-        group: this.props.select_user.group,
+        group: [],
         main: 'LOADING',
         quick: [],
         selected: [],
         sort: sortTypes.DATE_ASC,
-        tab: this.props.select_collection.tab,
+        tab: {},
         tag: [],
         undo: {
             action: null,
             data: {}
         },
     }
-    page = this.props.match.params.collection === 'deck' ? 'card' : 'student';
     undoTimeout = null;
 
     componentDidMount () {
         const items = {};
-        const collection = {...this.props.select_collection};
         let $new = false;
+        let $unassigned = false;
         let tags = this.props.select_user.tag.slice();
-        Object.keys(this.props.select_items).filter(id => collection.member.includes(id)).forEach(id => {
+        Object.keys(this.props.select_items).forEach(id => {
             if (this.props.select_items[id].tag.includes('$new')) {
                 $new = true;
+            }
+            if (this.props.select_items[id].tag.includes('$unassigned')) {
+                $unassigned = true;
             }
             items[id] = this.props.select_items[id];
         });
         if ($new) {
             tags.push('$new');
         }
-
+        if ($unassigned) {
+            tags.push('$unassigned');
+        }
         this.setState(prev => ({
             ...prev,
+            group: this.props.select_user.group.slice(),
             items: items,
-            collection: collection,
             main: 'LIST_VIEW',
+            tab: this.props.select_user[this.props.match.params.item] || {},
             tag: tags
         }));
     }
@@ -140,19 +145,6 @@ class Inspector extends Component {
         }
     }
 
-    //  Collection  ------------------------------------------------  Collection SS  //
-    // _setCollection (collection) {
-    //     const members = Object.keys(collection).map(id => {return id});
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: collection,
-    //         deck: {
-    //             ...prev.deck,
-    //             member: members
-    //         }
-    //     }));
-    // }
-
     //  Current  ------------------------------------------------------  Current SS  //
     _setCurrent (tab) {
         this.setState(prev => ({
@@ -187,7 +179,6 @@ class Inspector extends Component {
     //  Items  ----------------------------------------------------------  Items SS  //
     _removeManyItems (items) {
         const i = this.state.items;
-        const nonmembers = items.map(item => {return item.id});
         items.forEach(item => {
             delete i[item.id];
         });
@@ -195,33 +186,27 @@ class Inspector extends Component {
             ...prev,
             items: i
         }));
-        this.setState(prev => ({
-            ...prev,
-            collection: {
-                ...prev.collection,
-                member: prev.collection.member.filter(id => !nonmembers.includes(id))
-            }
-        }));
     }
     _setManyItems (items) {
         const i = this.state.items;
         items.forEach(item => {
             i[item.id] = item;
         });
+        console.log(items);
         this.setState(prev => ({
             ...prev,
             items: i
         }));
     }
-    _setManyMembers (items) {
-        this.setState(prev => ({
-            ...prev,
-            collection: {
-                ...prev.collection,
-                member: prev.collection.member.concat(items.map(item => {return item.id}))
-            }
-        }));
-    }
+    // _setManyMembers (items) {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         collection: {
+    //             ...prev.collection,
+    //             member: prev.collection.member.concat(items.map(item => {return item.id}))
+    //         }
+    //     }));
+    // }
     _setItemValue (target, value) {
         const id = this.state.aside.data.item.id;
         this.setState(prev => ({
@@ -294,10 +279,10 @@ class Inspector extends Component {
     _setTab (tabs) {
         this.setState(prev => ({
             ...prev,
-            collection: {
-                ...prev.collection,
-                tab: tabs
-            },
+            // collection: {
+            //     ...prev.collection,
+            //     tab: tabs
+            // },
             tab: tabs
         }));
     }
@@ -340,6 +325,30 @@ class Inspector extends Component {
 
     //  PRIVATE METHODS  =========================================  PRIVATE METHODS  //
     //  Aside  ----------------------------------------------------------  Aside PM  //
+    _openAssignAside (data) {
+        const collections = this.props.select_collections;
+        const all = [];
+        const member = [];
+        Object.keys(collections).map(id => {
+            all.push({
+                id: id,
+                primary: collections[id].primary
+            });
+            if (data.item.member.includes(id)) {
+                member.push(id);
+            }
+        });
+        this._toggleAside(data.type);
+        this._setAside({
+            toggle: (collection) => this.handle_onAsideAssignToggle(data, collection)
+        }, {
+            all: all,
+            confirm: data.confirm,
+            item: data.item,
+            member: member,
+            selected: this.state.assigned
+        });
+    }
     _openFilterAside (filter) {
         this._setAside({
             toggle: (tag) => this.handle_onAsideFilterToggle(filter, tag)
@@ -359,7 +368,7 @@ class Inspector extends Component {
         }, {
             group: this.state.group,
             item: data.item,
-            id: this.state.collection.id,
+            // id: this.state.collection.id,
             tag: this.state.tag
         });
     }
@@ -367,18 +376,17 @@ class Inspector extends Component {
     //  Items  ----------------------------------------------------------  Items PM  //
     _addManyItems = (items) => {
         this._addManyItems_async(items);
-        this._setManyMembers(items);
+        // this._setManyMembers(items);
         this._clearAndCloseAside();
     }
     _addManyItems_async (items) {
-        console.log(this.page);
-        this.props.addMany_async(this.page, this.props.select_authToken, items);
-        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
-            ...this.state.collection,
-            member: this.state.collection.member.concat(items.map(item => {
-                return item.id;
-            }))
-        });
+        this.props.addMany_async(this.props.match.params.item, this.props.select_authToken, items);
+        // this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+        //     ...this.state.collection,
+        //     member: this.state.collection.member.concat(items.map(item => {
+        //         return item.id;
+        //     }))
+        // });
     }
     _checkItem (item) {
         let valid = true;
@@ -416,12 +424,12 @@ class Inspector extends Component {
         });
         this._addManyItems_async(cloned);
         this._setManyItems(cloned);
-        this._setManyMembers(cloned);
+        // this._setManyMembers(cloned);
         this._clearSelected();
     }
     _createItem () {
         const item = create.itemViewModel(utility.createHashId(0), {
-            member: [this.state.collection.id],
+            // member: [this.state.collection.id],
             owner: this.props.select_authUser,
             primary: '',
             secondary: '',
@@ -439,18 +447,18 @@ class Inspector extends Component {
     _deleteManyItems () {
         const i = this.state.items;
         const selected = this.state.selected.slice();
-        const nonmembers = [];
+        // const nonmembers = [];
         selected.forEach(item => {
-            nonmembers.push(item.id);
+            // nonmembers.push(item.id);
             delete i[item.id];
-            this.props.delete_async(this.page, this.props.select_authToken, item);
+            this.props.delete_async(this.props.match.params.item, this.props.select_authToken, item);
         });
-        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
-            ...this.state.collection,
-            member: this.state.collection.member.filter(id => !nonmembers.includes(id))
-        });
+        // this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+        //     ...this.state.collection,
+        //     member: this.state.collection.member.filter(id => !nonmembers.includes(id))
+        // });
         this._setManyItems(i);
-        this._setManyMembers(this.state.collection.member.filter(id => !nonmembers.includes(id)));
+        // this._setManyMembers(this.state.collection.member.filter(id => !nonmembers.includes(id)));
         this._setUndo({
             action: this._undoManyItemsDeleted,
             data: selected
@@ -458,11 +466,11 @@ class Inspector extends Component {
         this._clearSelected();
     }
     _deleteItem = (item) => {
-        this.props.delete_async(this.page, this.props.select_authToken, item);
-        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
-            ...this.state.collection,
-            member: this.state.collection.member.filter(id => id !== item.id)
-        });
+        this.props.delete_async(this.props.match.params.item, this.props.select_authToken, item);
+        // this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+        //     ...this.state.collection,
+        //     member: this.state.collection.member.filter(id => id !== item.id)
+        // });
         this._removeManyItems([item]);
         this._setUndo({
             action: this._undoManyItemsDeleted,
@@ -478,22 +486,30 @@ class Inspector extends Component {
         });
         this._clearQuick('s');
     }
-    _removeItem = (item) => {
-        this.props.update_async(this.page, this.props.select_authToken, {
-            ...item,
-            member: item.member.filter(id => id !== this.state.collection.id)
+    _assignItem = (item) => {
+        this._openAssignAside({
+            confirm: this._updateItem,
+            item: item,
+            type: asideTypes.ASSIGN_ITEM
         });
-        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
-            ...this.state.collection,
-            member: this.state.collection.member.filter(id => id !== item.id)
-        });
-        this._removeManyItems([item]);
-        this._setUndo({
-            action: this._undoManyItemsRemoved,
-            data: [item]
-        });
-        this._clearSelected();
+        this._clearQuick('s');
     }
+    // _removeItem = (item) => {
+    //     this.props.update_async(this.page, this.props.select_authToken, {
+    //         ...item,
+    //         member: item.member.filter(id => id !== this.state.collection.id)
+    //     });
+    //     this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+    //         ...this.state.collection,
+    //         member: this.state.collection.member.filter(id => id !== item.id)
+    //     });
+    //     this._removeManyItems([item]);
+    //     this._setUndo({
+    //         action: this._undoManyItemsRemoved,
+    //         data: [item]
+    //     });
+    //     this._clearSelected();
+    // }
     _selectItem = (item) => {
         let selected = this.state.selected.slice();
         if (selected.find(i => i.id === item.id)) {
@@ -511,7 +527,7 @@ class Inspector extends Component {
         const item = this.state.items[original.id];
         if (JSON.stringify(item) !== JSON.stringify(original)) {
             console.log(item);
-            this.props.update_async(this.page, this.props.select_authToken, item);
+            this.props.update_async(this.props.match.params.item, this.props.select_authToken, item);
             this._setUndo({
                 action: this._undoItemUpdated,
                 data: original
@@ -524,11 +540,10 @@ class Inspector extends Component {
     _deleteTab (tab) {
         let tabs = {...this.state.tab};
         delete tabs[tab.id];
-        console.log(this.state.collection);
-        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
-            ...this.state.collection,
-            tab: tabs
-        });
+        // this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+        //     ...this.state.collection,
+        //     tab: tabs
+        // });
         this._setTab(tabs);
         if (this.state.current.id === tab.id) {
             this._setCurrent({
@@ -555,25 +570,25 @@ class Inspector extends Component {
         const items = this.state.undo.data.slice();
         this._addManyItems_async(items);
         this._setManyItems(items);
-        this._setManyMembers(items);
+        // this._setManyMembers(items);
     }
     _undoManyItemsRemoved = () => {
         const items = this.state.undo.data.slice();
         const members = [];
         items.forEach(item => {
             members.push(item.id);
-            this.props.update_async(this.page, this.props.select_authToken, item);
+            this.props.update_async(this.props.match.params.item, this.props.select_authToken, item);
         });
-        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
-            ...this.state.collection,
-            member: this.state.collection.member.concat(members)
-        });
+        // this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+        //     ...this.state.collection,
+        //     member: this.state.collection.member.concat(members)
+        // });
         this._setManyItems(items);
-        this._setManyMembers(items);
+        // this._setManyMembers(items);
     }
     _undoItemUpdated = () => {
         const item = this.state.undo.data;
-        this.props.update_async(this.page, this.props.select_authToken, item);
+        this.props.update_async(this.props.match.params.item, this.props.select_authToken, item);
         this._setManyItems([item]);
     }
     
@@ -628,7 +643,7 @@ class Inspector extends Component {
             case asideTypes.INSPECT_ITEM:
                 data = this.state.items[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkItem(data)) {
-                    this.props.update_async(this.page, this.props.select_authToken, data);
+                    this.props.update_async(this.props.match.params.item, this.props.select_authToken, data);
                     this._setUndo({
                         action: this._undoItemUpdated,
                         data: originalData.item
@@ -716,7 +731,7 @@ class Inspector extends Component {
                 this._inspectItem(data);
                 break;
             case 2:
-                this._removeItem(data);
+                this._assignItem(data);
                 break;
             case 3:
                 this._deleteItem(data);
@@ -768,17 +783,17 @@ class Inspector extends Component {
                 break;
         }
     }
-    handle_onTabCreate = (tab) => {
-        const tabs = {...this.state.collection.tab};
-        tabs[tab.id] = tab;
-        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
-            ...this.state.collection,
-            tab: tabs
-        });
-        this._setTab(tabs);
-        this._setCurrent(tab);
-        this._setMainState('LIST_VIEW');
-    }
+    // handle_onTabCreate = (tab) => {
+    //     const tabs = {...this.state.collection.tab};
+    //     tabs[tab.id] = tab;
+    //     // this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
+    //     //     ...this.state.collection,
+    //     //     tab: tabs
+    //     // });
+    //     this._setTab(tabs);
+    //     this._setCurrent(tab);
+    //     this._setMainState('LIST_VIEW');
+    // }
 
     //  Tag  -----------------------------------------------------------------  Tag  //
     handle_onTagCreate = (category, tag) => {
@@ -797,7 +812,7 @@ class Inspector extends Component {
                         filters={this.state.filter}
                         current={this.state.current}
                         selected={this.state.selected}
-                        aux={'remove'}/>
+                        aux={'assign'}/>
                 );
                 break;
             case 'ADD_TAB':
@@ -856,8 +871,8 @@ const mapStateToProps = (state, ownProps) => {
     return {
         select_authToken: select.authToken(state),
         select_authUser: select.authUser(state),
-        select_collection: select.collection(state, ownProps.match.params.collection, ownProps.match.params.id),
-        select_items: select.items(state, ownProps.match.params.collection === 'deck' ? 'card' : 'student'),
+        select_items: select.items(state, ownProps.match.params.item),
+        select_collections: select.collections(state, ownProps.match.params.item === 'card' ? 'deck' : 'class'),
         select_user: select.user(state)
     };
 };
@@ -869,4 +884,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Inspector);
+export default connect(mapStateToProps, mapDispatchToProps)(Item);

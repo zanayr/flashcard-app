@@ -11,20 +11,24 @@ const navigationAside = (props) => {
             value: 'Sign Out'
         },
         {
-            path: '/u/load/class',
+            path: '/load/class',
             value: 'Classes'
+        },
+        {
+            path: '/load/user',
+            value: 'Users'
         }
     ];
     switch (props.page) {
         case 'deck':
             navigationLinks.unshift({
-                path: '/u/card',
+                path: '/load/card',
                 value: 'Cards'
             });
             break;
         case 'card':
             navigationLinks.unshift({
-                path: '/u/deck',
+                path: '/load/deck',
                 value: 'Decks'
             });
             break;

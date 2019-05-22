@@ -25,6 +25,25 @@
     padding: 8px;
 }
 
+.AssignAside > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.AssignButton {
+    background-color: lightcoral;
+    width: 100%;
+    height: 28px;
+    padding: 4px;
+}
+.AssignButton.Active {
+    background-color: coral;
+}
+.AssignButton.Static {
+    background-color: gray;
+}
+
 .FilterAside > div {
     display: flex;
     flex-direction: column;

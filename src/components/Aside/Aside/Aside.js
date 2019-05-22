@@ -2,15 +2,50 @@ import React from 'react';
 
 import * as asideTypes from './asideTypes';
 
-import NavigationAiside from '../Nav/NavAside';
+import AssignAside from '../Assign/AssignAside';
 import FilterAside from '../Filter/FilterAside';
 import InspectAside from '../Inspect/InspectAside';
+import NavigationAiside from '../Nav/NavAside';
 
 const aside = (props) => {
     let aside = null;
     switch (props.state) {
         case asideTypes.CLOSED:
             aside = (null);
+            break;
+        case asideTypes.ASSIGN_ITEM:
+            console.log('here');
+            aside = (
+                <AssignAside
+                    actions={props.actions}
+                    data={props.data}/>
+            );
+            break;
+        case asideTypes.CREATE_CARD:
+        case asideTypes.INSPECT_CARD:
+            aside = (
+                <InspectAside
+                    actions={props.actions}
+                    data={{
+                        ...props.data,
+                        primary: 'Front',
+                        secondary: 'Back',
+                    }}
+                    path={'/create'}/>
+            );
+            break;
+        case asideTypes.CREATE_USER:
+        case asideTypes.INSPECT_USER:
+            aside = (
+                <InspectAside
+                    actions={props.actions}
+                    data={{
+                        ...props.data,
+                        primary: 'First',
+                        secondary: 'Last',
+                    }}
+                    path={''}/>
+            );
             break;
         case asideTypes.CREATE_COLLECTION:
         case asideTypes.INSPECT_COLLECTION:
@@ -22,7 +57,7 @@ const aside = (props) => {
                         primary: 'Title',
                         secondary: 'Details'
                     }}
-                    path={'/u/' + props.page}/>
+                    path={'/0/' + props.page}/>
             );
             break;
         case asideTypes.CREATE_ITEM:
@@ -35,7 +70,7 @@ const aside = (props) => {
                         primary: props.page === 'deck' ? 'Front' : 'First',
                         secondary: props.page === 'deck' ? 'Back' : 'Last',
                     }}
-                    path={props.page === 'deck' ? '/u/create' : ''}/>
+                    path={props.page === 'deck' ? '/create' : ''}/>
             );
             break;
         case asideTypes.FILTER_TAG:

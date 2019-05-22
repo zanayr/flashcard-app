@@ -45,15 +45,14 @@ class List2 extends Component {
             let isSelected = typeof this.props.selected.find(i => i.id === item.id) === 'object';
             let isActive = isSelected && this.props.selected.length === 1;
             let contextPosition = 1;
-            if (this.props.remove) {
+            if (this.props.aux) {
                 removeContext = (
                     <ContextAction2
                         action={() => this.props.action(2, item)}
                         active={isActive}
-                        destructive
-                        key={'remove'}
+                        key={'aux'}
                         position={1}>
-                        Remove
+                        {this.props.aux.charAt(0).toUpperCase() + this.props.aux.slice(1).toLowerCase()}
                     </ContextAction2>
                 );
                 contextPosition++;
