@@ -8,6 +8,7 @@ import InspectAside from '../Inspect/InspectAside';
 import NavigationAiside from '../Nav/NavAside';
 
 const aside = (props) => {
+    console.log(props);
     let aside = null;
     switch (props.state) {
         case asideTypes.CLOSED:
@@ -66,10 +67,10 @@ const aside = (props) => {
                     actions={props.actions}
                     data={{
                         ...props.data,
-                        primary: props.page === 'deck' ? 'Front' : 'First',
-                        secondary: props.page === 'deck' ? 'Back' : 'Last',
+                        primary: props.page !== 'student' ? 'Front' : 'First',
+                        secondary: props.page !== 'student' ? 'Back' : 'Last',
                     }}
-                    path={props.page === 'deck' ? '/create' : ''}/>
+                    path={props.page !== 'student' ? '/create' : ''}/>
             );
             break;
         case asideTypes.FILTER_TAG:

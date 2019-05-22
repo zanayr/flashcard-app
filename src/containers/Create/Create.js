@@ -66,10 +66,10 @@ class Create extends Component {
             ...prev,
             cards: prev.cards.filter(c => c.id !== card.id)
         }));
-        this.props.delete_async('card', this.props.select_token, card);
-        if (typeof this.props.location.state.id !== undefined) {
+        this.props.delete_async('card', this.props.select_authToken, card);
+        if (this.props.location.state.id) {
             let deck = this.props.select_deck;
-            this.props.update_async('deck', this.props.select_token, {
+            this.props.update_async('deck', this.props.select_authToken, {
                 ...deck,
                 member: deck.member.filter(id => id !== card.id)
             });
@@ -89,10 +89,10 @@ class Create extends Component {
     //  Cards  --------------------------------------------------------------  Cards //
     handle_onCardCreate = (card) => {
         this._addCard(card);
-        this.props.add_async('card', this.props.select_token, card);
-        if (typeof this.props.location.state.id !== undefined) {
+        this.props.add_async('card', this.props.select_authToken, card);
+        if (this.props.location.state.id) {
             let deck = this.props.select_deck;
-            this.props.update_async('deck', this.props.select_token, {
+            this.props.update_async('deck', this.props.select_authToken, {
                 ...deck,
                 member: deck.member.concat(card.id)
             });

@@ -76,11 +76,19 @@ class InspectAside extends Component {
     render () {
         let link = null;
         if (this.props.path.length) {
-            link = (
-                <div>
-                    <BarLink path={this.props.path + '/' + this.props.data.id} state={{id: this.props.data.id}}>Add many</BarLink>
-                </div>
-            );
+            if (this.props.data.id) {
+                link = (
+                    <div>
+                        <BarLink path={this.props.path + '/' + this.props.data.id} state={{id: this.props.data.id}}>Add many</BarLink>
+                    </div>
+                );
+            } else {
+                link = (
+                    <div>
+                        <BarLink path={this.props.path} state={{}}>Add many</BarLink>
+                    </div>
+                );
+            }
         }
         return (
             <aside className={[styles.Aside].join(' ')}>

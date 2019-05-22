@@ -846,6 +846,7 @@ class Inspector extends Component {
                 <Aside
                     actions={this.state.aside.actions}
                     data={this.state.aside.data}
+                    page={this.page}
                     state={this.state.aside.state}/>
             </Aux>
         )
