@@ -1,12 +1,7 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-
-import * as actions from '../../store/actions/index';
-import * as select from '../../store/reducers/root';
 
 import ListItem from '../ui/ListItem/ListItem';
 import ContextAction2 from '../ui/button/Context/ContextAction2';
-import ContextConfirm from '../ui/button/Context/ContextConfirm';
 
 import listStyles from './List.module.css';
 
@@ -105,16 +100,4 @@ class List2 extends Component {
 }
 
 
-const mapStateToProps = state => {
-    return {
-        select_token: select.authToken(state)
-    }
-}
-const mapDispatchToProps = dispatch => {
-    return {
-        deleteDeck_async: (token, item) => dispatch(actions.deleteDeck_async(token, item)),
-    };
-};
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(List2);
+export default List2;

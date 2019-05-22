@@ -402,7 +402,7 @@ class Inspector extends Component {
             }
             switch (this.page) {
                 case 'card':
-                        cloned.push(create.cardViewModel(utility.createHashId(i), {
+                        cloned.push(create.itemViewModel(utility.createHashId(i), {
                             ...item,
                             date: Date.now(),
                             primary: primary
@@ -420,22 +420,14 @@ class Inspector extends Component {
         this._clearSelected();
     }
     _createItem () {
-        let item;
-        switch (this.props.match.params.collection) {
-            case 'card':
-                item = create.cardViewModel(utility.createHashId(0), {
-                    member: [this.state.collection.id],
-                    owner: this.props.select_authUser,
-                    primary: '',
-                    secondary: '',
-                    tag: []
-                });
-                break;
-            case 'student':
-                break;
-            default:
-                break;
-        }
+        const item = create.itemViewModel(utility.createHashId(0), {
+            member: [this.state.collection.id],
+            owner: this.props.select_authUser,
+            primary: '',
+            secondary: '',
+            tag: []
+        });
+        
         this._setManyItems([item]);
         this._openInspectAside({
             confirm: () => this._addManyItems([this.state.items[item.id]]),
@@ -531,6 +523,7 @@ class Inspector extends Component {
     _deleteTab (tab) {
         let tabs = {...this.state.tab};
         delete tabs[tab.id];
+        console.log(this.state.collection);
         this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
             ...this.state.collection,
             tab: tabs

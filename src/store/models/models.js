@@ -1,53 +1,98 @@
 
 //  MODELS  ---------------------------------------------------------------  MODELS  //
 //  Card  -------------------------------------------------------------  Card Model  //
-export function cardModel (card) {
+// export function cardModel (card) {
+//     const internal = /^\$[a-zA-Z0-9]*/;
+//     return {
+//         group: card.group,
+//         date: card.date,
+//         member: card.member,
+//         meta: card.meta,
+//         note: card.note,
+//         owner: card.owner,
+//         primary: card.primary,
+//         secondary: card.secondary,
+//         tag: card.tag.filter(tag => !tag.match(internal)),
+//     }
+// }
+//  Tab  ---------------------------------------------------------------  Tab Model  //
+//  Tab models are used for all "tab" database entites; these entites live inside of
+//  of collection entites.
+export function tabModel (model) {
     const internal = /^\$[a-zA-Z0-9]*/;
     return {
-        group: card.group,
-        date: card.date,
-        member: card.member,
-        meta: card.meta,
-        note: card.note,
-        owner: card.owner,
-        primary: card.primary,
-        secondary: card.secondary,
-        tag: card.tag.filter(tag => !tag.match(internal)),
+        date: model.date,
+        group: model.group.filter(tag => !tag.match(internal)),
+        name: model.name,
+        tag: model.tag.filter(tag => !tag.match(internal))
     }
 }
 
-//  Deck  -------------------------------------------------------------  Deck Model  //
-export function deckModel (deck) {
+//  Item  -------------------------------------------------------------  Item Model  //
+//  Item models are used for all "item" database entities; these inlcude cards,
+//  students, reports and sessions.
+export function itemModel (model) {
+    const internal = /^\$[a-zA-Z0-9]*/;
+    return {
+        date: model.date,
+        group: model.group.filter(tag => !tag.match(internal)),
+        member: model.member,
+        meta: model.meta,
+        note: model.note,
+        owner: model.owner,
+        primary: model.primary,
+        secondary: model.secondary,
+        tag: model.tag.filter(tag => !tag.match(internal)),
+    }
+}
+
+//  Collection  -------------------------------------------------  Collection Model  //
+//  Collection models are used for all "collection" database entities; these include
+//  decks and classes.
+export function collectionModel (model) {
+    const internal = /^\$[a-zA-Z0-9]*/;
     const tab = {};
-    if (deck.tab) {
-        Object.keys(deck.tab).map(id => {
-            tab[id] = tabModel(deck.tab[id]);
+    if (model.tab) {
+        Object.keys(model.tab).forEach(id => {
+            tab[id] = tabModel(model.tab[id]);
         });
     }
     return {
-        date: deck.date,
-        group: deck.group,
-        member: deck.member,
-        meta: deck.meta,
-        note: deck.note,
-        owner: deck.owner,
-        primary: deck.primary,
-        secondary: deck.secondary,
+        date: model.date,
+        group: model.group.filter(tag => !tag.match(internal)),
+        member: model.member,
+        meta: model.meta,
+        note: model.note,
+        owner: model.owner,
+        primary: model.primary,
+        secondary: model.secondary,
         tab: tab,
-        tag: deck.tag
+        tag: model.tag.filter(tag => !tag.match(internal))
     }
 }
 
-//  Tab  ---------------------------------------------------------------  Tab Model  //
-export function tabModel (tab) {
-    return {
-        collection: tab.collection,
-        date: tab.date,
-        group: tab.group,
-        name: tab.name,
-        tag: tab.tag
-    }
-}
+
+//  Deck  -------------------------------------------------------------  Deck Model  //
+// export function deckModel (deck) {
+//     const tab = {};
+//     if (deck.tab) {
+//         Object.keys(deck.tab).map(id => {
+//             tab[id] = tabModel(deck.tab[id]);
+//         });
+//     }
+//     return {
+//         date: deck.date,
+//         group: deck.group,
+//         member: deck.member,
+//         meta: deck.meta,
+//         note: deck.note,
+//         owner: deck.owner,
+//         primary: deck.primary,
+//         secondary: deck.secondary,
+//         tab: tab,
+//         tag: deck.tag
+//     }
+// }
 
 //  Student  -------------------------------------------------------  Student Model  //
 export function userModel (student) {
@@ -70,55 +115,19 @@ export function userModel (student) {
 
 
 //  VIEW MODELS  ------------------------------------------------------------  V.M.  //
-//  Card View Model  ---------------------------------------------------  Card V.M.  //
-export function cardViewModel (id, card) {
-    const date = card.date || Date.now();
-    const member = card.member || [];
-    let tag = card.tag || [];
-    if (!member.length) {
-        tag = tag.concat('$unassigned');
-    }
-    if (Date.now() - date < 604800000 && !tag.includes('$new')) {
-        tag = tag.concat('$new');
-    }
+//  Tab View Model  -----------------------------------------------------  Tab V.M.  //
+export function tabViewModel (id, tab) {
     return {
-        date: date,
-        group: card.group || [],
+        date: tab.date || Date.now(),
+        group: tab.group || [],
         id: id,
-        member: member,
-        meta: card.meta || {},
-        note: card.note || '',
-        owner: card.owner,
-        primary: card.primary || '',
-        secondary: card.secondary || '',
-        tag: tag,
+        name: tab.name,
+        tag: tab.tag || []
     }
 }
 
-//  Deck View Model  ---------------------------------------------------  Deck V.M.  //
-export function deckViewModel (id, deck) {
-    const tab = {};
-    if (deck.tab) {
-        Object.keys(deck.tab).map(id => {
-            tab[id] = tabViewModel(id, deck.tab[id]);
-        });
-    }
-    return {
-        date: deck.date || Date.now(),
-        group: deck.group || [],
-        id: id,
-        member: deck.member || [],
-        meta: deck.meta || {},
-        note: deck.note || '',
-        owner: deck.owner,
-        primary: deck.primary || '',
-        secondary: deck.secondary || '',
-        tab: tab,
-        tag: deck.tag || []
-    }
-}
-
-//  Flashcard View Model  ------------------------------------------  Flashcard V.M.  //
+//  Flashcard View Model  ------------------------------------------  FLASHCARD  //
+//  Flashcard view models require a card ID with which to correlate
 export function flashcardViewModel (card) {
     return {
         flagged: false,
@@ -133,55 +142,111 @@ export function flashcardViewModel (card) {
     }
 }
 
-//  Tab View Model  -----------------------------------------------------  Tab V.M.  //
-export function tabViewModel (id, tab) {
+//  Item View Model  ---------------------------------------------------  ITEM  //
+//  Item view models require an ID and owner (a collection); they have an array of
+//  member IDs (collection IDs)
+export function itemViewModel (id, model) {
+    const date = model.date || Date.now();
+    const member = model.member || [];
+    let tag = model.tag || [];
+    if (!member.length) {
+        tag = tag.concat('$unassigned');
+    }
+    if (Date.now() - date < 604800000 && !tag.includes('$new')) {
+        tag = tag.concat('$new');
+    }
     return {
-        active: tab.active || false,
-        collection: tab.collection,
-        date: tab.date || Date.now(),
-        delete: id === 'default' ? false : true,
-        group: tab.group || [],
+        date: date,
+        group: model.group || [],
         id: id,
-        name: tab.name,
-        tag: tab.tag || []
+        member: member,
+        meta: model.meta || {},
+        note: model.note || '',
+        owner: model.owner,
+        primary: model.primary || '',
+        secondary: model.secondary || '',
+        tag: tag,
     }
 }
 
-//  Student View Model  ---------------------------------------------  Student V.M.  //
-export function userViewModel (id, student) {
+
+//  Collectionm View Model  -------------------------------------------  COLLECTION  //
+//  Collection view models require an ID and an owner (a user); they have an array of
+//  member IDs (item IDs)
+export function collectionViewModel (id, model) {
     const tab = {};
-    const classTabs = {};
-    const deckTabs = {};
-    if (student.tab) {
-        Object.keys(student.tab).map(id => {
-            tab[id] = tabViewModel(id, student.tab[id]);
-        });
-    }
-    if (student.class) {
-        Object.keys(student.class).map(id => {
-            classTabs[id] = tabViewModel(id, student.class[id]);
-        });
-    }
-    if (student.deck) {
-        Object.keys(student.deck).map(id => {
-            deckTabs[id] = tabViewModel(id, student.deck[id]);
+    if (model.tab) {
+        Object.keys(model.tab).map(id => {
+            tab[id] = tabViewModel(id, model.tab[id]);
         });
     }
     return {
-        class: classTabs,
-        date: student.date || Date.now(),
-        deck: deckTabs,
-        group: student.group || [],
+        date: model.date || Date.now(),
+        group: model.group || [],
+        id: id,
+        member: model.member || [],
+        meta: model.meta || {},
+        note: model.note || '',
+        owner: model.owner,
+        primary: model.primary || '',
+        secondary: model.secondary || '',
+        tab: tab,
+        tag: model.tag || []
+    }
+}
+
+
+//  Deck View Model  --------------------------------------------------------  DECK  //
+// export function deckViewModel (id, deck) {
+//     const tab = {};
+//     if (deck.tab) {
+//         Object.keys(deck.tab).map(id => {
+//             tab[id] = tabViewModel(id, deck.tab[id]);
+//         });
+//     }
+//     return {
+//         date: deck.date || Date.now(),
+//         group: deck.group || [],
+//         id: id,
+//         member: deck.member || [],
+//         meta: deck.meta || {},
+//         note: deck.note || '',
+//         owner: deck.owner,
+//         primary: deck.primary || '',
+//         secondary: deck.secondary || '',
+//         tab: tab,
+//         tag: deck.tag || []
+//     }
+// }
+
+//  User View Model  ---------------------------------------------  User V.M.  //
+export function userViewModel (id, model) {
+    const classTab = {};
+    const deckTab = {};
+    if (model.class) {
+        Object.keys(model.class).map(id => {
+            classTab[id] = tabViewModel(id, model.class[id]);
+        });
+    }
+    if (model.deck) {
+        Object.keys(model.deck).map(id => {
+            deckTab[id] = tabViewModel(id, model.deck[id]);
+        });
+    }
+    return {
+        class: classTab,
+        date: model.date || Date.now(),
+        deck: deckTab,
+        group: model.group || [],
         id: id,
         info: {
-            email: student.info.email,
-            first: student.info.first,
-            last: student.info.last,
-            user: student.info.user || id
+            email: model.info.email,
+            first: model.info.first,
+            last: model.info.last,
+            user: model.info.user || id
         },
-        meta: student.meta || {},
-        privilage: 0,
-        tab: tab,
-        tag: student.tag || []
+        meta: model.meta || {},
+        privilage: model.privilage || 0,
+        tag: model.tag || []
     }
 }

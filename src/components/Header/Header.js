@@ -2,13 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
-import * as asideTypes from '../aside/Aside/asideTypes';
 import * as headerTypes from '../Header/types';
 import * as modalTypes from '../modal/Modal/modalTypes';
-import * as create from '../../store/models/models';
-import * as select from '../../store/reducers/root';
-import * as sortTypes from '../../utility/sortTypes';
-import * as utility from '../../utility/utility';
 
 import Aux from '../../hoc/Aux/Aux';
 import ReturnLink from '../ui/link/Return/ReturnLink';
@@ -50,28 +45,6 @@ class Header extends Component {
             'Merge', 'Cancel')
         .then(response => {
             this.props.actions.action(2, response);
-            // const tags = [];
-            // const groups = [];
-            // this.props.selected.forEach(item => {
-            //     item.tags.forEach(tag => {
-            //         if (!tags.includes(tag)) {
-            //             tags.push(tag);
-            //         }
-            //     });
-            //     item.groups.forEach(tag => {
-            //         if (!groups.includes(tag)) {
-            //             groups.push(tag);
-            //         }
-            //     });
-            // });
-            // let merged = create.deckViewModel(utility.createHashId(0), {
-            //     groups: groups,
-            //     owner: this.props.select_userId,
-            //     primary: response || 'New Merged Deck',
-            //     tags: tags
-            // });
-            // this.props.addDeck_async(this.props.select_token, merged);
-            // this.props.actions.create([merged]);
         }).catch(() => {}); // Eat user cancel
     };
 
@@ -168,20 +141,12 @@ class Header extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        select_token: select.authToken(state),
-        select_userId: select.authUser(state)
-    }
-}
+
 const mapDispatchToProps = dispatch => {
     return {
-        deleteManyDecks_async: (token, items) => dispatch(actions.deleteManyDecks_async(token, items)),
         displayModal_async: (type, message, confirm, cancel) => dispatch(actions.displayModal_async(type, message, confirm, cancel)),
-        addDeck_async: (token, item) => dispatch(actions.addDeck_async(token, item)),
-        addManyDecks_async: (token, items) => dispatch(actions.addManyDecks_async(token, items))
     };
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(null, mapDispatchToProps)(Header);

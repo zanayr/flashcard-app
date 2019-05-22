@@ -76,7 +76,7 @@ class CreateForm extends Component {
             allTags = this.state[category].concat(newTags);
             this._setTags(category, allTags);
             //  Send new tags to the redux store and database
-            this.props.putTag_async(category, this.props.select_token, this.props.select_user.id, allTags);
+            this.props.updateTag_async('user', category, this.props.select_authToken, this.props.select_authUser, allTags);
         }
     }
     _clearTag (category, tag) {
@@ -174,11 +174,11 @@ class CreateForm extends Component {
             }
 
             //  Build the new card
-            const card = create.cardViewModel(utility.createHashId(0), {
+            const card = create.itemViewModel(utility.createHashId(0), {
                 group: groups,
                 member: [this.props.deck],
                 notes: this.state.card.notes,
-                owner: this.props.select_user.id,
+                owner: this.props.select_authUser,
                 primary: this.state.card.primary,
                 secondary: this.state.card.secondary,
                 tag: tags
@@ -203,7 +203,7 @@ class CreateForm extends Component {
                 this._selectTag(category, tag);
             });
             this._setTags(category, allTags);
-            this.props.putTag_async(category, this.props.select_token, this.props.select_user.id, allTags);
+            this.props.updateTag_async('user', category, this.props.select_authToken, this.props.select_authUser, allTags);
         }
         
     }
@@ -337,13 +337,14 @@ class CreateForm extends Component {
 
 const mapStateToProps = state => {
     return {
-        select_token: select.authToken(state),
+        select_authToken: select.authToken(state),
+        select_authUser: select.authUser(state),
         select_user: select.user(state)
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
-        putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
+        updateTag_async: (store, collection, token, id, tag) => dispatch(actions.updateTag_async(store, collection, token, id, tag)),
     };
 };
 

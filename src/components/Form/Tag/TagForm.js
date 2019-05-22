@@ -134,17 +134,20 @@ class TagForm extends Component {
 }
 
 
-const mapStateToProps = state => {
-    return {
-        select_token: select.authToken(state),
-        select_user: select.user(state)
-    }
-}
-const mapDispatchToProps = dispatch => {
-    return {
-        putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
-    };
-};
+export default TagForm;
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(TagForm);
+// const mapStateToProps = state => {
+//     return {
+//         select_token: select.authToken(state),
+//         select_user: select.user(state)
+//     }
+// }
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         updateTag_async: (store, collection, token, id, tag) => dispatch(actions.updateTag_async(store, collection, token, id, tag)),
+//     };
+// };
+
+
+// export default connect(mapStateToProps, mapDispatchToProps)(TagForm);

@@ -356,7 +356,7 @@ class Collections extends Component {
             }
             switch (this.props.match.params.collection) {
                 case 'deck':
-                    cloned.push(create.deckViewModel(utility.createHashId(i), {
+                    cloned.push(create.collectionViewModel(utility.createHashId(i), {
                         ...collection,
                         date: Date.now(),
                         primary: primary
@@ -376,7 +376,7 @@ class Collections extends Component {
         let collection;
         switch (this.props.match.params.collection) {
             case 'deck':
-                collection = create.deckViewModel(utility.createHashId(0), {
+                collection = create.collectionViewModel(utility.createHashId(0), {
                     owner: this.props.select_authUser,
                     primary: '',
                     secondary: '',
@@ -451,7 +451,7 @@ class Collections extends Component {
         });
         switch (this.props.match.params.collection) {
             case 'deck':
-                merged = create.deckViewModel(utility.createHashId(0), {
+                merged = create.collectionViewModel(utility.createHashId(0), {
                     group: group,
                     member: member,
                     owner: this.props.select_authUser,
@@ -497,7 +497,7 @@ class Collections extends Component {
     _deleteTab (tab) {
         let tabs = {...this.state.tab};
         delete tabs[tab.id];
-        this.props.deleteCollectionTab_async(this.props.match.params.collection, this.props.select_authToken, this.props.select_authUser, tab);
+        this.props.deleteTab_async('user', this.props.match.params.collection, this.props.select_authToken, this.props.select_authUser, tab);
         this._setTab(tabs);
         if (this.state.current.id === tab.id) {
             this._setCurrent({
@@ -728,7 +728,7 @@ class Collections extends Component {
     handle_onTabCreate = (tab) => {
         const tabs = {...this.state.tab};
         tabs[tab.id] = tab;
-        this.props.addCollectionTab_async(this.props.match.params.collection, this.props.select_authToken, this.props.select_authUser, tab);
+        this.props.addTab_async('user', this.props.match.params.collection, this.props.select_authToken, this.props.select_authUser, tab);
         this._setTab(tabs);
         this._setCurrent(tab);
         this._setMainState('LIST_VIEW');
@@ -815,10 +815,10 @@ const mapStateToProps = (state, ownProps) => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        addCollectionTab_async: (collection, token, user, model) => dispatch(actions.addCollectionTab_async(collection, token, user, model)),
+        addTab_async: (store, collection, token, user, model) => dispatch(actions.addTab_async(store, collection, token, user, model)),
         addMany_async: (store, token, models) => dispatch(actions.addMany_async(store, token, models)),
         delete_async: (store, token, model) => dispatch(actions.delete_async(store, token, model)),
-        deleteCollectionTab_async: (collection, token, user, model) => dispatch(actions.deleteCollectionTab_async(collection, token, user, model)),
+        deleteTab_async: (store, collection, token, user, tab) => dispatch(actions.deleteTab_async(store, collection, token, user, tab)),
         update_async: (store, token, model) => dispatch(actions.update_async(store, token, model))
     };
 };

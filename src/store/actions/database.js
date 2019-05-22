@@ -51,9 +51,21 @@ export const _add = (store, data) => {
 
 
 //  Add Tab  -------------------------------------------------------  Add Tab Async  //
-export const _addCollectionTab = (collection, data) => {
+export const _addTab = (store, collection, data) => {
+    let type = null;
+    switch (store) {
+        case 'deck':
+            type = actionTypes.ADD_DECK_TAB;
+            break;
+        case 'user':
+            type = actionTypes.ADD_USER_TAB;
+            break;
+        default:
+            type = actionTypes.SUCCESS;
+            break;
+    }
     return {
-        type: actionTypes.ADD_COLLECTION_TAB,
+        type: type,
         payload: {
             collection: collection,
             tab: data
@@ -87,9 +99,21 @@ export const _delete = (store, data) => {
 
 
 //  Delete Tab  -------------------------------------------------  Delete Tab Async  //
-export const _deleteCollectionTab = (collection, data) => {
+export const _deleteTab = (store, collection, data) => {
+    let type = null;
+    switch (store) {
+        case 'deck':
+            type = actionTypes.DELETE_DECK_TAB;
+            break;
+        case 'user':
+            type = actionTypes.DELETE_USER_TAB;
+            break;
+        default:
+            type = actionTypes.SUCCESS;
+            break;
+    }
     return {
-        type: actionTypes.DELETE_COLLECTION_TAB,
+        type: type,
         payload: {
             collection: collection,
             tab: data
@@ -210,6 +234,30 @@ export const _update = (store, data) => {
         payload: data
     };
 }
+export const _updateTag = (store, collection, data) => {
+    let type = null;
+    switch (store) {
+        case 'card':
+            type = actionTypes.UPDATE_CARD_TAG;
+            break;
+        case 'deck':
+            type = actionTypes.UPDATE_DECK_TAG;
+            break;
+        case 'user':
+            type = actionTypes.UPDATE_USER_TAG;
+            break;
+        default:
+            type = actionTypes.SUCCESS;
+            break;
+    }
+    return {
+        type: type,
+        payload: {
+            collection: collection,
+            tag: data
+        }
+    };
+}
 
 
 //  Add  ---------------------------------------------------------------  Add Async  //
@@ -218,10 +266,10 @@ export const add_async = (store, token, viewModel) => {
         let model = {};
         switch (store) {
             case 'card':
-                model = create.cardModel(viewModel);
+                model = create.itemModel(viewModel);
                 break;
             case 'deck':
-                model = create.deckModel(viewModel);
+                model = create.collectionModel(viewModel);
                 break;
             case 'user':
                 model = create.userModel(viewModel);
@@ -248,14 +296,14 @@ export const addMany_async = (store, token, viewModels) => {
 
 
 //  Add Tab  -------------------------------------------------------  Add Tab Async  //
-export const addCollectionTab_async = (collection, token, user, viewModel) => {
+export const addTab_async = (store, collection, token, id, tab) => {
     return dispatch => {
-        axios.patch('/user/' + user + '/' + collection + '/' + viewModel.id + '.json?auth=' + token, create.tabModel(viewModel))
+        axios.patch('/' + store + '/' + id + '/' + collection + '/' + tab.id + '.json?auth=' + token, create.tabModel(tab))
         .then(response => {
-            dispatch(_addCollectionTab(collection, viewModel));
+            dispatch(_addTab(store, collection, tab));
         })
         .catch(error => {
-            dispatch(failure('user', error));
+            dispatch(failure(store, error));
         });
     }
 }
@@ -283,14 +331,15 @@ export const deleteMany_async = (store, token, viewModels) => {
 
 
 //  Delete Tab  -------------------------------------------------  Delete Tab Async  //
-export const deleteCollectionTab_async = (collection, token, user, viewModel) => {
+export const deleteTab_async = (store, collection, token, id, tab) => {
+    console.log(store);
     return dispatch => {
-        axios.delete('/user/' + user + '/' + collection + '/' + viewModel.id + '.json?auth=' + token)
+        axios.delete('/' + store + '/' + id + '/' + collection + '/' + tab.id + '.json?auth=' + token)
         .then(response => {
-            dispatch(_deleteCollectionTab(collection, viewModel));
+            dispatch(_deleteTab(store, collection, tab));
         })
         .catch(error => {
-            dispatch(failure('user', error));
+            dispatch(failure(store, error));
         });
     }
 }
@@ -305,10 +354,10 @@ export const get_async = (store, token, id) => {
             let model = {};
             switch (store) {
                 // case 'card':
-                //     model = create.cardViewModel(id, response.data);
+                //     model = create.itemViewModel(id, response.data);
                 //     break;
                 // case 'deck':
-                //     model = create.deckViewModel(id, response.data);
+                //     model = create.collectionViewModel(id, response.data);
                 //     break;
                 case 'user':
                     model = create.userViewModel(id, response.data);
@@ -335,12 +384,12 @@ export const getAll_async = (store, token, user) => {
             switch (store) {
                 case 'card':
                     Object.keys(response.data).forEach(id => {
-                        models[id] = create.cardViewModel(id, response.data[id]);
+                        models[id] = create.itemViewModel(id, response.data[id]);
                     });
                     break;
                 case 'deck':
                     Object.keys(response.data).forEach(id => {
-                        models[id] = create.deckViewModel(id, response.data[id]);
+                        models[id] = create.collectionViewModel(id, response.data[id]);
                     });
                     break;
                 case 'user':
@@ -366,10 +415,10 @@ export const update_async = (store, token, viewModel) => {
         let model = {};
         switch (store) {
             case 'card':
-                model = create.cardModel(viewModel);
+                model = create.itemModel(viewModel);
                 break;
             case 'deck':
-                model = create.deckModel(viewModel);
+                model = create.collectionModel(viewModel);
                 break;
             case 'user':
                 model = create.userModel(viewModel);
@@ -390,6 +439,19 @@ export const updateMany_async = (store, token, viewModels) => {
     return dispatch => {
         viewModels.forEach(viewModel => {
             dispatch(update_async(store, token, viewModel));
+        });
+    }
+}
+
+//  Update Tag  -------------------------------------------------  Update Tag Async  //
+export const updateTag_async = (store, collection, token, id, tag) => {
+    return dispatch => {
+        axios.put('/' + store + '/' + id + '/' + collection + '.json?auth=' + token, tag)
+        .then(response => {
+            dispatch(_updateTag(store, collection, tag));
+        })
+        .catch(error => {
+            dispatch(failure(store, error));
         });
     }
 }

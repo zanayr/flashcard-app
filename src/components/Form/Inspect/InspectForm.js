@@ -65,7 +65,7 @@ class InspectForm extends Component {
             allTags = this.state[category].concat(newTags);
             this._resetTags(category, allTags);
             //  Send new tags to the redux store and database
-            this.props.putTag_async(category, this.props.select_token, this.props.select_user.id, allTags);
+            this.props.updateTag_async(category, allTags);
         }
     }
     _clearTag (category, tag) {
@@ -146,7 +146,7 @@ class InspectForm extends Component {
             }
 
             //  Build the new item
-            const item = create.cardViewModel(utility.createHashId(0), {
+            const item = create.itemViewModel(utility.createHashId(0), {
                 group: groups,
                 notes: this.state.item.notes,
                 owner: this.props.select_user.id,
@@ -173,7 +173,7 @@ class InspectForm extends Component {
                 this._selectTag(category, tag);
             });
             this._resetTags(category, allTags);
-            this.props.putTag_async(category, this.props.select_token, this.props.select_user.id, allTags);
+            this.props.updateTag_async(category, allTags);
             //this.props.onTagCreate();
         }
     }
@@ -278,13 +278,14 @@ class InspectForm extends Component {
 
 const mapStateToProps = state => {
     return {
-        select_token: select.authToken(state),
         select_user: select.user(state)
     }
 }
 const mapDispatchToProps = dispatch => {
+    let authToken = select.authToken;
+    let authUser = select.authUser;
     return {
-        putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
+        updateTag_async: (collection, tag) => dispatch(actions.updateTag_async('user', collection, authToken, authUser, tag)),
     };
 };
 

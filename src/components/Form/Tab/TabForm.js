@@ -14,9 +14,9 @@ import styles from './TabForm.module.css';
 
 class TabForm extends Component {
     state = {
-        group: this.props.select_user.group,
+        group: this.props.group,
         name: '',
-        tag: this.props.select_user.tag,
+        tag: this.props.tag,
         selected: {
             group: [],
             tag: []
@@ -65,7 +65,7 @@ class TabForm extends Component {
             allTags = this.state[category].concat(newTags);
             this._resetTags(category, allTags);
             //  Send new tags to the redux store and database
-            this.props.putTag_async(category, this.props.select_token, this.props.select_user.id, allTags);
+            this.props.updateTag_async('user', category, this.props.select_authtoken, this.props.select_authUser, allTags);
         }
     }
     _clearTag (category, tag) {
@@ -138,7 +138,7 @@ class TabForm extends Component {
             this._resetTags(category, allTags);
         }
         console.log(tags);
-        this.props.putTag_async(category, this.props.select_token, this.props.select_user.id, this.state[category].concat(tags));
+        this.props.updateTag_async('user', category, this.props.select_authtoken, this.props.select_authUser, this.state[category].concat(tags));
     }
     handle_onTagToggle = (category, tag) => {
         if (!this.state.selected[category].includes(tag)) {
@@ -202,14 +202,13 @@ class TabForm extends Component {
 
 const mapStateToProps = state => {
     return {
-        select_token: select.authToken(state),
-        select_user: select.user(state),
-        select_userId: select.authUser(state)
+        select_authtoken: select.authToken(state),
+        select_authUser: select.authUser(state),
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
-        putTag_async: (category, token, user, tab) => dispatch(actions.putTag_async(category, token, user, tab))
+        updateTag_async: (store, collection, token, id, tag) => dispatch(actions.updateTag_async(store, collection, token, id, tag))
     };
 };
 

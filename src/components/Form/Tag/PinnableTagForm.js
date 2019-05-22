@@ -113,17 +113,20 @@ class PinnableTagForm extends Component {
 }
 
 
-const mapStateToProps = state => {
-    return {
-        select_token: select.authToken(state),
-        select_user: select.user(state)
-    }
-}
-const mapDispatchToProps = dispatch => {
-    return {
-        putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
-    };
-};
+export default PinnableTagForm;
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(PinnableTagForm);
+// const mapStateToProps = state => {
+//     return {
+//         select_token: select.authToken(state),
+//         select_user: select.user(state)
+//     }
+// }
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
+//     };
+// };
+
+
+// export default connect(mapStateToProps, mapDispatchToProps)(PinnableTagForm);

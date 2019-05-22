@@ -21,23 +21,6 @@ class Auth extends Component {
             markup = (
                 <Redirect to="/in"/>
             );
-            // this.props.patchUser_async(this.props.select_token, {
-            //     active: 1,
-            //     assigned: {},
-            //     auth: this.props.select_user,
-            //     date: Date.now(),
-            //     id: 'gaxyaaxy04vj',
-            //     info: {
-            //         first: 'Ryan',
-            //         last:'Fickencher',
-            //         email:'rsficken@gmail.com',
-            //     },
-            //     buds: {},
-            //     priv: 4,
-            //     pref:{},
-            //     sessions: {},
-            //     tabs: {},
-            // });
         }
         return (
             <main className={AuthCSS.Open}>
@@ -51,85 +34,11 @@ class Auth extends Component {
 
 const mapStateToProps = state => {
     return {
-        select_token: select.authToken(state),
-        select_user: select.authUser(state),
+        select_authToken: select.authToken(state),
+        select_authUser: select.authUser(state),
         select_isLoading: select.authIsLoading(state),
         isAuthenticated: select.authToken(state) !== null
     };
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        patchUser_async: (token, data) => dispatch(actions.patchUser_async(token, data))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Auth);
-
-/*
-const mapStateToProps = state => {
-    // foo: state.foo
-    // ^ component prop that refences reducer state
-    //      ^ reducer state and property
-    // this.props.foo replaces this.state.foo
-}
-const mapDispatchToProps = dispatch => {
-    // onFoo: (arg) => dispatch({type: actionTypes.FOO, payload: {name: arg, value: 1}});
-    // ^ component prop that references dispatch method
-    // (arg) => {this.props.onFoo(arg)};
-}
-*/
-
-//  export default connect(mapStateToProps, mapDispatchToProps)(Auth);
-
-/*
-NOTE:   split up action file
-TIP:    export {
-            foo,
-            bar,
-            spa,
-        } from 'js file'; import everything as one
-
-1.  create a new action creator:
-export const foo = (payload) => {
-    return {
-        type: FOO
-        payload: payload
-                 ^ same name as reducer
-    }
-};
-
-2.  import action
-import {foo} from 'actions/actions'
-
-3.  implement in the mapDispatchToProps function
-const mapDispatchToProps = dispatch => {
-    onFoo: () => dispatch(foo());
-                             ^ execute it becuse it returns an action
-
-}
-
-Redux-thunk async action creator
-NOTE:   We tend to make async action creators call sync actions:
-export const barSync = (payload) => {
-    return {
-        type: FOO,
-        payload: payload
-    }
-}
-export const fooAsync = (payload) => {
-    return (dispatch, getState) => {
-           ^ thunk provides this action
-        setTimout(() => {
-            const spam = getState().property
-                         ^ great utility, but don't over use it,
-                           passing states is better
-            dispatch(payload);
-            ^ dispatch whichever function we want to dispatch
-            ^ execute because it returns an action
-        }, 2000);
-        ^ async code goes here
-    }
-};
-
-*/
+export default connect(mapStateToProps, null)(Auth);

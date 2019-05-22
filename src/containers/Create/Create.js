@@ -66,10 +66,10 @@ class Create extends Component {
             ...prev,
             cards: prev.cards.filter(c => c.id !== card.id)
         }));
-        this.props.deleteCard_async(this.props.select_token, card);
+        this.props.delete_async('card', this.props.select_token, card);
         if (typeof this.props.location.state.id !== undefined) {
             let deck = this.props.select_deck;
-            this.props.updateDeck_async(this.props.select_token, {
+            this.props.update_async('deck', this.props.select_token, {
                 ...deck,
                 member: deck.member.filter(id => id !== card.id)
             });
@@ -89,10 +89,10 @@ class Create extends Component {
     //  Cards  --------------------------------------------------------------  Cards //
     handle_onCardCreate = (card) => {
         this._addCard(card);
-        this.props.addCard_async(this.props.select_token, card);
+        this.props.add_async('card', this.props.select_token, card);
         if (typeof this.props.location.state.id !== undefined) {
             let deck = this.props.select_deck;
-            this.props.updateDeck_async(this.props.select_token, {
+            this.props.update_async('deck', this.props.select_token, {
                 ...deck,
                 member: deck.member.concat(card.id)
             });
@@ -151,14 +151,14 @@ class Create extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         select_deck: select.deck(state, ownProps.location.state.id),
-        select_token: select.authToken(state)
+        select_authToken: select.authToken(state)
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
-        deleteCard_async: (token, card) => dispatch(actions.deleteCard_async(token, card)),
-        addCard_async: (token, card) => dispatch(actions.addCard_async(token, card)),
-        updateDeck_async: (token, deck) => dispatch(actions.updateDeck_async(token, deck))
+        delete_async: (store, token, card) => dispatch(actions.delete_async(store, token, card)),
+        add_async: (store, token, card) => dispatch(actions.add_async(store, token, card)),
+        update_async: (store, token, deck) => dispatch(actions.update_async(store, token, deck))
     };
 };
 

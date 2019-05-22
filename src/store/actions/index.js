@@ -4,46 +4,47 @@ export {
     checkAuth_async
 } from './auth';
 
-export {
-    addCard_async,
-    addManyCards_async,
-    deleteCard_async,
-    deleteManyCards_async,
-    getAllCards_async,
-    updateCard_async
-} from './card';
+// export {
+//     addCard_async,
+//     addManyCards_async,
+//     deleteCard_async,
+//     deleteManyCards_async,
+//     getAllCards_async,
+//     updateCard_async
+// } from './card';
 
-export {
-    addDeck_async,
-    addManyDecks_async,
-    deleteDeck_async,
-    deleteManyDecks_async,
-    getAllDecks_async,
-    updateDeck_async,
-    updateDeckMember_async
-} from './deck';
+// export {
+//     addDeck_async,
+//     addManyDecks_async,
+//     deleteDeck_async,
+//     deleteManyDecks_async,
+//     getAllDecks_async,
+//     updateDeck_async,
+//     updateDeckMember_async
+// } from './deck';
 
 export {
     add_async,
-    addCollectionTab_async,
+    addTab_async,
     addMany_async,
     delete_async,
-    deleteCollectionTab_async,
+    deleteTab_async,
     deleteMany_async,
     get_async,
     getAll_async,
     update_async,
-    updateMany_async
+    updateMany_async,
+    updateTag_async
 } from './database';
 
-export {
-    deleteTab_async,
-    getUser_async,
-    patchUser_async,
-    patchTab_async,
-    putUser_async,
-    putTag_async
-} from './user'
+// export {
+//     deleteTab_async,
+//     getUser_async,
+//     patchUser_async,
+//     patchTab_async,
+//     putUser_async,
+//     putTag_async
+// } from './user'
 
 export {
     displayModal,
