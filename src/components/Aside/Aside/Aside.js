@@ -5,7 +5,6 @@ import * as asideTypes from './asideTypes';
 import NavigationAiside from '../Nav/NavAside';
 import FilterAside from '../Filter/FilterAside';
 import InspectAside from '../Inspect/InspectAside';
-import CardInspect from '../Inspect/CardInspect';
 
 const aside = (props) => {
     let aside = null;
@@ -13,19 +12,8 @@ const aside = (props) => {
         case asideTypes.CLOSED:
             aside = (null);
             break;
-        case asideTypes.CREATE_CARD:
-            aside = (
-                <InspectAside
-                    actions={props.actions}
-                    data={{
-                        ...props.data,
-                        primary: 'Front',
-                        secondary: 'Back'
-                    }}
-                    path={'/u/create'}/>
-            );
-            break;
         case asideTypes.CREATE_COLLECTION:
+        case asideTypes.INSPECT_COLLECTION:
             aside = (
                 <InspectAside
                     actions={props.actions}
@@ -35,6 +23,19 @@ const aside = (props) => {
                         secondary: 'Details'
                     }}
                     path={'/u/' + props.page}/>
+            );
+            break;
+        case asideTypes.CREATE_ITEM:
+        case asideTypes.INSPECT_ITEM:
+            aside = (
+                <InspectAside
+                    actions={props.actions}
+                    data={{
+                        ...props.data,
+                        primary: props.page === 'deck' ? 'Front' : 'First',
+                        secondary: props.page === 'deck' ? 'Back' : 'Last',
+                    }}
+                    path={props.page === 'deck' ? '/u/create' : ''}/>
             );
             break;
         case asideTypes.FILTER_TAG:
@@ -49,30 +50,6 @@ const aside = (props) => {
                 <FilterAside
                     actions={props.actions}
                     data={props.data}/>
-            );
-            break;
-        case asideTypes.INSPECT_CARD:
-            aside = (
-                <InspectAside
-                    actions={props.actions}
-                    data={{
-                        ...props.data,
-                        primary: 'Front',
-                        secondary: 'Back'
-                    }}
-                    path={'/u/create'}/>
-            );
-            break;
-        case asideTypes.INSPECT_COLLECTION:
-            aside = (
-                <InspectAside
-                    actions={props.actions}
-                    data={{
-                        ...props.data,
-                        primary: 'Title',
-                        secondary: 'Details'
-                    }}
-                    path={'/u/load/' + props.page}/>
             );
             break;
         case asideTypes.NAVIGATION:

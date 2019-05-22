@@ -128,6 +128,9 @@ export function modals (store) {
 export function user (store) {
     return FromUser.selectUser(store[USER]);
 }
+export function users (store) {
+    return FromUser.selectUsers(store[USER]);
+}
 export function userId (store) {
     return FromUser.selectUserId(store[USER]);
 }

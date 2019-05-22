@@ -74,6 +74,14 @@ class InspectAside extends Component {
         }
     }
     render () {
+        let link = null;
+        if (this.props.path.length) {
+            link = (
+                <div>
+                    <BarLink path={this.props.path + '/' + this.props.data.id} state={{id: this.props.data.id}}>Add many</BarLink>
+                </div>
+            );
+        }
         return (
             <aside className={[styles.Aside].join(' ')}>
                 <div>
@@ -84,9 +92,7 @@ class InspectAside extends Component {
                         onChange={this.handle_onChange}
                         onConfirm={this.props.actions.confirm}/>
                     <Button onClick={this.props.actions.cancel}>Cancel</Button>
-                    <div>
-                        <BarLink path={this.props.path + '/' + this.props.data.id} state={{id: this.props.data.id}}>Add many</BarLink>
-                    </div>
+                    {link}
                 </div>
             </aside>
         );

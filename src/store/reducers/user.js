@@ -30,19 +30,19 @@ const getUserSuccess = (state, action) => {
         user: action.payload
     };
 }
-// const getAllUsersInit = (state, action) => {
-//     return {
-//         ...state,
-//         isLoading: true
-//     };
-// }
-// const getAllUsersSuccess = (state, action) => {
-//     return {
-//         ...state,
-//         isLoading: false,
-//         users: action.payload
-//     };
-// }
+const getAllUsersInit = (state, action) => {
+    return {
+        ...state,
+        isLoading: true
+    };
+}
+const getAllUsersSuccess = (state, action) => {
+    return {
+        ...state,
+        isLoading: false,
+        users: action.payload
+    };
+}
 const updateUser = (state, action) => {
     return {
         ...state,
@@ -134,12 +134,12 @@ const reducer = (state=initialState, action) => {
             return getUserInit(state, action);
         case actionTypes.GET_USER_SUCCESS:
             return getUserSuccess(state, action);
+        case actionTypes.GET_ALL_USERS_INIT:
+            return getAllUsersInit(state, action);
+        case actionTypes.GET_ALL_USERS_SUCCESS:
+            return getAllUsersSuccess(state, action);
         case actionTypes.UPDATE_USER:
             return updateUser(state, action);
-        // case actionTypes.GET_ALL_USERS_INIT:
-        //     return getAllUsersInit(state, action);
-        // case actionTypes.GET_ALL_USERS_SUCCESS:
-        //     return getAllUsersSuccess(state, action);
         //  ^^^ NEW STUFF ^^^  //
         // case actionTypes.GET_USER_FAIL:
         //     return service_fail(state, action);
@@ -176,6 +176,9 @@ const reducer = (state=initialState, action) => {
 //  STORE SELECTORS  ---------------------------------------------------  SELECTORS  //
 export function selectUser (state) {
     return state.user;
+}
+export function selectUsers (state) {
+    return state.users;
 }
 export function selectUserId (state) {
     return state.user.id;

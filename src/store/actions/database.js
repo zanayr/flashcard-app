@@ -208,7 +208,6 @@ export const _getAll_success = (store, data) => {
     };
 };
 export const _getAll_init = (store) => {
-    console.log(store);
     let type = null;
     switch (store) {
         case 'card':

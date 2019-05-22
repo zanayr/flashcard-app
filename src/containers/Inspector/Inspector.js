@@ -433,7 +433,7 @@ class Inspector extends Component {
         this._openInspectAside({
             confirm: () => this._addManyItems([this.state.items[item.id]]),
             item: item,
-            type: asideTypes.CREATE_CARD
+            type: asideTypes.CREATE_ITEM
         });
         this._clearSelected();
     }
@@ -475,7 +475,7 @@ class Inspector extends Component {
         this._openInspectAside({
             confirm: this._updateItem,
             item: item,
-            type: asideTypes.INSPECT_CARD
+            type: asideTypes.INSPECT_ITEM
         });
         this._clearQuick('s');
     }
@@ -502,7 +502,7 @@ class Inspector extends Component {
         } else {
             selected = selected.concat(item);
         }
-        if (this.state.aside.state === asideTypes.CREATE_CARD || this.state.aside.state === asideTypes.INSPECT_CARD) {
+        if (this.state.aside.state === asideTypes.CREATE_ITEM || this.state.aside.state === asideTypes.INSPECT_ITEM) {
             this.handle_onAsideClose();
         }
         this._setSelected(selected);
@@ -600,10 +600,10 @@ class Inspector extends Component {
         const originalData = this.state.aside.data;
         let data;
         switch (this.state.aside.state) {
-            case asideTypes.CREATE_CARD:
+            case asideTypes.CREATE_ITEM:
                 this._removeManyItems([this.state.items[this.state.aside.data.item.id]]);
                 break;
-            case asideTypes.INSPECT_CARD:
+            case asideTypes.INSPECT_ITEM:
                 data = this.state.items[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkItem(data)) {
                     this._setManyItems([originalData.item]);
@@ -618,7 +618,7 @@ class Inspector extends Component {
         const originalData = this.state.aside.data;
         let data;
         switch (this.state.aside.state) {
-            case asideTypes.CREATE_CARD:
+            case asideTypes.CREATE_ITEM:
                 data = this.state.items[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkItem(data)) {
                     this._addManyItems([data]);
@@ -626,7 +626,7 @@ class Inspector extends Component {
                     this._removeManyItems([data]);
                 }
                 break;
-            case asideTypes.INSPECT_CARD:
+            case asideTypes.INSPECT_ITEM:
                 data = this.state.items[originalData.item.id];
                 if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkItem(data)) {
                     this.props.update_async(this.page, this.props.select_authToken, data);
