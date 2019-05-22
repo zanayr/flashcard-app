@@ -43,6 +43,7 @@ class App extends Component {
       routes = (
         <Switch>
           <Route path='/u/create' component={Create}/>
+          <Route path='/u/load/:store/:collection' component={Load}/>
           <Route path='/u/load/:store' component={Load}/>
           <Route path='/u/:collection/:id' component={Inspector}/>
           <Route path='/u/:collection' component={Collection}/>

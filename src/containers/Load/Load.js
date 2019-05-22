@@ -9,24 +9,22 @@ import Throbber from '../../components/ui/Throbber/Throbber';
 
 
 class Load extends Component {
-    componentDidMount() {
-        const token = this.props.select_authToken;
-        const user = this.props.select_authUser;
-        this.props.getAll_async(this.props.match.params.store, token, user);
-    }
+    // componentDidMount() {
+    //     const token = this.props.select_authToken;
+    //     const user = this.props.select_authUser;
+    //     this.props.getAll_async(this.props.match.params.store, token, user);
+    // }
 
     
     render() {
-        let content = (<Throbber/>);
-        if (!this.props.select_isLoading) {
+        let content;
+        if (this.props.location.state) {
+            content = <Redirect to={'/u/' + this.props.match.params.store + '/' + this.props.location.state.id}/>;
+        } else {
             content = <Redirect to={'/u/' + this.props.match.params.store}/>;
         }
 
-        return (
-            <Aux>
-                {content}
-            </Aux>
-        )
+        return content
     }
 }
 

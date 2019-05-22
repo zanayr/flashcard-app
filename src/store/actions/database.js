@@ -192,7 +192,7 @@ export const _getAll_success = (store, data) => {
         case 'deck':
             type = actionTypes.GET_ALL_DECKS_SUCCESS;
             break;
-        case 'card':
+        case 'student':
             type = actionTypes.GET_ALL_STUDENTS_SUCCESS;
             break;
         case 'user':
@@ -432,13 +432,18 @@ export const getAll_async = (store, token, user) => {
                     });
                     break;
                 case 'class':
-                        Object.keys(response.data).forEach(id => {
-                            models[id] = create.collectionViewModel(id, response.data[id]);
-                        });
-                        break;
+                    Object.keys(response.data).forEach(id => {
+                        models[id] = create.collectionViewModel(id, response.data[id]);
+                    });
+                    break;
                 case 'deck':
                     Object.keys(response.data).forEach(id => {
                         models[id] = create.collectionViewModel(id, response.data[id]);
+                    });
+                    break;
+                case 'student':
+                    Object.keys(response.data).forEach(id => {
+                        models[id] = create.itemViewModel(id, response.data[id]);
                     });
                     break;
                 case 'user':

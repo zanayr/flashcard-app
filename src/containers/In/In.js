@@ -13,7 +13,9 @@ class In extends Component {
         const token = this.props.select_authToken;
         const user = this.props.select_authUser;
         this.props.getAll_async('card', token, user);
+        this.props.getAll_async('class', token, user);
         this.props.getAll_async('deck', token, user);
+        this.props.getAll_async('student', token, user);
         this.props.get_async('user', token, user);
     }
 

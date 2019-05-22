@@ -72,7 +72,7 @@ const aside = (props) => {
                         primary: 'Title',
                         secondary: 'Details'
                     }}
-                    path={'/u/' + props.page}/>
+                    path={'/u/load/' + props.page}/>
             );
             break;
         case asideTypes.NAVIGATION:

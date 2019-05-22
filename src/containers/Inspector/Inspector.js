@@ -511,6 +511,7 @@ class Inspector extends Component {
         const original = this.state.aside.data.item;
         const item = this.state.items[original.id];
         if (JSON.stringify(item) !== JSON.stringify(original)) {
+            console.log(item);
             this.props.update_async(this.page, this.props.select_authToken, item);
             this._setUndo({
                 action: this._undoItemUpdated,
