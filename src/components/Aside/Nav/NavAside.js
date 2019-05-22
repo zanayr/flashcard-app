@@ -17,6 +17,10 @@ const navigationAside = (props) => {
         {
             path: '/load/user',
             value: 'Users'
+        },
+        {
+            path: '/load/student',
+            value: 'Students'
         }
     ];
     switch (props.page) {

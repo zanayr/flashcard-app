@@ -14,7 +14,6 @@ const aside = (props) => {
             aside = (null);
             break;
         case asideTypes.ASSIGN_ITEM:
-            console.log('here');
             aside = (
                 <AssignAside
                     actions={props.actions}

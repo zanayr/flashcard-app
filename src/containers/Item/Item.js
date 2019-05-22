@@ -164,6 +164,12 @@ class Item extends Component {
         }));
         this._clearQuick('f');
     }
+    _setAssigned (assigned) {
+        this.setState(prev => ({
+            ...prev,
+            assigned: assigned
+        }));
+    }
     _setFilter (filter) {
         this.setState(prev => ({
             ...prev,
@@ -340,13 +346,13 @@ class Item extends Component {
         });
         this._toggleAside(data.type);
         this._setAside({
-            toggle: (collection) => this.handle_onAsideAssignToggle(data, collection)
+            cancel: this.handle_onAsideCancel,
+            change: this.handle_onItemChange,
+            confirm: data.confirm,
         }, {
             all: all,
-            confirm: data.confirm,
             item: data.item,
             member: member,
-            selected: this.state.assigned
         });
     }
     _openFilterAside (filter) {
@@ -486,9 +492,21 @@ class Item extends Component {
         });
         this._clearQuick('s');
     }
+    _assign = (member) => {
+        const item = this.state.aside.data.item;
+        this.props.update_async(this.props.match.params.item, this.props.select_authToken, {
+            ...item,
+            member: member
+        });
+        this._setItemValue('member', member);
+        this._setUndo({
+            action: this._undoItemUpdated,
+            data: item
+        });
+    }
     _assignItem = (item) => {
         this._openAssignAside({
-            confirm: this._updateItem,
+            confirm: this._assign,
             item: item,
             type: asideTypes.ASSIGN_ITEM
         });
@@ -526,7 +544,6 @@ class Item extends Component {
         const original = this.state.aside.data.item;
         const item = this.state.items[original.id];
         if (JSON.stringify(item) !== JSON.stringify(original)) {
-            console.log(item);
             this.props.update_async(this.props.match.params.item, this.props.select_authToken, item);
             this._setUndo({
                 action: this._undoItemUpdated,
@@ -655,6 +672,16 @@ class Item extends Component {
         }
         this._clearAndCloseAside();
     }
+    // handle_onAsideAssignToggle = (item, collection) => {
+    //     let assigned = this.state.assigned.slice();
+    //     if (assigned.includes(collection)) {
+    //         assigned = assigned.filter(c => c !== collection);
+    //     } else {
+    //         assigned = assigned.concat(collection);
+    //     }
+    //     this._updateAsideData('selected', assigned);
+    //     this._setAssigned(assigned);
+    // }
     handle_onAsideFilterToggle = (category, tag) => {
         let filter = {...this.state.filter};
         if (filter[category].includes(tag)) {

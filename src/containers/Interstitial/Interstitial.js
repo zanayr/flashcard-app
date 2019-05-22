@@ -5,17 +5,41 @@ import {Redirect} from 'react-router-dom';
 const interstitial = (props) => {
     let content;
     if (props.location.state) {
-        content = <Redirect to={'/0/' + props.match.params.store + '/' + props.location.state.id}/>;
-    } else {
-        if (props.match.params.store === 'deck' || props.match.params.store === 'class') {
-            content = <Redirect to={'/0/' + props.match.params.store}/>;
-        } else {
-            content = <Redirect to={'/1/' + props.match.params.store}/>;
+        switch (props.match.params.store) {
+            case 'class':
+                content = <Redirect to={'/0/class/' + props.location.state.id}/>;
+                break;
+            case 'deck':
+                content = <Redirect to={'/0/deck/' + props.location.state.id}/>;
+                break;
+            default:
+                content = <Redirect to={'/auth'}/>;
+                break;
         }
-        
+    } else {
+        switch (props.match.params.store) {
+            case 'card':
+                content = <Redirect to={'/1/card'}/>;
+                break;
+            case 'class':
+                content = <Redirect to={'/0/class'}/>;
+                break;
+            case 'deck':
+                content = <Redirect to={'/0/deck'}/>;
+                break;
+            case 'student':
+                content = <Redirect to={'/1/student'}/>;
+                break;
+            case 'user':
+                content = <Redirect to={'/2/user'}/>;
+                break;
+            default:
+                content = <Redirect to={'/auth'}/>;
+                break;
+        }
     }
-
     return content
 }
+
 
 export default interstitial;
