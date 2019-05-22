@@ -5,6 +5,7 @@ import cardReducer, * as FromCard from './card';
 import classReducer, * as FromClass from './class';
 import deckReducer, * as FromDeck from './deck';
 import modalReducer, * as FromModal from './modal';
+import studentReducer, * as FromStudent from './student';
 import userReducer, * as FromUser from './user';
 
 
@@ -14,6 +15,7 @@ const CARD = 'CARD';
 const CLASS = 'CLASS';
 const DECK = 'DECK';
 const MODAL = 'MODAL';
+const STUDENT = 'STUDENT';
 const USER = 'USER';
 
 
@@ -23,6 +25,7 @@ const rootReducer = combineReducers({
     CLASS: classReducer,
     DECK: deckReducer,
     MODAL: modalReducer,
+    STUDENT: studentReducer,
     USER: userReducer
 });
 
@@ -93,6 +96,8 @@ export function collections (store, collection) {
 }
 export function collection (store, collection, id) {
     switch (collection) {
+        case 'class':
+            return FromClass.selectClass(store[CLASS], id);
         case 'deck':
             return FromDeck.selectDeck(store[DECK], id);
         case 'class':
@@ -108,7 +113,7 @@ export function items (store, collection) {
         case 'card':
             return FromCard.selectCards(store[CARD]);
         case 'student':
-            break;
+            return FromStudent.selectStudents(store[STUDENT]);
         default:
             break;
     }

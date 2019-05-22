@@ -15,6 +15,9 @@ export const failure = (store, error) => {
         case 'deck':
             type = actionTypes.DECK_FAILURE;
             break;
+        case 'student':
+            type = actionTypes.STUDENT_FAILURE;
+            break;
         case 'user':
             type = actionTypes.USER_FAILURE;
             break;
@@ -41,6 +44,9 @@ export const _add = (store, data) => {
             break;
         case 'deck':
             type = actionTypes.ADD_DECK;
+            break;
+        case 'student':
+            type = actionTypes.ADD_STUDENT;
             break;
         case 'user':
             type = actionTypes.ADD_USER;
@@ -96,6 +102,9 @@ export const _delete = (store, data) => {
         case 'deck':
             type = actionTypes.DELETE_DECK;
             break;
+        case 'student':
+            type = actionTypes.DELETE_STUDENT;
+            break;
         case 'user':
             type = actionTypes.DELETE_USER;
             break;
@@ -141,12 +150,6 @@ export const _deleteTab = (store, collection, data) => {
 export const _get_success = (store, data) => {
     let type = null;
     switch (store) {
-        case 'card':
-            type = actionTypes.GET_CARD_SUCCESS;
-            break;
-        case 'deck':
-            type = actionTypes.GET_DECK_SUCCESS;
-            break;
         case 'user':
             type = actionTypes.GET_USER_SUCCESS;
             break;
@@ -162,12 +165,6 @@ export const _get_success = (store, data) => {
 export const _get_init = (store) => {
     let type = null;
     switch (store) {
-        case 'card':
-            type = actionTypes.GET_CARD_INIT;
-            break;
-        case 'deck':
-            type = actionTypes.GET_DECK_INIT;
-            break;
         case 'user':
             type = actionTypes.GET_USER_INIT;
             break;
@@ -195,6 +192,9 @@ export const _getAll_success = (store, data) => {
         case 'deck':
             type = actionTypes.GET_ALL_DECKS_SUCCESS;
             break;
+        case 'card':
+            type = actionTypes.GET_ALL_STUDENTS_SUCCESS;
+            break;
         case 'user':
             type = actionTypes.GET_ALL_USERS_SUCCESS;
             break;
@@ -219,6 +219,9 @@ export const _getAll_init = (store) => {
             break;
         case 'deck':
             type = actionTypes.GET_ALL_DECKS_INIT;
+            break;
+        case 'student':
+            type = actionTypes.GET_ALL_STUDENTS_INIT;
             break;
         case 'user':
             type = actionTypes.GET_ALL_USERS_INIT;
@@ -247,6 +250,9 @@ export const _update = (store, data) => {
         case 'deck':
             type = actionTypes.UPDATE_DECK;
             break;
+        case 'student':
+            type = actionTypes.UPDATE_STUDENT;
+            break;
         case 'user':
             type = actionTypes.UPDATE_USER;
             break;
@@ -270,6 +276,9 @@ export const _updateTag = (store, collection, data) => {
             break;
         case 'deck':
             type = actionTypes.UPDATE_DECK_TAG;
+            break;
+        case 'student':
+            type = actionTypes.UPDATE_STUDENT_TAG;
             break;
         case 'user':
             type = actionTypes.UPDATE_USER_TAG;
@@ -301,6 +310,9 @@ export const add_async = (store, token, viewModel) => {
                 break;
             case 'deck':
                 model = create.collectionModel(viewModel);
+                break;
+            case 'student':
+                model = create.itemModel(viewModel);
                 break;
             case 'user':
                 model = create.userModel(viewModel);

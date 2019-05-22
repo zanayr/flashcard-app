@@ -60,7 +60,7 @@ class Inspector extends Component {
         const collection = {...this.props.select_collection};
         let $new = false;
         let tags = this.props.select_user.tag.slice();
-
+        console.log(collection);
         Object.keys(this.props.select_items).filter(id => collection.member.includes(id)).forEach(id => {
             if (this.props.select_items[id].tag.includes('$new')) {
                 $new = true;
@@ -372,6 +372,7 @@ class Inspector extends Component {
         this._clearAndCloseAside();
     }
     _addManyItems_async (items) {
+        console.log(this.page);
         this.props.addMany_async(this.page, this.props.select_authToken, items);
         this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
             ...this.state.collection,
@@ -786,7 +787,6 @@ class Inspector extends Component {
 
 
     render () {
-        console.log(this.state);
         let content;
         switch (this.state.main) {
             case 'LIST_VIEW':
@@ -859,8 +859,8 @@ const mapStateToProps = (state, ownProps) => {
         select_collection: select.collection(state, ownProps.match.params.collection, ownProps.match.params.id),
         select_items: select.items(state, ownProps.match.params.collection === 'deck' ? 'card' : 'student'),
         select_user: select.user(state)
-    }
-}
+    };
+};
 const mapDispatchToProps = dispatch => {
     return {
         addMany_async: (store, token, items) => dispatch(actions.addMany_async(store, token, items)),

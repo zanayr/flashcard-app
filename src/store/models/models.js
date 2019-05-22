@@ -95,21 +95,21 @@ export function collectionModel (model) {
 // }
 
 //  Student  -------------------------------------------------------  Student Model  //
-export function userModel (student) {
+export function userModel (model) {
     return {
-        class: student.class,
-        date: student.date,
-        deck: student.deck,
-        group: student.group,
+        class: model.class,
+        date: model.date,
+        deck: model.deck,
+        group: model.group,
         info: {
-            email: student.info.email,
-            first: student.info.first,
-            last: student.info.last,
-            user: student.info.user
+            email: model.info.email,
+            first: model.info.first,
+            last: model.info.last,
+            user: model.info.user
         },
-        meta: student.meta,
-        tab: student.tab,
-        tag: student.tag
+        meta: model.meta,
+        tab: model.tab,
+        tag: model.tag
     }
 }
 
@@ -128,17 +128,17 @@ export function tabViewModel (id, tab) {
 
 //  Flashcard View Model  ------------------------------------------  FLASHCARD  //
 //  Flashcard view models require a card ID with which to correlate
-export function flashcardViewModel (card) {
+export function flashcardViewModel (model) {
     return {
         flagged: false,
         flipped: false,
         selected: false,
-        id: card.id,
-        meta: card.meta || {},
-        primary: card.primary,
-        secondary: card.secondary,
-        tag: card.tag || [],
-        zIndex: card.zIndex || 0
+        id: model.id,
+        meta: model.meta || {},
+        primary: model.primary,
+        secondary: model.secondary,
+        tag: model.tag || [],
+        zIndex: model.zIndex || 0
     }
 }
 

@@ -1,97 +1,97 @@
-import React, {Component} from 'react';
+// import React, {Component} from 'react';
 
-import BarLink from '../../ui/link/Bar/BarLink';
-import Button from '../../ui/button/Button/Button';
-import CardInspectForm from '../../form/Card/CardInspectForm';
+// import BarLink from '../../ui/link/Bar/BarLink';
+// import Button from '../../ui/button/Button/Button';
+// import CardInspectForm from '../../form/Card/CardInspectForm';
 
-import styles from '../Aside.module.css';
-
-
-class CardInspect extends Component {
-    state = {
-        actions: this.props.actions,
-        group: this.props.data.group,
-        item: this.props.data.item,
-        tag: this.props.data.tag
-    }
+// import styles from '../Aside.module.css';
 
 
-    //  FORM  ---------------------------------------------------------------  FORM  //
-    handle_onChange = (target, value) => {
-        this.setState(prev => ({
-            ...prev,
-            item: {
-                ...prev.item,
-                [target]: value
-            }
-        }));
-        this.props.actions.change(target, value);
-    }
+// class CardInspect extends Component {
+//     state = {
+//         actions: this.props.actions,
+//         group: this.props.data.group,
+//         item: this.props.data.item,
+//         tag: this.props.data.tag
+//     }
 
-    
-    //  TAGS  ---------------------------------------------------------------  TAGS  //
-    handle_onTagCreate = (category, tag) => {
-        const tags = this.state.item[category];
-        this.setState(prev => ({
-            ...prev,
-            item: {
-                ...prev.item,
-                [category]: prev.item[category].concat(tag)
-            }
-        }));
-        this.props.actions.change(this.state.item, {
-            target: category,
-            value: tags.concat(tag)
-        });
-        this.props.actions.create(category, tag);
-    }
-    handle_onTagToggle = (category, tag) => {
-        const tags = this.state.item[category];
-        if (tags.indexOf(tag) > -1) {
-            this.setState(prev => ({
-                ...prev,
-                item: {
-                    ...prev.item,
-                    [category]: prev.item[category].filter(t => t !== tag)
-                }
-            }));
-            this.props.actions.change(this.state.item, {
-                target: category,
-                value: tags.filter(t => t !== tag)
-            });
-        } else {
-            this.setState(prev => ({
-                ...prev,
-                item: {
-                    ...prev.item,
-                    [category]: prev.item[category].concat(tag)
-                }
-            }));
-            this.props.actions.change(this.state.item, {
-                target: category,
-                value: tags.concat(tag)
-            });
-        }
-    }
+
+//     //  FORM  ---------------------------------------------------------------  FORM  //
+//     handle_onChange = (target, value) => {
+//         this.setState(prev => ({
+//             ...prev,
+//             item: {
+//                 ...prev.item,
+//                 [target]: value
+//             }
+//         }));
+//         this.props.actions.change(target, value);
+//     }
 
     
+//     //  TAGS  ---------------------------------------------------------------  TAGS  //
+//     handle_onTagCreate = (category, tag) => {
+//         const tags = this.state.item[category];
+//         this.setState(prev => ({
+//             ...prev,
+//             item: {
+//                 ...prev.item,
+//                 [category]: prev.item[category].concat(tag)
+//             }
+//         }));
+//         this.props.actions.change(this.state.item, {
+//             target: category,
+//             value: tags.concat(tag)
+//         });
+//         this.props.actions.create(category, tag);
+//     }
+//     handle_onTagToggle = (category, tag) => {
+//         const tags = this.state.item[category];
+//         if (tags.indexOf(tag) > -1) {
+//             this.setState(prev => ({
+//                 ...prev,
+//                 item: {
+//                     ...prev.item,
+//                     [category]: prev.item[category].filter(t => t !== tag)
+//                 }
+//             }));
+//             this.props.actions.change(this.state.item, {
+//                 target: category,
+//                 value: tags.filter(t => t !== tag)
+//             });
+//         } else {
+//             this.setState(prev => ({
+//                 ...prev,
+//                 item: {
+//                     ...prev.item,
+//                     [category]: prev.item[category].concat(tag)
+//                 }
+//             }));
+//             this.props.actions.change(this.state.item, {
+//                 target: category,
+//                 value: tags.concat(tag)
+//             });
+//         }
+//     }
 
-    render () {
-        return (
-            <aside className={[styles.Aside].join(' ')}>
-                <div>
-                    <CardInspectForm
-                        card={this.state.item}
-                        onChange={this.handle_onChange}
-                        onConfirm={this.props.actions.confirm}/>
-                    <Button onClick={this.props.actions.cancel}>Cancel</Button>
-                    <div>
-                        <BarLink path={this.props.path} state={{id: this.props.data.deckId}}>Add many</BarLink>
-                    </div>
-                </div>
-            </aside>
-        );
-    }
-}
+    
 
-export default CardInspect;
+//     render () {
+//         return (
+//             <aside className={[styles.Aside].join(' ')}>
+//                 <div>
+//                     <CardInspectForm
+//                         card={this.state.item}
+//                         onChange={this.handle_onChange}
+//                         onConfirm={this.props.actions.confirm}/>
+//                     <Button onClick={this.props.actions.cancel}>Cancel</Button>
+//                     <div>
+//                         <BarLink path={this.props.path} state={{id: this.props.data.deckId}}>Add many</BarLink>
+//                     </div>
+//                 </div>
+//             </aside>
+//         );
+//     }
+// }
+
+// export default CardInspect;
