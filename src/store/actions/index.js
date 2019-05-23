@@ -32,6 +32,7 @@ export {
     deleteMany_async,
     get_async,
     getAll_async,
+    getAllUsers_async,
     update_async,
     updateMany_async,
     updateTag_async

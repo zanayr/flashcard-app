@@ -8,7 +8,6 @@ import InspectAside from '../Inspect/InspectAside';
 import NavigationAiside from '../Nav/NavAside';
 
 const aside = (props) => {
-    console.log(props);
     let aside = null;
     switch (props.state) {
         case asideTypes.CLOSED:

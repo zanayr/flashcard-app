@@ -207,6 +207,12 @@ export const _getAll_success = (store, data) => {
         payload: data
     };
 };
+export const _getAllUsers_success = (data) => {
+    return {
+        type: actionTypes.GET_ALL_USERS_SUCCESS,
+        payload: data
+    };
+};
 export const _getAll_init = (store) => {
     let type = null;
     switch (store) {
@@ -231,6 +237,12 @@ export const _getAll_init = (store) => {
     }
     return {
         type: type,
+        payload: {}
+    };
+};
+export const _getAllUsers_init = (store) => {
+    return {
+        type: actionTypes.GET_ALL_USERS_INIT,
         payload: {}
     };
 };
@@ -458,6 +470,22 @@ export const getAll_async = (store, token, user) => {
         })
         .catch(error => {
             dispatch(failure(store, error));
+        });
+    };
+};
+export const getAllUsers_async = (token) => {
+    return dispatch => {
+        dispatch(_getAllUsers_init());
+        axios.get('/user.json?auth=' + token)
+        .then(response => {
+            let models = {};
+            Object.keys(response.data).forEach(id => {
+                models[id] = create.userViewModel(id, response.data[id]);
+            });
+            dispatch(_getAllUsers_success(models));
+        })
+        .catch(error => {
+            dispatch(failure('user', error));
         });
     };
 };

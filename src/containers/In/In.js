@@ -12,11 +12,12 @@ class In extends Component {
     componentDidMount() {
         const token = this.props.select_authToken;
         const user = this.props.select_authUser;
+        this.props.get_async('user', token, user);
         this.props.getAll_async('card', token, user);
         this.props.getAll_async('class', token, user);
         this.props.getAll_async('deck', token, user);
         this.props.getAll_async('student', token, user);
-        this.props.get_async('user', token, user);
+        this.props.getAllUsers_async(token);
     }
 
     
@@ -47,7 +48,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         get_async: (store, token, id) => dispatch(actions.get_async(store, token, id)),
-        getAll_async: (store, token, user) => dispatch(actions.getAll_async(store, token, user))
+        getAll_async: (store, token, user) => dispatch(actions.getAll_async(store, token, user)),
+        getAllUsers_async: (token) => dispatch(actions.getAllUsers_async(token))
     };
 };
 

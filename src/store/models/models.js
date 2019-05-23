@@ -241,12 +241,12 @@ export function userViewModel (id, model) {
         id: id,
         info: {
             email: model.info.email,
-            first: model.info.first,
-            last: model.info.last,
             user: model.info.user || id
         },
         meta: model.meta || {},
+        primary: model.info.first,
         privilage: model.privilage || 0,
+        secondary: model.info.last,
         tag: model.tag || []
     }
 }
