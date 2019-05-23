@@ -24,9 +24,10 @@ class TagEditor extends Component {
                     <textarea
                         autoComplete={'off'}
                         className={styles.Input}
-                        placeholder={this.props.label}
                         maxLength={128}
                         name='tag'
+                        pattern={'[a-zA-Z0-9 ,]+'}
+                        placeholder={this.props.label}
                         tabIndex={this.props.tabIndex || -1}
                         value={this.state.value}
                         onChange={(e) => this.handle_onChange(e.target.value)}/>

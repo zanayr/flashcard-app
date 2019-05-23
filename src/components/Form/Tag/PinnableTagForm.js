@@ -1,8 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-
-import * as actions from '../../../store/actions/index';
-import * as select from '../../../store/reducers/root';
 import * as utility from '../../../utility/utility';
 
 import Aux from '../../../hoc/Aux/Aux';
@@ -36,9 +32,11 @@ class PinnableTagForm extends Component {
         this.setState({value: value});
     }
     handle_onConfirm = () => {
-        const tag = this.props.reference.current.tag.value.split(', ');
+        const tags = this.props.reference.current.tag.value.split(', ');
         if (this.props.reference.current.reportValidity()) {
-            this.props.onConfirm(this._checkTags(tag));
+            this.props.onConfirm(this._checkTags(tags.map(t => {
+                return t.replace(' ', '_').toLowerCase();
+            })));
             this._resetValue();
         }
     }
@@ -48,7 +46,7 @@ class PinnableTagForm extends Component {
             <Aux>
                 <div className={styles.TagBar}>
                     <div>
-                        {this.props.collection.map((tag, i) => {
+                        {utility.sortByAlpha_asc(this.props.collection).map((tag, i) => {
                             return (
                                 <Tag2
                                     key={utility.createHashId(i)}
@@ -114,19 +112,3 @@ class PinnableTagForm extends Component {
 
 
 export default PinnableTagForm;
-
-
-// const mapStateToProps = state => {
-//     return {
-//         select_token: select.authToken(state),
-//         select_user: select.user(state)
-//     }
-// }
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         putTag_async: (category, token, user, data) => dispatch(actions.putTag_async(category, token, user, data)),
-//     };
-// };
-
-
-// export default connect(mapStateToProps, mapDispatchToProps)(PinnableTagForm);

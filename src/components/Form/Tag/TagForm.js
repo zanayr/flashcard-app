@@ -1,8 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-
-import * as actions from '../../../store/actions/index';
-import * as select from '../../../store/reducers/root';
 import * as utility from '../../../utility/utility';
 
 import Aux from '../../../hoc/Aux/Aux';
@@ -57,7 +53,9 @@ class TagForm extends Component {
     handle_onConfirm = () => {
         const tags = this.props.reference.current.tag.value.split(', ');
         if (this.props.reference.current.reportValidity()) {
-            this.props.onConfirm(this._checkTags(tags));
+            this.props.onConfirm(this._checkTags(tags.map(t => {
+                return t.replace(' ', '_').toLowerCase();
+            })));
             this._resetValue();
         }
     }
@@ -75,7 +73,7 @@ class TagForm extends Component {
             <Aux>
                 <div className={styles.TagBar}>
                     <div>
-                        {this.props.collection.map((tag, i) => {
+                        {utility.sortByAlpha_asc(this.props.collection).map((tag, i) => {
                             return (
                                 <Tag2
                                     key={utility.createHashId(i)}
@@ -135,19 +133,3 @@ class TagForm extends Component {
 
 
 export default TagForm;
-
-
-// const mapStateToProps = state => {
-//     return {
-//         select_token: select.authToken(state),
-//         select_user: select.user(state)
-//     }
-// }
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         updateTag_async: (store, collection, token, id, tag) => dispatch(actions.updateTag_async(store, collection, token, id, tag)),
-//     };
-// };
-
-
-// export default connect(mapStateToProps, mapDispatchToProps)(TagForm);

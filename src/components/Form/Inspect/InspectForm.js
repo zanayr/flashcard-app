@@ -65,7 +65,7 @@ class InspectForm extends Component {
             allTags = this.state[category].concat(newTags);
             this._resetTags(category, allTags);
             //  Send new tags to the redux store and database
-            this.props.updateTag_async(category, allTags);
+            this.props.updateTag_async('user', category, this.props.select_authToken, this.props.select_authUser, allTags);
         }
     }
     _clearTag (category, tag) {
@@ -127,20 +127,35 @@ class InspectForm extends Component {
         this._updateCard(target, value);
         this.props.onChange(target, value);
     }
-    handle_onCardCreate = () => {
-        if (this.basicsForm.current.reportValidity()) {
+    _checkTagFieldValidity () {
+        const regex = /^[a-zA-Z0-9 ,]+$/
+        let valid = true;
+        if (this.state.states.group && !this.groupForm.current.tag.value.match(regex)) {
+            valid = false;
+        }
+        if (this.state.states.tag && !this.tagForm.current.tag.value.match(regex)) {
+            valid = false;
+        }
+        return valid;
+    }
+    handle_onConfirmClick = () => {
+        if (this.basicsForm.current.reportValidity() && this._checkTagFieldValidity()) {
             //  Retrieve all tags for the new item
             let tags;
             let groups;
             if (this.state.states.tag && this.tagForm.current.tag.value.length) {
                 tags = this.tagForm.current.tag.value.trim().split(', ');
-                this._checkTags('tag', tags);
+                this._checkTags('tag', tags.map(t => {
+                    return t.replace(' ', '_').toLowerCase();
+                }));
             } else {
                 tags = this.state.item.tag;
             }
             if (this.state.states.group && this.groupForm.current.tag.value.length) {
                 groups = this.groupForm.current.tag.value.trim().split(', ');
-                this._checkTags('group', groups);
+                this._checkTags('group', groups.map(g => {
+                    return g.replace(' ', '_').toLowerCase();
+                }));
             } else {
                 groups = this.state.item.group;
             }
@@ -167,14 +182,15 @@ class InspectForm extends Component {
 
     //  TAGS  ---------------------------------------------------------------  TAGS  //
     handle_onTagCreate = (category, tags) => {
+        //  1.  Check if there are any duplicates
+        //  2.  All lowercase, no spaces
         if (tags.length) {
             const allTags = this.state[category].concat(tags);
             tags.forEach(tag => {
                 this._selectTag(category, tag);
             });
             this._resetTags(category, allTags);
-            this.props.updateTag_async(category, allTags);
-            //this.props.onTagCreate();
+            this.props.updateTag_async('user', category, this.props.select_authToken, this.props.select_authUser, allTags);
         }
     }
     handle_onTagToggle = (category, tag) => {
@@ -267,7 +283,7 @@ class InspectForm extends Component {
                 {groupForm}
                 <Button
                     tabIndex={6}
-                    onClick={this.handle_onCardCreate}>
+                    onClick={this.handle_onConfirmClick}>
                     Create
                 </Button>
             </Aux>
@@ -278,14 +294,14 @@ class InspectForm extends Component {
 
 const mapStateToProps = state => {
     return {
+        select_authToken: select.authToken(state),
+        select_authUser: select.authUser(state),
         select_user: select.user(state)
     }
 }
 const mapDispatchToProps = dispatch => {
-    let authToken = select.authToken;
-    let authUser = select.authUser;
     return {
-        updateTag_async: (collection, tag) => dispatch(actions.updateTag_async('user', collection, authToken, authUser, tag)),
+        updateTag_async: (store, collection, token, id, tag) => dispatch(actions.updateTag_async(store, collection, token, id, tag)),
     };
 };
 
