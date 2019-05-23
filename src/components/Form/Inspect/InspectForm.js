@@ -10,7 +10,7 @@ import Aux from '../../../hoc/Aux/Aux';
 import TextField2 from '../../ui/input/Field/TextField2';
 import Textarea2 from '../../ui/input/TextArea/Textarea2';
 import Button from '../../ui/button/Button/Button';
-import TagForm from '../Tag/TagForm';
+import TagForm2 from '../Tag/TagForm2';
 
 import styles from './InspectForm.module.css';
 
@@ -79,7 +79,7 @@ class InspectForm extends Component {
             }
         }));
     }
-    _resetTagForms () {
+    _resetTagForm2s () {
         this.setState(prev => ({
             ...prev,
             reset: true
@@ -141,49 +141,38 @@ class InspectForm extends Component {
     handle_onConfirmClick = () => {
         if (this.basicsForm.current.reportValidity() && this._checkTagFieldValidity()) {
             //  Retrieve all tags for the new item
-            let tags;
-            let groups;
+            let tag;
+            let group;
             if (this.state.states.tag && this.tagForm.current.tag.value.length) {
-                tags = this.tagForm.current.tag.value.trim().split(', ');
-                this._checkTags('tag', tags.map(t => {
+                tag = this.tagForm.current.tag.value.trim().split(', ');
+                this._checkTags('tag', tag.map(t => {
                     return t.replace(' ', '_').toLowerCase();
                 }));
             } else {
-                tags = this.state.item.tag;
+                tag = this.state.item.tag;
             }
             if (this.state.states.group && this.groupForm.current.tag.value.length) {
-                groups = this.groupForm.current.tag.value.trim().split(', ');
-                this._checkTags('group', groups.map(g => {
+                group = this.groupForm.current.tag.value.trim().split(', ');
+                this._checkTags('group', group.map(g => {
                     return g.replace(' ', '_').toLowerCase();
                 }));
             } else {
-                groups = this.state.item.group;
+                group = this.state.item.group;
             }
-
-            //  Build the new item
-            const item = create.itemViewModel(utility.createHashId(0), {
-                group: groups,
-                notes: this.state.item.notes,
-                owner: this.props.select_user.id,
-                primary: this.state.item.primary,
-                secondary: this.state.item.secondary,
-                tag: tags
-            });
-
             //  Send the new item up to the create page
+            // this.props.onConfirm({
+            //     group: group,
+            //     note: this.state.item.note,
+            //     primary: this.state.item.primary,
+            //     secondary: this.state.item.secondary,
+            //     tag: tag
+            // });
             this.props.onConfirm();
-
-            //  Reset the item state, tag forms and form focus
-            this._resetTagForms();
-            this._resetCard();
-            this.basicsForm.current.primary.focus();
         }
     }
 
     //  TAGS  ---------------------------------------------------------------  TAGS  //
     handle_onTagCreate = (category, tags) => {
-        //  1.  Check if there are any duplicates
-        //  2.  All lowercase, no spaces
         if (tags.length) {
             const allTags = this.state[category].concat(tags);
             tags.forEach(tag => {
@@ -214,7 +203,7 @@ class InspectForm extends Component {
         
         if (!this.state.reset) {
             tagForm = (
-                <TagForm
+                <TagForm2
                     category={'tag'}
                     collection={this.state.tag}
                     selected={this.state.item.tag}
@@ -225,7 +214,7 @@ class InspectForm extends Component {
                     onToggle={() => this.handle_onStateToggle('tag')}/>
             );
             groupForm = (
-                <TagForm
+                <TagForm2
                     category={'group'}
                     collection={this.state.group}
                     selected={this.state.item.group}
