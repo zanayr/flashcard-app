@@ -30,7 +30,7 @@ const aside = (props) => {
                         primary: 'Front',
                         secondary: 'Back',
                     }}
-                    path={'/create'}/>
+                    path={'create'}/>
             );
             break;
         case asideTypes.CREATE_USER:
@@ -56,7 +56,7 @@ const aside = (props) => {
                         primary: 'Title',
                         secondary: 'Details'
                     }}
-                    path={'/0/' + props.page}/>
+                    path={'0/' + props.page}/>
             );
             break;
         case asideTypes.CREATE_ITEM:
@@ -69,7 +69,7 @@ const aside = (props) => {
                         primary: props.page !== 'student' ? 'Front' : 'First',
                         secondary: props.page !== 'student' ? 'Back' : 'Last',
                     }}
-                    path={props.page !== 'student' ? '/create' : ''}/>
+                    path={props.page !== 'student' ? 'create' : ''}/>
             );
             break;
         case asideTypes.FILTER_TAG:

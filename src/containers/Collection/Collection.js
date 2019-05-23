@@ -129,7 +129,6 @@ class Collections extends Component {
 
     //  Collection  ------------------------------------------------  Collection SS  //
     _setCollection (collection) {
-        console.log(collection);
         this.setState(prev => ({
             ...prev,
             collection: collection

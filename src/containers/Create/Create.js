@@ -79,8 +79,8 @@ class Create extends Component {
 
     //  EVENT HANDLERS  -----------------------------------------------------  E.H.  //
     //  Aside  --------------------------------------------------------------  Aside //
-    handle_onAsideToggle = (state) => {
-        this._toggleAside(state);
+    handle_onNagivationToggle = () => {
+        this._toggleAside(asideTypes.NAVIGATION);
     }
     handle_onAsideClose = () => {
         this._closeAside();
@@ -113,9 +113,9 @@ class Create extends Component {
                     <div>
                         <Header
                             actions={{
-                                toggle: this.handle_onAsideToggle
+                                navigation: this.handle_onNagivationToggle
                             }}
-                            back={'/u/deck/' + this.props.location.state.id}
+                            back={'/0/deck/' + this.props.location.state.id}
                             state={headerTypes.NAVIGATION}/>
                         <section className={styles.Editor}>
                             <div>

@@ -76,16 +76,16 @@ class InspectAside extends Component {
     render () {
         let link = null;
         if (this.props.path.length) {
-            if (this.props.data.id) {
+            if (this.props.path !== 'create' && this.props.data.id) {
                 link = (
                     <div>
-                        <BarLink path={this.props.path + '/' + this.props.data.id} state={{id: this.props.data.id}}>Add many</BarLink>
+                        <BarLink path={'/' + this.props.path + '/' + this.props.data.id} state={{id: this.props.data.id}}>Add many</BarLink>
                     </div>
                 );
             } else {
                 link = (
                     <div>
-                        <BarLink path={this.props.path} state={{}}>Add many</BarLink>
+                        <BarLink path={'/' + this.props.path} state={{}}>Add many</BarLink>
                     </div>
                 );
             }

@@ -60,8 +60,8 @@ class Profile extends Component {
 
     //  EVENT HANDLERS  -----------------------------------------------------  E.H.  //
     //  Aside  --------------------------------------------------------------  Aside //
-    handle_onAsideToggle = (state) => {
-        this._toggleAside(state);
+    handle_onNagivationToggle = () => {
+        this._toggleAside(asideTypes.NAVIGATION);
     }
     handle_onAsideClose = () => {
         this._closeAside();
@@ -83,7 +83,7 @@ class Profile extends Component {
                     <div>
                         <Header
                             actions={{
-                                toggle: this.handle_onAsideToggle
+                                toggle: this.handle_onNagivationToggle
                             }}
                             back={'/2/user'}
                             state={headerTypes.NAVIGATION}/>
