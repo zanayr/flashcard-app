@@ -177,6 +177,9 @@ const reducer = (state=initialState, action) => {
 export function selectUser (state) {
     return state.user;
 }
+export function selectUserById (state, id) {
+    return state.users[id];
+}
 export function selectUsers (state) {
     return state.users;
 }

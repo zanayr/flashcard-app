@@ -14,6 +14,7 @@ import Interstitial from './containers/Interstitial/Interstitial';
 import Item from './containers/Item/Item';
 import Modal from './components/modal/Modal/Modal';
 import Out from './containers/Out/Out';
+import Profile from './containers/Profile/Profile';
 import User from './containers/User/User';
 
 import AppCSS from './App.module.css';
@@ -44,13 +45,15 @@ class App extends Component {
     if (this.props.isAuthenticated) {
       routes = (
         <Switch>
-          <Route path='/create' exact component={Create}/>
-          <Route path='/load/:store/:collection' component={Interstitial}/>
-          <Route path='/load/:store' component={Interstitial}/>
+          
           <Route path='/0/:collection/:id' component={Inspector}/>
           <Route path='/0/:collection' component={Collection}/>
           <Route path='/1/:item' component={Item}/>
+          <Route path='/2/user/:id' component={Profile}/>
           <Route path='/2/user' component={User}/>
+          <Route path='/create' exact component={Create}/>
+          <Route path='/load/:store/:collection' component={Interstitial}/>
+          <Route path='/load/:store' component={Interstitial}/>
           <Route path='/in' exact component={In}/>
           <Route path='/out' exact component={Out}/>
           <Route path='/auth' exact component={Auth}/>

@@ -671,13 +671,15 @@ class User extends Component {
                 this._selectUser(data);
                 break;
             case 1:
-                this._inspectUser(data);
+                this.props.history.replace('/2/user/' + data.id);
                 break;
             case 2:
-                this._assignUser(data);
+                //  Suspend user
+                // this._assignUser(data);
                 break;
             case 3:
-                this._deleteUser(data);
+                //  Delete User
+                // this._deleteUser(data);
                 break;
             default:
                 break;
@@ -744,7 +746,7 @@ class User extends Component {
                         filters={this.state.filter}
                         current={this.state.current}
                         selected={this.state.selected}
-                        aux={'assign'}/>
+                        aux={'suspend'}/>
                 );
                 break;
             case 'ADD_TAB':
@@ -759,6 +761,7 @@ class User extends Component {
                 content = (<Throbber/>);
                 break;
         }
+        console.log(this.props);
         return (
             <Aux>
                 <Header
