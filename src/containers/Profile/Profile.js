@@ -83,7 +83,7 @@ class Profile extends Component {
                     <div>
                         <Header
                             actions={{
-                                toggle: this.handle_onNagivationToggle
+                                navigation: this.handle_onNagivationToggle
                             }}
                             back={'/2/user'}
                             state={headerTypes.NAVIGATION}/>
