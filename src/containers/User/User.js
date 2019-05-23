@@ -59,7 +59,6 @@ class User extends Component {
         Object.keys(models).forEach(id => {
             users[id] = models[id];
         });
-        console.log(users);
         this.setState(prev => ({
             ...prev,
             group: this.props.select_user.group.slice(),
@@ -184,7 +183,6 @@ class User extends Component {
         users.forEach(user => {
             i[user.id] = user;
         });
-        console.log(users);
         this.setState(prev => ({
             ...prev,
             users: i
@@ -537,21 +535,6 @@ class User extends Component {
     
 
     //  EVENT HANDLERS  ===========================================  EVENT HANDLERS  //
-    //  Action Button  ------------------------------------------  Action Button EH  //
-    handle_onActionClick = (action) => {
-        switch (action) {
-            case 0:
-                this._createUser();
-                break;
-            case 1:
-                console.log('Starting study session...');
-                break;
-            default:
-                break;
-        }
-    }
-
-
     //  Aside  ----------------------------------------------------------  Aside EH  //
     handle_onAsideCancel = () => {
         const originalData = this.state.aside.data;
@@ -761,7 +744,6 @@ class User extends Component {
                 content = (<Throbber/>);
                 break;
         }
-        console.log(this.props);
         return (
             <Aux>
                 <Header
@@ -784,10 +766,6 @@ class User extends Component {
                             collection={this.state.tab}
                             onClick={this.handle_onAsideClose}/>
                         {content}
-                        <ActionButton
-                            onClick={this.handle_onActionClick}
-                            state={0}
-                            values={['Create', 'Study']}/>
                         <QuickBar
                             action={this.handle_onQuickClick}
                             data={this.state.quick}/>

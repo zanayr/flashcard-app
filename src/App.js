@@ -49,6 +49,7 @@ class App extends Component {
           <Route path='/0/:collection/:id' component={Inspector}/>
           <Route path='/0/:collection' component={Collection}/>
           <Route path='/1/:item' component={Item}/>
+          <Route path='/2/create' component={Profile}/>
           <Route path='/2/user/:id' component={Profile}/>
           <Route path='/2/user' component={User}/>
           <Route path='/create' exact component={Create}/>

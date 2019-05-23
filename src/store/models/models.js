@@ -103,11 +103,13 @@ export function userModel (model) {
         group: model.group,
         info: {
             email: model.info.email,
-            first: model.info.first,
-            last: model.info.last,
+            first: model.primary,
+            last: model.secondary,
+            note: model.note,
             user: model.info.user
         },
         meta: model.meta,
+        privilage: model.privilage,
         tab: model.tab,
         tag: model.tag
     }
@@ -244,6 +246,7 @@ export function userViewModel (id, model) {
             user: model.info.user || id
         },
         meta: model.meta || {},
+        note: model.info.note || '',
         primary: model.info.first,
         privilage: model.privilage || 0,
         secondary: model.info.last,

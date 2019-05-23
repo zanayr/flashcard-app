@@ -9,7 +9,7 @@ import * as headerTypes from '../../components/Header/types.js';
 import Aside from '../../components/aside/Aside/Aside';
 import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
-// import ProfileForm from '../../components/form/Profile/ProfileForm';
+import ProfileForm from '../../components/form/Profile/ProfileForm';
 
 import styles from './Profile.module.css';
 
@@ -67,8 +67,9 @@ class Profile extends Component {
         this._closeAside();
     }
 
-    handle_onUserSave = (user) => {
-        //  Do stuff
+    handle_onFormConfirm = (user) => {
+        this.props.update_async('user', this.props.select_authToken, user);
+        this.props.history.replace('/2/user');
     }
 
 
@@ -89,9 +90,9 @@ class Profile extends Component {
                         <section className={styles.Editor}>
                             <div>
                                 <div className={styles.Wrapper}>
-                                    {/* <ProfileForm
+                                    <ProfileForm
                                         user={this.props.select_user}
-                                        onConfirm={this.handle_onUserSave}/> */}
+                                        onConfirm={this.handle_onFormConfirm}/>
                                 </div>
                             </div>
                         </section>
