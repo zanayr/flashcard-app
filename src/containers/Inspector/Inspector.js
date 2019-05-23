@@ -34,19 +34,18 @@ class Inspector extends Component {
             id: 'all',
             tag: []
         },
+        internal: [],
         items: {},
         collection: {},
         filter: {
             group: [],
             tag: []
         },
-        group: this.props.select_user.group,
         main: 'LOADING',
         quick: [],
         selected: [],
         sort: sortTypes.DATE_ASC,
         tab: this.props.select_collection.tab,
-        tag: [],
         undo: {
             action: null,
             data: {}
@@ -59,7 +58,7 @@ class Inspector extends Component {
         const items = {};
         const collection = {...this.props.select_collection};
         let $new = false;
-        let tags = this.props.select_user.tag.slice();
+        const internal = [];
         Object.keys(this.props.select_items).filter(id => collection.member.includes(id)).forEach(id => {
             if (this.props.select_items[id].tag.includes('$new')) {
                 $new = true;
@@ -67,15 +66,15 @@ class Inspector extends Component {
             items[id] = this.props.select_items[id];
         });
         if ($new) {
-            tags.push('$new');
+            internal.push('$new');
         }
 
         this.setState(prev => ({
             ...prev,
-            items: items,
             collection: collection,
-            main: 'LIST_VIEW',
-            tag: tags
+            internal: internal,
+            items: items,
+            main: 'LIST_VIEW'
         }));
     }
 
@@ -341,12 +340,18 @@ class Inspector extends Component {
     //  PRIVATE METHODS  =========================================  PRIVATE METHODS  //
     //  Aside  ----------------------------------------------------------  Aside PM  //
     _openFilterAside (filter) {
+        let all;
+        if (filter === 'tag') {
+            all = this.props.select_user.tag.concat(this.state.internal);
+        } else {
+            all = this.props.select_user.group.slice();
+        }
         this._setAside({
             toggle: (tag) => this.handle_onAsideFilterToggle(filter, tag)
         }, {
-            all: this.state[filter],
-            filter: this.state.filter[filter],
-            tab: this.state.current[filter]
+            all: all,
+            filter: this.state.filter[filter].slice(),
+            tab: this.state.current[filter].slice()
         });
     }
     _openInspectAside (data) {

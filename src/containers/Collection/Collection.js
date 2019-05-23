@@ -38,13 +38,12 @@ class Collections extends Component {
             group: [],
             tag: []
         },
-        group: this.props.select_user.group,
+        internal: [],
         main: 'LOADING',
         quick: [],
         selected: [],
         sort: sortTypes.DATE_ASC,
         tab: this.props.select_user[this.props.match.params.collection],
-        tag: this.props.select_user.tag,
         undo: {
             action: null,
             data: {}
@@ -55,12 +54,21 @@ class Collections extends Component {
 
     componentDidMount () {
         const collection = {};
+        let $new = false;
+        const internal = [];
         Object.keys(this.props.select_collections).forEach(id => {
+            if (this.props.select_collections[id].tag.includes('$new')) {
+                $new = true;
+            }
             collection[id] = this.props.select_collections[id];
         });
+        if ($new) {
+            internal.push('$new');
+        }
         this.setState(prev => ({
             ...prev,
             collection: collection,
+            internal: internal,
             main: 'LIST_VIEW'
         }));
     }
@@ -301,12 +309,18 @@ class Collections extends Component {
     //  PRIVATE METHODS  =========================================  PRIVATE METHODS  //
     //  Aside  ----------------------------------------------------------  Aside PM  //
     _openFilterAside (filter) {
+        let all;
+        if (filter === 'tag') {
+            all = this.props.select_user.tag.concat(this.state.internal);
+        } else {
+            all = this.props.select_user.group.slice();
+        }
         this._setAside({
             toggle: (tag) => this.handle_onAsideFilterToggle(filter, tag)
         }, {
-            all: this.state[filter],
-            filter: this.state.filter[filter],
-            tab: this.state.current[filter]
+            all: all,
+            filter: this.state.filter[filter].slice(),
+            tab: this.state.current[filter].slice()
         });
     }
     _openInspectAside (data) {
