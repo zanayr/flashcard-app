@@ -56,7 +56,7 @@ const aside = (props) => {
                         primary: 'Title',
                         secondary: 'Details'
                     }}
-                    path={'0/' + props.page}/>
+                    path={props.page}/>
             );
             break;
         case asideTypes.CREATE_ITEM:
