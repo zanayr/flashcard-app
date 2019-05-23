@@ -357,10 +357,10 @@ class Inspector extends Component {
             confirm: data.confirm,
             create: this.handle_onTagCreate
         }, {
-            group: this.state.group,
+            group: this.props.select_user.group,
             item: data.item,
             id: this.state.collection.id,
-            tag: this.state.tag
+            tag: this.props.select_user.tag
         });
     }
 
@@ -510,7 +510,6 @@ class Inspector extends Component {
         const original = this.state.aside.data.item;
         const item = this.state.items[original.id];
         if (JSON.stringify(item) !== JSON.stringify(original)) {
-            console.log(item);
             this.props.update_async(this.page, this.props.select_authToken, item);
             this._setUndo({
                 action: this._undoItemUpdated,
@@ -803,8 +802,8 @@ class Inspector extends Component {
             case 'ADD_TAB':
                 content = (
                     <TabForm
-                        tag={this.state.tag}
-                        group={this.state.group}
+                        group={this.props.select_user.group}
+                        tag={this.props.select_user.tag}
                         onConfirm={this.handle_onTabCreate}/>
                 );
                 break;

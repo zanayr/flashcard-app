@@ -134,14 +134,8 @@ export function userById (store, id) {
 export function users (store) {
     return FromUser.selectUsers(store[USER]);
 }
-export function userId (store) {
-    return FromUser.selectUserId(store[USER]);
-}
 export function userIsLoading (store) {
     return FromUser.selectUserIsLoading(store[USER]);
-}
-export function userTabs (store) {
-    return FromUser.selectUserTabs(store[USER]);
 }
 
 

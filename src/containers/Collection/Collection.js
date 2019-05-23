@@ -317,10 +317,10 @@ class Collections extends Component {
             confirm: data.confirm,
             create: this.handle_onTagCreate
         }, {
-            group: this.state.group,
+            group: this.props.select_user.group,
             item: data.collection,
             id: data.collection.id,
-            tag: this.state.tag
+            tag: this.props.select_user.tag
         });
     }
 
@@ -728,8 +728,8 @@ class Collections extends Component {
             case 'ADD_TAB':
                 content = (
                     <TabForm
-                        tag={this.state.tag}
-                        group={this.state.group}
+                        group={this.props.select_user.group}
+                        tag={this.props.select_user.tag}
                         onConfirm={this.handle_onTabCreate}/>
                 );
                 break;
