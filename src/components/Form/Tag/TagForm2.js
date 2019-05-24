@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import * as utility from '../../../utility/utility';
 
-import Aux from '../../../hoc/Aux/Aux';
 import TagField2 from '../../ui/input/Tag/TagField2';
-import TagEditor from '../../ui/input/Tag/TagEditor';
 import Tag2 from '../../ui/Tag/Tag2';
 import Button from '../../ui/button/Button/Button';
 

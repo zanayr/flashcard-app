@@ -8,22 +8,18 @@ import * as utility from '../../../utility/utility';
 
 import TextField2 from '../../ui/input/Field/TextField2';
 import Button from '../../ui/button/Button/Button';
-import TagForm from '../../form/Tag/TagForm';
+import TagForm2 from '../../form/Tag/TagForm2';
 
 import styles from './TabForm.module.css';
 
 class TabForm extends Component {
     state = {
-        group: this.props.group,
+        group: [],
         name: '',
-        tag: this.props.tag,
-        selected: {
-            group: [],
-            tag: []
-        },
-        states: {
-            tag: false,
-            group: false
+        tag: [],
+        valid: {
+            name: false,
+            tag: false
         }
     }
 
@@ -37,6 +33,15 @@ class TabForm extends Component {
     }
 
     //  STATE SETTERS  ---------------------------------------------  STATE SETTERS  //
+    setValid (target, bool) {
+        this.setState(prev => ({
+            ...prev,
+            valid: {
+                ...prev.valid,
+                [target]: bool
+            }
+        }));
+    }
     //  Name  ---------------------------------------------------------------  Name  //
     _setName (value) {
         this.setState(prev => ({
@@ -46,50 +51,35 @@ class TabForm extends Component {
     }
 
     //  Form  //
-    _toggleFormState (name) {
-        this.setState(prev => ({
-            ...prev,
-            states: {
-                ...prev.states,
-                [name]: !prev.states[name]
-            }
-        }));
-    }
 
     //  Tags  ---------------------------------------------------------------  Tags  //
-    _checkTags (category, tags) {
-        //  Check for new tags that are not included in the user defined tags
-        const newTags = tags.filter(tag => !this.state[category].includes(tag));
-        let allTags;
-        if (newTags.length) {
-            allTags = this.state[category].concat(newTags);
-            this._resetTags(category, allTags);
-            //  Send new tags to the redux store and database
-            this.props.updateTag_async('user', category, this.props.select_authtoken, this.props.select_authUser, allTags);
-        }
-    }
+    // _checkTags (category, tags) {
+    //     //  Check for new tags that are not included in the user defined tags
+    //     const newTags = tags.filter(tag => !this.state[category].includes(tag));
+    //     let allTags;
+    //     if (newTags.length) {
+    //         allTags = this.state[category].concat(newTags);
+    //         this._resetTags(category, allTags);
+    //         //  Send new tags to the redux store and database
+    //         this.props.updateTag_async('user', category, this.props.select_authtoken, this.props.select_authUser, allTags);
+    //     }
+    // }
     _clearTag (category, tag) {
         this.setState(prev => ({
             ...prev,
-            selected: {
-                ...prev.selected,
-                [category]: prev.selected[category].filter(t => t !== tag)
-            }
+            [category]: prev[category].filter(t => t !== tag)
         }));
     }
-    _resetTags (category, tags) {
-        this.setState(prev => ({
-            ...prev,
-            [category]: tags
-        }));
-    }
+    // _resetTags (category, tags) {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         [category]: tags
+    //     }));
+    // }
     _selectTag (category, tag) {
         this.setState(prev => ({
             ...prev,
-            selected: {
-                ...prev.selected,
-                [category]: prev.selected[category].concat(tag)
-            }
+            [category]: prev[category].concat(tag)
         }));
     }
     
@@ -97,6 +87,7 @@ class TabForm extends Component {
     //  EVENT HANDLERS  -------------------------------------------  EVENT HANDLERS  //
     //  Name  ---------------------------------------------------------------  Name  //
     handle_onNameChange = (value) => {
+        this.setValid('name', value.length >= 3);
         this._setName(value);
     }
 
@@ -105,45 +96,50 @@ class TabForm extends Component {
         this._toggleFormState(name);
     }
     handle_onFormConfirm = () => {
-        let tags = [];
-        let groups = [];
+        // let tags = [];
+        // let groups = [];
 
-        if (this.state.states.tag && this.tagForm.current.reportValidity()) {
-            tags = this.tagForm.current.tag.value.trim().split(', ');
-            this._checkTags('tag', tags);
-        } else {
-            tags = this.state.selected.tag;
-        }
-        if (this.state.states.group && this.groupForm.current.reportValidity()) {
-            groups = this.groupForm.current.tag.value.trim().split(', ');
-            this._checkTags('group', groups);
-        } else {
-            groups = this.state.selected.group;
-        }
+        // if (this.state.states.tag && this.tagForm.current.reportValidity()) {
+        //     tags = this.tagForm.current.tag.value.trim().split(', ');
+        //     this._checkTags('tag', tags);
+        // } else {
+        //     tags = this.state.tag;
+        // }
+        // if (this.state.states.group && this.groupForm.current.reportValidity()) {
+        //     groups = this.groupForm.current.tag.value.trim().split(', ');
+        //     this._checkTags('group', groups);
+        // } else {
+        //     groups = this.state.group;
+        // }
 
         this.props.onConfirm(create.tabViewModel(utility.createHashId(0), {
             active: true,
-            group: groups,
+            group: this.state.group,
             name: this.state.name,
-            tag: tags
+            tag: this.state.tag
         }));
     }
 
     handle_onTagCreate = (category, tags) => {
         if (tags.length) {
-            const allTags = this.state[category].concat(tags);
             tags.forEach(tag => {
                 this._selectTag(category, tag);
             });
-            this._resetTags(category, allTags);
+            this.props.updateTag_async('user', category, this.props.select_authtoken, this.props.select_authUser, this.props[category].concat(tags));
+            this.setValid('tag', true);
         }
-        console.log(tags);
-        this.props.updateTag_async('user', category, this.props.select_authtoken, this.props.select_authUser, this.state[category].concat(tags));
     }
     handle_onTagToggle = (category, tag) => {
-        if (!this.state.selected[category].includes(tag)) {
+        if (!this.state[category].includes(tag)) {
+            this.setValid('tag', true);
             this._selectTag(category, tag);
         } else {
+            let valid = {
+                tag: this.state.tag.length > 0,
+                group: this.state.group.length > 0
+            }
+            valid[category] = this.state[category].length - 1 > 0;
+            this.setValid('tag', (valid.tag || valid.group));
             this._clearTag(category, tag);
         }
     }
@@ -170,25 +166,26 @@ class TabForm extends Component {
                             onChange={(value) => this.handle_onNameChange(value)}/>
                         </div>
                     </form>
-                    <TagForm
+                    <TagForm2
                         category={'tag'}
-                        collection={this.state.tag}
-                        selected={this.state.selected.tag}
+                        collection={this.props.tag}
+                        selected={this.state.tag}
                         tabIndex={4}
                         reference={this.tagForm}
                         onConfirm={(tag) => this.handle_onTagCreate('tag', tag)}
                         onSelect={this.handle_onTagToggle}
                         onToggle={() => this.handle_onStateToggle('tag')}/>
-                    <TagForm
+                    <TagForm2
                         category={'group'}
-                        collection={this.state.group}
-                        selected={this.state.selected.group}
+                        collection={this.props.group}
+                        selected={this.state.group}
                         tabIndex={5}
                         reference={this.groupForm}
                         onConfirm={(group) => this.handle_onTagCreate('group', group)}
                         onSelect={this.handle_onTagToggle}
                         onToggle={() => this.handle_onStateToggle('group')}/>
                     <Button
+                        disabled={!this.state.valid.name || !this.state.valid.tag}
                         tabIndex={6}
                         onClick={this.handle_onFormConfirm}>
                         Add
