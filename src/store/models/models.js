@@ -59,6 +59,7 @@ export function collectionModel (model) {
 //  Student  -------------------------------------------------------  Student Model  //
 export function userModel (model) {
     return {
+        card: model.card,
         class: model.class,
         date: model.date,
         deck: model.deck,
@@ -161,8 +162,14 @@ export function collectionViewModel (id, model) {
 
 //  User View Model  ---------------------------------------------  User V.M.  //
 export function userViewModel (id, model) {
+    const cardTab = {};
     const classTab = {};
     const deckTab = {};
+    if (model.card) {
+        Object.keys(model.card).map(id => {
+            cardTab[id] = tabViewModel(id, model.card[id]);
+        });
+    }
     if (model.class) {
         Object.keys(model.class).map(id => {
             classTab[id] = tabViewModel(id, model.class[id]);
@@ -174,6 +181,7 @@ export function userViewModel (id, model) {
         });
     }
     return {
+        card: cardTab,
         class: classTab,
         date: model.date || Date.now(),
         deck: deckTab,

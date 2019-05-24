@@ -34,18 +34,17 @@ class Item extends Component {
             id: 'all',
             tag: []
         },
+        internal: [],
         items: {},
         filter: {
             group: [],
             tag: []
         },
-        group: [],
         main: 'LOADING',
         quick: [],
         selected: [],
         sort: sortTypes.DATE_ASC,
         tab: {},
-        tag: [],
         undo: {
             action: null,
             data: {}
@@ -54,10 +53,10 @@ class Item extends Component {
     undoTimeout = null;
 
     componentDidMount () {
+        const internal = [];
         const items = {};
         let $new = false;
         let $unassigned = false;
-        let tags = this.props.select_user.tag.slice();
         Object.keys(this.props.select_items).forEach(id => {
             if (this.props.select_items[id].tag.includes('$new')) {
                 $new = true;
@@ -68,18 +67,20 @@ class Item extends Component {
             items[id] = this.props.select_items[id];
         });
         if ($new) {
-            tags.push('$new');
+            internal.push('$new');
         }
         if ($unassigned) {
-            tags.push('$unassigned');
+            internal.push('$unassigned');
         }
+        console.log(this.props.select_user.card);
         this.setState(prev => ({
             ...prev,
             group: this.props.select_user.group.slice(),
+            internal: internal,
             items: items,
             main: 'LIST_VIEW',
             tab: this.props.select_user[this.props.match.params.item] || {},
-            tag: tags
+            tag: this.props.select_user.tag.slice()
         }));
     }
 
@@ -342,12 +343,18 @@ class Item extends Component {
         });
     }
     _openFilterAside (filter) {
+        let all;
+        if (filter === 'tag') {
+            all = this.props.select_user.tag.concat(this.state.internal);
+        } else {
+            all = this.props.select_user.group.slice();
+        }
         this._setAside({
             toggle: (tag) => this.handle_onAsideFilterToggle(filter, tag)
         }, {
-            all: this.state[filter],
-            filter: this.state.filter[filter],
-            tab: this.state.current[filter]
+            all: all,
+            filter: this.state.filter[filter].slice(),
+            tab: this.state.current[filter].slice()
         });
     }
     _openInspectAside (data) {
@@ -358,9 +365,9 @@ class Item extends Component {
             confirm: data.confirm,
             create: this.handle_onTagCreate
         }, {
-            group: this.state.group,
+            group: this.props.select_user.group,
             item: data.item,
-            tag: this.state.tag
+            tag: this.props.select_user.tag
         });
     }
 
@@ -506,6 +513,7 @@ class Item extends Component {
     _deleteTab (tab) {
         let tabs = {...this.state.tab};
         delete tabs[tab.id];
+        this.props.deleteTab_async('user', this.props.match.params.item, this.props.select_authToken, this.props.select_authUser, tab);
         this._setTab(tabs);
         if (this.state.current.id === tab.id) {
             this._setCurrent({
@@ -739,6 +747,14 @@ class Item extends Component {
                 break;
         }
     }
+    handle_onTabCreate = (tab) => {
+        const tabs = {...this.state.tab};
+        tabs[tab.id] = tab;
+        this.props.addTab_async('user', this.props.match.params.item, this.props.select_authToken, this.props.select_authUser, tab);
+        this._setTab(tabs);
+        this._setCurrent(tab);
+        this._setMainState('LIST_VIEW');
+    }
 
     //  Tag  -----------------------------------------------------------------  Tag  //
     handle_onTagCreate = (category, tag) => {
@@ -763,8 +779,8 @@ class Item extends Component {
             case 'ADD_TAB':
                 content = (
                     <TabForm
-                        tag={this.state.tag}
-                        group={this.state.group}
+                        tag={this.props.select_user.tag}
+                        group={this.props.select_user.group}
                         onConfirm={this.handle_onTabCreate}/>
                 );
                 break;
@@ -825,7 +841,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
     return {
         addMany_async: (store, token, items) => dispatch(actions.addMany_async(store, token, items)),
+        addTab_async: (store, collection, token, user, model) => dispatch(actions.addTab_async(store, collection, token, user, model)),
         delete_async: (store, token, item) => dispatch(actions.delete_async(store, token, item)),
+        deleteTab_async: (store, collection, token, user, tab) => dispatch(actions.deleteTab_async(store, collection, token, user, tab)),
         update_async: (store, token, model) => dispatch(actions.update_async(store, token, model)),
     };
 };
