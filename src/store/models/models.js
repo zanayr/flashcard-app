@@ -139,14 +139,19 @@ export function itemViewModel (id, model) {
 //  Collection view models require an ID and an owner (a user); they have an array of
 //  member IDs (item IDs)
 export function collectionViewModel (id, model) {
+    const date = model.date || Date.now();
     const tab = {};
+    let tag = model.tag || [];
     if (model.tab) {
         Object.keys(model.tab).map(id => {
             tab[id] = tabViewModel(id, model.tab[id]);
         });
     }
+    if (Date.now() - date < 604800000 && !tag.includes('$new')) {
+        tag = tag.concat('$new');
+    }
     return {
-        date: model.date || Date.now(),
+        date: date,
         group: model.group || [],
         id: id,
         member: model.member || [],
@@ -156,7 +161,7 @@ export function collectionViewModel (id, model) {
         primary: model.primary || '',
         secondary: model.secondary || '',
         tab: tab,
-        tag: model.tag || []
+        tag: tag
     }
 }
 
