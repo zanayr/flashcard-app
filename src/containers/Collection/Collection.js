@@ -802,8 +802,8 @@ const mapStateToProps = (state, ownProps) => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        addTab_async: (store, collection, token, user, model) => dispatch(actions.addTab_async(store, collection, token, user, model)),
         addMany_async: (store, token, models) => dispatch(actions.addMany_async(store, token, models)),
+        addTab_async: (store, collection, token, user, model) => dispatch(actions.addTab_async(store, collection, token, user, model)),
         delete_async: (store, token, model) => dispatch(actions.delete_async(store, token, model)),
         deleteTab_async: (store, collection, token, user, tab) => dispatch(actions.deleteTab_async(store, collection, token, user, tab)),
         update_async: (store, token, model) => dispatch(actions.update_async(store, token, model))

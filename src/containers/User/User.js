@@ -9,7 +9,6 @@ import * as select from '../../store/reducers/root';
 import * as sortTypes from '../../utility/sortTypes';
 import * as utility from '../../utility/utility';
 
-import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside from '../../components/aside/Aside/Aside';
 import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
@@ -442,26 +441,6 @@ class User extends Component {
         });
         this._clearQuick('s');
     }
-    // _assign = (member) => {
-    //     const user = this.state.aside.data.user;
-    //     this.props.update_async(this.props.match.params.user, this.props.select_authToken, {
-    //         ...user,
-    //         member: member
-    //     });
-    //     this._setUserValue('member', member);
-    //     this._setUndo({
-    //         action: this._undoUserUpdated,
-    //         data: user
-    //     });
-    // }
-    // _assignUser = (user) => {
-    //     this._openAssignAside({
-    //         confirm: this._assign,
-    //         user: user,
-    //         type: asideTypes.ASSIGN_USER
-    //     });
-    //     this._clearQuick('s');
-    // }
     _selectUser = (user) => {
         let selected = this.state.selected.slice();
         if (selected.find(i => i.id === user.id)) {
@@ -491,6 +470,7 @@ class User extends Component {
     _deleteTab (tab) {
         let tabs = {...this.state.tab};
         delete tabs[tab.id];
+        this.props.deleteTab_async('user', 'user', this.props.select_authToken, this.props.select_authUser, tab);
         this._setTab(tabs);
         if (this.state.current.id === tab.id) {
             this._setCurrent({
@@ -711,6 +691,14 @@ class User extends Component {
                 break;
         }
     }
+    handle_onTabCreate = (tab) => {
+        const tabs = {...this.state.tab};
+        tabs[tab.id] = tab;
+        this.props.addTab_async('user', 'user', this.props.select_authToken, this.props.select_authUser, tab);
+        this._setTab(tabs);
+        this._setCurrent(tab);
+        this._setMainState('LIST_VIEW');
+    }
 
     //  Tag  -----------------------------------------------------------------  Tag  //
     handle_onTagCreate = (category, tag) => {
@@ -792,7 +780,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
     return {
         addMany_async: (store, token, users) => dispatch(actions.addMany_async(store, token, users)),
+        addTab_async: (store, collection, token, user, model) => dispatch(actions.addTab_async(store, collection, token, user, model)),
         delete_async: (store, token, user) => dispatch(actions.delete_async(store, token, user)),
+        deleteTab_async: (store, collection, token, user, tab) => dispatch(actions.deleteTab_async(store, collection, token, user, tab)),
         update_async: (store, token, model) => dispatch(actions.update_async(store, token, model)),
     };
 };
