@@ -1,20 +1,5 @@
 
 //  MODELS  ---------------------------------------------------------------  MODELS  //
-//  Card  -------------------------------------------------------------  Card Model  //
-// export function cardModel (card) {
-//     const internal = /^\$[a-zA-Z0-9]*/;
-//     return {
-//         group: card.group,
-//         date: card.date,
-//         member: card.member,
-//         meta: card.meta,
-//         note: card.note,
-//         owner: card.owner,
-//         primary: card.primary,
-//         secondary: card.secondary,
-//         tag: card.tag.filter(tag => !tag.match(internal)),
-//     }
-// }
 //  Tab  ---------------------------------------------------------------  Tab Model  //
 //  Tab models are used for all "tab" database entites; these entites live inside of
 //  of collection entites.
@@ -70,29 +55,6 @@ export function collectionModel (model) {
         tag: model.tag.filter(tag => !tag.match(internal))
     }
 }
-
-
-//  Deck  -------------------------------------------------------------  Deck Model  //
-// export function deckModel (deck) {
-//     const tab = {};
-//     if (deck.tab) {
-//         Object.keys(deck.tab).map(id => {
-//             tab[id] = tabModel(deck.tab[id]);
-//         });
-//     }
-//     return {
-//         date: deck.date,
-//         group: deck.group,
-//         member: deck.member,
-//         meta: deck.meta,
-//         note: deck.note,
-//         owner: deck.owner,
-//         primary: deck.primary,
-//         secondary: deck.secondary,
-//         tab: tab,
-//         tag: deck.tag
-//     }
-// }
 
 //  Student  -------------------------------------------------------  Student Model  //
 export function userModel (model) {
@@ -196,30 +158,6 @@ export function collectionViewModel (id, model) {
         tag: model.tag || []
     }
 }
-
-
-//  Deck View Model  --------------------------------------------------------  DECK  //
-// export function deckViewModel (id, deck) {
-//     const tab = {};
-//     if (deck.tab) {
-//         Object.keys(deck.tab).map(id => {
-//             tab[id] = tabViewModel(id, deck.tab[id]);
-//         });
-//     }
-//     return {
-//         date: deck.date || Date.now(),
-//         group: deck.group || [],
-//         id: id,
-//         member: deck.member || [],
-//         meta: deck.meta || {},
-//         note: deck.note || '',
-//         owner: deck.owner,
-//         primary: deck.primary || '',
-//         secondary: deck.secondary || '',
-//         tab: tab,
-//         tag: deck.tag || []
-//     }
-// }
 
 //  User View Model  ---------------------------------------------  User V.M.  //
 export function userViewModel (id, model) {
