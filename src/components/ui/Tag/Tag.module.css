@@ -51,6 +51,7 @@
 }
 .Tag2 span p {
     font-size: 9px;
+    text-transform: capitalize;
     user-select: none;
 }
 

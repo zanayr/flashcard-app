@@ -53,29 +53,12 @@ class TabForm extends Component {
     //  Form  //
 
     //  Tags  ---------------------------------------------------------------  Tags  //
-    // _checkTags (category, tags) {
-    //     //  Check for new tags that are not included in the user defined tags
-    //     const newTags = tags.filter(tag => !this.state[category].includes(tag));
-    //     let allTags;
-    //     if (newTags.length) {
-    //         allTags = this.state[category].concat(newTags);
-    //         this._resetTags(category, allTags);
-    //         //  Send new tags to the redux store and database
-    //         this.props.updateTag_async('user', category, this.props.select_authtoken, this.props.select_authUser, allTags);
-    //     }
-    // }
     _clearTag (category, tag) {
         this.setState(prev => ({
             ...prev,
             [category]: prev[category].filter(t => t !== tag)
         }));
     }
-    // _resetTags (category, tags) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         [category]: tags
-    //     }));
-    // }
     _selectTag (category, tag) {
         this.setState(prev => ({
             ...prev,
@@ -96,22 +79,6 @@ class TabForm extends Component {
         this._toggleFormState(name);
     }
     handle_onFormConfirm = () => {
-        // let tags = [];
-        // let groups = [];
-
-        // if (this.state.states.tag && this.tagForm.current.reportValidity()) {
-        //     tags = this.tagForm.current.tag.value.trim().split(', ');
-        //     this._checkTags('tag', tags);
-        // } else {
-        //     tags = this.state.tag;
-        // }
-        // if (this.state.states.group && this.groupForm.current.reportValidity()) {
-        //     groups = this.groupForm.current.tag.value.trim().split(', ');
-        //     this._checkTags('group', groups);
-        // } else {
-        //     groups = this.state.group;
-        // }
-
         this.props.onConfirm(create.tabViewModel(utility.createHashId(0), {
             active: true,
             group: this.state.group,

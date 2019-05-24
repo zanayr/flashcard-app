@@ -13,12 +13,11 @@ const tag2 = (props) => {
     } else if (props.selected) {
         css.push(styles.Selected);
     }
-    
     return (
         <div className={styles.Tag2}>
             <span
                 className={css.join(' ')}
-                onClick={(e) => handle_onClick(e)}><p>{props.children}</p></span>
+                onClick={(e) => handle_onClick(e)}><p>{props.children.replace('_', ' ')}</p></span>
         </div>
     );
 }
