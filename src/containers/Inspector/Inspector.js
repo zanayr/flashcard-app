@@ -220,6 +220,7 @@ class Inspector extends Component {
     }
     _setManyMembers (items) {
         console.log(items);
+        console.log(this.state.collection.member);
         this.setState(prev => ({
             ...prev,
             collection: {
@@ -454,11 +455,9 @@ class Inspector extends Component {
         const items = {...this.state.items};
         const selected = this.state.selected.slice();
         const nonmembers = [];
-        const deleted = {}
         selected.forEach(item => {
             nonmembers.push(item.id);
             delete items[item.id];
-            // this.props.delete_async(this.page, this.props.select_authToken, item);
         });
         //  Update entire store in the database and redux with updated collection of models
         this.props.deleteMany_async(this.page, this.props.select_authToken, selected);
@@ -570,6 +569,7 @@ class Inspector extends Component {
     //  Undo  -----------------------------------------------------------  Undo  PM  //
     _undoManyItemsDeleted = () => {
         const items = this.state.undo.data.slice();
+        console.log(items);
         this._addManyItems_async(items);
         this._setManyItems(items);
         this._setManyMembers(items);
