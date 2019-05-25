@@ -140,17 +140,6 @@ class Inspector extends Component {
     }
 
     //  Collection  ------------------------------------------------  Collection SS  //
-    // _setCollection (collection) {
-    //     const members = Object.keys(collection).map(id => {return id});
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         collection: collection,
-    //         deck: {
-    //             ...prev.deck,
-    //             member: members
-    //         }
-    //     }));
-    // }
 
     //  Current  ------------------------------------------------------  Current SS  //
     _setCurrent (tab) {

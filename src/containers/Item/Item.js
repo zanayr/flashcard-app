@@ -72,7 +72,6 @@ class Item extends Component {
         if ($unassigned) {
             internal.push('$unassigned');
         }
-        console.log(this.props.select_user.card);
         this.setState(prev => ({
             ...prev,
             group: this.props.select_user.group.slice(),
@@ -198,7 +197,6 @@ class Item extends Component {
         items.forEach(item => {
             i[item.id] = item;
         });
-        console.log(items);
         this.setState(prev => ({
             ...prev,
             items: i
@@ -415,6 +413,7 @@ class Item extends Component {
         });
         this._addManyItems_async(cloned);
         this._setManyItems(cloned);
+        this._setManyMembers(cloned);
         this._clearSelected();
     }
     _createItem () {
@@ -434,13 +433,15 @@ class Item extends Component {
         this._clearSelected();
     }
     _deleteManyItems () {
-        const i = this.state.items;
+        // const i = this.state.items;
         const selected = this.state.selected.slice();
-        selected.forEach(item => {
-            delete i[item.id];
-            this.props.delete_async(this.props.match.params.item, this.props.select_authToken, item);
-        });
-        this._setManyItems(i);
+        this.props.deleteMany_async(this.props.match.params.item, this.props.select_authToken, selected);
+        // selected.forEach(item => {
+        //     delete i[item.id];
+        //     this.props.delete_async(this.props.match.params.item, this.props.select_authToken, item);
+        // });
+        // this._setManyItems(i);
+        this._removeManyItems(selected);
         this._setUndo({
             action: this._undoManyItemsDeleted,
             data: selected
@@ -843,6 +844,7 @@ const mapDispatchToProps = dispatch => {
         addMany_async: (store, token, items) => dispatch(actions.addMany_async(store, token, items)),
         addTab_async: (store, collection, token, user, model) => dispatch(actions.addTab_async(store, collection, token, user, model)),
         delete_async: (store, token, item) => dispatch(actions.delete_async(store, token, item)),
+        deleteMany_async: (store, token, models) => dispatch(actions.deleteMany_async(store, token, models)),
         deleteTab_async: (store, collection, token, user, tab) => dispatch(actions.deleteTab_async(store, collection, token, user, tab)),
         update_async: (store, token, model) => dispatch(actions.update_async(store, token, model)),
     };
