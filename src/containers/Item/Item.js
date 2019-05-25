@@ -454,7 +454,7 @@ class Item extends Component {
     _deleteManyItems () {
         const selected = this.state.selected.slice();
         this.props.deleteMany_async(this.props.match.params.item, this.props.select_authToken, selected);
-        this._removeMembershipInCollections(selected);
+        this._removeCollectionMembership_async(selected);
         this._removeManyItems(selected);
         this._setUndo({
             action: this._undoManyItemsDeleted,
@@ -462,7 +462,7 @@ class Item extends Component {
         });
         this._clearSelected();
     }
-    _removeMembershipInCollections (items) {
+    _removeCollectionMembership_async (items) {
         const collections = this.props.select_collections;
         const membership = {};
         items.forEach(item => {

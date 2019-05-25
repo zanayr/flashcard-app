@@ -52,10 +52,11 @@ const getAllCardsSuccess = (state, action) => {
     };
 }
 const updateCard = (state, action) => {
+    console.log(action.payload.member);
     return {
         ...state,
-        cards: {
-            ...state.cards,
+        card: {
+            ...state.card,
             [action.payload.id]: action.payload
         },
         error: null

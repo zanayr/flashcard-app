@@ -253,7 +253,7 @@ class Collections extends Component {
                 this.undoTimeout = setTimeout(() => {
                     this._clearQuick('u');
                     this._clearUndo();
-                }, 5000);
+                }, 60000);
             }
             this.setState(prev => ({
                 ...prev,
@@ -337,6 +337,19 @@ class Collections extends Component {
             tag: this.props.select_user.tag
         });
     }
+    _setItemMembership_async (collections) {
+        const items = this.props.select_items;
+        collections.forEach(collection => {
+            if (collection.member.length) {
+                collection.member.forEach(id => {
+                    this.props.update_async('card', this.props.select_authToken, {
+                        ...items[id],
+                        member: items[id].member.concat(collection.id)
+                    });
+                });
+            }
+        });
+    }
 
     //  Collections  ----------------------------------------------------------  Collections PM  //
     _addManyCollections = (collections) => {
@@ -345,6 +358,7 @@ class Collections extends Component {
     }
     _addManyCollections_async (collections) {
         this.props.addMany_async(this.props.match.params.collection, this.props.select_authToken, collections);
+        this._setItemMembership_async(collections);
     }
     _checkCollection (collection) {
         let valid = true;
@@ -391,14 +405,24 @@ class Collections extends Component {
         });
         this._clearSelected();
     }
-    _deleteManyCollections () {
-        const collection = {...this.state.collection};
-        const selected = this.state.selected.slice();
-        selected.forEach(coll => {
-            delete collection[coll.id];
-            this.props.delete_async(this.props.match.params.collection, this.props.select_authToken, coll);
+    _removeItemMembership_async (collections) {
+        const items = this.props.select_items;
+        collections.forEach(collection => {
+            if (collection.member.length) {
+                collection.member.forEach(id => {
+                    this.props.update_async('card', this.props.select_authToken, {
+                        ...items[id],
+                        member: items[id].member.filter(i => i !== collection.id)
+                    });
+                });
+            }
         });
-        this._setCollection(collection);
+    }
+    _deleteManyCollections () {
+        const selected = this.state.selected.slice();
+        this.props.deleteMany_async('deck', this.props.select_authToken, selected);
+        this._removeItemMembership_async(selected);
+        this._removeManyCollections(selected);
         this._setUndo({
             action: this._undoManyCollectionsDeleted,
             data: selected
@@ -797,6 +821,7 @@ const mapStateToProps = (state, ownProps) => {
         select_authToken: select.authToken(state),
         select_authUser: select.authUser(state),
         select_collections: select.collections(state, ownProps.match.params.collection),
+        select_items: select.items(state, 'card'),
         select_user: select.user(state)
     }
 }
@@ -805,6 +830,7 @@ const mapDispatchToProps = dispatch => {
         addMany_async: (store, token, models) => dispatch(actions.addMany_async(store, token, models)),
         addTab_async: (store, collection, token, user, model) => dispatch(actions.addTab_async(store, collection, token, user, model)),
         delete_async: (store, token, model) => dispatch(actions.delete_async(store, token, model)),
+        deleteMany_async: (store, token, models) => dispatch(actions.deleteMany_async(store, token, models)),
         deleteTab_async: (store, collection, token, user, tab) => dispatch(actions.deleteTab_async(store, collection, token, user, tab)),
         update_async: (store, token, model) => dispatch(actions.update_async(store, token, model))
     };
