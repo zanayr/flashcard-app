@@ -368,7 +368,25 @@ class Item extends Component {
             tag: this.props.select_user.tag
         });
     }
-
+    _setCollectionMembership_async (items) {
+        const collections = this.props.select_collections;
+        const membership = {};
+        items.forEach(item => {
+            item.member.forEach(member => {
+                if (membership[member]) {
+                    membership[member] = membership[member].concat(item.id);
+                } else {
+                    membership[member] = [item.id];
+                }
+            });
+        });
+        Object.keys(membership).forEach(id => {
+            this.props.update_async('deck', this.props.select_authToken, {
+                ...collections[id],
+                member: collections[id].member.concat(membership[id])
+            });
+        });
+    }
     //  Items  ----------------------------------------------------------  Items PM  //
     _addManyItems = (items) => {
         this._addManyItems_async(items);
@@ -376,6 +394,7 @@ class Item extends Component {
     }
     _addManyItems_async (items) {
         this.props.addMany_async(this.props.match.params.item, this.props.select_authToken, items);
+        this._setCollectionMembership_async(items);
     }
     _checkItem (item) {
         let valid = true;
@@ -433,14 +452,9 @@ class Item extends Component {
         this._clearSelected();
     }
     _deleteManyItems () {
-        // const i = this.state.items;
         const selected = this.state.selected.slice();
         this.props.deleteMany_async(this.props.match.params.item, this.props.select_authToken, selected);
-        // selected.forEach(item => {
-        //     delete i[item.id];
-        //     this.props.delete_async(this.props.match.params.item, this.props.select_authToken, item);
-        // });
-        // this._setManyItems(i);
+        this._removeMembershipInCollections(selected);
         this._removeManyItems(selected);
         this._setUndo({
             action: this._undoManyItemsDeleted,
@@ -448,8 +462,29 @@ class Item extends Component {
         });
         this._clearSelected();
     }
+    _removeMembershipInCollections (items) {
+        const collections = this.props.select_collections;
+        const membership = {};
+        items.forEach(item => {
+            item.member.forEach(member => {
+                if (membership[member]) {
+                    membership[member] = membership[member].concat(item.id);
+                } else {
+                    membership[member] = [item.id];
+                }
+            });
+        });
+        Object.keys(membership).forEach(id => {
+            this.props.update_async('deck', this.props.select_authToken, {
+                ...collections[id],
+                member: collections[id].member.filter(i => !membership[id].includes(i))
+            });
+        });
+    }
     _deleteItem = (item) => {
         this.props.delete_async(this.props.match.params.item, this.props.select_authToken, item);
+        
+        this._removeMembershipInCollections([item]);
         this._removeManyItems([item]);
         this._setUndo({
             action: this._undoManyItemsDeleted,
