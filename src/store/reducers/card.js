@@ -62,6 +62,13 @@ const updateCard = (state, action) => {
     }
 }
 
+// const update2Card = (state, action) => {
+//     return {
+//         ...state,
+//         cards: action.payload
+//     }
+// }
+
 
 //  REDUCER  -------------------------------------------------------------  REDUCER  //
 const reducer = (state=initialState, action) => {
@@ -78,6 +85,8 @@ const reducer = (state=initialState, action) => {
             return getAllCardsSuccess(state, action);
         case actionTypes.UPDATE_CARD:
             return updateCard(state, action);
+        // case actionTypes.UPDATE2_CARD:
+        //     return update2Card(state, action);
         default:
             return state;
     }

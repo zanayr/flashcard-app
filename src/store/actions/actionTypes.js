@@ -59,59 +59,16 @@ export const UPDATE_DECK_TAG = 'UPDATE_DECK_TAG';
 export const UPDATE_USER = 'UPDATE_USER';
 export const UPDATE_USER_TAG = 'UPDATE_USER_TAG';
 
-
-
-
-
-
-
-//  Card  //
-// export const ADD_CARD_SUCC = 'ADD_CARD_SUCC';
-// export const CARD_FAIL = 'CARD_FAIL';
-// export const DELETE_CARD_SUCC = 'DELETE_CARD_SUCC';
-// // export const GET_ALL_CARDS_INIT = 'GET_ALL_CARDS_INIT';
-// export const GET_ALL_CARDS_SUCC = 'GET_ALL_CARDS_SUCC';
-// export const UPDATE_CARD_SUCC = 'UPDATE_CARD_SUCC';
-
-//  Deck  //
-// export const ADD_DECK_SUCC = 'ADD_DECK_SUCC';
-// export const DECK_FAIL = 'DECK_FAIL';
-// export const DELETE_DECK_SUCC = 'DELETE_DECK_SUCC';
-// // export const GET_ALL_DECKS_INIT = 'GET_ALL_DECKS_INIT';
-// export const GET_ALL_DECKS_SUCC = 'GET_ALL_DECKS_SUCC';
-// export const UPDATE_DECK_SUCC = 'UPDATE_DECK_SUCC';
+// export const PROCESSING_CARD = 'PROCESSING_CARD';
+// export const PROCESSING_DECK = 'PROCESSING_DECK';
+// export const PROCESSING_USER = 'PROCESSING_USER';
+// export const PROCESSING = 'PROCESSING';
+// export const UPDATE2_CARD = 'UPDATE2_CARD';
+// export const UPDATE2_DECK = 'UPDATE2_DECK';
+// export const UPDATE2_USER = 'UPDATE2_USER';
 
 
 //  Modal Store  //
 export const DISPLAY_MODAL = 'DISPLAY_MODAL';
 export const CLEAR_MODAL = 'CLEAR_MODAL';
 export const DISPLAY_MODAL2 = 'DISPLAY_MODAL2';
-
-//  Student  //
-// export const ADD_STUDENT_SUCC = 'ADD_STUDENT_SUCC';
-// export const ADD_STUDENT_TAB_SUCC = 'ADD_STUDENT_TAB_SUCC';
-// export const DELETE_STUDENT_SUCC = 'DELETE_STUDENT_SUCC';
-// export const DELETE_STUDENT_TAB_SUCC = 'DELETE_STUDENT_TAB_SUCC';
-// export const GET_ALL_STUDENTS_INIT = 'GET_ALL_STUDENTS_INIT';
-// export const GET_ALL_STUDENTS_SUCC = 'GET_ALL_STUDENTS_SUCC';
-// export const STUDENT_FAIL = 'STUDENT_FAIL';
-// export const UPDATE_STUDENT_SUCC = 'PUT_STUDENT_SUCC';
-// export const UPDATE_STUDENT_TAG_SUCC = 'UPDATE_STUDENT_TAG_SUCC';
-
-
-//  User  //
-// export const GET_USER_FAIL = 'GET_USER_FAIL';
-// // export const GET_USER_INIT = 'GET_USER_INIT';
-// export const GET_USER_SUCC = 'GET_USER_SUCC';
-// export const PATCH_USER_FAIL = 'PATCH_USER_FAIL';
-// export const PATCH_USER_SUCC = 'PATCH_USER_SUCC';
-// export const PUT_USER_FAIL = 'PUT_USER_FAIL';
-// export const PUT_USER_SUCC = 'PUT_USER_SUCC';
-// //  User Tags  //
-// export const PUT_TAG_FAIL = 'PUT_TAG_FAIL';
-// export const PUT_TAG_SUCC = 'PUT_TAG_SUCC';
-// //  User Tabs  //
-// export const DELETE_TAB_FAIL = 'DELETE_TAB_FAIL';
-// export const DELETE_TAB_SUCC = 'DELETE_TAB_SUCC';
-// export const PATCH_TAB_FAIL = 'PATCH_TAB_FAIL';
-// export const PATCH_TAB_SUCC = 'PATCH_TAB_SUCC';

@@ -202,6 +202,12 @@ class Inspector extends Component {
             }
         }));
     }
+    _setItems (items) {
+        this.setState(prev => ({
+            ...prev,
+            items: items
+        }));
+    }
     _setManyItems (items) {
         const i = this.state.items;
         items.forEach(item => {
@@ -213,6 +219,7 @@ class Inspector extends Component {
         }));
     }
     _setManyMembers (items) {
+        console.log(items);
         this.setState(prev => ({
             ...prev,
             collection: {
@@ -237,6 +244,7 @@ class Inspector extends Component {
 
     //  Selected  ----------------------------------------------------  Selected SS  //
     _clearSelected () {
+        console.log('clear selected');
         this.setState(prev => ({
             ...prev,
             selected: []
@@ -329,6 +337,7 @@ class Inspector extends Component {
         this._clearQuick('u');
     }
     _setUndo (undo) {
+        console.log(undo);
         this.setState(prev => ({
             ...prev,
             undo: undo
@@ -442,20 +451,24 @@ class Inspector extends Component {
         this._clearSelected();
     }
     _deleteManyItems () {
-        const i = this.state.items;
+        const items = {...this.state.items};
         const selected = this.state.selected.slice();
         const nonmembers = [];
+        const deleted = {}
         selected.forEach(item => {
             nonmembers.push(item.id);
-            delete i[item.id];
-            this.props.delete_async(this.page, this.props.select_authToken, item);
+            delete items[item.id];
+            // this.props.delete_async(this.page, this.props.select_authToken, item);
         });
+        //  Update entire store in the database and redux with updated collection of models
+        this.props.deleteMany_async(this.page, this.props.select_authToken, selected);
+        //  Update collection in the database and redux with new array of members
         this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
             ...this.state.collection,
             member: this.state.collection.member.filter(id => !nonmembers.includes(id))
         });
-        this._setManyItems(i);
-        this._setManyMembers(this.state.collection.member.filter(id => !nonmembers.includes(id)));
+        this._setItems(items);
+        this._setManyMembers(Object.keys(items).map(i => {return items[i]}));
         this._setUndo({
             action: this._undoManyItemsDeleted,
             data: selected
@@ -658,6 +671,7 @@ class Inspector extends Component {
 
     //  Header  --------------------------------------------------------  Header EH  //
     handle_onActionToggle = (action) => {
+        console.log(action);
         switch (action) {
             case 0:
                 this._deleteManyItems();
@@ -870,7 +884,9 @@ const mapDispatchToProps = dispatch => {
     return {
         addMany_async: (store, token, items) => dispatch(actions.addMany_async(store, token, items)),
         delete_async: (store, token, item) => dispatch(actions.delete_async(store, token, item)),
-        update_async: (store, token, model) => dispatch(actions.update_async(store, token, model)),
+        deleteMany_async: (store, token, items) => dispatch(actions.deleteMany_async(store, token, items)),
+        update_async: (store, token, model) => dispatch(actions.update_async(store, token, model))
+        // update2_async: (store, token, models) => dispatch(actions.update2_async(store, token, models))
     };
 };
 

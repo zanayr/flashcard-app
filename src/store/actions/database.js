@@ -331,7 +331,6 @@ export const add_async = (store, token, viewModel) => {
             default:
                 break;
         }
-        console.log(store, model);
         axios.patch('/' + store + '/' + viewModel.id + '.json?auth=' + token, model)
         .then(response => {
             dispatch(_add(store, viewModel));
@@ -342,7 +341,6 @@ export const add_async = (store, token, viewModel) => {
     }
 }
 export const addMany_async = (store, token, viewModels) => {
-    console.log(store, viewModels);
     return dispatch => {
         viewModels.forEach(viewModel => {
             dispatch(add_async(store, token, viewModel));
@@ -378,6 +376,7 @@ export const delete_async = (store, token, viewModel) => {
     }
 }
 export const deleteMany_async = (store, token, viewModels) => {
+    console.log(store, viewModels);
     return dispatch => {
         viewModels.forEach(viewModel => {
             dispatch(delete_async(store, token, viewModel));
@@ -388,7 +387,6 @@ export const deleteMany_async = (store, token, viewModels) => {
 
 //  Delete Tab  -------------------------------------------------  Delete Tab Async  //
 export const deleteTab_async = (store, collection, token, id, tab) => {
-    console.log(store);
     return dispatch => {
         axios.delete('/' + store + '/' + id + '/' + collection + '/' + tab.id + '.json?auth=' + token)
         .then(response => {
@@ -490,6 +488,104 @@ export const getAllUsers_async = (token) => {
     };
 };
 
+// export const _processing = (store, data) => {
+//     let type = null;
+//     switch (store) {
+//         case 'card':
+//             type = actionTypes.PROCESSING_CARD;
+//             break;
+//         case 'deck':
+//             type = actionTypes.PROCESSING_DECK;
+//             break;
+//         case 'user':
+//             type = actionTypes.PROCESSING_USER;
+//             break;
+//         default:
+//             type = actionTypes.PROCESSING;
+//             break;
+//     }
+//     return {
+//         type: type,
+//         payload: {}
+//     };
+// }
+// export const _update2 = (store, data) => {
+//     let type = null;
+//     switch (store) {
+//         case 'card':
+//             type = actionTypes.UPDATE2_CARD;
+//             break;
+//         case 'deck':
+//             type = actionTypes.UPDATE2_DECK;
+//             break;
+//         case 'user':
+//             type = actionTypes.UPDATE2_USER;
+//             break;
+//         default:
+//             type = actionTypes.SUCCESS;
+//             break;
+//     }
+//     return {
+//         type: type,
+//         payload: data
+//     };
+// }
+// export const _failure = (store, error) => {
+//     let type = null;
+//     switch (store) {
+//         case 'card':
+//             type = actionTypes.CARD_FAILURE;
+//             break;
+//         case 'deck':
+//             type = actionTypes.DECK_FAILURE;
+//             break;
+//         case 'user':
+//             type = actionTypes.USER_FAILURE;
+//             break;
+//         default:
+//             type = actionTypes.FAILURE;
+//             break;
+//     }
+//     return {
+//         type: type,
+//         payload: error
+//     };
+// }
+
+// export const update2_async = (store, token, viewModels) => {
+//     return dispatch => {
+//         dispatch(_processing(store));
+//         let models = {};
+//         switch (store) {
+//             case 'card':
+//                 Object.keys(viewModels).forEach(id => {
+//                     models[id] = create.itemModel(viewModels[id]);
+//                 })
+//                 break;
+//             case 'deck':
+//                 Object.keys(viewModels).forEach(id => {
+//                     models[id] = create.collectionModel(viewModels[id]);
+//                 })
+//                 break;
+//             case 'user':
+//                 Object.keys(viewModels).forEach(id => {
+//                     models[id] = create.userModel(viewModels[id]);
+//                 })
+//                 break;
+//             default:
+//                 break;
+//         }
+//         console.log(store, viewModels);
+//         dispatch(_update2(store, viewModels));
+//         axios.put('/' + store + '/.json?auth=' + token, models)
+//         .then(response => {
+//             dispatch(_update2(store, viewModels));
+//         })
+//         .catch(error => {
+//             dispatch(_failure(store, error));
+//         });
+//     }
+// }
 
 //  Update  ----------------------------------------------------------  Update Async  //
 export const update_async = (store, token, viewModel) => {
