@@ -376,7 +376,6 @@ export const delete_async = (store, token, viewModel) => {
     }
 }
 export const deleteMany_async = (store, token, viewModels) => {
-    console.log(store, viewModels);
     return dispatch => {
         viewModels.forEach(viewModel => {
             dispatch(delete_async(store, token, viewModel));

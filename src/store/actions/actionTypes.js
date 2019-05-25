@@ -59,15 +59,6 @@ export const UPDATE_DECK_TAG = 'UPDATE_DECK_TAG';
 export const UPDATE_USER = 'UPDATE_USER';
 export const UPDATE_USER_TAG = 'UPDATE_USER_TAG';
 
-// export const PROCESSING_CARD = 'PROCESSING_CARD';
-// export const PROCESSING_DECK = 'PROCESSING_DECK';
-// export const PROCESSING_USER = 'PROCESSING_USER';
-// export const PROCESSING = 'PROCESSING';
-// export const UPDATE2_CARD = 'UPDATE2_CARD';
-// export const UPDATE2_DECK = 'UPDATE2_DECK';
-// export const UPDATE2_USER = 'UPDATE2_USER';
-
-
 //  Modal Store  //
 export const DISPLAY_MODAL = 'DISPLAY_MODAL';
 export const CLEAR_MODAL = 'CLEAR_MODAL';

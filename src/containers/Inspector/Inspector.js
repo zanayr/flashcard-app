@@ -219,8 +219,6 @@ class Inspector extends Component {
         }));
     }
     _setManyMembers (items) {
-        console.log(items);
-        console.log(this.state.collection.member);
         this.setState(prev => ({
             ...prev,
             collection: {
@@ -245,7 +243,6 @@ class Inspector extends Component {
 
     //  Selected  ----------------------------------------------------  Selected SS  //
     _clearSelected () {
-        console.log('clear selected');
         this.setState(prev => ({
             ...prev,
             selected: []
@@ -338,7 +335,6 @@ class Inspector extends Component {
         this._clearQuick('u');
     }
     _setUndo (undo) {
-        console.log(undo);
         this.setState(prev => ({
             ...prev,
             undo: undo
@@ -386,7 +382,6 @@ class Inspector extends Component {
         this._clearAndCloseAside();
     }
     _addManyItems_async (items) {
-        console.log(this.page);
         this.props.addMany_async(this.page, this.props.select_authToken, items);
         this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
             ...this.state.collection,
@@ -452,22 +447,13 @@ class Inspector extends Component {
         this._clearSelected();
     }
     _deleteManyItems () {
-        const items = {...this.state.items};
         const selected = this.state.selected.slice();
-        const nonmembers = [];
-        selected.forEach(item => {
-            nonmembers.push(item.id);
-            delete items[item.id];
-        });
-        //  Update entire store in the database and redux with updated collection of models
         this.props.deleteMany_async(this.page, this.props.select_authToken, selected);
-        //  Update collection in the database and redux with new array of members
         this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
             ...this.state.collection,
-            member: this.state.collection.member.filter(id => !nonmembers.includes(id))
+            member: this.state.collection.member.filter(i => !Object.keys(selected).map(s => {return selected[s].id}).includes(i))
         });
-        this._setItems(items);
-        this._setManyMembers(Object.keys(items).map(i => {return items[i]}));
+        this._removeManyItems(selected);
         this._setUndo({
             action: this._undoManyItemsDeleted,
             data: selected
@@ -540,7 +526,6 @@ class Inspector extends Component {
     _deleteTab (tab) {
         let tabs = {...this.state.tab};
         delete tabs[tab.id];
-        console.log(this.state.collection);
         this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
             ...this.state.collection,
             tab: tabs
@@ -569,7 +554,6 @@ class Inspector extends Component {
     //  Undo  -----------------------------------------------------------  Undo  PM  //
     _undoManyItemsDeleted = () => {
         const items = this.state.undo.data.slice();
-        console.log(items);
         this._addManyItems_async(items);
         this._setManyItems(items);
         this._setManyMembers(items);
@@ -671,7 +655,6 @@ class Inspector extends Component {
 
     //  Header  --------------------------------------------------------  Header EH  //
     handle_onActionToggle = (action) => {
-        console.log(action);
         switch (action) {
             case 0:
                 this._deleteManyItems();
