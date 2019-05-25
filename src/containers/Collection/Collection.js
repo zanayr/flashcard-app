@@ -430,13 +430,7 @@ class Collections extends Component {
         this._clearSelected();
     }
     _deleteCollection = (collection) => {
-        this.props.delete_async(this.props.match.params.collection, this.props.select_authToken, collection);
-        this._removeManyCollections([collection]);
-        this._setUndo({
-            action: this._undoManyCollectionsDeleted,
-            data: [collection]
-        });
-        this._clearSelected();
+        this._deleteManyCollections([collection]);
     }
     _inspectCollection = (collection) => {
         this._openInspectAside({

@@ -482,15 +482,7 @@ class Item extends Component {
         });
     }
     _deleteItem = (item) => {
-        this.props.delete_async(this.props.match.params.item, this.props.select_authToken, item);
-        
-        this._removeMembershipInCollections([item]);
-        this._removeManyItems([item]);
-        this._setUndo({
-            action: this._undoManyItemsDeleted,
-            data: [item]
-        });
-        this._clearSelected();
+        this._deleteManyItems([item]);
     }
     _inspectItem = (item) => {
         this._openInspectAside({

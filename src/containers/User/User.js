@@ -421,13 +421,7 @@ class User extends Component {
         this._clearSelected();
     }
     _deleteUser = (user) => {
-        this.props.delete_async('user', this.props.select_authToken, user);
-        this._removeManyUsers([user]);
-        this._setUndo({
-            action: this._undoManyUsersDeleted,
-            data: [user]
-        });
-        this._clearSelected();
+        this._deleteManyUsers([user]);
     }
     _inspectUser = (user) => {
         this._openInspectAside({

@@ -450,17 +450,7 @@ class Inspector extends Component {
         this._clearSelected();
     }
     _deleteItem = (item) => {
-        this.props.delete_async(this.page, this.props.select_authToken, item);
-        this.props.update_async(this.props.match.params.collection, this.props.select_authToken, {
-            ...this.state.collection,
-            member: this.state.collection.member.filter(id => id !== item.id)
-        });
-        this._removeManyItems([item]);
-        this._setUndo({
-            action: this._undoManyItemsDeleted,
-            data: [item]
-        });
-        this._clearSelected();
+        this._deleteManyItems([item]);
     }
     _inspectItem = (item) => {
         this._openInspectAside({
