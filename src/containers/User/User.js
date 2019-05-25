@@ -354,7 +354,7 @@ class User extends Component {
         this._clearAndCloseAside();
     }
     _addManyUsers_async (users) {
-        this.props.addMany_async(this.props.match.params.user, this.props.select_authToken, users);
+        this.props.addMany_async('user', this.props.select_authToken, users);
     }
     _checkUser (user) {
         let valid = true;
@@ -411,13 +411,9 @@ class User extends Component {
         this._clearSelected();
     }
     _deleteManyUsers () {
-        const i = this.state.users;
         const selected = this.state.selected.slice();
-        selected.forEach(user => {
-            delete i[user.id];
-            this.props.delete_async(this.props.match.params.user, this.props.select_authToken, user);
-        });
-        this._setManyUsers(i);
+        this.props.deleteMany_async('user', this.props.select_authToken, selected);
+        this._removeManyUsers(selected);
         this._setUndo({
             action: this._undoManyUsersDeleted,
             data: selected
@@ -425,7 +421,7 @@ class User extends Component {
         this._clearSelected();
     }
     _deleteUser = (user) => {
-        this.props.delete_async(this.props.match.params.user, this.props.select_authToken, user);
+        this.props.delete_async('user', this.props.select_authToken, user);
         this._removeManyUsers([user]);
         this._setUndo({
             action: this._undoManyUsersDeleted,
@@ -782,6 +778,7 @@ const mapDispatchToProps = dispatch => {
         addMany_async: (store, token, users) => dispatch(actions.addMany_async(store, token, users)),
         addTab_async: (store, collection, token, user, model) => dispatch(actions.addTab_async(store, collection, token, user, model)),
         delete_async: (store, token, user) => dispatch(actions.delete_async(store, token, user)),
+        deleteMany_async: (store, token, models) => dispatch(actions.deleteMany_async(store, token, models)),
         deleteTab_async: (store, collection, token, user, tab) => dispatch(actions.deleteTab_async(store, collection, token, user, tab)),
         update_async: (store, token, model) => dispatch(actions.update_async(store, token, model)),
     };
