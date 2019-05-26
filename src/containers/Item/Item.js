@@ -10,7 +10,7 @@ import * as sortTypes from '../../utility/sortTypes';
 import * as utility from '../../utility/utility';
 
 import ActionButton from '../../components/ui/button/Action/ActionButton';
-import Aside from '../../components/aside/Aside/Aside';
+import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
 import List2 from '../../components/List/List2';
@@ -278,14 +278,6 @@ class Item extends Component {
         }));
     }
 
-    //  Tag & Group  ----------------------------------------------  Tag & Group SS  //
-    _addTag (category, tag) {
-        this.setState(prev => ({
-            ...prev,
-            [category]: prev[category].concat(tag)
-        }));
-    }
-
     //  Sort  ------------------------------------------------------------  Sort SS  //
     _setSort (sort) {
         this.setState(prev => ({
@@ -316,55 +308,36 @@ class Item extends Component {
 
     //  PRIVATE METHODS  =========================================  PRIVATE METHODS  //
     //  Aside  ----------------------------------------------------------  Aside PM  //
-    _openAssignAside (data) {
-        const collections = this.props.select_collections;
-        const all = [];
-        const member = [];
-        Object.keys(collections).map(id => {
-            all.push({
-                id: id,
-                primary: collections[id].primary
-            });
-            if (data.item.member.includes(id)) {
-                member.push(id);
-            }
-        });
-        this._toggleAside(data.type);
+    _openFilterAside () {
         this._setAside({
-            cancel: this.handle_onAsideCancel,
-            change: this.handle_onItemChange,
-            confirm: data.confirm,
+            cancel: this.handle_onAsideClose,
+            toggle: (filter, tag) => this.handle_onAsideFilterToggle(filter, tag)
         }, {
-            all: all,
-            item: data.item,
-            member: member,
-        });
-    }
-    _openFilterAside (filter) {
-        let all;
-        if (filter === 'tag') {
-            all = this.props.select_user.tag.concat(this.state.internal);
-        } else {
-            all = this.props.select_user.group.slice();
-        }
-        this._setAside({
-            toggle: (tag) => this.handle_onAsideFilterToggle(filter, tag)
-        }, {
-            all: all,
-            filter: this.state.filter[filter].slice(),
-            tab: this.state.current[filter].slice()
+            all: {
+                group: this.props.select_user.group.slice(),
+                tag: this.props.select_user.tag.concat(this.state.internal)
+            },
+            filter: {...this.state.filter},
+            tab: {...this.state.current}
         });
     }
     _openInspectAside (data) {
         this._toggleAside(data.type);
         this._setAside({
-            cancel: this.handle_onAsideCancel,
+            cancel: this.handle_onAsideClose,
             change: this.handle_onItemChange,
             confirm: data.confirm,
-            create: this.handle_onTagCreate
+            overlay: data.overlay
         }, {
             group: this.props.select_user.group,
+            labels: {
+                aux: 'Add More',
+                confirm: 'Confirm',
+                primary: 'Title',
+                secondary: 'Details'
+            },
             item: data.item,
+            id: data.item.id,
             tag: this.props.select_user.tag
         });
     }
@@ -392,19 +365,12 @@ class Item extends Component {
         this._addManyItems_async(items);
         this._clearAndCloseAside();
     }
+    _updateItem_async (item) {
+        this.props.update_async('card', this.props.select_authToken, item);
+    }
     _addManyItems_async (items) {
         this.props.addMany_async(this.props.match.params.item, this.props.select_authToken, items);
         this._setCollectionMembership_async(items);
-    }
-    _checkItem (item) {
-        let valid = true;
-        if (!item.primary.length > 0 && valid) {
-            valid = false;
-        }
-        if (!item.secondary.length && valid) {
-            valid = false
-        }
-        return valid;
     }
     _cloneManyItems () {
         const cloned = [];
@@ -416,24 +382,56 @@ class Item extends Component {
             } else {
                 primary = 'Copy of ' + item.primary.substr(0, 21) + '...';
             }
-            switch (this.page) {
-                case 'card':
-                        cloned.push(create.itemViewModel(utility.createHashId(i), {
-                            ...item,
-                            date: Date.now(),
-                            primary: primary
-                        }));
-                    break;
-                case 'student':
-                    break;
-                default:
-                    break;
-            }
+            cloned.push(create.itemViewModel(utility.createHashId(i), {
+                ...item,
+                date: Date.now(),
+                primary: primary
+            }));
         });
         this._addManyItems_async(cloned);
         this._setManyItems(cloned);
         this._setManyMembers(cloned);
         this._clearSelected();
+    }
+    handle_onInspectAsideConfirm = () => {
+        const original = this.state.aside.data;
+        const inspected = this.state.items[original.item.id];
+        if (inspected.primary.length && inspected.secondary.length) {
+            if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
+                if (original.item.tag.includes('$create')) {
+                    this._addManyItems([inspected]);
+                } else {
+                    this._updateItem_async(inspected);
+                    this._setUndo({
+                        action: this._undoItemUpdated,
+                        data: original.item
+                    });
+                }
+            } else if (original.tag.includes('$create')) {
+                this._removeManyItems([inspected]);
+            }
+            this._clearAndCloseAside();
+        }
+    }
+    handle_onAsideClose = () => {
+        switch (this.state.aside.state) {
+            case asideTypes.FILTER:
+                this._clearFilter();
+                break;
+            case asideTypes.INSPECT:
+                    const original = this.state.aside.data;
+                    const inspected = this.state.item[original.item.id];
+                    if (original.tag.includes('$create')) {
+                        this._removeManyItems([inspected]);
+                    } else if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
+                        this._setManyItems([original.item]);
+                    }
+                    this._clearAndCloseAside();
+                    break;
+            default:
+                break;
+        }
+        this._clearAndCloseAside();
     }
     _createItem () {
         const item = create.itemViewModel(utility.createHashId(0), {
@@ -442,12 +440,15 @@ class Item extends Component {
             secondary: '',
             tag: []
         });
-        
         this._setManyItems([item]);
         this._openInspectAside({
-            confirm: () => this._addManyItems([this.state.items[item.id]]),
-            item: item,
-            type: asideTypes.CREATE_ITEM
+            confirm: this.handle_onInspectAsideConfirm,
+            overlay: this.handle_onInspectAsideConfirm,
+            item: {
+                ...item,
+                tag: ['$create']
+            },
+            type: asideTypes.INSPECT
         });
         this._clearSelected();
     }
@@ -486,9 +487,10 @@ class Item extends Component {
     }
     _inspectItem = (item) => {
         this._openInspectAside({
-            confirm: this._updateItem,
+            confirm: this.handle_onInspectAsideConfirm,
+            overlay: this.handle_onInspectAsideConfirm,
             item: item,
-            type: asideTypes.INSPECT_ITEM
+            type: asideTypes.INSPECT
         });
         this._clearQuick('s');
     }
@@ -518,9 +520,6 @@ class Item extends Component {
             selected = selected.filter(i => i.id !== item.id);
         } else {
             selected = selected.concat(item);
-        }
-        if (this.state.aside.state === asideTypes.CREATE_ITEM || this.state.aside.state === asideTypes.INSPECT_ITEM) {
-            this.handle_onAsideClose();
         }
         this._setSelected(selected);
     }
@@ -602,51 +601,6 @@ class Item extends Component {
 
 
     //  Aside  ----------------------------------------------------------  Aside EH  //
-    handle_onAsideCancel = () => {
-        const originalData = this.state.aside.data;
-        let data;
-        switch (this.state.aside.state) {
-            case asideTypes.CREATE_ITEM:
-                this._removeManyItems([this.state.items[this.state.aside.data.item.id]]);
-                break;
-            case asideTypes.INSPECT_ITEM:
-                data = this.state.items[originalData.item.id];
-                if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkItem(data)) {
-                    this._setManyItems([originalData.item]);
-                }
-                break;
-            default:
-                break;
-        }
-        this._clearAndCloseAside();
-    }
-    handle_onAsideClose = () => {
-        const originalData = this.state.aside.data;
-        let data;
-        switch (this.state.aside.state) {
-            case asideTypes.CREATE_ITEM:
-                data = this.state.items[originalData.item.id];
-                if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkItem(data)) {
-                    this._addManyItems([data]);
-                } else {
-                    this._removeManyItems([data]);
-                }
-                break;
-            case asideTypes.INSPECT_ITEM:
-                data = this.state.items[originalData.item.id];
-                if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkItem(data)) {
-                    this.props.update_async(this.props.match.params.item, this.props.select_authToken, data);
-                    this._setUndo({
-                        action: this._undoItemUpdated,
-                        data: originalData.item
-                    });
-                }
-                break;
-            default:
-                break;
-        }
-        this._clearAndCloseAside();
-    }
     handle_onAsideFilterToggle = (category, tag) => {
         let filter = {...this.state.filter};
         if (filter[category].includes(tag)) {
@@ -654,7 +608,7 @@ class Item extends Component {
         } else {
             filter[category] = filter[category].concat(tag);
         }
-        this._updateAsideData('filter', filter[category]);
+        this._updateAsideData('filter', filter);
         this._setFilter(filter);
     }
     
@@ -673,18 +627,8 @@ class Item extends Component {
         }
     }
     handle_onFilterToggle = (filter) => {
-        switch (filter) {
-            case 0:
-                this._openFilterAside('tag');
-                this._toggleAside(asideTypes.FILTER_TAG)
-                break;
-            case 1:
-                this._openFilterAside('group');
-                this._toggleAside(asideTypes.FILTER_GROUP);
-                break;
-            default:
-                break;
-        }
+        this._openFilterAside();
+        this._toggleAside(asideTypes.FILTER);
     }
     handle_onSortToggle = (sort) => {
         switch (sort) {
@@ -706,6 +650,9 @@ class Item extends Component {
     }
     handle_onNagivationToggle = () => {
         this._toggleAside(asideTypes.NAVIGATION);
+        this._setAside({
+            cancel: this.handle_onAsideClose
+        });
     }
     
     //  Item  ------------------------------------------------------------  Item EH  //
@@ -784,12 +731,6 @@ class Item extends Component {
         this._setMainState('LIST_VIEW');
     }
 
-    //  Tag  -----------------------------------------------------------------  Tag  //
-    handle_onTagCreate = (category, tag) => {
-        this._addTag(category, tag);
-    }
-
-
     render () {
         let content;
         switch (this.state.main) {
@@ -847,7 +788,7 @@ class Item extends Component {
                             data={this.state.quick}/>
                     </div>
                 </main>
-                <Aside
+                <Aside2
                     actions={this.state.aside.actions}
                     data={this.state.aside.data}
                     page={this.props.match.params.item}

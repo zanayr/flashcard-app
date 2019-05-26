@@ -708,8 +708,6 @@ class Collections extends Component {
         this._setMainState('LIST_VIEW');
     }
 
-    //  Tag  -----------------------------------------------------------------  Tag  //
-
     render () {
         let content;
         switch (this.state.main) {

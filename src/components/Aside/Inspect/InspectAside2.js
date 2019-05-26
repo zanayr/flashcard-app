@@ -23,17 +23,27 @@ class InspectAside extends Component {
 
     //  FORM  ---------------------------------------------------------------  FORM  //
     handle_onChange = (target, value) => {
-        this.setState(prev => ({
-            ...prev,
-            item: {
-                ...prev.item,
-                [target]: value.trim()
-            },
-            valid: {
-                ...prev.valid,
-                [target]: value.trim().length > 0
-            }
-        }));
+        if (target === 'primary' || target === 'secondary') {
+            this.setState(prev => ({
+                ...prev,
+                item: {
+                    ...prev.item,
+                    [target]: value.trim()
+                },
+                valid: {
+                    ...prev.valid,
+                    [target]: value.trim().length > 0
+                }
+            }));
+        } else {
+            this.setState(prev => ({
+                ...prev,
+                item: {
+                    ...prev.item,
+                    [target]: value
+                }
+            }));
+        }
         this.props.actions.change(target, value);
     }
 
