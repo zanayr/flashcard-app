@@ -23,7 +23,7 @@
 .Aside .Footer > div {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 .Aside .Footer > div button:first-of-type {
     flex-grow: 1;

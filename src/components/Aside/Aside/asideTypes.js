@@ -7,6 +7,7 @@ export const CREATE_ITEM = 'CREATE_ITEM';
 export const FILTER = 'FILTER';
 export const FILTER_GROUP = 'FILTER_GROUP';
 export const FILTER_TAG = 'FILTER_TAG';
+export const INSPECT = 'INSPECT';
 export const INSPECT_CARD = 'INSPECT_CARD';
 export const INSPECT_USER = 'INSPECT_USER';
 export const INSPECT_COLLECTION = 'INSPECT_COLLECTION';

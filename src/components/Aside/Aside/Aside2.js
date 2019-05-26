@@ -5,7 +5,7 @@ import * as asideTypes from './asideTypes';
 
 import Aux from '../../../hoc/Aux/Aux';
 import AssignAside from '../Assign/AssignAside';
-import FilterAside from '../Filter/FilterAside';
+import FilterAside2 from '../Filter/FilterAside2';
 import InspectAside2 from '../Inspect/InspectAside2';
 import NavigationAiside from '../Nav/NavAside';
 import AsideOverlay from '../../Overlay/Aside/AsideOverlay';
@@ -97,7 +97,14 @@ const aside2 = (props) => {
         //             page={props.page}/>
         //     );
         //     break;
-        case asideTypes.INSPECT_COLLECTION:
+        case asideTypes.FILTER:
+            aside = (
+                <FilterAside2
+                    actions={props.actions}
+                    data={props.data}/>
+            );
+            break;
+        case asideTypes.INSPECT:
             aside = (
                 <Aux>
                     <InspectAside2
@@ -111,12 +118,22 @@ const aside2 = (props) => {
                 </Aux>
             );
             break;
+        case asideTypes.NAVIGATION:
+            aside = (
+                <NavigationAiside
+                    actions={props.actions}
+                    data={props.data}
+                    history={props.history}
+                    page={props.page}/>
+            );
+            break;
         default:
             aside = (
                 null
             );
             break;
     }
+    console.log(props.actions.confirm);
     return aside;
 }
 

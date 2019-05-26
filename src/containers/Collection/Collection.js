@@ -308,19 +308,17 @@ class Collections extends Component {
 
     //  PRIVATE METHODS  =========================================  PRIVATE METHODS  //
     //  Aside  ----------------------------------------------------------  Aside PM  //
-    _openFilterAside (filter) {
-        let all;
-        if (filter === 'tag') {
-            all = this.props.select_user.tag.concat(this.state.internal);
-        } else {
-            all = this.props.select_user.group.slice();
-        }
+    _openFilterAside () {
         this._setAside({
-            toggle: (tag) => this.handle_onAsideFilterToggle(filter, tag)
+            cancel: this.handle_onFilterAsideCancel,
+            toggle: (filter, tag) => this.handle_onAsideFilterToggle(filter, tag)
         }, {
-            all: all,
-            filter: this.state.filter[filter].slice(),
-            tab: this.state.current[filter].slice()
+            all: {
+                group: this.props.select_user.group.slice(),
+                tag: this.props.select_user.tag.concat(this.state.internal)
+            },
+            filter: {...this.state.filter},
+            tab: {...this.state.current}
         });
     }
     _openInspectAside (data) {
@@ -427,6 +425,10 @@ class Collections extends Component {
         }
         this._clearAndCloseAside();
     }
+    handle_onFilterAsideCancel = () => {
+        this._clearFilter();
+        this._clearAndCloseAside();
+    }
 
 
     _createCollection () {
@@ -475,7 +477,7 @@ class Collections extends Component {
         this._openInspectAside({
             confirm: this.handle_onInspectAsideConfirm,
             collection: collection,
-            type: asideTypes.INSPECT_COLLECTION
+            type: asideTypes.INSPECT
         });
         this._clearQuick('s');
     }
@@ -519,9 +521,9 @@ class Collections extends Component {
         } else {
             selected = selected.concat(collection);
         }
-        if (this.state.aside.state === asideTypes.CREATE_COLLECTION || this.state.aside.state === asideTypes.INSPECT_COLLECTION) {
-            this.handle_onAsideClose();
-        }
+        // if (this.state.aside.state === asideTypes.INSPECT) {
+        //     this.handle_onAsideClose();
+        // }
         this._setSelected(selected);
     }
     _updateCollection = () => {
@@ -645,7 +647,7 @@ class Collections extends Component {
         } else {
             filter[category] = filter[category].concat(tag);
         }
-        this._updateAsideData('filter', filter[category]);
+        this._updateAsideData('filter', filter);
         this._setFilter(filter);
     }
     
@@ -666,19 +668,9 @@ class Collections extends Component {
                 break;
         }
     }
-    handle_onFilterToggle = (filter) => {
-        switch (filter) {
-            case 0:
-                this._openFilterAside('tag');
-                this._toggleAside(asideTypes.FILTER_TAG)
-                break;
-            case 1:
-                this._openFilterAside('group');
-                this._toggleAside(asideTypes.FILTER_GROUP);
-                break;
-            default:
-                break;
-        }
+    handle_onFilterToggle = () => {
+        this._openFilterAside();
+        this._toggleAside(asideTypes.FILTER);
     }
     handle_onSortToggle = (sort) => {
         switch (sort) {
@@ -729,11 +721,16 @@ class Collections extends Component {
 
     // //  Main  -----------------------------------------------------------  Main EHs  //
     handle_onDefaultClick = () => {
-        if (this.state.aside.state === asideTypes.INSPECT_COLLECTION) {
-            this.handle_onInspectAsideCancel();
+        switch (this.state.aside.state) {
+            case asideTypes.FILTER:
+                this._clearAndCloseAside();
+                break;
+            case asideTypes.INSPECT:
+                this.handle_onInspectAsideCancel();
+                break;
+            default:
+                break;
         }
-        this._clearSelected();
-        this._clearFilter();
     }
 
     //  Quicks  ----------------------------------------------------------  Quicks EH  //

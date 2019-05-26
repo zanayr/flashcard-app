@@ -77,6 +77,7 @@ class InspectAside extends Component {
     render () {
         let aux = null;
         let path = '';
+        console.log(this.props.history);
         if (this.props.path.length) {
             switch (this.props.path) {
                 case 'create':
