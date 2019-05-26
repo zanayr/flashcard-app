@@ -13,7 +13,11 @@ class InspectAside extends Component {
         actions: this.props.actions,
         group: this.props.data.group,
         item: this.props.data.item,
-        tag: this.props.data.tag
+        tag: this.props.data.tag,
+        valid: {
+            primary: this.props.data.item.primary.length > 0,
+            secondary: this.props.data.item.secondary.length > 0
+        }
     }
 
 
@@ -23,7 +27,11 @@ class InspectAside extends Component {
             ...prev,
             item: {
                 ...prev.item,
-                [target]: value
+                [target]: value.trim()
+            },
+            valid: {
+                ...prev.valid,
+                [target]: value.trim().length > 0
             }
         }));
         this.props.actions.change(target, value);
@@ -77,7 +85,6 @@ class InspectAside extends Component {
     render () {
         let aux = null;
         let path = '';
-        console.log(this.props.history);
         if (this.props.path.length) {
             switch (this.props.path) {
                 case 'create':
@@ -104,14 +111,17 @@ class InspectAside extends Component {
                         labels={this.props.data.labels}
                         onChange={this.handle_onChange}
                         onConfirm={this.props.actions.confirm}/>
-                        <div className={styles.Footer}>
-                            <div>
-                                <Button onClick={this.props.actions.confirm}>{this.props.data.labels.confirm}</Button>
-                                {aux}
-                                <IconButton onClick={this.props.actions.cancel}>x</IconButton>
-                            </div>
+                    <div className={styles.Footer}>
+                        <div>
+                            <Button
+                                disabled={!this.state.valid.primary || !this.state.valid.secondary}
+                                onClick={this.props.actions.confirm}>
+                                {this.props.data.labels.confirm}
+                            </Button>
+                            {aux}
+                            <IconButton onClick={this.props.actions.cancel}>x</IconButton>
                         </div>
-                    
+                    </div>
                 </div>
             </aside>
         );

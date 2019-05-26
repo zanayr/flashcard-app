@@ -271,12 +271,12 @@ class Collections extends Component {
     }
 
     //  Tag & Group  ----------------------------------------------  Tag & Group SS  //
-    _addTag (category, tag) {
-        this.setState(prev => ({
-            ...prev,
-            [category]: prev[category].concat(tag)
-        }));
-    }
+    // _addTag (category, tag) {
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         [category]: prev[category].concat(tag)
+    //     }));
+    // }
 
     //  Sort  ------------------------------------------------------------  Sort SS  //
     _setSort (sort) {
@@ -327,7 +327,8 @@ class Collections extends Component {
             cancel: this.handle_onAsideClose,
             change: this.handle_onCollectionChange,
             confirm: data.confirm,
-            create: this.handle_onTagCreate
+            // create: this.handle_onTagCreate,
+            overlay: data.overlay
         }, {
             group: this.props.select_user.group,
             labels: {
@@ -400,20 +401,22 @@ class Collections extends Component {
     handle_onInspectAsideConfirm = () => {
         const original = this.state.aside.data;
         const inspected = this.state.collection[original.item.id];
-        if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
-            if (original.item.tag.includes('$create')) {
-                this._addManyCollections([inspected]);
-            } else {
-                this._updateCollection_async(inspected);
-                this._setUndo({
-                    action: this._undoCollectionUpdated,
-                    data: original.item
-                });
+        if (inspected.primary.length && inspected.secondary.length) {
+            if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
+                if (original.item.tag.includes('$create')) {
+                    this._addManyCollections([inspected]);
+                } else {
+                    this._updateCollection_async(inspected);
+                    this._setUndo({
+                        action: this._undoCollectionUpdated,
+                        data: original.item
+                    });
+                }
+            } else if (original.tag.includes('$create')) {
+                this._removeManyCollections([inspected]);
             }
-        } else if (original.tag.includes('$create')) {
-            this._removeManyCollections([inspected]);
+            this._clearAndCloseAside();
         }
-        this._clearAndCloseAside();
     }
     handle_onAsideClose = () => {
         switch (this.state.aside.state) {
@@ -442,13 +445,17 @@ class Collections extends Component {
             owner: this.props.select_authUser,
             primary: '',
             secondary: '',
-            tag: ['$create']
+            tag: []
         });
         this._setManyCollections([collection]);
         this._openInspectAside({
-            confirm: () => this._addManyCollections([this.state.collection[collection.id]]),
-            collection: collection,
-            type: asideTypes.CREATE_COLLECTION
+            confirm: this.handle_onInspectAsideConfirm,
+            overlay: this.handle_onInspectAsideConfirm,
+            collection: {
+                ...collection,
+                tag: ['$create']
+            },
+            type: asideTypes.INSPECT
         });
         this._clearSelected();
     }
@@ -482,6 +489,7 @@ class Collections extends Component {
     _inspectCollection = (collection) => {
         this._openInspectAside({
             confirm: this.handle_onInspectAsideConfirm,
+            overlay: this.handle_onInspectAsideConfirm,
             collection: collection,
             type: asideTypes.INSPECT
         });
@@ -779,9 +787,9 @@ class Collections extends Component {
     }
 
     //  Tag  -----------------------------------------------------------------  Tag  //
-    handle_onTagCreate = (category, tag) => {
-        this._addTag(category, tag);
-    }
+    // handle_onTagCreate = (category, tag) => {
+    //     this._addTag(category, tag);
+    // }
 
     render () {
         let content;

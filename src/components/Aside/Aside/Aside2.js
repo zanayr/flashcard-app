@@ -113,7 +113,7 @@ const aside2 = (props) => {
                         history={props.history}
                         path={props.page}/>
                     <AsideOverlay
-                        action={props.actions.confirm}
+                        action={props.actions.overlay}
                         active={true}/>
                 </Aux>
             );
@@ -127,7 +127,7 @@ const aside2 = (props) => {
                         history={props.history}
                         page={props.page}/>
                     <AsideOverlay
-                        action={props.actions.cancel}
+                        action={props.actions.overlay}
                         active={true}/>
                 </Aux>
             );
