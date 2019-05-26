@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 
+import AsideOverlay from '../../Overlay/Aside/AsideOverlay';
+import Aux from '../../../hoc/Aux/Aux';
 import Button from '../../ui/button/Button/Button';
+import IconButton from '../../ui/button/Icon/IconButton';
 
 import styles from '../Aside.module.css';
 
@@ -45,19 +48,28 @@ class AssignAside extends Component {
         });
         
         return (
-            <aside className={[styles.Aside].join(' ')}>
-                <div>
-                    <h3>Assign</h3>
-                    <p>Instructions on how to assign here.</p>
-                    <div className={styles.AssignAside}>
-                        <div>
-                            {collectionButtons}
+            <Aux>
+                <aside className={[styles.Aside].join(' ')}>
+                    <div>
+                        <h3>Assign</h3>
+                        <p>Instructions on how to assign here.</p>
+                        <div className={styles.AssignAside}>
+                            <div>
+                                {collectionButtons}
+                            </div>
+                        </div>
+                        <div className={styles.Footer}>
+                            <div>
+                                <Button onClick={() => this.props.actions.confirm(this.state.selected.slice())}>{this.props.data.labels.confirm}</Button>
+                                <IconButton onClick={this.props.actions.cancel}>x</IconButton>
+                            </div>
                         </div>
                     </div>
-                    <Button onClick={() => this.props.actions.confirm(this.state.selected)}>Confirm</Button>
-                    <Button onClick={this.props.actions.cancel}>Cancel</Button>
-                </div>
-            </aside>
+                </aside>
+                <AsideOverlay
+                    action={() => this.props.actions.overlay(this.state.selected.slice())}
+                    active={true}/>
+            </Aux>
         );
     }
 }

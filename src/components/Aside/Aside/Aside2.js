@@ -13,6 +13,13 @@ import AsideOverlay from '../../Overlay/Aside/AsideOverlay';
 const aside2 = (props) => {
     let aside = null;
     switch (props.state) {
+        case asideTypes.ASSIGN:
+            aside = (
+                <AssignAside
+                    actions={props.actions}
+                    data={props.data}/>
+            );
+            break;
         case asideTypes.CLOSED:
             aside = (null);
             break;

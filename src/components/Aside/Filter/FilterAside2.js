@@ -24,7 +24,7 @@ class FilterAside2 extends Component {
         this.props.data.all[this.state.filter].forEach(tag => {
             dict[tag.replace('$', '')] = tag;
         });
-
+        console.log(this.props.data.filter);
         const tagButtons = utility.sortByAlpha_asc(Object.keys(dict)).map((key, i) => {
             let css = [styles.FilterButton];
             let tag = dict[key];
@@ -64,8 +64,6 @@ class FilterAside2 extends Component {
                             <Button onClick={() => this.handle_onTabClick('group')}>Groups</Button>
                         </div>
                     </div>
-                    <h3>Filter</h3>
-                    <p>Instructions on how to filter here.</p>
                     <div className={styles.FilterAside}>
                         <div>
                             {tagButtons}
@@ -73,6 +71,7 @@ class FilterAside2 extends Component {
                     </div>
                     <div className={styles.Footer}>
                         <div>
+                            <Button onClick={this.props.actions.confirm}>{this.props.data.labels.confirm}</Button>
                             <IconButton onClick={this.props.actions.cancel}>x</IconButton>
                         </div>
                     </div>

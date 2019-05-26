@@ -353,9 +353,6 @@ class User extends Component {
         } else {
             selected = selected.concat(user);
         }
-        if (this.state.aside.state === asideTypes.CREATE_USER || this.state.aside.state === asideTypes.INSPECT_USER) {
-            this.handle_onAsideClose();
-        }
         this._setSelected(selected);
     }
 

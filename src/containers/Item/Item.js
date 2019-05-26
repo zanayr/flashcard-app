@@ -304,18 +304,28 @@ class Item extends Component {
         }));
         this._setQuick('u');
     }
-
+    handle_onFilterClear = () => {
+        this._updateAsideData('filter', {
+            group: [],
+            tag: []
+        });
+        this._clearFilter();
+    }
 
     //  PRIVATE METHODS  =========================================  PRIVATE METHODS  //
     //  Aside  ----------------------------------------------------------  Aside PM  //
     _openFilterAside () {
         this._setAside({
-            cancel: this.handle_onAsideClose,
+            cancel: this.handle_onFilterClear,
+            confirm: this.handle_onAsideClose,
             toggle: (filter, tag) => this.handle_onAsideFilterToggle(filter, tag)
         }, {
             all: {
                 group: this.props.select_user.group.slice(),
                 tag: this.props.select_user.tag.concat(this.state.internal)
+            },
+            labels: {
+                confirm: 'Close'
             },
             filter: {...this.state.filter},
             tab: {...this.state.current}
@@ -361,10 +371,6 @@ class Item extends Component {
         });
     }
     //  Items  ----------------------------------------------------------  Items PM  //
-    _addManyItems = (items) => {
-        this._addManyItems_async(items);
-        this._clearAndCloseAside();
-    }
     _updateItem_async (item) {
         this.props.update_async('card', this.props.select_authToken, item);
     }
@@ -399,7 +405,7 @@ class Item extends Component {
         if (inspected.primary.length && inspected.secondary.length) {
             if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
                 if (original.item.tag.includes('$create')) {
-                    this._addManyItems([inspected]);
+                    this._addManyItems_async([inspected]);
                 } else {
                     this._updateItem_async(inspected);
                     this._setUndo({
@@ -415,9 +421,6 @@ class Item extends Component {
     }
     handle_onAsideClose = () => {
         switch (this.state.aside.state) {
-            case asideTypes.FILTER:
-                this._clearFilter();
-                break;
             case asideTypes.INSPECT:
                     const original = this.state.aside.data;
                     const inspected = this.state.item[original.item.id];
@@ -426,7 +429,6 @@ class Item extends Component {
                     } else if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
                         this._setManyItems([original.item]);
                     }
-                    this._clearAndCloseAside();
                     break;
             default:
                 break;
@@ -494,23 +496,49 @@ class Item extends Component {
         });
         this._clearQuick('s');
     }
-    _assign = (member) => {
-        const item = this.state.aside.data.item;
-        this.props.update_async(this.props.match.params.item, this.props.select_authToken, {
+    handle_onAssignAsideConfirm = (member) => {
+        let item = this.state.aside.data.item;
+        let tag = item.tag;
+        if (member.length && tag.includes('$unassigned')) {
+            tag = tag.filter(t => t !== '$unassigned');
+        } else if (!tag.includes('$unassigned')) {
+            tag = tag.concat(['$unassigned']);
+        }
+        item = {
             ...item,
-            member: member
-        });
-        this._setItemValue('member', member);
+            member: member,
+            tag: tag
+        }
+        this.props.update_async('card', this.props.select_authToken, item);
+        this._setManyItems([item]);
         this._setUndo({
             action: this._undoItemUpdated,
-            data: item
+            data: this.state.aside.data.item
+        });
+        this._clearAndCloseAside();
+    }
+    _openAssignAside (data) {
+        const collections = this.props.select_collections;
+        this._toggleAside(data.type);
+        this._setAside({
+            cancel: this.handle_asideCancel,
+            confirm: data.confirm,
+            overlay: data.overlay
+        }, {
+            all: Object.keys(collections).map(id => {return {...collections[id]}}),
+            item: data.item,
+            labels: {
+                confirm: 'Confirm'
+            },
+            member: data.item.member.slice()
         });
     }
     _assignItem = (item) => {
         this._openAssignAside({
-            confirm: this._assign,
+            confirm: this.handle_onAssignAsideConfirm,
             item: item,
-            type: asideTypes.ASSIGN_ITEM
+            overlay: this.handle_onAssignAsideConfirm,
+            type: asideTypes.ASSIGN
         });
         this._clearQuick('s');
     }
@@ -570,16 +598,13 @@ class Item extends Component {
     }
     _undoManyItemsRemoved = () => {
         const items = this.state.undo.data.slice();
-        const members = [];
-        items.forEach(item => {
-            members.push(item.id);
-            this.props.update_async(this.props.match.params.item, this.props.select_authToken, item);
-        });
+        this.props.updateMany_async(this.props.match.params.item, this.props.select_authToken, items);
         this._setManyItems(items);
     }
     _undoItemUpdated = () => {
         const item = this.state.undo.data;
-        this.props.update_async(this.props.match.params.item, this.props.select_authToken, item);
+        console.log(item);
+        this.props.update_async('card', this.props.select_authToken, item);
         this._setManyItems([item]);
     }
     
@@ -691,7 +716,10 @@ class Item extends Component {
     handle_onQuickClick = (quick) => {
         switch (quick) {
             case 0:
-                this._updateAsideData('filter', []);
+                this._updateAsideData('filter', {
+                    group: [],
+                    tag: []
+                });
                 this._clearFilter();
                 break;
             case 1:
@@ -803,7 +831,7 @@ const mapStateToProps = (state, ownProps) => {
         select_authToken: select.authToken(state),
         select_authUser: select.authUser(state),
         select_items: select.items(state, ownProps.match.params.item),
-        select_collections: select.collections(state, ownProps.match.params.item === 'card' ? 'deck' : 'class'),
+        select_collections: select.collections(state, 'deck'),
         select_user: select.user(state)
     };
 };
@@ -811,7 +839,6 @@ const mapDispatchToProps = dispatch => {
     return {
         addMany_async: (store, token, items) => dispatch(actions.addMany_async(store, token, items)),
         addTab_async: (store, collection, token, user, model) => dispatch(actions.addTab_async(store, collection, token, user, model)),
-        delete_async: (store, token, item) => dispatch(actions.delete_async(store, token, item)),
         deleteMany_async: (store, token, models) => dispatch(actions.deleteMany_async(store, token, models)),
         deleteTab_async: (store, collection, token, user, tab) => dispatch(actions.deleteTab_async(store, collection, token, user, tab)),
         update_async: (store, token, model) => dispatch(actions.update_async(store, token, model)),
