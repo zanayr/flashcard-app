@@ -9,7 +9,7 @@ import * as select from '../../store/reducers/root';
 import * as sortTypes from '../../utility/sortTypes';
 import * as utility from '../../utility/utility';
 
-import Aside from '../../components/aside/Aside/Aside';
+import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
 import List2 from '../../components/List/List2';
@@ -38,13 +38,12 @@ class User extends Component {
             group: [],
             tag: []
         },
-        group: [],
+        internal: [],
         main: 'LOADING',
         quick: [],
         selected: [],
         sort: sortTypes.DATE_ASC,
         tab: {},
-        tag: [],
         undo: {
             action: null,
             data: {}
@@ -168,23 +167,23 @@ class User extends Component {
 
     //  Users  ----------------------------------------------------------  Users SS  //
     _removeManyUsers (users) {
-        const i = this.state.users;
+        const u = this.state.users;
         users.forEach(user => {
-            delete i[user.id];
+            delete u[user.id];
         });
         this.setState(prev => ({
             ...prev,
-            users: i
+            users: u
         }));
     }
     _setManyUsers (users) {
-        const i = this.state.users;
+        const u = this.state.users;
         users.forEach(user => {
-            i[user.id] = user;
+            u[user.id] = user;
         });
         this.setState(prev => ({
             ...prev,
-            users: i
+            users: u
         }));
     }
     _setUserValue (target, value) {
@@ -263,14 +262,6 @@ class User extends Component {
         }));
     }
 
-    //  Tag & Group  ----------------------------------------------  Tag & Group SS  //
-    _addTag (category, tag) {
-        this.setState(prev => ({
-            ...prev,
-            [category]: prev[category].concat(tag)
-        }));
-    }
-
     //  Sort  ------------------------------------------------------------  Sort SS  //
     _setSort (sort) {
         this.setState(prev => ({
@@ -301,50 +292,17 @@ class User extends Component {
 
     //  PRIVATE METHODS  =========================================  PRIVATE METHODS  //
     //  Aside  ----------------------------------------------------------  Aside PM  //
-    _openAssignAside (data) {
-        const collections = this.props.select_collections;
-        const all = [];
-        const member = [];
-        Object.keys(collections).map(id => {
-            all.push({
-                id: id,
-                primary: collections[id].primary
-            });
-            if (data.user.member.includes(id)) {
-                member.push(id);
-            }
-        });
-        this._toggleAside(data.type);
+    _openFilterAside () {
         this._setAside({
-            cancel: this.handle_onAsideCancel,
-            change: this.handle_onUserChange,
-            confirm: data.confirm,
+            cancel: this.handle_onAsideClose,
+            toggle: (filter, tag) => this.handle_onAsideFilterToggle(filter, tag)
         }, {
-            all: all,
-            user: data.user,
-            member: member,
-        });
-    }
-    _openFilterAside (filter) {
-        this._setAside({
-            toggle: (tag) => this.handle_onAsideFilterToggle(filter, tag)
-        }, {
-            all: this.state[filter],
-            filter: this.state.filter[filter],
-            tab: this.state.current[filter]
-        });
-    }
-    _openInspectAside (data) {
-        this._toggleAside(data.type);
-        this._setAside({
-            cancel: this.handle_onAsideCancel,
-            change: this.handle_onUserChange,
-            confirm: data.confirm,
-            create: this.handle_onTagCreate
-        }, {
-            group: this.state.group,
-            user: data.user,
-            tag: this.state.tag
+            all: {
+                group: this.props.select_user.group.slice(),
+                tag: this.props.select_user.tag.concat(this.state.internal)
+            },
+            filter: {...this.state.filter},
+            tab: {...this.state.current}
         });
     }
 
@@ -366,49 +324,15 @@ class User extends Component {
         }
         return valid;
     }
-    _cloneManyUsers () {
-        const cloned = [];
-        const selected = this.state.selected.slice();
-        selected.forEach((user, i) => {
-            let primary;
-            if (user.primary.length <= 24) {
-                primary = 'Copy of ' + user.primary;
-            } else {
-                primary = 'Copy of ' + user.primary.substr(0, 21) + '...';
-            }
-            switch (this.page) {
-                case 'card':
-                        cloned.push(create.userViewModel(utility.createHashId(i), {
-                            ...user,
-                            date: Date.now(),
-                            primary: primary
-                        }));
-                    break;
-                case 'student':
-                    break;
-                default:
-                    break;
-            }
-        });
-        this._addManyUsers_async(cloned);
-        this._setManyUsers(cloned);
-        this._clearSelected();
-    }
-    _createUser () {
-        const user = create.userViewModel(utility.createHashId(0), {
-            owner: this.props.select_authUser,
-            primary: '',
-            secondary: '',
-            tag: []
-        });
-        
-        this._setManyUsers([user]);
-        this._openInspectAside({
-            confirm: () => this._addManyUsers([this.state.users[user.id]]),
-            user: user,
-            type: asideTypes.CREATE_USER
-        });
-        this._clearSelected();
+    handle_onAsideClose = () => {
+        switch (this.state.aside.state) {
+            case asideTypes.FILTER:
+                this._clearFilter();
+                break;
+            default:
+                break;
+        }
+        this._clearAndCloseAside();
     }
     _deleteManyUsers () {
         const selected = this.state.selected.slice();
@@ -423,14 +347,6 @@ class User extends Component {
     _deleteUser = (user) => {
         this._deleteManyUsers([user]);
     }
-    _inspectUser = (user) => {
-        this._openInspectAside({
-            confirm: this._updateUser,
-            user: user,
-            type: asideTypes.INSPECT_USER
-        });
-        this._clearQuick('s');
-    }
     _selectUser = (user) => {
         let selected = this.state.selected.slice();
         if (selected.find(i => i.id === user.id)) {
@@ -442,18 +358,6 @@ class User extends Component {
             this.handle_onAsideClose();
         }
         this._setSelected(selected);
-    }
-    _updateUser = () => {
-        const original = this.state.aside.data.user;
-        const user = this.state.users[original.id];
-        if (JSON.stringify(user) !== JSON.stringify(original)) {
-            this.props.update_async(this.props.match.params.user, this.props.select_authToken, user);
-            this._setUndo({
-                action: this._undoUserUpdated,
-                data: original
-            });
-        }
-        this._clearAndCloseAside();
     }
 
     //  Tab  ------------------------------------------------------------------ Tab  //
@@ -488,69 +392,10 @@ class User extends Component {
         this._addManyUsers_async(users);
         this._setManyUsers(users);
     }
-    _undoManyUsersRemoved = () => {
-        const users = this.state.undo.data.slice();
-        const members = [];
-        users.forEach(user => {
-            members.push(user.id);
-            this.props.update_async(this.props.match.params.user, this.props.select_authToken, user);
-        });
-        this._setManyUsers(users);
-    }
-    _undoUserUpdated = () => {
-        const user = this.state.undo.data;
-        this.props.update_async(this.props.match.params.user, this.props.select_authToken, user);
-        this._setManyUsers([user]);
-    }
     
 
     //  EVENT HANDLERS  ===========================================  EVENT HANDLERS  //
     //  Aside  ----------------------------------------------------------  Aside EH  //
-    handle_onAsideCancel = () => {
-        const originalData = this.state.aside.data;
-        let data;
-        switch (this.state.aside.state) {
-            case asideTypes.CREATE_USER:
-                this._removeManyUsers([this.state.users[this.state.aside.data.user.id]]);
-                break;
-            case asideTypes.INSPECT_USER:
-                data = this.state.users[originalData.user.id];
-                if (JSON.stringify(data) !== JSON.stringify(originalData.user) && this._checkUser(data)) {
-                    this._setManyUsers([originalData.user]);
-                }
-                break;
-            default:
-                break;
-        }
-        this._clearAndCloseAside();
-    }
-    handle_onAsideClose = () => {
-        const originalData = this.state.aside.data;
-        let data;
-        switch (this.state.aside.state) {
-            case asideTypes.CREATE_USER:
-                data = this.state.users[originalData.user.id];
-                if (JSON.stringify(data) !== JSON.stringify(originalData.user) && this._checkUser(data)) {
-                    this._addManyUsers([data]);
-                } else {
-                    this._removeManyUsers([data]);
-                }
-                break;
-            case asideTypes.INSPECT_USER:
-                data = this.state.users[originalData.user.id];
-                if (JSON.stringify(data) !== JSON.stringify(originalData.user) && this._checkUser(data)) {
-                    this.props.update_async(this.props.match.params.user, this.props.select_authToken, data);
-                    this._setUndo({
-                        action: this._undoUserUpdated,
-                        data: originalData.user
-                    });
-                }
-                break;
-            default:
-                break;
-        }
-        this._clearAndCloseAside();
-    }
     handle_onAsideFilterToggle = (category, tag) => {
         let filter = {...this.state.filter};
         if (filter[category].includes(tag)) {
@@ -558,7 +403,7 @@ class User extends Component {
         } else {
             filter[category] = filter[category].concat(tag);
         }
-        this._updateAsideData('filter', filter[category]);
+        this._updateAsideData('filter', filter);
         this._setFilter(filter);
     }
     
@@ -569,26 +414,13 @@ class User extends Component {
             case 0:
                 this._deleteManyUsers();
                 break;
-            case 1:
-                this._cloneManyUsers();
-                break;
             default:
                 break;
         }
     }
     handle_onFilterToggle = (filter) => {
-        switch (filter) {
-            case 0:
-                this._openFilterAside('tag');
-                this._toggleAside(asideTypes.FILTER_TAG)
-                break;
-            case 1:
-                this._openFilterAside('group');
-                this._toggleAside(asideTypes.FILTER_GROUP);
-                break;
-            default:
-                break;
-        }
+        this._openFilterAside();
+        this._toggleAside(asideTypes.FILTER);
     }
     handle_onSortToggle = (sort) => {
         switch (sort) {
@@ -610,6 +442,9 @@ class User extends Component {
     }
     handle_onNagivationToggle = () => {
         this._toggleAside(asideTypes.NAVIGATION);
+        this._setAside({
+            cancel: this.handle_onAsideClose
+        });
     }
     
     //  User  ------------------------------------------------------------  User EH  //
@@ -690,12 +525,6 @@ class User extends Component {
         this._setMainState('LIST_VIEW');
     }
 
-    //  Tag  -----------------------------------------------------------------  Tag  //
-    handle_onTagCreate = (category, tag) => {
-        this._addTag(category, tag);
-    }
-
-
     render () {
         let content;
         switch (this.state.main) {
@@ -749,7 +578,7 @@ class User extends Component {
                             data={this.state.quick}/>
                     </div>
                 </main>
-                <Aside
+                <Aside2
                     actions={this.state.aside.actions}
                     data={this.state.aside.data}
                     page={this.props.match.params.user}

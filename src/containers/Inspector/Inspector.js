@@ -315,7 +315,7 @@ class Inspector extends Component {
 
     //  PRIVATE METHODS  =========================================  PRIVATE METHODS  //
     //  Aside  ----------------------------------------------------------  Aside PM  //
-    _openFilterAside (filter) {
+    _openFilterAside () {
         this._setAside({
             cancel: this.handle_onAsideClose,
             toggle: (filter, tag) => this.handle_onAsideFilterToggle(filter, tag)
@@ -605,7 +605,7 @@ class Inspector extends Component {
                 break;
         }
     }
-    handle_onFilterToggle = (filter) => {
+    handle_onFilterToggle = () => {
         this._openFilterAside();
         this._toggleAside(asideTypes.FILTER);
     }
