@@ -1,6 +1,6 @@
 .Bar_Button {
     background-color: lightcoral;
-    flex-grow: 1;
+    /* flex-grow: 1; */
     height: 48px;
     text-align: center;
 }

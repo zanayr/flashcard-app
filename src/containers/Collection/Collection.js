@@ -310,7 +310,7 @@ class Collections extends Component {
     //  Aside  ----------------------------------------------------------  Aside PM  //
     _openFilterAside () {
         this._setAside({
-            cancel: this.handle_onFilterAsideCancel,
+            cancel: this.handle_onAsideClose,
             toggle: (filter, tag) => this.handle_onAsideFilterToggle(filter, tag)
         }, {
             all: {
@@ -324,7 +324,7 @@ class Collections extends Component {
     _openInspectAside (data) {
         this._toggleAside(data.type);
         this._setAside({
-            cancel: this.handle_onInspectAsideCancel,
+            cancel: this.handle_onAsideClose,
             change: this.handle_onCollectionChange,
             confirm: data.confirm,
             create: this.handle_onTagCreate
@@ -415,18 +415,24 @@ class Collections extends Component {
         }
         this._clearAndCloseAside();
     }
-    handle_onInspectAsideCancel = () => {
-        const original = this.state.aside.data;
-        const inspected = this.state.collection[original.item.id];
-        if (original.tag.includes('$create')) {
-            this._removeManyCollections([inspected]);
-        } else if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
-            this._setManyCollections([original.item]);
+    handle_onAsideClose = () => {
+        switch (this.state.aside.state) {
+            case asideTypes.FILTER:
+                this._clearFilter();
+                break;
+            case asideTypes.INSPECT:
+                    const original = this.state.aside.data;
+                    const inspected = this.state.collection[original.item.id];
+                    if (original.tag.includes('$create')) {
+                        this._removeManyCollections([inspected]);
+                    } else if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
+                        this._setManyCollections([original.item]);
+                    }
+                    this._clearAndCloseAside();
+                    break;
+            default:
+                break;
         }
-        this._clearAndCloseAside();
-    }
-    handle_onFilterAsideCancel = () => {
-        this._clearFilter();
         this._clearAndCloseAside();
     }
 
@@ -692,6 +698,9 @@ class Collections extends Component {
     }
     handle_onNagivationToggle = () => {
         this._toggleAside(asideTypes.NAVIGATION);
+        this._setAside({
+            cancel: this.handle_onAsideClose
+        });
     }
     
     //  Collection  ------------------------------------------------------------  Collection EH  //
@@ -721,16 +730,8 @@ class Collections extends Component {
 
     // //  Main  -----------------------------------------------------------  Main EHs  //
     handle_onDefaultClick = () => {
-        switch (this.state.aside.state) {
-            case asideTypes.FILTER:
-                this._clearAndCloseAside();
-                break;
-            case asideTypes.INSPECT:
-                this.handle_onInspectAsideCancel();
-                break;
-            default:
-                break;
-        }
+        this.handle_onAsideClose();
+        this._clearSelected();
     }
 
     //  Quicks  ----------------------------------------------------------  Quicks EH  //

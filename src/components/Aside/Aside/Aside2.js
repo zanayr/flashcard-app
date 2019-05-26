@@ -7,7 +7,7 @@ import Aux from '../../../hoc/Aux/Aux';
 import AssignAside from '../Assign/AssignAside';
 import FilterAside2 from '../Filter/FilterAside2';
 import InspectAside2 from '../Inspect/InspectAside2';
-import NavigationAiside from '../Nav/NavAside';
+import NavigationAiside2 from '../Nav/NavAside2';
 import AsideOverlay from '../../Overlay/Aside/AsideOverlay';
 
 const aside2 = (props) => {
@@ -120,11 +120,16 @@ const aside2 = (props) => {
             break;
         case asideTypes.NAVIGATION:
             aside = (
-                <NavigationAiside
-                    actions={props.actions}
-                    data={props.data}
-                    history={props.history}
-                    page={props.page}/>
+                <Aux>
+                    <NavigationAiside2
+                        actions={props.actions}
+                        data={props.data}
+                        history={props.history}
+                        page={props.page}/>
+                    <AsideOverlay
+                        action={props.actions.cancel}
+                        active={true}/>
+                </Aux>
             );
             break;
         default:
