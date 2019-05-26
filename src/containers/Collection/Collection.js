@@ -297,17 +297,29 @@ class Collections extends Component {
         this._setQuick('u');
     }
 
+    handle_onFilterClear = () => {
+        this._updateAsideData('filter', {
+            group: [],
+            tag: []
+        });
+        this._clearFilter();
+    }
+
 
     //  PRIVATE METHODS  =========================================  PRIVATE METHODS  //
     //  Aside  ----------------------------------------------------------  Aside PM  //
     _openFilterAside () {
         this._setAside({
-            cancel: this.handle_onAsideClose,
+            cancel: this.handle_onFilterClear,
+            confirm: this.handle_onAsideClose,
             toggle: (filter, tag) => this.handle_onAsideFilterToggle(filter, tag)
         }, {
             all: {
                 group: this.props.select_user.group.slice(),
                 tag: this.props.select_user.tag.concat(this.state.internal)
+            },
+            labels: {
+                confirm: 'Close'
             },
             filter: {...this.state.filter},
             tab: {...this.state.current}
@@ -401,9 +413,6 @@ class Collections extends Component {
     }
     handle_onAsideClose = () => {
         switch (this.state.aside.state) {
-            case asideTypes.FILTER:
-                this._clearFilter();
-                break;
             case asideTypes.INSPECT:
                     const original = this.state.aside.data;
                     const inspected = this.state.collection[original.item.id];
@@ -668,7 +677,10 @@ class Collections extends Component {
     handle_onQuickClick = (quick) => {
         switch (quick) {
             case 0:
-                this._updateAsideData('filter', []);
+                this._updateAsideData('filter', {
+                    group: [],
+                    tag: []
+                });
                 this._clearFilter();
                 break;
             case 1:
