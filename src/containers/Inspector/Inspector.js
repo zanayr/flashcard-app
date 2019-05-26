@@ -344,7 +344,7 @@ class Inspector extends Component {
                 secondary: 'Details'
             },
             item: data.item,
-            id: data.item.id,
+            id: this.state.collection.id,
             tag: this.props.select_user.tag
         });
     }

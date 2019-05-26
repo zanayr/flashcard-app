@@ -12,7 +12,6 @@ import AsideOverlay from '../../Overlay/Aside/AsideOverlay';
 
 const aside2 = (props) => {
     let aside = null;
-    console.log(props.data);
     switch (props.state) {
         case asideTypes.CLOSED:
             aside = (null);
@@ -31,7 +30,7 @@ const aside2 = (props) => {
                         actions={props.actions}
                         data={props.data}
                         history={props.history}
-                        path={props.page}/>
+                        path={props.page === 'deck' ? props.page : 'create'}/>
                     <AsideOverlay
                         action={props.actions.overlay}
                         active={true}/>

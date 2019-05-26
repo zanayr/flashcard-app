@@ -20,7 +20,6 @@ class FilterAside2 extends Component {
     }
 
     render () {
-        console.log(this.props.data.filter);
         const dict = {};
         this.props.data.all[this.state.filter].forEach(tag => {
             dict[tag.replace('$', '')] = tag;

@@ -6,7 +6,7 @@ import * as select from '../../store/reducers/root';
 import * as asideTypes from '../../components/aside/Aside/asideTypes';
 import * as headerTypes from '../../components/Header/types.js';
 
-import Aside from '../../components/aside/Aside/Aside';
+import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
 import ProfileForm from '../../components/form/Profile/ProfileForm';
@@ -62,6 +62,9 @@ class Profile extends Component {
     //  Aside  --------------------------------------------------------------  Aside //
     handle_onNagivationToggle = () => {
         this._toggleAside(asideTypes.NAVIGATION);
+        this._setAside({
+            cancel: this.handle_onAsideClose
+        });
     }
     handle_onAsideClose = () => {
         this._closeAside();
@@ -98,7 +101,7 @@ class Profile extends Component {
                         </section>
                     </div>
                 </main>
-                <Aside
+                <Aside2
                     actions={{}}
                     data={{}}
                     state={this.state.aside.state}/>
