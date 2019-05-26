@@ -270,8 +270,6 @@ class Collections extends Component {
         }));
     }
 
-    //  Tag & Group  ----------------------------------------------  Tag & Group SS  //
-
     //  Sort  ------------------------------------------------------------  Sort SS  //
     _setSort (sort) {
         this.setState(prev => ({
@@ -360,16 +358,6 @@ class Collections extends Component {
     _addManyCollections_async (collections) {
         this.props.addMany_async(this.props.match.params.collection, this.props.select_authToken, collections);
         this._setItemMembership_async(collections);
-    }
-    _checkCollection (collection) {
-        let valid = true;
-        if (!collection.primary.length > 0 && valid) {
-            valid = false;
-        }
-        if (!collection.secondary.length && valid) {
-            valid = false
-        }
-        return valid;
     }
     _cloneManyCollections () {
         const cloned = [];
@@ -530,18 +518,6 @@ class Collections extends Component {
         }
         this._setSelected(selected);
     }
-    _updateCollection = () => {
-        const original = this.state.aside.data.item;
-        const collection = this.state.collection[original.id];
-        if (JSON.stringify(collection) !== JSON.stringify(original)) {
-            this.props.update_async(this.props.match.params.collection, this.props.select_authToken, collection);
-            this._setUndo({
-                action: this._undoCollectionUpdated,
-                data: original
-            });
-        }
-        this._clearAndCloseAside();
-    }
 
     //  Tab  ------------------------------------------------------------------ Tab  //
     _deleteTab (tab) {
@@ -685,6 +661,7 @@ class Collections extends Component {
     handle_onDefaultClick = () => {
         this.handle_onAsideClose();
         this._clearSelected();
+        this._clearFilter();
     }
 
     //  Quicks  ----------------------------------------------------------  Quicks EH  //
