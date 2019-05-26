@@ -13,6 +13,28 @@
 .Aside > div {
     height: 100%;
 }
+
+.Aside .Footer {
+    bottom: 0px;
+    left: 0px;
+    position: absolute;
+    width: 100%;
+}
+.Aside .Footer > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.Aside .Footer > div button:first-of-type {
+    flex-grow: 1;
+}
+
+
+
+
+
+
+
 .Active {
     display: block;
     right: 0px;

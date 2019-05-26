@@ -63,13 +63,6 @@ const updateCard = (state, action) => {
     }
 }
 
-// const update2Card = (state, action) => {
-//     return {
-//         ...state,
-//         cards: action.payload
-//     }
-// }
-
 
 //  REDUCER  -------------------------------------------------------------  REDUCER  //
 const reducer = (state=initialState, action) => {

@@ -10,7 +10,7 @@ import * as sortTypes from '../../utility/sortTypes';
 import * as utility from '../../utility/utility';
 
 import ActionButton from '../../components/ui/button/Action/ActionButton';
-import Aside from '../../components/aside/Aside/Aside';
+import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
 import List2 from '../../components/List/List2';
@@ -326,12 +326,18 @@ class Collections extends Component {
     _openInspectAside (data) {
         this._toggleAside(data.type);
         this._setAside({
-            cancel: this.handle_onAsideCancel,
+            cancel: this.handle_onInspectAsideCancel,
             change: this.handle_onCollectionChange,
             confirm: data.confirm,
             create: this.handle_onTagCreate
         }, {
             group: this.props.select_user.group,
+            labels: {
+                aux: 'Add More',
+                confirm: 'Confirm',
+                primary: 'Title',
+                secondary: 'Details'
+            },
             item: data.collection,
             id: data.collection.id,
             tag: this.props.select_user.tag
@@ -355,6 +361,9 @@ class Collections extends Component {
     _addManyCollections = (collections) => {
         this._addManyCollections_async(collections);
         this._clearAndCloseAside();
+    }
+    _updateCollection_async (collection) {
+        this.props.update_async('deck', this.props.select_authToken, collection);
     }
     _addManyCollections_async (collections) {
         this.props.addMany_async(this.props.match.params.collection, this.props.select_authToken, collections);
@@ -390,12 +399,42 @@ class Collections extends Component {
         this._setManyCollections(cloned);
         this._clearSelected();
     }
+    handle_onInspectAsideConfirm = () => {
+        const original = this.state.aside.data;
+        const inspected = this.state.collection[original.item.id];
+        if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
+            if (original.item.tag.includes('$create')) {
+                this._addManyCollections([inspected]);
+            } else {
+                this._updateCollection_async(inspected);
+                this._setUndo({
+                    action: this._undoCollectionUpdated,
+                    data: original.item
+                });
+            }
+        } else if (original.tag.includes('$create')) {
+            this._removeManyCollections([inspected]);
+        }
+        this._clearAndCloseAside();
+    }
+    handle_onInspectAsideCancel = () => {
+        const original = this.state.aside.data;
+        const inspected = this.state.collection[original.item.id];
+        if (original.tag.includes('$create')) {
+            this._removeManyCollections([inspected]);
+        } else if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
+            this._setManyCollections([original.item]);
+        }
+        this._clearAndCloseAside();
+    }
+
+
     _createCollection () {
         const collection = create.collectionViewModel(utility.createHashId(0), {
             owner: this.props.select_authUser,
             primary: '',
             secondary: '',
-            tag: []
+            tag: ['$create']
         });
         this._setManyCollections([collection]);
         this._openInspectAside({
@@ -434,7 +473,7 @@ class Collections extends Component {
     }
     _inspectCollection = (collection) => {
         this._openInspectAside({
-            confirm: this._updateCollection,
+            confirm: this.handle_onInspectAsideConfirm,
             collection: collection,
             type: asideTypes.INSPECT_COLLECTION
         });
@@ -554,51 +593,51 @@ class Collections extends Component {
 
 
     //  Aside  ----------------------------------------------------------  Aside EH  //
-    handle_onAsideCancel = () => {
-        const originalData = this.state.aside.data;
-        let data;
-        switch (this.state.aside.state) {
-            case asideTypes.CREATE_COLLECTION:
-                this._removeManyCollections([this.state.collection[this.state.aside.data.item.id]]);
-                break;
-            case asideTypes.INSPECT_COLLECTION:
-                data = this.state.collection[originalData.item.id];
-                if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
-                    this._setManyCollections([originalData.item]);
-                }
-                break;
-            default:
-                break;
-        }
-        this._clearAndCloseAside();
-    }
-    handle_onAsideClose = () => {
-        const originalData = this.state.aside.data;
-        let data;
-        switch (this.state.aside.state) {
-            case asideTypes.CREATE_COLLECTION:
-                data = this.state.collection[originalData.item.id];
-                if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
-                    this._addManyCollections([data]);
-                } else {
-                    this._removeManyCollections([data]);
-                }
-                break;
-            case asideTypes.INSPECT_COLLECTION:
-                data = this.state.collection[originalData.item.id];
-                if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
-                    this.props.update_async(this.props.match.params.collection, this.props.select_authToken, data);
-                    this._setUndo({
-                        action: this._undoCollectionUpdated,
-                        data: originalData.item
-                    });
-                }
-                break;
-            default:
-                break;
-        }
-        this._clearAndCloseAside();
-    }
+    // handle_onAsideCancel = () => {
+    //     const originalData = this.state.aside.data;
+    //     let data;
+    //     switch (this.state.aside.state) {
+    //         case asideTypes.CREATE_COLLECTION:
+    //             this._removeManyCollections([this.state.collection[this.state.aside.data.item.id]]);
+    //             break;
+    //         case asideTypes.INSPECT_COLLECTION:
+    //             data = this.state.collection[originalData.item.id];
+    //             if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
+    //                 this._setManyCollections([originalData.item]);
+    //             }
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    //     this._clearAndCloseAside();
+    // }
+    // handle_onAsideClose = () => {
+    //     const originalData = this.state.aside.data;
+    //     let data;
+    //     switch (this.state.aside.state) {
+    //         case asideTypes.CREATE_COLLECTION:
+    //             data = this.state.collection[originalData.item.id];
+    //             if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
+    //                 this._addManyCollections([data]);
+    //             } else {
+    //                 this._removeManyCollections([data]);
+    //             }
+    //             break;
+    //         case asideTypes.INSPECT_COLLECTION:
+    //             data = this.state.collection[originalData.item.id];
+    //             if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
+    //                 this.props.update_async(this.props.match.params.collection, this.props.select_authToken, data);
+    //                 this._setUndo({
+    //                     action: this._undoCollectionUpdated,
+    //                     data: originalData.item
+    //                 });
+    //             }
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    //     this._clearAndCloseAside();
+    // }
     handle_onAsideFilterToggle = (category, tag) => {
         let filter = {...this.state.filter};
         if (filter[category].includes(tag)) {
@@ -689,8 +728,10 @@ class Collections extends Component {
     }
 
     // //  Main  -----------------------------------------------------------  Main EHs  //
-    handle_onMainClick = () => {
-        this.handle_onAsideClose();
+    handle_onDefaultClick = () => {
+        if (this.state.aside.state === asideTypes.INSPECT_COLLECTION) {
+            this.handle_onInspectAsideCancel();
+        }
         this._clearSelected();
         this._clearFilter();
     }
@@ -780,16 +821,16 @@ class Collections extends Component {
                     }}
                     selected={this.state.selected}
                     state={headerTypes.COLLECTION}
-                    onClick={this.handle_onAsideClose}/>
+                    onClick={this.handle_onDefaultClick}/>
                 <main
                     className={styles.Main}
-                    onClick={this.handle_onMainClick}>
+                    onClick={this.handle_onDefaultClick}>
                     <div>
                         <TabBar
                             action={this.handle_onTabToggle}
                             active={this.state.current.id}
                             collection={this.state.tab}
-                            onClick={this.handle_onAsideClose}/>
+                            onClick={this.handle_onDefaultClick}/>
                         {content}
                         <ActionButton
                             onClick={this.handle_onActionClick}
@@ -800,7 +841,7 @@ class Collections extends Component {
                             data={this.state.quick}/>
                     </div>
                 </main>
-                <Aside
+                <Aside2
                     actions={this.state.aside.actions}
                     page={this.props.match.params.collection}
                     data={this.state.aside.data}
