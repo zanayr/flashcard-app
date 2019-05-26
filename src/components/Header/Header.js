@@ -64,7 +64,7 @@ class Header extends Component {
             case headerTypes.COLLECTION:
                 content = (
                     <Aux>
-                        <Search/>
+                        <Search onChange={this.props.actions.search}/>
                         <Toolbar>
                             <IconButton onClick={() => this.props.actions.filter(0)}>T</IconButton>
                             <IconButton onClick={() => this.props.actions.filter(1)}>G</IconButton>
@@ -90,7 +90,7 @@ class Header extends Component {
             case headerTypes.INSPECTOR:
                 content = (
                     <Aux>
-                        <Search/>
+                        <Search onChange={this.props.actions.search}/>
                         <Toolbar>
                             <IconButton onClick={() => this.props.actions.filter(0)}>T</IconButton>
                             <IconButton onClick={() => this.props.actions.filter(1)}>G</IconButton>

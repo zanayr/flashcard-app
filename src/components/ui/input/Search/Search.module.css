@@ -6,6 +6,8 @@
     align-items: center;
     display: flex;
     flex-direction: row;
+    height: 100%;
+    justify-content: center;
 }
 .Search input {
     background-color: white;
@@ -18,4 +20,14 @@
 }
 .Search input:focus {
     outline: none;
+}
+
+
+.Search .Clear {
+    background-color: cadetblue;
+    color: white;
+    height: 16px;
+    position: absolute;
+    right: 12px;
+    width: 16px;
 }

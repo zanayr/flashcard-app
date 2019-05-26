@@ -36,6 +36,7 @@ class Collections extends Component {
         collection: {},
         filter: {
             group: [],
+            search: '',
             tag: []
         },
         internal: [],
@@ -155,6 +156,7 @@ class Collections extends Component {
         this.setState(prev => ({
             ...prev,
             filter: {
+                ...prev.filter,
                 group: [],
                 tag: []
             }
@@ -300,6 +302,7 @@ class Collections extends Component {
     handle_onFilterClear = () => {
         this._updateAsideData('filter', {
             group: [],
+            search: this.state.filter.search,
             tag: []
         });
         this._clearFilter();
@@ -679,6 +682,7 @@ class Collections extends Component {
             case 0:
                 this._updateAsideData('filter', {
                     group: [],
+                    search: this.state.filter.search,
                     tag: []
                 });
                 this._clearFilter();
@@ -694,6 +698,7 @@ class Collections extends Component {
                 break;
         }
     }
+    
 
     // Tab  ---------------------------------------------------------------  Tab EH  //
     handle_onTabToggle = (tab, data) => {
@@ -718,6 +723,19 @@ class Collections extends Component {
         this._setTab(tabs);
         this._setCurrent(tab);
         this._setMainState('LIST_VIEW');
+    }
+
+    setSearch (value) {
+        this.setState(prev => ({
+            ...prev,
+            filter: {
+                ...prev.filter,
+                search: value.toUpperCase()
+            }
+        }));
+    }
+    handle_onSearchChange = (value) => {
+        this.setSearch(value);
     }
 
     render () {
@@ -751,6 +769,7 @@ class Collections extends Component {
                     actions={{
                         action: this.handle_onActionToggle,
                         filter: this.handle_onFilterToggle,
+                        search: this.handle_onSearchChange,
                         sort: this.handle_onSortToggle,
                         navigation: this.handle_onNagivationToggle
                     }}

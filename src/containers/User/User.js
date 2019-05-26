@@ -35,6 +35,7 @@ class User extends Component {
         users: {},
         filter: {
             group: [],
+            search: '',
             tag: []
         },
         internal: [],
@@ -140,6 +141,7 @@ class User extends Component {
         this.setState(prev => ({
             ...prev,
             filter: {
+                ...prev.filter,
                 group: [],
                 tag: []
             }
@@ -291,6 +293,7 @@ class User extends Component {
     handle_onFilterClear = () => {
         this._updateAsideData('filter', {
             group: [],
+            search: this.state.filter.search,
             tag: []
         });
         this._clearFilter();
@@ -494,6 +497,7 @@ class User extends Component {
             case 0:
                 this._updateAsideData('filter', {
                     group: [],
+                    search: this.state.filter.search,
                     tag: []
                 });
                 this._clearFilter();
@@ -535,6 +539,19 @@ class User extends Component {
         this._setMainState('LIST_VIEW');
     }
 
+    setSearch (value) {
+        this.setState(prev => ({
+            ...prev,
+            filter: {
+                ...prev.filter,
+                search: value.toUpperCase()
+            }
+        }));
+    }
+    handle_onSearchChange = (value) => {
+        this.setSearch(value);
+    }
+
     render () {
         let content;
         switch (this.state.main) {
@@ -567,6 +584,7 @@ class User extends Component {
                     actions={{
                         action: this.handle_onActionToggle,
                         filter: this.handle_onFilterToggle,
+                        search: this.handle_onSearchChange,
                         sort: this.handle_onSortToggle,
                         navigation: this.handle_onNagivationToggle
                     }}

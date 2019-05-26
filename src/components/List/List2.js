@@ -6,18 +6,6 @@ import ContextAction2 from '../ui/button/Context/ContextAction2';
 import listStyles from './List.module.css';
 
 class List2 extends Component {
-    _checkTags (item) {
-        const tags = this.props.current.tag.concat(this.props.filters.tag);
-        if (tags.length) {
-            let match = false;
-            tags.forEach(tag => {
-                match = item.tag.includes(tag) || match
-            });
-            return match;
-        } else {
-            return true;
-        }
-    }
     _checkGroups (item) {
         const groups = this.props.current.group.concat(this.props.filters.group);
         if (groups.length) {
@@ -34,6 +22,31 @@ class List2 extends Component {
             return true;
         }
     }
+    _checkSearch (item) {
+        const term = this.props.filters.search;
+        if (term.length) {
+            if (item.primary.toUpperCase().match('^' + term) || item.primary.toUpperCase().match('^' + term)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return true;
+        }
+    }
+    _checkTags (item) {
+        const tags = this.props.current.tag.concat(this.props.filters.tag);
+        if (tags.length) {
+            let match = false;
+            tags.forEach(tag => {
+                match = item.tag.includes(tag) || match
+            });
+            return match;
+        } else {
+            return true;
+        }
+    }
+    
 
     handle_onItemSelect = (item) => {
         this.props.action(0, item);
@@ -57,7 +70,7 @@ class List2 extends Component {
                 );
                 contextPosition++;
             }
-            if (this._checkGroups(item) && this._checkTags(item)) {
+            if (this._checkGroups(item) && this._checkTags(item) && this._checkSearch(item)) {
                 return (
                     <ListItem
                         key={item.id}

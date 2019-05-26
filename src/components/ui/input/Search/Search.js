@@ -1,16 +1,44 @@
-import React from 'react';
+import React, {Component} from 'react';
 
-import searchCSS from './Search.module.css';
-import AppCSS from '../../../../App.module.css';
+import Button from '../../button/Button/Button';
 
-const searchBar = (props) => {
-    return (
-        <div className={searchCSS.Search}>
-            <div className={AppCSS.Inner}>
-                <input className={searchCSS.Search_Bar} type="text" placeholder="Search"/>
+import styles from './Search.module.css';
+
+class SearchBar extends Component {
+    state = {
+        value: ''
+    }
+    setValue (value) {
+        this.setState({value: value});
+    }
+
+    handle_onChange = (value) => {
+        this.setValue(value);
+        this.props.onChange(value);
+    }
+    render () {
+        let clear = null;
+        if (this.state.value.length) {
+            clear = (
+                <Button
+                    className={styles.Clear}
+                    onClick={() => this.handle_onChange('')}>x</Button>
+            );
+        }
+        return (
+            <div className={styles.Search}>
+                <div>
+                    <input
+                        className={styles.Search_Bar}
+                        type="text"
+                        placeholder="Search"
+                        value={this.state.value}
+                        onChange={(e) => this.handle_onChange(e.target.value)}/>
+                    {clear}
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
 
-export default searchBar;
+export default SearchBar;
