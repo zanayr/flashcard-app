@@ -271,12 +271,6 @@ class Collections extends Component {
     }
 
     //  Tag & Group  ----------------------------------------------  Tag & Group SS  //
-    // _addTag (category, tag) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         [category]: prev[category].concat(tag)
-    //     }));
-    // }
 
     //  Sort  ------------------------------------------------------------  Sort SS  //
     _setSort (sort) {
@@ -327,7 +321,6 @@ class Collections extends Component {
             cancel: this.handle_onAsideClose,
             change: this.handle_onCollectionChange,
             confirm: data.confirm,
-            // create: this.handle_onTagCreate,
             overlay: data.overlay
         }, {
             group: this.props.select_user.group,
@@ -535,9 +528,6 @@ class Collections extends Component {
         } else {
             selected = selected.concat(collection);
         }
-        // if (this.state.aside.state === asideTypes.INSPECT) {
-        //     this.handle_onAsideClose();
-        // }
         this._setSelected(selected);
     }
     _updateCollection = () => {
@@ -609,51 +599,6 @@ class Collections extends Component {
 
 
     //  Aside  ----------------------------------------------------------  Aside EH  //
-    // handle_onAsideCancel = () => {
-    //     const originalData = this.state.aside.data;
-    //     let data;
-    //     switch (this.state.aside.state) {
-    //         case asideTypes.CREATE_COLLECTION:
-    //             this._removeManyCollections([this.state.collection[this.state.aside.data.item.id]]);
-    //             break;
-    //         case asideTypes.INSPECT_COLLECTION:
-    //             data = this.state.collection[originalData.item.id];
-    //             if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
-    //                 this._setManyCollections([originalData.item]);
-    //             }
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    //     this._clearAndCloseAside();
-    // }
-    // handle_onAsideClose = () => {
-    //     const originalData = this.state.aside.data;
-    //     let data;
-    //     switch (this.state.aside.state) {
-    //         case asideTypes.CREATE_COLLECTION:
-    //             data = this.state.collection[originalData.item.id];
-    //             if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
-    //                 this._addManyCollections([data]);
-    //             } else {
-    //                 this._removeManyCollections([data]);
-    //             }
-    //             break;
-    //         case asideTypes.INSPECT_COLLECTION:
-    //             data = this.state.collection[originalData.item.id];
-    //             if (JSON.stringify(data) !== JSON.stringify(originalData.item) && this._checkCollection(data)) {
-    //                 this.props.update_async(this.props.match.params.collection, this.props.select_authToken, data);
-    //                 this._setUndo({
-    //                     action: this._undoCollectionUpdated,
-    //                     data: originalData.item
-    //                 });
-    //             }
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    //     this._clearAndCloseAside();
-    // }
     handle_onAsideFilterToggle = (category, tag) => {
         let filter = {...this.state.filter};
         if (filter[category].includes(tag)) {
@@ -787,9 +732,6 @@ class Collections extends Component {
     }
 
     //  Tag  -----------------------------------------------------------------  Tag  //
-    // handle_onTagCreate = (category, tag) => {
-    //     this._addTag(category, tag);
-    // }
 
     render () {
         let content;
