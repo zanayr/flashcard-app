@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
+import * as create from '../../store/models/models';
 import * as select from '../../store/reducers/root';
 import * as asideTypes from '../../components/aside/Aside/asideTypes';
 import * as headerTypes from '../../components/Header/types.js';
+import * as utility from '../../utility/utility';
 
 import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
@@ -15,6 +17,7 @@ import styles from './Study.module.css';
 
 class Study extends Component {
     state = {
+        all: {},
         aside: {
             state: asideTypes.CLOSED
         },
@@ -27,7 +30,8 @@ class Study extends Component {
         const cards = this.props.select_cardsById;
         this.setState(prev => ({
             ...prev,
-            cards: cards,
+            all: this.props.select_cards,
+            cards: utility.shuffle(cards),
             display: [cards[this.state.current]]
         }));
     }
@@ -65,6 +69,14 @@ class Study extends Component {
     }
 
     //  Cards  --------------------------------------------------------------  Cards //
+    setCard (card) {
+        const display = this.state.display.slice();
+        display[card.id] = card;
+        this.setState(prev => ({
+            ...prev,
+            display: display
+        }));
+    }
     setNextCard () {
         const current = this.state.current + 1;
         this.setState(prev => ({
@@ -73,67 +85,40 @@ class Study extends Component {
             display: prev.display.concat(this.state.cards[current])
         }));
     }
-    // _addCard (card) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         cards: prev.cards.concat(card)
-    //     }));
-    // }
-    // _removeCard (card) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         cards: prev.cards.filter(c => c.id !== card.id)
-    //     }));
-    //     this.props.delete_async('card', this.props.select_authToken, card);
-    //     if (this.props.location.state.id) {
-    //         let deck = this.props.select_deck;
-    //         this.props.update_async('deck', this.props.select_authToken, {
-    //             ...deck,
-    //             member: deck.member.filter(id => id !== card.id)
-    //         });
-    //     }
-    // }
 
 
     //  EVENT HANDLERS  -----------------------------------------------------  E.H.  //
     //  Aside  --------------------------------------------------------------  Aside //
-    // handle_onNagivationToggle = () => {
-    //     this._toggleAside(asideTypes.NAVIGATION);
-    //     this._setAside({
-    //         cancel: this.handle_onAsideClose
-    //     });
-    // }
-    // handle_onAsideClose = () => {
-    //     this._closeAside();
-    // }
+    handle_onNagivationToggle = () => {
+        this._toggleAside(asideTypes.NAVIGATION);
+        this._setAside({
+            cancel: this.handle_onAsideClose
+        });
+    }
+    handle_onAsideClose = () => {
+        this._closeAside();
+    }
 
     //  Cards  --------------------------------------------------------------  Cards //
-    // handle_onCardCreate = (card) => {
-    //     this._addCard(card);
-    //     this.props.add_async('card', this.props.select_authToken, card);
-    //     if (this.props.location.state.id) {
-    //         let deck = this.props.select_deck;
-    //         this.props.update_async('deck', this.props.select_authToken, {
-    //             ...deck,
-    //             member: deck.member.concat(card.id)
-    //         });
-    //     }
-    // }
-    // handle_onCardDelete = (card) => {
-    //     this._removeCard(card);
-    // }
-
     handle_onCardClick = () => {
         if (this.state.current + 1 < this.state.cards.length) {
             this.setNextCard();
         } else {
             console.log('end');
         }
-        
     }
 
-    handle_onCardFlag = () => {
-
+    handle_onCardFlag = (card) => {
+        const model = this.state.all[card.id];
+        card.flagged = !card.flagged ? true : null;
+        this.setCard(card);
+        this.props.update_async('card', this.props.select_authToken, {
+            ...model,
+            meta: {
+                ...model.meta,
+                flagged: card.flagged
+            }
+        });
     }
 
 
@@ -175,6 +160,7 @@ class Study extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
+        select_cards: select.cards(state),
         select_cardsById: select.cardsById(state, ownProps.location.state.data),
         select_authToken: select.authToken(state)
     }

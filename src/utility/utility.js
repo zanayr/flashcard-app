@@ -99,6 +99,19 @@ export function createHashId (i) {
 }
 
 
+//  SHUFFLE ARRAY  //
+//  Fisher-Yates Shuffle  //
+export function shuffle (arr) {
+    let i = arr.length - 1;
+    for (i; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+
+
 //  COMPARE TWO ARRAYS  //
 export function compareArrays (a, b) {
     if (a === b) {

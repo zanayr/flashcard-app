@@ -1,4 +1,3 @@
-
 //  MODELS  ---------------------------------------------------------------  MODELS  //
 //  Tab  ---------------------------------------------------------------  Tab Model  //
 //  Tab models are used for all "tab" database entites; these entites live inside of
