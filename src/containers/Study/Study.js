@@ -24,16 +24,17 @@ class Study extends Component {
         },
         cards: [],
         current: 0,
-        display: []
+        display: [],
+        timestamp: 0
     }
-
     componentDidMount () {
         const cards = this.props.select_cardsById;
         this.setState(prev => ({
             ...prev,
             all: this.props.select_cards,
             cards: utility.shuffle(cards),
-            display: [cards[this.state.current]]
+            display: [cards[this.state.current]],
+            timestamp: Date.now()
         }));
     }
 
@@ -92,8 +93,18 @@ class Study extends Component {
         this.setState(prev => ({
             ...prev,
             current: current,
-            display: prev.display.concat(this.state.cards[current])
+            display: prev.display.concat(this.state.cards[current]),
+            timestamp: Date.now()
         }));
+    }
+    updateMeta_async (card, meta) {
+        this.props.update_async('card', this.props.select_authToken, {
+            ...card,
+            meta: {
+                ...card.meta,
+                ...meta
+            }
+        });
     }
 
 
@@ -112,6 +123,21 @@ class Study extends Component {
     //  Cards  --------------------------------------------------------------  Cards //
     handle_onCardClick = () => {
         if (this.state.current + 1 < this.state.cards.length) {
+            const card = this.state.display[this.state.current];
+
+            const count = card.meta.count + 1;
+            const total = card.meta.time.total + (Date.now() - this.state.timestamp);
+            const average = total / count;
+
+            let meta = {
+                count: count,
+                flagged: card.meta.flagged || null,
+                time: {
+                    average: average,
+                    total: total
+                }
+            }
+            this.updateMeta_async(card, meta);
             this.setNextCard();
         } else {
             console.log('end');
@@ -122,18 +148,13 @@ class Study extends Component {
         const model = this.state.all[card.id];
         card.flagged = !card.flagged ? true : null;
         this.setCard(card);
-        this.props.update_async('card', this.props.select_authToken, {
-            ...model,
-            meta: {
-                ...model.meta,
-                flagged: card.flagged
-            }
-        });
+        this.updateMeta_async(model, {flagged: card.flagged});
     }
 
 
     //  RENDER METHOD  ----------------------------------------------------  RENDER  //
     render () {
+        console.log(this.state.cards);
         return (
             <Aux>
                 <main

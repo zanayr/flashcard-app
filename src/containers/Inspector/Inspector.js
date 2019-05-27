@@ -443,6 +443,13 @@ class Inspector extends Component {
     _createItem () {
         const item = create.itemViewModel(utility.createHashId(0), {
             member: [this.state.collection.id],
+            meta: {
+                count: 0,
+                time: {
+                    average: 0,
+                    total: 0
+                }
+            },
             owner: this.props.select_authUser,
             primary: '',
             secondary: '',

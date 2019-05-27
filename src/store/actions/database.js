@@ -588,7 +588,6 @@ export const getAllUsers_async = (token) => {
 
 //  Update  ----------------------------------------------------------  Update Async  //
 export const update_async = (store, token, viewModel) => {
-    console.log(viewModel);
     return dispatch => {
         let model = {};
         switch (store) {
