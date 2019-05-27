@@ -27,6 +27,7 @@ class Study extends Component {
         card: {},
         current: 0,
         display: [],
+        meta: {},
         shuffled: [],
         timestamp: 0,
         total: 0,
@@ -130,6 +131,16 @@ class Study extends Component {
             meta: meta
         });
     }
+    //  Meta  ---------------------------------------------------------------  Meta  //
+    setMeta (id, meta) {
+        this.setState(prev => ({
+            ...prev,
+            meta: {
+                ...prev.meta,
+                [id]: meta
+            }
+        }));
+    }
 
     //  State  -------------------------------------------------------------  State  //
     begin () {
@@ -154,7 +165,7 @@ class Study extends Component {
                 console.log('are you sure?...');
                 break;
             default:
-                this.props.history.replace('/review', {card: this.state.card});
+                this.props.history.replace('/review', {data: this.state.card, meta: this.state.meta});
                 break;
         }
     }
@@ -171,13 +182,12 @@ class Study extends Component {
 
     //  Cards  --------------------------------------------------------------  Cards //
     handle_onCardClick = () => {
-        if (this.state.current + 1 < this.state.total) {
+        if (!this.state.action) {
             const card = this.state.card[this.state.display[this.state.current].id];
-
+            const time = (Date.now() - this.state.timestamp);
             const count = card.meta.count + 1;
-            const total = card.meta.time.total + (Date.now() - this.state.timestamp);
+            const total = card.meta.time.total + time;
             const average = total / count;
-
             let meta = {
                 ...card.meta,
                 count: count,
@@ -187,11 +197,13 @@ class Study extends Component {
                     total: total
                 }
             }
+            this.setMeta(card.id, {time: time});
             this.updateMeta_async(card, meta);
-            this.setNextCard();
-        } else {
-            this.finish();
-            // this.props.history.replace('/review', {data: this.state.card});
+            if (this.state.current + 1 < this.state.total) {
+                this.setNextCard();
+            } else {
+                this.finish();
+            }
         }
     }
 
