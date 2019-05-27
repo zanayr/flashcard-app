@@ -788,7 +788,7 @@ class Collections extends Component {
                         {content}
                         <ActionButton
                             onClick={this.handle_onActionClick}
-                            state={0}
+                            state={this.state.selected.length}
                             values={['Create', 'Study']}/>
                         <QuickBar
                             action={this.handle_onQuickClick}
