@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
-import * as create from '../../store/models/models';
 import * as select from '../../store/reducers/root';
 import * as asideTypes from '../../components/aside/Aside/asideTypes';
 import * as headerTypes from '../../components/Header/types.js';
@@ -212,7 +211,6 @@ class Study extends Component {
         this.flagCard(flag);
         this.updateMeta_async(this.state.card[card.id], {flagged: flag});
     }
-
 
     //  RENDER METHOD  ----------------------------------------------------  RENDER  //
     render () {
