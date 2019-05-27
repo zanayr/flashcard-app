@@ -61,7 +61,11 @@ class CardStack extends Component {
         if (!card.selected) {
             this._selectCard(card);
         } else if (card.selected) {
-            this._flipCard(card);
+            if (this.props.onClick && this.state.max === card.zIndex && card.flipped) {
+                this.props.onClick();
+            } else {
+                this._flipCard(card);
+            }
         }
     }
 

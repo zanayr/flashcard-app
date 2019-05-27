@@ -94,6 +94,11 @@ export function selectCards (state) {
 export function selectCardsIsLoading (state) {
     return state.isLoading;
 }
+export function selectCardsById (state, ids) {
+    return ids.map(id => {
+        return state.card[id];
+    });
+}
 
 
 export default reducer;

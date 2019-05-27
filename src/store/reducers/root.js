@@ -52,6 +52,9 @@ export function cards (store) {
 export function cardsIsLoading (store) {
     return FromCard.selectCardsIsLoading(store[CARD]);
 }
+export function cardsById (store, ids) {
+    return FromCard.selectCardsById(store[CARD], ids);
+}
 
 //  Deck  -----------------------------------------------------------  Deck Selectors  //
 export function deck (store, id) {
