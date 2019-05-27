@@ -18,6 +18,7 @@ class Create extends Component {
     state = {
         cards: [],
         aside: {
+            actions: {},
             state: asideTypes.CLOSED
         }
     }
@@ -39,6 +40,15 @@ class Create extends Component {
             aside: {
                 ...prev.aside,
                 state: state
+            }
+        }));
+    }
+    setAside (actions) {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                actions: actions
             }
         }));
     }
@@ -81,8 +91,8 @@ class Create extends Component {
     //  Aside  --------------------------------------------------------------  Aside //
     handle_onNagivationToggle = () => {
         this._toggleAside(asideTypes.NAVIGATION);
-        this._setAside({
-            cancel: this.handle_onAsideClose
+        this.setAside({
+            overlay: this.handle_onAsideClose
         });
     }
     handle_onAsideClose = () => {
@@ -142,7 +152,7 @@ class Create extends Component {
                     </div>
                 </main>
                 <Aside2
-                    actions={{}}
+                    actions={this.state.aside.actions}
                     data={{}}
                     state={this.state.aside.state}/>
             </Aux>

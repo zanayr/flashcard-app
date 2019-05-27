@@ -19,7 +19,8 @@ class Study extends Component {
     state = {
         all: {},
         aside: {
-            state: asideTypes.CLOSED
+            state: asideTypes.CLOSED,
+            actions: {}
         },
         cards: [],
         current: 0,
@@ -53,6 +54,15 @@ class Study extends Component {
             aside: {
                 ...prev.aside,
                 state: state
+            }
+        }));
+    }
+    setAside (actions) {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                actions: actions
             }
         }));
     }
@@ -91,8 +101,8 @@ class Study extends Component {
     //  Aside  --------------------------------------------------------------  Aside //
     handle_onNagivationToggle = () => {
         this._toggleAside(asideTypes.NAVIGATION);
-        this._setAside({
-            cancel: this.handle_onAsideClose
+        this.setAside({
+            overlay: this.handle_onAsideClose
         });
     }
     handle_onAsideClose = () => {
@@ -149,7 +159,7 @@ class Study extends Component {
                     </div>
                 </main>
                 <Aside2
-                    actions={{}}
+                    actions={this.state.aside.actions}
                     data={{}}
                     state={this.state.aside.state}/>
             </Aux>

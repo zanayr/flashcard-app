@@ -48,7 +48,6 @@ const aside2 = (props) => {
             aside = (
                 <Aux>
                     <NavigationAiside2
-                        actions={props.actions}
                         data={props.data}
                         history={props.history}
                         page={props.page}/>

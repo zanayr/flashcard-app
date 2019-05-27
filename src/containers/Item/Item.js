@@ -679,7 +679,7 @@ class Item extends Component {
     handle_onNagivationToggle = () => {
         this._toggleAside(asideTypes.NAVIGATION);
         this._setAside({
-            cancel: this.handle_onAsideClose
+            overlay: this.handle_onAsideClose
         });
     }
     
