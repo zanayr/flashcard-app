@@ -577,10 +577,12 @@ class Collections extends Component {
             case 0:
                 this._createCollection();
                 break;
-            case 1:
-                console.log('Starting study session...');
-                break;
             default:
+                let cards = []
+                this.state.selected.forEach(deck => {
+                    cards = cards.concat(deck.member);
+                });
+                this.props.history.replace('/study', {data: cards});
                 break;
         }
     }

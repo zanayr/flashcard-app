@@ -1,0 +1,35 @@
+.Study {
+    background-color: cadetblue;
+    height: 100%;
+}
+.Study > div {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    justify-content: space-between;
+} 
+
+.Editor {
+    width: 50%;
+}
+.Study section > div {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+}
+.Wrapper {
+    background-color: gold;
+    height: auto;
+    padding: 16px;
+    width: 66%;
+}
+.Editor form {
+    margin-bottom: 32px;
+}
+
+
+.Board {
+    width: 50%;
+}
