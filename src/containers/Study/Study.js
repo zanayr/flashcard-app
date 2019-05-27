@@ -8,6 +8,7 @@ import * as asideTypes from '../../components/aside/Aside/asideTypes';
 import * as headerTypes from '../../components/Header/types.js';
 import * as utility from '../../utility/utility';
 
+import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
 import CardStack from '../../components/Stack/CardStack';
@@ -17,24 +18,30 @@ import styles from './Study.module.css';
 
 class Study extends Component {
     state = {
+        action: 0,
         all: {},
         aside: {
             state: asideTypes.CLOSED,
             actions: {}
         },
-        cards: [],
+        card: {},
         current: 0,
         display: [],
-        timestamp: 0
+        shuffled: [],
+        timestamp: 0,
+        total: 0,
     }
     componentDidMount () {
         const cards = this.props.select_cardsById;
+        const shuffled = utility.shuffle(Object.keys(cards).map(id => {return cards[id]}));
         this.setState(prev => ({
             ...prev,
             all: this.props.select_cards,
-            cards: utility.shuffle(cards),
-            display: [cards[this.state.current]],
-            timestamp: Date.now()
+            card: cards,
+            display: [shuffled[this.state.current]],
+            shuffled: shuffled,
+            timestamp: Date.now(),
+            total: shuffled.length
         }));
     }
 
@@ -80,7 +87,17 @@ class Study extends Component {
     }
 
     //  Cards  --------------------------------------------------------------  Cards //
-    setCard (card) {
+    flagCard (value) {
+        const display = this.state.display;
+        display[this.state.current].meta = {
+            flagged: value
+        }
+        this.setState(prev => ({
+            ...prev,
+            display: display
+        }));
+    }
+    setDisplayCard (card) {
         const display = this.state.display.slice();
         display[card.id] = card;
         this.setState(prev => ({
@@ -93,22 +110,54 @@ class Study extends Component {
         this.setState(prev => ({
             ...prev,
             current: current,
-            display: prev.display.concat(this.state.cards[current]),
+            display: prev.display.concat(this.state.shuffled[current]),
             timestamp: Date.now()
         }));
     }
-    updateMeta_async (card, meta) {
-        this.props.update_async('card', this.props.select_authToken, {
-            ...card,
-            meta: {
-                ...card.meta,
-                ...meta
+    updateMeta_async (model, meta) {
+        this.setState(prev => ({
+            ...prev,
+            card: {
+                ...prev.card,
+                [model.id]: {
+                    ...model,
+                    meta: meta
+                }
             }
+        }));
+        this.props.update_async('card', this.props.select_authToken, {
+            ...model,
+            meta: meta
         });
+    }
+
+    //  State  -------------------------------------------------------------  State  //
+    begin () {
+        this.setState(prev => ({
+            ...prev,
+            action: 0
+        }));
+    }
+    finish () {
+        this.setState(prev => ({
+            ...prev,
+            action: 1
+        }));
     }
 
 
     //  EVENT HANDLERS  -----------------------------------------------------  E.H.  //
+    //  Action  -----------------------------------------------------------  Action  //
+    handle_onActionClick = (action) => {
+        switch (action) {
+            case 0:
+                console.log('are you sure?...');
+                break;
+            default:
+                this.props.history.replace('/review', {card: this.state.card});
+                break;
+        }
+    }
     //  Aside  --------------------------------------------------------------  Aside //
     handle_onNagivationToggle = () => {
         this._toggleAside(asideTypes.NAVIGATION);
@@ -122,14 +171,15 @@ class Study extends Component {
 
     //  Cards  --------------------------------------------------------------  Cards //
     handle_onCardClick = () => {
-        if (this.state.current + 1 < this.state.cards.length) {
-            const card = this.state.display[this.state.current];
+        if (this.state.current + 1 < this.state.total) {
+            const card = this.state.card[this.state.display[this.state.current].id];
 
             const count = card.meta.count + 1;
             const total = card.meta.time.total + (Date.now() - this.state.timestamp);
             const average = total / count;
 
             let meta = {
+                ...card.meta,
                 count: count,
                 flagged: card.meta.flagged || null,
                 time: {
@@ -140,21 +190,20 @@ class Study extends Component {
             this.updateMeta_async(card, meta);
             this.setNextCard();
         } else {
-            console.log('end');
+            this.finish();
+            // this.props.history.replace('/review', {data: this.state.card});
         }
     }
 
     handle_onCardFlag = (card) => {
-        const model = this.state.all[card.id];
-        card.flagged = !card.flagged ? true : null;
-        this.setCard(card);
-        this.updateMeta_async(model, {flagged: card.flagged});
+        const flag = !card.flagged ? true : null;
+        this.flagCard(flag);
+        this.updateMeta_async(this.state.card[card.id], {flagged: flag});
     }
 
 
     //  RENDER METHOD  ----------------------------------------------------  RENDER  //
     render () {
-        console.log(this.state.cards);
         return (
             <Aux>
                 <main
@@ -178,6 +227,10 @@ class Study extends Component {
                             </div>
                         </section>
                     </div>
+                    <ActionButton
+                            onClick={this.handle_onActionClick}
+                            state={this.state.action}
+                            values={['Exit', 'Review']}/>
                 </main>
                 <Aside2
                     actions={this.state.aside.actions}
