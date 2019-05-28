@@ -5,6 +5,7 @@ import * as actions from '../../store/actions/index';
 import * as select from '../../store/reducers/root';
 import * as asideTypes from '../../components/aside/Aside/asideTypes';
 import * as headerTypes from '../../components/Header/types.js';
+import * as modalTypes from '../../components/modal/Modal/modalTypes';
 import * as utility from '../../utility/utility';
 
 import ActionButton from '../../components/ui/button/Action/ActionButton';
@@ -162,7 +163,15 @@ class Study extends Component {
     handle_onActionClick = (action) => {
         switch (action) {
             case 0:
-                console.log('are you sure?...');
+                const t = this.state.timestamp;
+                this.props.displayModal_async(
+                    modalTypes.WARNING,
+                    'Are you sure you wish to leave this study session?',
+                    'Leave', 'Cancel')
+                .then(response => {
+                    this.props.history.replace('/deck');
+                })
+                .catch(() => {}); // Eat cancel
                 break;
             default:
                 this.props.history.replace('/review', {data: this.state.card, meta: this.state.meta});
