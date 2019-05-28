@@ -10,6 +10,7 @@ import * as utility from '../../utility/utility';
 import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
+import BarButton from '../../components/ui/button/Bar/BarButton';
 import CardStack from '../../components/Stack/CardStack';
 import Header from '../../components/Header/Header';
 
@@ -145,13 +146,13 @@ class Study extends Component {
     begin () {
         this.setState(prev => ({
             ...prev,
-            action: 0
+            action: 1
         }));
     }
     finish () {
         this.setState(prev => ({
             ...prev,
-            action: 1
+            action: 2
         }));
     }
 
@@ -181,7 +182,7 @@ class Study extends Component {
 
     //  Cards  --------------------------------------------------------------  Cards //
     handle_onCardClick = () => {
-        if (!this.state.action) {
+        if (!this.state.action - 1) {
             const card = this.state.card[this.state.display[this.state.current].id];
             const time = (Date.now() - this.state.timestamp);
             const count = card.meta.count + 1;
@@ -212,8 +213,57 @@ class Study extends Component {
         this.updateMeta_async(this.state.card[card.id], {flagged: flag});
     }
 
+    handle_onStartClick = () => {
+        this.begin();
+    }
+
     //  RENDER METHOD  ----------------------------------------------------  RENDER  //
     render () {
+        let content;
+        if (this.state.action) {
+            content = (
+                <Aux>
+                    <section className={styles.Board}>
+                            <div>
+                                <div className={styles.Wrapper}>
+                                    <CardStack
+                                        collection={this.state.display}
+                                        max={1}
+                                        onAction={this.handle_onCardFlag}
+                                        onClick={this.handle_onCardClick}/>
+                                </div>
+                            </div>
+                        </section>
+                        <ActionButton
+                            onClick={this.handle_onActionClick}
+                            state={this.state.action - 1}
+                            values={['Exit', 'Review']}/>
+                </Aux>
+            );
+        } else {
+            const cards = this.state.card;
+            let ms = 0;
+            let total = 0;
+            Object.keys(cards).forEach(id => {
+                total++;
+                ms = (cards[id].meta.time.average || 3000) + ms;
+            });
+            let minutes = Math.round(ms / 1000) / 60;
+            if (minutes < 2) {
+                minutes = '1 minute';
+            } else {
+                minutes = minutes + ' minutes';
+            }
+            content = (
+                <section className={styles.Board}>
+                    <div>
+                        <h1>Get Ready!</h1>
+                        <p>{'You will be studying ' + total + ' cards. It should take you around ' + minutes + ' to complete these. Good luck!'}</p>
+                        <BarButton onClick={this.handle_onStartClick}>Start</BarButton>
+                    </div>
+                </section>
+            );
+        }
         return (
             <Aux>
                 <main
@@ -225,22 +275,8 @@ class Study extends Component {
                                 navigation: this.handle_onNagivationToggle
                             }}
                             state={headerTypes.NAVIGATION}/>
-                        <section className={styles.Board}>
-                            <div>
-                                <div className={styles.Wrapper}>
-                                    <CardStack
-                                        collection={this.state.display}
-                                        max={1}
-                                        onAction={this.handle_onCardFlag}
-                                        onClick={this.handle_onCardClick}/>
-                                </div>
-                            </div>
-                        </section>
+                        {content}
                     </div>
-                    <ActionButton
-                            onClick={this.handle_onActionClick}
-                            state={this.state.action}
-                            values={['Exit', 'Review']}/>
                 </main>
                 <Aside2
                     actions={this.state.aside.actions}
@@ -261,8 +297,7 @@ const mapStateToProps = (state, ownProps) => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        delete_async: (store, token, card) => dispatch(actions.delete_async(store, token, card)),
-        add_async: (store, token, card) => dispatch(actions.add_async(store, token, card)),
+        displayModal_async: (type, message, confirm, cancel) => dispatch(actions.displayModal_async(type, message, confirm, cancel)),
         update_async: (store, token, deck) => dispatch(actions.update_async(store, token, deck))
     };
 };

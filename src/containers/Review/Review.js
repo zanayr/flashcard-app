@@ -4,6 +4,7 @@ import * as headerTypes from '../../components/Header/types.js';
 
 import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
+import Button from '../../components/ui/button/Button/Button';
 import Header from '../../components/Header/Header';
 import MetaGraph from '../../components/ui/Graph/Meta';
 
@@ -71,6 +72,10 @@ class Review extends Component {
         this._closeAside();
     }
 
+    handle_onExitClick = () => {
+        this.props.history.replace('/deck');
+    }
+
 
     //  RENDER METHOD  ----------------------------------------------------  RENDER  //
     render () {
@@ -89,6 +94,7 @@ class Review extends Component {
                             <div>
                                 <h1>Session Review</h1>
                                 <MetaGraph source={this.props.location.state}/>
+                                <Button onClick={this.handle_onExitClick}>Exit</Button>
                             </div>
                         </section>
                     </div>
