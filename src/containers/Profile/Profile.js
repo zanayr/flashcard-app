@@ -4,11 +4,10 @@ import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
 import * as select from '../../store/reducers/root';
 import * as asideTypes from '../../components/aside/Aside/asideTypes';
-import * as headerTypes from '../../components/Header/types.js';
 
 import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
-import Header from '../../components/Header/Header';
+import SimpleHeader from '../../components/Header/SimpleHeader';
 import ProfileForm from '../../components/form/Profile/ProfileForm';
 
 import styles from './Profile.module.css';

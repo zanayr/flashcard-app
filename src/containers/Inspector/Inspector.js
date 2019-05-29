@@ -18,7 +18,6 @@ import QuickBar from '../../components/ui/bar/Quick/QuickBar';
 import TabBar from '../../components/ui/bar/Tab/TabBar';
 import TabForm from '../../components/form/Tab/TabForm';
 import Throbber from '../../components/ui/Throbber/Throbber';
-import withUser from '../../hoc/withUser/withUser';
 
 import styles from './Inspector.module.css';
 

@@ -30,7 +30,7 @@ const simpleHeader = (props) => {
             <div>
                 <ReturnLink/>
                 {content}
-                <Dashboard onNavigation={this.props.actions.navigation}/>
+                <Dashboard onNavigation={props.actions.navigation}/>
             </div>
         </header>
     );

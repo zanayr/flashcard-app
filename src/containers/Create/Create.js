@@ -4,13 +4,12 @@ import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
 import * as select from '../../store/reducers/root';
 import * as asideTypes from '../../components/aside/Aside/asideTypes';
-import * as headerTypes from '../../components/Header/types.js';
 
 import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
 import CreateForm from '../../components/form/Create/CreateForm';
 import CardStack from '../../components/Stack/CardStack';
-import Header from '../../components/Header/Header';
+import SimpleHeader from '../../components/Header/SimpleHeader';
 
 import styles from './Create.module.css';
 

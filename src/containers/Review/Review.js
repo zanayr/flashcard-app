@@ -5,7 +5,7 @@ import * as headerTypes from '../../components/Header/types.js';
 import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
 import Button from '../../components/ui/button/Button/Button';
-import Header from '../../components/Header/Header';
+import SimpleHeader from '../../components/Header/SimpleHeader';
 import MetaGraph from '../../components/ui/Graph/Meta';
 
 import styles from './Review.module.css';
@@ -85,11 +85,10 @@ class Review extends Component {
                     className={styles.Review}
                     onClick={this.handle_onAsideClose}>
                     <div>
-                        <Header
+                        <SimpleHeader
                             actions={{
                                 navigation: this.handle_onNagivationToggle
-                            }}
-                            state={headerTypes.NAVIGATION}/>
+                            }}/>
                         <section className={styles.Board}>
                             <div>
                                 <h1>Session Review</h1>

@@ -12,7 +12,7 @@ import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
 import BarButton from '../../components/ui/button/Bar/BarButton';
 import CardStack from '../../components/Stack/CardStack';
-import SimpleHeader from '../../components/SimpleHeader/SimpleHeader';
+import SimpleHeader from '../../components/Header/SimpleHeader';
 
 import styles from './Study.module.css';
 
