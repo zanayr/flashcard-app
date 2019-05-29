@@ -124,12 +124,14 @@ class Create extends Component {
                     className={styles.Creator}
                     onClick={this.handle_onAsideClose}>
                     <div>
-                        <Header
+                        <SimpleHeader
                             actions={{
                                 navigation: this.handle_onNagivationToggle
                             }}
-                            back={'/0/deck/' + this.props.location.state.id}
-                            state={headerTypes.NAVIGATION}/>
+                            navigation={{
+                                label: 'Back',
+                                path: '0/deck' + this.props.location.state.id
+                            }}/>
                         <section className={styles.Editor}>
                             <div>
                                 <div className={styles.Wrapper}>

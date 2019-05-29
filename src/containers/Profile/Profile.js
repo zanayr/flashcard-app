@@ -84,12 +84,14 @@ class Profile extends Component {
                     className={styles.Profile}
                     onClick={this.handle_onAsideClose}>
                     <div>
-                        <Header
+                        <SimpleHeader
                             actions={{
                                 navigation: this.handle_onNagivationToggle
                             }}
-                            back={'/2/user'}
-                            state={headerTypes.NAVIGATION}/>
+                            navigation={{
+                                label: 'Back',
+                                path: '2/user'
+                            }}/>
                         <section className={styles.Editor}>
                             <div>
                                 <div className={styles.Wrapper}>

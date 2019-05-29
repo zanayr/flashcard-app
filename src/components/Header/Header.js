@@ -5,9 +5,7 @@ import * as actions from '../../store/actions/index';
 import * as headerTypes from '../Header/types';
 import * as modalTypes from '../modal/Modal/modalTypes';
 
-import Aux from '../../hoc/Aux/Aux';
 import ReturnLink from '../ui/link/Return/ReturnLink';
-import BarLink from '../ui/link/Bar/BarLink';
 import Search from '../ui/input/Search/Search';
 import Toolbar from '../ui/bar/Toolbar/Toolbar';
 import Dashboard from '../ui/Dashboard/Dashboard';
@@ -59,72 +57,31 @@ class Header extends Component {
     };
 
     render () {
-        let content = null;
+        let aux1 = null;
+        let aux2 = null;
         switch (this.props.state) {
             case headerTypes.COLLECTION:
-                content = (
-                    <Aux>
-                        <Search onChange={this.props.actions.search}/>
-                        <Toolbar>
-                            <IconButton onClick={() => this.props.actions.filter(0)}>T</IconButton>
-                            <IconButton onClick={() => this.props.actions.filter(1)}>G</IconButton>
-                            <IconButton
-                                disabled={!this.props.selected.length}
-                                onClick={this.handle_onSelectedDelete}>D</IconButton>
-                            <IconButton
-                                disabled={!(this.props.selected.length > 1)}
-                                onClick={this.handle_onSelectedMerge}>
-                                M
-                            </IconButton>
-                            <IconButton
-                                disabled={!this.props.selected.length}
-                                onClick={this.handle_onSelectedClone}>C</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(0)}>AA</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(1)}>AD</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(2)}>DA</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(3)}>DD</IconButton>
-                        </Toolbar>
-                    </Aux>
+                aux1 = (
+                    <IconButton
+                        disabled={!(this.props.selected.length > 1)}
+                        onClick={this.handle_onSelectedMerge}>
+                        M
+                    </IconButton>
+                );
+                aux2 = (
+                    <IconButton
+                        disabled={!this.props.selected.length}
+                        onClick={this.handle_onSelectedClone}>C</IconButton>
                 );
                 break;
-            case headerTypes.INSPECTOR:
-                content = (
-                    <Aux>
-                        <Search onChange={this.props.actions.search}/>
-                        <Toolbar>
-                            <IconButton onClick={() => this.props.actions.filter(0)}>T</IconButton>
-                            <IconButton onClick={() => this.props.actions.filter(1)}>G</IconButton>
-                            <IconButton
-                                disabled={!this.props.selected.length}
-                                onClick={this.handle_onSelectedDelete}>D</IconButton>
-                            {this.props.page === 'deck' ? (
-                                    <IconButton
-                                        disabled={!(this.props.selected.length > 1)}
-                                        onClick={this.handle_onSelectedMerge}>
-                                        M
-                                    </IconButton>
-                                ) : (null)}
-                            <IconButton
-                                disabled={!this.props.selected.length}
-                                onClick={this.handle_onSelectedClone}>C</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(0)}>AA</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(1)}>AD</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(2)}>DA</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(3)}>DD</IconButton>
-                        </Toolbar>
-                    </Aux>
+            case headerTypes.ITEM:
+                aux1 = (
+                    <IconButton
+                        disabled={!this.props.selected.length}
+                        onClick={this.handle_onSelectedClone}>C</IconButton>
                 );
                 break;
-            case headerTypes.NAVIGATION:
-                content = (
-                    <Aux>
-                        <BarLink
-                            path={this.props.back}
-                            state={{}}>
-                            Back
-                        </BarLink>
-                    </Aux>
-                );
+            default:
                 break;
         }
         return (
@@ -133,7 +90,19 @@ class Header extends Component {
                 onClick={(e) => this.handle_onClick(e)}>
                 <div>
                     <ReturnLink/>
-                    {content}
+                    <Search onChange={this.props.actions.search}/>
+                        <Toolbar>
+                            <IconButton onClick={this.props.actions.filter}>F</IconButton>
+                            <IconButton
+                                disabled={!this.props.selected.length}
+                                onClick={this.handle_onSelectedDelete}>D</IconButton>
+                            {aux1}
+                            {aux2}
+                            <IconButton onClick={() => this.props.actions.sort(0)}>AA</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(1)}>AD</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(2)}>DA</IconButton>
+                            <IconButton onClick={() => this.props.actions.sort(3)}>DD</IconButton>
+                        </Toolbar>
                     <Dashboard onNavigation={this.props.actions.navigation}/>
                 </div>
             </header>

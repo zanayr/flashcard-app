@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
 import * as select from '../../store/reducers/root';
 import * as asideTypes from '../../components/aside/Aside/asideTypes';
-import * as headerTypes from '../../components/Header/types.js';
 import * as modalTypes from '../../components/modal/Modal/modalTypes';
 import * as utility from '../../utility/utility';
 
@@ -13,7 +12,7 @@ import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
 import BarButton from '../../components/ui/button/Bar/BarButton';
 import CardStack from '../../components/Stack/CardStack';
-import Header from '../../components/Header/Header';
+import SimpleHeader from '../../components/SimpleHeader/SimpleHeader';
 
 import styles from './Study.module.css';
 
@@ -279,11 +278,10 @@ class Study extends Component {
                     className={styles.Study}
                     onClick={this.handle_onAsideClose}>
                     <div>
-                        <Header
+                        <SimpleHeader
                             actions={{
                                 navigation: this.handle_onNagivationToggle
-                            }}
-                            state={headerTypes.NAVIGATION}/>
+                            }}/>
                         {content}
                     </div>
                 </main>

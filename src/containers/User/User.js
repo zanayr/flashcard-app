@@ -589,7 +589,7 @@ class User extends Component {
                         navigation: this.handle_onNagivationToggle
                     }}
                     selected={this.state.selected}
-                    state={headerTypes.INSPECTOR}
+                    state={headerTypes.USER}
                     onClick={this.handle_onAsideClose}/>
                 <main
                     className={styles.Main}

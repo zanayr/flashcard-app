@@ -813,7 +813,7 @@ class Item extends Component {
                         navigation: this.handle_onNagivationToggle
                     }}
                     selected={this.state.selected}
-                    state={headerTypes.INSPECTOR}
+                    state={headerTypes.ITEM}
                     onClick={this.handle_onAsideClose}/>
                 <main
                     className={styles.Main}
