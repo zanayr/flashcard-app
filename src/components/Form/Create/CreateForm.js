@@ -78,6 +78,7 @@ class CreateForm extends Component {
             //  Send new tags to the redux store and database
             this.props.updateTag_async('user', category, this.props.select_authToken, this.props.select_authUser, allTags);
         }
+        return tags;
     }
     _clearTag (category, tag) {
         //  Remove tag from both the card and the pinned categories
@@ -158,8 +159,9 @@ class CreateForm extends Component {
             let tags;
             let groups;
             if (this.state.states.tag && this.tagForm.current.tag.value.length) {
-                tags = this.tagForm.current.tag.value.trim().split(', ');
-                this._checkTags('tag', tags);
+                tags = this._checkTags('tag', this.tagForm.current.tag.value.trim().split(', ').map(tag => {
+                    return tag.replace(' ', '_').toLowerCase();
+                }));
             } else {
                 tags = this.state.card.tag.filter(tag => !this.state.pinned.tag.includes(tag)).concat(this.state.pinned.tag);
             }
@@ -167,12 +169,13 @@ class CreateForm extends Component {
                 tags.concat('$unassinged');
             }
             if (this.state.states.group && this.groupForm.current.tag.value.length) {
-                groups = this.groupForm.current.tag.value.trim().split(', ');
-                this._checkTags('group', groups);
+                groups = this._checkTags('group', this.tagForm.current.tag.value.trim().split(', ').map(tag => {
+                    return tag.replace(' ', '_').toLowerCase();
+                }));
             } else {
                 groups = this.state.card.group.filter(group => !this.state.pinned.group.includes(group)).concat(this.state.pinned.group);
             }
-
+            console.log(tags, groups);
             //  Build the new card
             const card = create.itemViewModel(utility.createHashId(0), {
                 group: groups,
@@ -203,7 +206,6 @@ class CreateForm extends Component {
 
     //  TAGS  ---------------------------------------------------------------  TAGS  //
     handle_onTagCreate = (category, tags) => {
-
         if (tags.length) {
             const allTags = this.state[category].concat(tags);
             tags.forEach(tag => {
