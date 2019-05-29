@@ -9,8 +9,8 @@ import styles from './Header.module.css';
 const simpleHeader = (props) => {
     const handle_onClick = (e) => {
         e.stopPropagation();
-        if (this.props.onClick) {
-            this.props.onClick();
+        if (props.onClick) {
+            props.onClick();
         }
     }
     let content = null;

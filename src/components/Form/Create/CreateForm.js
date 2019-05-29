@@ -18,7 +18,7 @@ class CreateForm extends Component {
     state = {
         card: {
             group: [],
-            notes: '',
+            note: '',
             primary: '',
             secondary: '',
             tag: []
@@ -50,7 +50,7 @@ class CreateForm extends Component {
             ...prev,
             card: {
                 group: [],
-                notes: '',
+                note: '',
                 primary: '',
                 secondary: '',
                 tag: []
@@ -187,7 +187,7 @@ class CreateForm extends Component {
                         total: 0
                     }
                 },
-                notes: this.state.card.notes,
+                note: this.state.card.note,
                 owner: this.props.select_authUser,
                 primary: this.state.card.primary,
                 secondary: this.state.card.secondary,
@@ -234,17 +234,17 @@ class CreateForm extends Component {
 
     //  RENDER METHOD  ---------------------------------------------  RENDER METHOD  //
     render () {
-        let notes;
+        let note;
         let tagForm = null;
         let groupForm = null;
         if (this.state.states.note) {
-            notes = (
+            note = (
                 <Textarea2
                     config={{
                         autoComplete: 'off',
                         label: 'Notes',
                         maxLength: 128,
-                        name: 'notes',
+                        name: 'note',
                         tabIndex: 3
                     }}
                     key='note'
@@ -256,7 +256,7 @@ class CreateForm extends Component {
                 </Textarea2>
             );
         } else {
-            notes = (
+            note = (
                 <div className={styles.NotesField}>
                     <div>
                         <p>Add Notes</p>
@@ -328,7 +328,7 @@ class CreateForm extends Component {
                             required
                             value={this.state.card.secondary}
                             onChange={(value) => this.handle_onCardChange('secondary', value)}/>
-                        {notes}
+                        {note}
                     </div>
                 </form>
                 {tagForm}
