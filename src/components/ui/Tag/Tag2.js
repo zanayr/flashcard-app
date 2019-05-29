@@ -2,6 +2,7 @@ import React from 'react';
 
 import styles from './Tag.module.css';
 
+
 const tag2 = (props) => {
     const handle_onClick = (e) => {
         e.stopPropagation();

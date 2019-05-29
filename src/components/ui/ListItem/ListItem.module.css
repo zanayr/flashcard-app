@@ -5,14 +5,29 @@
     width: 100%;
 }
 .ListItem > div {
+    display: flex;
+    flex-direction: row;
     height: 100%;
-    /* padding: 0px 16px; */
+    justify-content: flex-start;
 }
 .ListItem h3 {
     margin-bottom: 2px;
 }
 .ListItem p {
     margin-top: 2px;
+}
+
+.ListItem .TagContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+.ListItem.Selected .TagContainer span {
+    border-color: white;
+}
+.ListItem.Selected .TagContainer span p {
+    color: white;
 }
 
 .Selected {

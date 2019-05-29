@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 
-import Column from '../../../hoc/Column/Column';
-import Row from '../../../hoc/Row/Row';
+import Tag from '../Tag/Tag';
 
-import ListItemStyles from './ListItem.module.css';
+import styles from './ListItem.module.css';
 
 
 class ListItem extends Component {
@@ -13,29 +12,31 @@ class ListItem extends Component {
     }
 
     render () {
-        let css = [ListItemStyles.ListItem];
+        let css = [styles.ListItem];
         if (this.props.selected) {
-            css = [ListItemStyles.ListItem, ListItemStyles.Selected];
+            css = [styles.ListItem, styles.Selected];
         }
         let tags = this.props.tags.map(tag => {
             return tag.match(/^\$[a-zA-Z0-9]*/) ? null : (
-                <div key={tag}><p>{tag}</p></div>
+                <Tag key={tag}>{tag}</Tag>
             );
         })
         return (
             <article
                 className={css.join(' ')}
                 onClick={(e) => this.onClick(e)}>
-                <Row>
+                <div>
                     <div key={0}>
                         <h3>{this.props.primary}</h3>
                         <p>{this.props.secondary}</p>
                     </div>
-                    <div key={1}>
+                    <div
+                        className={styles.TagContainer}
+                        key={1}>
                         {tags}
                     </div>
                     {this.props.children}
-                </Row>
+                </div>
             </article>
         );
     }

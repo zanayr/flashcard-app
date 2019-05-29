@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Tag from '../Tag/Tag';
+
 import styles from './Card.module.css';
 
 
@@ -17,7 +19,11 @@ const card = (props) => {
                 {props.children}
                 <div className={styles.TagList}>
                     <div>
-                        <p>{props.data.tag.join(', ')}</p>
+                        {props.data.tag.map(t => {
+                            return t.match(/^\$[a-zA-Z0-9]*/) ? null : (
+                                <Tag key={t}>{t}</Tag>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

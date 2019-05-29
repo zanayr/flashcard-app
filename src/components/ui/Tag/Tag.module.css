@@ -1,4 +1,4 @@
-.Tag {
+/* .Tag {
     background-color: lightslategray;
     cursor: pointer;
     display: inline-block;
@@ -16,11 +16,33 @@
     flex-direction: row;
     justify-content: center;
     padding: 4px;
+} */
+
+.Tag {
+    min-width: 32px;
+    padding-bottom: 4px;
+    padding-right: 4px;
+}
+.Tag span {
+    border: solid 1px blue;
+    border-radius: 8px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+}
+.Tag span p {
+    color: blue;
+    font-size: 9px;
+    text-transform: capitalize;
+    user-select: none;
 }
 
 
 /* Button */
-.Tab > div button {
+/* .Tab > div button {
     display: none;
     height: 28px;
     position: absolute;
@@ -30,7 +52,7 @@
 }
 .Tab:hover > div button {
     display: block;
-}
+} */
 
 
 .Tag2 {
@@ -65,7 +87,7 @@
 }
 
 /*  DISPLAY TAG  */
-.DisplayTag {
+/* .DisplayTag {
     padding-bottom: 4px;
     padding-right: 4px;
 }
@@ -81,4 +103,4 @@
     color: coral;
     font-size: 9px;
     user-select: none;
-}
+} */
