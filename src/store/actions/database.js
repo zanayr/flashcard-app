@@ -162,9 +162,12 @@ export const _get_success = (store, data) => {
         payload: data
     };
 };
-export const _get_init = (store) => {
+export const _init = (store) => {
     let type = null;
     switch (store) {
+        case 'deck':
+            type = actionTypes.DECK_INIT;
+            break
         case 'user':
             type = actionTypes.GET_USER_INIT;
             break;
@@ -299,6 +302,8 @@ export const _updateTag = (store, collection, data) => {
 //  Add  ---------------------------------------------------------------  Add Async  //
 export const add_async = (store, token, viewModel) => {
     return dispatch => {
+        console.log(store);
+        dispatch(_init(store));
         let model = {};
         switch (store) {
             case 'card':
@@ -383,7 +388,7 @@ export const deleteTab_async = (store, collection, token, id, tab) => {
 //  Get  ---------------------------------------------------------------  Get Async  //
 export const get_async = (store, token, id) => {
     return dispatch => {
-        dispatch(_get_init(store));
+        dispatch(_init(store));
         axios.get('/' + store + '/' + id + '.json?auth=' + token)
         .then(response => {
             let model = {};

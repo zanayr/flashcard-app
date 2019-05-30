@@ -2,7 +2,7 @@ import React from 'react';
 import {Redirect} from 'react-router-dom';
 
 
-const interstitial = (props) => {
+const load = (props) => {
     // let content;
     // if (props.location.state) {
     //     switch (props.match.params.store) {

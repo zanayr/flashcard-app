@@ -93,6 +93,9 @@ class InspectAside extends Component {
         }
     }
     render () {
+        if (this.props.path === 'deck' && this.props.data.data.tag.includes('$create')) {
+            console.log('here');
+        }
         let aux = null;
         let path = '';
         if (this.props.path.length) {
@@ -106,8 +109,16 @@ class InspectAside extends Component {
             }
             aux = (
                 <IconButton
+                    disabled={!this.state.valid.primary || !this.state.valid.secondary}
                     onClick={() => {
-                        this.props.history.replace(path, {id: this.props.data.id});
+                        if (this.props.path === 'deck' && this.props.data.data.tag.includes('$create')) {
+                            this.props.history.replace('/load', {
+                                data: this.state.data,
+                                store: 'deck'
+                            });
+                        } else {
+                            this.props.history.replace(path, {id: this.props.data.id});
+                        }
                     }}>{this.props.data.labels.aux}</IconButton>
             );
         }

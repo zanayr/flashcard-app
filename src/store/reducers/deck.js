@@ -26,7 +26,14 @@ const addDeck = (state, action) => {
             ...state.deck,
             [action.payload.id]: action.payload
         },
+        isLoading: false,
         error: null
+    }
+}
+const deckInit = (state, action) => {
+    return {
+        ...state,
+        isLoading: true
     }
 }
 const deleteDeck = (state, action) => {
@@ -70,6 +77,8 @@ const reducer = (state=initialState, action) => {
             return deckFailure(state, action);
         case actionTypes.ADD_DECK:
             return addDeck(state, action);
+        case actionTypes.DECK_INIT:
+            return deckInit(state, action);
         case actionTypes.DELETE_DECK:
             return deleteDeck(state, action);
         case actionTypes.GET_ALL_DECKS_INIT:
