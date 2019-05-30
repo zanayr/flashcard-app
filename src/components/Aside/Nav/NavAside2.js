@@ -7,6 +7,10 @@ import styles from '../Aside.module.css';
 const navigationAside2 = (props) => {
     const navigationLinks = [
         {
+            path: '/report',
+            value: 'Reports'
+        },
+        {
             path: '/2/user',
             value: 'Users'
         },
