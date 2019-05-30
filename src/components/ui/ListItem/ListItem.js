@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import * as utility from '../../../utility/utility';
+
 import Tag from '../Tag/Tag';
 
 import styles from './ListItem.module.css';
@@ -16,11 +18,11 @@ class ListItem extends Component {
         if (this.props.selected) {
             css = [styles.ListItem, styles.Selected];
         }
-        let tags = this.props.tags.map(tag => {
+        let tags = utility.sortByAlpha_asc(this.props.tags).map(tag => {
             return tag.match(/^\$[a-zA-Z0-9]*/) ? null : (
                 <Tag key={tag}>{tag}</Tag>
             );
-        })
+        });
         return (
             <article
                 className={css.join(' ')}
