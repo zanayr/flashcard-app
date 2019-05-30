@@ -162,7 +162,6 @@ class Study extends Component {
     handle_onActionClick = (action) => {
         switch (action) {
             case 0:
-                const t = this.state.timestamp;
                 this.props.displayModal_async(
                     modalTypes.WARNING,
                     'Are you sure you wish to leave this study session?',

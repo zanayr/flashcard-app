@@ -142,7 +142,7 @@ export function collectionViewModel (id, model) {
     const tab = {};
     let tag = model.tag || [];
     if (model.tab) {
-        Object.keys(model.tab).map(id => {
+        Object.keys(model.tab).forEach(id => {
             tab[id] = tabViewModel(id, model.tab[id]);
         });
     }
@@ -170,17 +170,17 @@ export function userViewModel (id, model) {
     const classTab = {};
     const deckTab = {};
     if (model.card) {
-        Object.keys(model.card).map(id => {
+        Object.keys(model.card).forEach(id => {
             cardTab[id] = tabViewModel(id, model.card[id]);
         });
     }
     if (model.class) {
-        Object.keys(model.class).map(id => {
+        Object.keys(model.class).forEach(id => {
             classTab[id] = tabViewModel(id, model.class[id]);
         });
     }
     if (model.deck) {
-        Object.keys(model.deck).map(id => {
+        Object.keys(model.deck).forEach(id => {
             deckTab[id] = tabViewModel(id, model.deck[id]);
         });
     }

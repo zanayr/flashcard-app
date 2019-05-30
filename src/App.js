@@ -10,7 +10,6 @@ import Collection from './containers/Collection/Collection';
 import Create from './containers/Create/Create';
 import In from './containers/In/In';
 import Inspector from './containers/Inspector/Inspector';
-import Interstitial from './containers/Interstitial/Interstitial';
 import Item from './containers/Item/Item';
 import Modal from './components/modal/Modal/Modal';
 import Out from './containers/Out/Out';

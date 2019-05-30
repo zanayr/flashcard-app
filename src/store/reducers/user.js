@@ -1,5 +1,4 @@
 import * as actionTypes from '../actions/actionTypes';
-import * as create from '../models/models';
 
 
 const initialState = {

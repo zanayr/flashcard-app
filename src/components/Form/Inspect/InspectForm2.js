@@ -7,7 +7,6 @@ import * as select from '../../../store/reducers/root';
 import Aux from '../../../hoc/Aux/Aux';
 import TextField2 from '../../ui/input/Field/TextField2';
 import Textarea2 from '../../ui/input/TextArea/Textarea2';
-import Button from '../../ui/button/Button/Button';
 import TagForm2 from '../Tag/TagForm2';
 
 import styles from './InspectForm.module.css';
@@ -157,14 +156,6 @@ class InspectForm2 extends Component {
             } else {
                 group = this.state.item.group;
             }
-            //  Send the new item up to the create page
-            // this.props.onConfirm({
-            //     group: group,
-            //     note: this.state.item.note,
-            //     primary: this.state.item.primary,
-            //     secondary: this.state.item.secondary,
-            //     tag: tag
-            // });
             this.props.onConfirm();
         }
     }
