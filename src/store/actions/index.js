@@ -15,7 +15,6 @@ export {
     getAll_async,
     getAllUsers_async,
     update_async,
-    // update2_async,
     updateMany_async,
     updateTag_async
 } from './database';

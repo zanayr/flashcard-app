@@ -49,14 +49,17 @@ export const GET_USER_INIT = 'GET_USER_INIT';
 export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
 
 export const UPDATE_CARD = 'UPDATE_CARD';
+export const UPDATE_CARD_META = 'UPDATE_CARD_META';
 export const UPDATE_STUDENT = 'UPDATE_STUDENT';
 export const UPDATE_CARD_TAG = 'UPDATE_CARD_TAG';
 export const UPDATE_STUDENT_TAG = 'UPDATE_STUDENT_TAG';
 export const UPDATE_CLASS = 'UPDATE_CLASS';
 export const UPDATE_CLASS_TAG = 'UPDATE_CLASS_TAG';
 export const UPDATE_DECK = 'UPDATE_DECK';
+export const UPDATE_DECK_META = 'UPDATE_DECK_META';
 export const UPDATE_DECK_TAG = 'UPDATE_DECK_TAG';
 export const UPDATE_USER = 'UPDATE_USER';
+export const UPDATE_USER_META = 'UPDATE_USER_META';
 export const UPDATE_USER_TAG = 'UPDATE_USER_TAG';
 
 //  Modal Store  //

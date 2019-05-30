@@ -28,10 +28,12 @@ class Study extends Component {
         current: 0,
         display: [],
         meta: {},
+        session: utility.createHashId(0),
         shuffled: [],
         timestamp: 0,
         total: 0,
     }
+
     componentDidMount () {
         const cards = this.props.select_cardsById;
         const shuffled = utility.shuffle(Object.keys(cards).map(id => {return cards[id]}));
@@ -115,29 +117,16 @@ class Study extends Component {
             timestamp: Date.now()
         }));
     }
-    updateMeta_async (model, meta) {
+    updateMeta_async (card) {
+        this.props.update_async('card', this.props.select_authToken, card);
+    }
+    //  Meta  ---------------------------------------------------------------  Meta  //
+    setCard (card) {
         this.setState(prev => ({
             ...prev,
             card: {
                 ...prev.card,
-                [model.id]: {
-                    ...model,
-                    meta: meta
-                }
-            }
-        }));
-        this.props.update_async('card', this.props.select_authToken, {
-            ...model,
-            meta: meta
-        });
-    }
-    //  Meta  ---------------------------------------------------------------  Meta  //
-    setMeta (id, meta) {
-        this.setState(prev => ({
-            ...prev,
-            meta: {
-                ...prev.meta,
-                [id]: meta
+                [card.id]: card
             }
         }));
     }
@@ -172,7 +161,7 @@ class Study extends Component {
                 .catch(() => {}); // Eat cancel
                 break;
             default:
-                this.props.history.replace('/review', {data: this.state.card, meta: this.state.meta});
+                this.props.history.replace('/0/deck');
                 break;
         }
     }
@@ -191,21 +180,28 @@ class Study extends Component {
     handle_onCardClick = () => {
         if (!this.state.action - 1) {
             const card = this.state.card[this.state.display[this.state.current].id];
-            const time = (Date.now() - this.state.timestamp);
-            const count = card.meta.count + 1;
-            const total = card.meta.time.total + time;
-            const average = total / count;
-            let meta = {
+            // const time = (Date.now() - this.state.timestamp);
+            // const count = card.meta.count + 1;
+            // const total = card.meta.time.total + time;
+            // const average = total / count;
+            // let meta = {
+            //     ...card.meta,
+            //     count: count,
+            //     flagged: card.meta.flagged || null,
+            //     time: {
+            //         average: average,
+            //         total: total
+            //     }
+            // }
+            card.meta = {
                 ...card.meta,
-                count: count,
-                flagged: card.meta.flagged || null,
-                time: {
-                    average: average,
-                    total: total
+                [this.state.session]: {
+                    date: Date.now(),
+                    time: Date.now() - this.state.timestamp
                 }
-            }
-            this.setMeta(card.id, {time: time});
-            this.updateMeta_async(card, meta);
+            };
+            this.setCard(card);
+            this.updateMeta_async(card);
             if (this.state.current + 1 < this.state.total) {
                 this.setNextCard();
             } else {
@@ -215,9 +211,9 @@ class Study extends Component {
     }
 
     handle_onCardFlag = (card) => {
-        const flag = !card.flagged ? true : null;
-        this.flagCard(flag);
-        this.updateMeta_async(this.state.card[card.id], {flagged: flag});
+        // const flag = !card.flagged ? true : null;
+        // this.flagCard(flag);
+        // this.updateMeta_async(this.state.card[card.id], {flagged: flag});
     }
 
     handle_onStartClick = () => {
@@ -244,28 +240,21 @@ class Study extends Component {
                         <ActionButton
                             onClick={this.handle_onActionClick}
                             state={this.state.action - 1}
-                            values={['Exit', 'Review']}/>
+                            values={['Exit', 'Finish']}/>
                 </Aux>
             );
         } else {
             const cards = this.state.card;
-            let ms = 0;
+            // let ms = 0;
             let total = 0;
             Object.keys(cards).forEach(id => {
                 total++;
-                ms = (cards[id].meta.time.average || 3000) + ms;
             });
-            let minutes = Math.round(ms / 1000) / 60;
-            if (minutes < 2) {
-                minutes = '1 minute';
-            } else {
-                minutes = minutes + ' minutes';
-            }
             content = (
                 <section className={styles.Board}>
                     <div>
                         <h1>Get Ready!</h1>
-                        <p>{'You will be studying ' + total + ' cards. It should take you around ' + minutes + ' to complete these. Good luck!'}</p>
+                        <p>{'You will be studying ' + total + ' cards. Good luck!'}</p>
                         <BarButton onClick={this.handle_onStartClick}>Start</BarButton>
                     </div>
                 </section>
@@ -304,7 +293,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => {
     return {
         displayModal_async: (type, message, confirm, cancel) => dispatch(actions.displayModal_async(type, message, confirm, cancel)),
-        update_async: (store, token, deck) => dispatch(actions.update_async(store, token, deck))
+        update_async: (store, token, model) => dispatch(actions.update_async(store, token, model))
     };
 };
 

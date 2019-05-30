@@ -255,14 +255,8 @@ export const _update = (store, data) => {
         case 'card':
             type = actionTypes.UPDATE_CARD;
             break;
-        case 'class':
-            type = actionTypes.UPDATE_CLASS;
-            break;
         case 'deck':
             type = actionTypes.UPDATE_DECK;
-            break;
-        case 'student':
-            type = actionTypes.UPDATE_STUDENT;
             break;
         case 'user':
             type = actionTypes.UPDATE_USER;
@@ -282,14 +276,8 @@ export const _updateTag = (store, collection, data) => {
         case 'card':
             type = actionTypes.UPDATE_CARD_TAG;
             break;
-        case 'class':
-            type = actionTypes.UPDATE_CLASS_TAG;
-            break;
         case 'deck':
             type = actionTypes.UPDATE_DECK_TAG;
-            break;
-        case 'student':
-            type = actionTypes.UPDATE_STUDENT_TAG;
             break;
         case 'user':
             type = actionTypes.UPDATE_USER_TAG;
@@ -316,14 +304,8 @@ export const add_async = (store, token, viewModel) => {
             case 'card':
                 model = create.itemModel(viewModel);
                 break;
-            case 'class':
-                model = create.collectionModel(viewModel);
-                break;
             case 'deck':
                 model = create.collectionModel(viewModel);
-                break;
-            case 'student':
-                model = create.itemModel(viewModel);
                 break;
             case 'user':
                 model = create.userModel(viewModel);
@@ -406,12 +388,6 @@ export const get_async = (store, token, id) => {
         .then(response => {
             let model = {};
             switch (store) {
-                // case 'card':
-                //     model = create.itemViewModel(id, response.data);
-                //     break;
-                // case 'deck':
-                //     model = create.collectionViewModel(id, response.data);
-                //     break;
                 case 'user':
                     model = create.userViewModel(id, response.data);
                     break;
@@ -487,105 +463,6 @@ export const getAllUsers_async = (token) => {
     };
 };
 
-// export const _processing = (store, data) => {
-//     let type = null;
-//     switch (store) {
-//         case 'card':
-//             type = actionTypes.PROCESSING_CARD;
-//             break;
-//         case 'deck':
-//             type = actionTypes.PROCESSING_DECK;
-//             break;
-//         case 'user':
-//             type = actionTypes.PROCESSING_USER;
-//             break;
-//         default:
-//             type = actionTypes.PROCESSING;
-//             break;
-//     }
-//     return {
-//         type: type,
-//         payload: {}
-//     };
-// }
-// export const _update2 = (store, data) => {
-//     let type = null;
-//     switch (store) {
-//         case 'card':
-//             type = actionTypes.UPDATE2_CARD;
-//             break;
-//         case 'deck':
-//             type = actionTypes.UPDATE2_DECK;
-//             break;
-//         case 'user':
-//             type = actionTypes.UPDATE2_USER;
-//             break;
-//         default:
-//             type = actionTypes.SUCCESS;
-//             break;
-//     }
-//     return {
-//         type: type,
-//         payload: data
-//     };
-// }
-// export const _failure = (store, error) => {
-//     let type = null;
-//     switch (store) {
-//         case 'card':
-//             type = actionTypes.CARD_FAILURE;
-//             break;
-//         case 'deck':
-//             type = actionTypes.DECK_FAILURE;
-//             break;
-//         case 'user':
-//             type = actionTypes.USER_FAILURE;
-//             break;
-//         default:
-//             type = actionTypes.FAILURE;
-//             break;
-//     }
-//     return {
-//         type: type,
-//         payload: error
-//     };
-// }
-
-// export const update2_async = (store, token, viewModels) => {
-//     return dispatch => {
-//         dispatch(_processing(store));
-//         let models = {};
-//         switch (store) {
-//             case 'card':
-//                 Object.keys(viewModels).forEach(id => {
-//                     models[id] = create.itemModel(viewModels[id]);
-//                 })
-//                 break;
-//             case 'deck':
-//                 Object.keys(viewModels).forEach(id => {
-//                     models[id] = create.collectionModel(viewModels[id]);
-//                 })
-//                 break;
-//             case 'user':
-//                 Object.keys(viewModels).forEach(id => {
-//                     models[id] = create.userModel(viewModels[id]);
-//                 })
-//                 break;
-//             default:
-//                 break;
-//         }
-//         console.log(store, viewModels);
-//         dispatch(_update2(store, viewModels));
-//         axios.put('/' + store + '/.json?auth=' + token, models)
-//         .then(response => {
-//             dispatch(_update2(store, viewModels));
-//         })
-//         .catch(error => {
-//             dispatch(_failure(store, error));
-//         });
-//     }
-// }
-
 //  Update  ----------------------------------------------------------  Update Async  //
 export const update_async = (store, token, viewModel) => {
     return dispatch => {
@@ -593,9 +470,6 @@ export const update_async = (store, token, viewModel) => {
         switch (store) {
             case 'card':
                 model = create.itemModel(viewModel);
-                break;
-            case 'class':
-                model = create.collectionModel(viewModel);
                 break;
             case 'deck':
                 model = create.collectionModel(viewModel);

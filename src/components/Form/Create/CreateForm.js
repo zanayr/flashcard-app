@@ -180,13 +180,6 @@ class CreateForm extends Component {
             const card = create.itemViewModel(utility.createHashId(0), {
                 group: groups,
                 member: [this.props.deck],
-                meta: {
-                    count: 0,
-                    time: {
-                        average: 0,
-                        total: 0
-                    }
-                },
                 note: this.state.card.note,
                 owner: this.props.select_authUser,
                 primary: this.state.card.primary,
