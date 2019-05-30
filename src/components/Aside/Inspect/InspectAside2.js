@@ -95,7 +95,7 @@ class InspectAside extends Component {
     render () {
         let aux = null;
         let path = '';
-        if (this.props.path.length && !this.props.data.data.tag.includes('$create')) {
+        if (this.props.path.length) {
             switch (this.props.path) {
                 case 'create':
                     path = '/' + this.props.path;

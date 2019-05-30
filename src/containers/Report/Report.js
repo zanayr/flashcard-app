@@ -566,8 +566,8 @@ class Report extends Component {
     handle_onAsideClose = () => {
         this.clearAndCloseAside();
     }
-    handle_onReportAsideConfirm = () => {
-        //  Build table data.
+    handle_onReportAsideConfirm = (data) => {
+        console.log(data);
         this.clearAndCloseAside();
     }
 

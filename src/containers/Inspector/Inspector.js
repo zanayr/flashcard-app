@@ -355,8 +355,7 @@ class Inspector extends Component {
                 primary: 'Title',
                 secondary: 'Details'
             },
-            item: data.item,
-            id: this.state.collection.id,
+            data: data.item,
             tag: this.props.select_user.tag
         });
     }
@@ -403,19 +402,19 @@ class Inspector extends Component {
 
     handle_onInspectAsideConfirm = () => {
         const original = this.state.aside.data;
-        const inspected = this.state.items[original.item.id];
+        const inspected = this.state.items[original.data.id];
         if (inspected.primary.length && inspected.secondary.length) {
-            if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
-                if (original.item.tag.includes('$create')) {
+            if (JSON.stringify(original.data) !== JSON.stringify(inspected)) {
+                if (original.data.tag.includes('$create')) {
                     this._addManyItems([inspected]);
                 } else {
                     this._updateItem_async(inspected);
                     this._setUndo({
                         action: this._undoItemUpdated,
-                        data: original.item
+                        data: original.data
                     });
                 }
-            } else if (original.tag.includes('$create')) {
+            } else if (original.data.tag.includes('$create')) {
                 this._removeManyItems([inspected]);
             }
             this._clearAndCloseAside();
@@ -425,11 +424,11 @@ class Inspector extends Component {
         switch (this.state.aside.state) {
             case asideTypes.INSPECT:
                     const original = this.state.aside.data;
-                    const inspected = this.state.items[original.item.id];
-                    if (original.tag.includes('$create')) {
+                    const inspected = this.state.items[original.data.id];
+                    if (original.data.tag.includes('$create')) {
                         this._removeManyItems([inspected]);
-                    } else if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
-                        this._setManyItems([original.item]);
+                    } else if (JSON.stringify(original.data) !== JSON.stringify(inspected)) {
+                        this._setManyItems([original.data]);
                     }
                     this._clearAndCloseAside();
                     break;
