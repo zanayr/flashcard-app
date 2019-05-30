@@ -619,10 +619,12 @@ class Item extends Component {
             case 0:
                 this._createItem();
                 break;
-            case 1:
-                console.log('Starting study session...');
-                break;
             default:
+                let cards = []
+                this.state.selected.forEach(card => {
+                    cards.push(card.id);
+                });
+                this.props.history.replace('/study', {data: cards});
                 break;
         }
     }
@@ -827,7 +829,7 @@ class Item extends Component {
                         {content}
                         <ActionButton
                             onClick={this.handle_onActionClick}
-                            state={0}
+                            state={this.state.selected.length}
                             values={['Create', 'Study']}/>
                         <QuickBar
                             action={this.handle_onQuickClick}

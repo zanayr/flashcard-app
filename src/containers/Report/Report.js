@@ -12,6 +12,7 @@ import Table from '../../components/Table/Table';
 
 import styles from './Report.module.css';
 
+
 class Report extends Component {
     state = {
         aside: {
