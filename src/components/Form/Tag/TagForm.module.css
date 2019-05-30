@@ -1,13 +1,15 @@
 .TagForm2 {
     height: 43px;
 }
+
 .TagForm2 > div {
     height: 100%;
 }
-
+.TagForm,
 .TagBar {
     width: 100%;
 }
+.TagForm > div,
 .TagBar > div {
     display: flex;
     flex-direction: row;

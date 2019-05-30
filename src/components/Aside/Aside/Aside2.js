@@ -3,12 +3,14 @@ import {withRouter} from 'react-router-dom';
 
 import * as asideTypes from './asideTypes';
 
-import Aux from '../../../hoc/Aux/Aux';
+import AsideOverlay from '../../Overlay/Aside/AsideOverlay';
 import AssignAside from '../Assign/AssignAside';
+import Aux from '../../../hoc/Aux/Aux';
 import FilterAside2 from '../Filter/FilterAside2';
 import InspectAside2 from '../Inspect/InspectAside2';
-import NavigationAiside2 from '../Nav/NavAside2';
-import AsideOverlay from '../../Overlay/Aside/AsideOverlay';
+import NavigationAside2 from '../Nav/NavAside2';
+import ReportAside from '../Report/ReportAside';
+
 
 const aside2 = (props) => {
     let aside = null;
@@ -47,10 +49,22 @@ const aside2 = (props) => {
         case asideTypes.NAVIGATION:
             aside = (
                 <Aux>
-                    <NavigationAiside2
+                    <NavigationAside2
                         data={props.data}
                         history={props.history}
                         page={props.page}/>
+                    <AsideOverlay
+                        action={props.actions.overlay}
+                        active={true}/>
+                </Aux>
+            );
+            break;
+        case asideTypes.REPORT:
+            aside = (
+                <Aux>
+                    <ReportAside
+                        actions={props.actions}
+                        data={props.data}/>
                     <AsideOverlay
                         action={props.actions.overlay}
                         active={true}/>

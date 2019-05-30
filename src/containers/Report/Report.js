@@ -8,10 +8,11 @@ import * as select from '../../store/reducers/root';
 import * as sortTypes from '../../utility/sortTypes';
 import * as utility from '../../utility/utility';
 
+import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
 import SimpleHeader from '../../components/Header/SimpleHeader';
-import List2 from '../../components/List/List2';
+import Table from '../../components/Table/Table';
 import QuickBar from '../../components/ui/bar/Quick/QuickBar';
 import TabBar from '../../components/ui/bar/Tab/TabBar';
 import TabForm from '../../components/form/Tab/TabForm';
@@ -48,6 +49,8 @@ class Report extends Component {
             action: null,
             data: {}
         },
+        columns: [],
+        report: {}
     }
     undoTimeout = null;
 
@@ -70,40 +73,40 @@ class Report extends Component {
 
     //  STATE SETTERS  ==============================================  STATE SETTERS  //
     //  Aside  -----------------------------------------------------------  Aside SS  //
-    // _clearAndCloseAside () {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             actions: {},
-    //             data: {},
-    //             state: asideTypes.CLOSED
-    //         }
-    //     }));
-    // }
-    // _openAside (state) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             state: state
-    //         }
-    //     }));
-    // }
-    // _setAside (actions, data) {
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         aside: {
-    //             ...prev.aside,
-    //             data: {
-    //                 ...data
-    //             },
-    //             actions: {
-    //                 ...actions
-    //             }
-    //         }
-    //     }));
-    // }
+    clearAndCloseAside () {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                actions: {},
+                data: {},
+                state: asideTypes.CLOSED
+            }
+        }));
+    }
+    openAside (state) {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                state: state
+            }
+        }));
+    }
+    setAside (actions, data) {
+        this.setState(prev => ({
+            ...prev,
+            aside: {
+                ...prev.aside,
+                data: {
+                    ...data
+                },
+                actions: {
+                    ...actions
+                }
+            }
+        }));
+    }
     // _updateAsideData (property, data) {
     //     this.setState(prev => ({
     //         ...prev,
@@ -116,17 +119,17 @@ class Report extends Component {
     //         }
     //     }));
     // }
-    // _toggleAside (state) {
-    //     if (this.state.aside.state !== asideTypes.CLOSED) {
-    //         if (state !== this.state.aside.state) {
-    //             this._openAside(state);
-    //         } else {
-    //             this._clearAndCloseAside();
-    //         }
-    //     } else {
-    //         this._openAside(state);
-    //     }
-    // }
+    toggleAside (state) {
+        if (this.state.aside.state !== asideTypes.CLOSED) {
+            if (state !== this.state.aside.state) {
+                this.openAside(state);
+            } else {
+                this.clearAndCloseAside();
+            }
+        } else {
+            this.openAside(state);
+        }
+    }
 
     //  Current  ------------------------------------------------------  Current SS  //
     // _setCurrent (tab) {
@@ -337,16 +340,6 @@ class Report extends Component {
     //     }
     //     return valid;
     // }
-    // handle_onAsideClose = () => {
-    //     switch (this.state.aside.state) {
-    //         case asideTypes.FILTER:
-    //             this._clearFilter();
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    //     this._clearAndCloseAside();
-    // }
     // _deleteManyReports () {
     //     const selected = this.state.selected.slice();
     //     this.props.deleteMany_async('report', this.props.select_authToken, selected);
@@ -551,6 +544,32 @@ class Report extends Component {
     // handle_onSearchChange = (value) => {
     //     this.setSearch(value);
     // }
+    //  Aside  -------------------------------------------------------------  Aside  //
+    _openReportAside () {
+        this.toggleAside(asideTypes.REPORT);
+        this.setAside({
+            cancel: this.handle_onAsideClose,
+            confirm: this.handle_onReportAsideConfirm,
+            overlay: this.handle_onReportAsideConfirm
+        },
+        {
+            group: this.props.select_user.group,
+            tag: this.props.select_user.tag
+        });
+    }
+    //  Action  -----------------------------------------------------------  Action  //
+    handle_onActionClick = (action) => {
+        this._openReportAside();
+    }
+
+    //  Aside  -------------------------------------------------------------  Aside  //
+    handle_onAsideClose = () => {
+        this.clearAndCloseAside();
+    }
+    handle_onReportAsideConfirm = () => {
+        //  Build table data.
+        this.clearAndCloseAside();
+    }
 
     render () {
         // let content;
@@ -589,6 +608,13 @@ class Report extends Component {
                     className={styles.Main}
                     onClick={this.handle_onMainClick}>
                     <div>
+                        <Table
+                            columns={this.state.columns}
+                            source={this.state.report}/>
+                        <ActionButton
+                            onClick={this.handle_onActionClick}
+                            state={0}
+                            values={['Create']}/>
                         {/* <TabBar
                             action={this.handle_onTabToggle}
                             active={this.state.current.id}
@@ -603,7 +629,6 @@ class Report extends Component {
                 <Aside2
                     actions={this.state.aside.actions}
                     data={this.state.aside.data}
-                    page={this.props.match.params.report}
                     state={this.state.aside.state}/>
             </Aux>
         )
@@ -611,25 +636,23 @@ class Report extends Component {
 }
 
 
-export default Report;
+const mapStateToProps = (state, ownProps) => {
+    return {
+        // select_authToken: select.authToken(state),
+        // select_authUser: select.authUser(state),
+        select_user: select.user(state),
+        select_cards: select.cards(state)
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return {
+        // addMany_async: (store, token, reports) => dispatch(actions.addMany_async(store, token, reports)),
+        // addTab_async: (store, collection, token, report, model) => dispatch(actions.addTab_async(store, collection, token, report, model)),
+        // delete_async: (store, token, report) => dispatch(actions.delete_async(store, token, report)),
+        // deleteMany_async: (store, token, models) => dispatch(actions.deleteMany_async(store, token, models)),
+        // deleteTab_async: (store, collection, token, report, tab) => dispatch(actions.deleteTab_async(store, collection, token, report, tab)),
+        // update_async: (store, token, model) => dispatch(actions.update_async(store, token, model)),
+    };
+};
 
-
-// const mapStateToProps = (state, ownProps) => {
-//     return {
-//         select_authToken: select.authToken(state),
-//         select_authUser: select.authUser(state),
-//         select_user: select.user(state)
-//     };
-// };
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         addMany_async: (store, token, reports) => dispatch(actions.addMany_async(store, token, reports)),
-//         addTab_async: (store, collection, token, report, model) => dispatch(actions.addTab_async(store, collection, token, report, model)),
-//         delete_async: (store, token, report) => dispatch(actions.delete_async(store, token, report)),
-//         deleteMany_async: (store, token, models) => dispatch(actions.deleteMany_async(store, token, models)),
-//         deleteTab_async: (store, collection, token, report, tab) => dispatch(actions.deleteTab_async(store, collection, token, report, tab)),
-//         update_async: (store, token, model) => dispatch(actions.update_async(store, token, model)),
-//     };
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Report);
+export default connect(mapStateToProps, null)(Report);

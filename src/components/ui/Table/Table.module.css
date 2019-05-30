@@ -1,0 +1,48 @@
+.TableHead {
+    background-color: white;
+    height: 32px;
+    left: 0px;
+    position: fixed;
+    top: 64px;
+    width: 100%;
+}
+.TableHead > div {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    justify-content: space-between;
+}
+.TableHead p {
+    color: coral;
+    font-weight: bold;
+}
+
+.TableRow {
+    height: 32px;
+}
+.TableRow > div {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    justify-content: space-between;
+}
+.TableRow p {
+    color: cadetblue;
+}
+
+.TableCell {
+    flex-grow: 1;
+    height: 100%;
+}
+.TableCell > div {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    justify-content: center;
+}
+.TableCell p {
+    font-size: 11px;
+}
