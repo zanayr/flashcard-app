@@ -357,8 +357,8 @@ class User extends Component {
         });
         this._clearSelected();
     }
-    _deleteUser = (user) => {
-        this._deleteManyUsers([user]);
+    _deleteUser = () => {
+        this._deleteManyUsers();
     }
     _selectUser = (user) => {
         let selected = this.state.selected.slice();
@@ -482,8 +482,7 @@ class User extends Component {
                 this._suspendUser(data);
                 break;
             case 3:
-                //  Delete User
-                // this._deleteUser(data);
+                this._deleteUser();
                 break;
             default:
                 break;
