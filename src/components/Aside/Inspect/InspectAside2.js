@@ -93,21 +93,22 @@ class InspectAside extends Component {
         }
     }
     render () {
+        console.log('aside', this.props.data.id);
         let aux = null;
         let path = '';
         if (this.props.path.length) {
             switch (this.props.path) {
                 case 'create':
-                    path = '/' + this.props.path;
+                    path = '/create';
                     break;
                 default:
-                    path = '/0/' + this.props.path + '/' + this.props.data.data.id;
+                    path = '/0/deck/' + this.props.data.data.id;
                     break;
             }
             aux = (
                 <IconButton
                     onClick={() => {
-                        this.props.history.replace(path, {id: this.props.data.data.id});
+                        this.props.history.replace(path, {id: this.props.data.id});
                     }}>{this.props.data.labels.aux}</IconButton>
             );
         }

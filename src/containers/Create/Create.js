@@ -117,6 +117,8 @@ class Create extends Component {
 
     //  RENDER METHOD  ----------------------------------------------------  RENDER  //
     render () {
+        console.log(this.props.location.state.id);
+        console.log(this.props.select_deck);
         return (
             <Aux>
                 <main

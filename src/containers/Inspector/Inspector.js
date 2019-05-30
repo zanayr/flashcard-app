@@ -207,7 +207,7 @@ class Inspector extends Component {
         }));
     }
     _setItemValue (target, value) {
-        const id = this.state.aside.data.item.id;
+        const id = this.state.aside.data.data.id;
         this.setState(prev => ({
             ...prev,
             items: {
@@ -356,6 +356,7 @@ class Inspector extends Component {
                 secondary: 'Details'
             },
             data: data.item,
+            id: this.state.collection.id,
             tag: this.props.select_user.tag
         });
     }
