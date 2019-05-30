@@ -14,9 +14,7 @@ class In extends Component {
         const user = this.props.select_authUser;
         this.props.get_async('user', token, user);
         this.props.getAll_async('card', token, user);
-        this.props.getAll_async('class', token, user);
         this.props.getAll_async('deck', token, user);
-        this.props.getAll_async('student', token, user);
         this.props.getAllUsers_async(token);
     }
 
@@ -24,7 +22,16 @@ class In extends Component {
     render() {
         let content = (<Throbber/>);
         if (!this.props.select_decksIsLoading && !this.props.select_cardsIsLoading && !this.props.select_userIsLoading) {
-            content = <Redirect to='/0/deck'/>;
+            if (this.props.select_user.suspend) {
+                content = <Redirect to={{
+                    pathname: '/alt',
+                    state: {
+                        message: 'Your account has been suspended. Please contact the administrator to resolve this issue.'
+                    }
+                }}/>;
+            } else {
+                content = <Redirect to='/0/deck'/>;
+            }
         }
 
         return (
@@ -40,6 +47,7 @@ const mapStateToProps = state => {
     return {
         select_authToken: select.authToken(state),
         select_authUser: select.authUser(state),
+        select_user: select.user(state),
         select_cardsIsLoading: select.cardsIsLoading(state),
         select_decksIsLoading: select.decksIsLoading(state),
         select_userIsLoading: select.userIsLoading(state)

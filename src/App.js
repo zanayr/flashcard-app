@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import * as select from './store/reducers/root';
 import * as actions from './store/actions/index';
 
+import Alt from './containers/Alt/Alt';
 import Auth from './containers/Auth/Auth';
 import Collection from './containers/Collection/Collection';
 import Create from './containers/Create/Create';
@@ -53,14 +54,13 @@ class App extends Component {
           <Route path='/2/create' component={Profile}/>
           <Route path='/2/user/:id' component={Profile}/>
           <Route path='/2/user' component={User}/>
+          <Route path='/alt' exact component={Alt}/>
           <Route path='/auth' exact component={Auth}/>
           <Route path='/create' exact component={Create}/>
-          {/* <Route path='/load/:store/:id' component={Interstitial}/>*/}
           <Route path='/load/' exact component={Load}/>
           <Route path='/in' exact component={In}/>
           <Route path='/out' exact component={Out}/>
           <Route path='/report' exact component={Report}/>
-          {/* <Route path='/review' exact component={Review}/> */}
           <Route path='/study' exact component={Study}/>
           {/* If no matches, redirect to sign in */}
           <Redirect to='/auth'/>

@@ -23,7 +23,7 @@ class ContextAction2 extends Component {
     
     handle_onClick (e) {
         e.stopPropagation();
-        if (this.props.destructive) {
+        if (this.props.confirm) {
             if (this.state.selected) {
                 this.props.action();
             } else {

@@ -58,6 +58,7 @@ export function collectionModel (model) {
 
 //  Student  -------------------------------------------------------  Student Model  //
 export function userModel (model) {
+    console.log(model);
     return {
         card: model.card,
         class: model.class,
@@ -73,6 +74,7 @@ export function userModel (model) {
         },
         meta: model.meta,
         privilage: model.privilage,
+        suspend: model.suspend,
         tab: model.tab,
         tag: model.tag
     }
@@ -202,6 +204,7 @@ export function userViewModel (id, model) {
         primary: model.info.first,
         privilage: model.privilage || 0,
         secondary: model.info.last,
+        suspend: model.suspend || false,
         tag: model.tag || []
     }
 }

@@ -1,37 +1,37 @@
-import React, {Component} from 'react';
+// import React, {Component} from 'react';
 
-import styles from './Context.module.css';
+// import styles from './Context.module.css';
 
-class ContextAction extends Component {
-    shouldComponentUpdate (nextProps, nextState) {
-        return nextProps.active !== this.props.active;
-    }
+// class ContextAction extends Component {
+//     shouldComponentUpdate (nextProps, nextState) {
+//         return nextProps.active !== this.props.active;
+//     }
 
-    onClick (e) {
-        e.stopPropagation();
+//     onClick (e) {
+//         e.stopPropagation();
         
-        this.props.action();
-    }
+//         this.props.action();
+//     }
 
-    render () {
-        let css = [styles.ContextAction];
-        if (this.props.active) {
-            css.push(styles.Active);
-        }
-        if (this.props.destructive) {
-            css.push(styles.Destructive);
-        }
+//     render () {
+//         let css = [styles.ContextAction];
+//         if (this.props.active) {
+//             css.push(styles.Active);
+//         }
+//         if (this.props.destructive) {
+//             css.push(styles.Destructive);
+//         }
 
-        return (
-            <div className={css.join(' ')}>
-                <div>
-                    <button onClick={(e) => {this.onClick(e)}}>
-                        {this.props.children}
-                    </button>
-                </div>
-            </div>
-        );
-    }
-}
+//         return (
+//             <div className={css.join(' ')}>
+//                 <div>
+//                     <button onClick={(e) => {this.onClick(e)}}>
+//                         {this.props.children}
+//                     </button>
+//                 </div>
+//             </div>
+//         );
+//     }
+// }
 
-export default ContextAction;
+// export default ContextAction;

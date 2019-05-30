@@ -188,7 +188,7 @@ class User extends Component {
         }));
     }
     _setUserValue (target, value) {
-        const id = this.state.aside.data.user.id;
+        const id = this.state.aside.data.data.id;
         this.setState(prev => ({
             ...prev,
             users: {
@@ -463,6 +463,13 @@ class User extends Component {
     }
 
     //  List  ------------------------------------------------------------  List EH  //
+    _suspendUser = (data) => {
+        const user = {...data};
+        user.suspend = !user.suspend;
+        this._setManyUsers([user]);
+        this.props.update_async('user', this.props.select_authToken, user);
+        this._clearSelected();
+    }
     handle_onListClick = (action, data) => {
         switch (action) {
             case 0:
@@ -472,8 +479,7 @@ class User extends Component {
                 this.props.history.replace('/2/user/' + data.id);
                 break;
             case 2:
-                //  Suspend user
-                // this._assignUser(data);
+                this._suspendUser(data);
                 break;
             case 3:
                 //  Delete User

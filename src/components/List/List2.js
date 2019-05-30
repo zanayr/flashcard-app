@@ -63,6 +63,7 @@ class List2 extends Component {
                     <ContextAction2
                         action={() => this.props.action(2, item)}
                         active={isActive}
+                        confirm
                         key={'aux'}
                         position={1}>
                         {this.props.aux.charAt(0).toUpperCase() + this.props.aux.slice(1).toLowerCase()}
@@ -88,6 +89,7 @@ class List2 extends Component {
                         <ContextAction2
                             action={() => this.props.action(3, item)}
                             active={isActive}
+                            confirm
                             destructive
                             key={'delete'}
                             position={0}>
