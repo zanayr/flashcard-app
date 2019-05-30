@@ -73,10 +73,8 @@ class List2 extends Component {
             if (this._checkGroups(item) && this._checkTags(item) && this._checkSearch(item)) {
                 return (
                     <ListItem
+                        data={item}
                         key={item.id}
-                        primary={item.primary}
-                        secondary={item.secondary}
-                        tags={item.tag}
                         selected={isSelected}
                         onSelect={() => this.handle_onItemSelect(item)}>
                         <ContextAction2

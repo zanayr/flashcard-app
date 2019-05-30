@@ -19,6 +19,7 @@ export function itemModel (model) {
     const internal = /^\$[a-zA-Z0-9]*/;
     return {
         date: model.date,
+        flag: model.flag,
         group: model.group.filter(tag => !tag.match(internal)),
         member: model.member,
         meta: model.meta,
@@ -94,7 +95,7 @@ export function tabViewModel (id, tab) {
 //  Flashcard view models require a card ID with which to correlate
 export function flashcardViewModel (model) {
     return {
-        flagged: false,
+        flagged: model.flag,
         flipped: false,
         selected: false,
         id: model.id,
@@ -121,6 +122,7 @@ export function itemViewModel (id, model) {
     }
     return {
         date: date,
+        flag: model.flag || false,
         group: model.group || [],
         id: id,
         member: member,

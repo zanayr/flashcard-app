@@ -35,6 +35,9 @@ const card = (props) => {
     if (props.position && props.data.selected) {
         css.push(styles.Pulled);
     }
+    if (props.data.flagged) {
+        css.push(styles.Flagged);
+    }
 
     const handle_onClick = (e) => {
         e.stopPropagation();

@@ -33,3 +33,7 @@
 .Selected {
     background-color: pink;
 }
+
+.ListItem.Flagged {
+    border-left: 3px solid red;
+}

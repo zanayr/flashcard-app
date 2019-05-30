@@ -35,6 +35,9 @@
     color: blue;
     font-size: 11px;
 }
+.Card.Flagged {
+    border: 1px solid red;
+}
 
 .TagList {
     position: absolute;

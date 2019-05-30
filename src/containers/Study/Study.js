@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
+import * as create from '../../store/models/models';
 import * as select from '../../store/reducers/root';
 import * as asideTypes from '../../components/aside/Aside/asideTypes';
 import * as modalTypes from '../../components/modal/Modal/modalTypes';
@@ -33,6 +34,7 @@ class Study extends Component {
         timestamp: 0,
         total: 0,
     }
+    updated = false;
 
     componentDidMount () {
         const cards = this.props.select_cardsById;
@@ -100,14 +102,14 @@ class Study extends Component {
             display: display
         }));
     }
-    setDisplayCard (card) {
-        const display = this.state.display.slice();
-        display[card.id] = card;
-        this.setState(prev => ({
-            ...prev,
-            display: display
-        }));
-    }
+    // setDisplayCard (card) {
+    //     const display = this.state.display.slice();
+    //     display[card.id] = card;
+    //     this.setState(prev => ({
+    //         ...prev,
+    //         display: display
+    //     }));
+    // }
     setNextCard () {
         const current = this.state.current + 1;
         this.setState(prev => ({
@@ -115,16 +117,18 @@ class Study extends Component {
             current: current,
             display: prev.display.concat(this.state.shuffled[current]),
             timestamp: Date.now()
-        }));
+        }), () => {
+            this.updated = false;
+        });
     }
-    updateMeta_async (card) {
+    updateCard_async (card) {
         this.props.update_async('card', this.props.select_authToken, card);
     }
     //  Meta  ---------------------------------------------------------------  Meta  //
     setCard (card) {
         this.setState(prev => ({
             ...prev,
-            card: {
+            all: {
                 ...prev.card,
                 [card.id]: card
             }
@@ -178,21 +182,9 @@ class Study extends Component {
 
     //  Cards  --------------------------------------------------------------  Cards //
     handle_onCardClick = () => {
-        if (!this.state.action - 1) {
-            const card = this.state.card[this.state.display[this.state.current].id];
-            // const time = (Date.now() - this.state.timestamp);
-            // const count = card.meta.count + 1;
-            // const total = card.meta.time.total + time;
-            // const average = total / count;
-            // let meta = {
-            //     ...card.meta,
-            //     count: count,
-            //     flagged: card.meta.flagged || null,
-            //     time: {
-            //         average: average,
-            //         total: total
-            //     }
-            // }
+        if (!this.state.action - 1 && !this.updated) {
+            const card = this.state.all[this.state.display[this.state.current].id];
+            this.updated = true;
             card.meta = {
                 ...card.meta,
                 [this.state.session]: {
@@ -201,7 +193,7 @@ class Study extends Component {
                 }
             };
             this.setCard(card);
-            this.updateMeta_async(card);
+            this.updateCard_async(card);
             if (this.state.current + 1 < this.state.total) {
                 this.setNextCard();
             } else {
@@ -210,10 +202,11 @@ class Study extends Component {
         }
     }
 
-    handle_onCardFlag = (card) => {
-        // const flag = !card.flagged ? true : null;
-        // this.flagCard(flag);
-        // this.updateMeta_async(this.state.card[card.id], {flagged: flag});
+    handle_onCardFlag = (flagged) => {
+        const card = {...this.state.all[flagged.id]};
+        card.flag = !card.flag;
+        this.setCard(card);
+        this.updateCard_async(card);
     }
 
     handle_onStartClick = () => {
@@ -245,7 +238,6 @@ class Study extends Component {
             );
         } else {
             const cards = this.state.card;
-            // let ms = 0;
             let total = 0;
             Object.keys(cards).forEach(id => {
                 total++;
