@@ -99,8 +99,8 @@ const table = (props) => {
         //         return null;
         //     }
         // });
-        const rows = Object.keys(props.source).map(period => {
-            return (<Row key={period} data={props.source[period]}/>);
+        const rows = props.source.map((entry, i) => {
+            return (<Row key={i} data={entry}/>);
         });
         return (
             <section className={styles.Table}>

@@ -6,8 +6,8 @@ import styles from './Table.module.css';
 
 
 const row = (props) => {
-    const cells = Object.keys(props.data).map((key, i) => {
-        return (<Cell key={i} data={props.data[key]}/>);
+    const cells = props.data.map((cell, i) => {
+        return (<Cell key={i} data={cell}/>);
     });
     return (
         <div className={styles.TableRow}>

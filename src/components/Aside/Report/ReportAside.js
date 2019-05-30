@@ -9,8 +9,8 @@ import styles from '../Aside.module.css';
 
 class ReportAside extends Component {
     state = {
-        group: this.props.data.group,
-        tag: this.props.data.tag
+        group: [],
+        tag: []
     }
 
     deselect (category, tag) {

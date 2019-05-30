@@ -49,8 +49,7 @@ class Report extends Component {
             action: null,
             data: {}
         },
-        columns: [],
-        report: {}
+        report: []
     }
     undoTimeout = null;
 
@@ -129,6 +128,12 @@ class Report extends Component {
         } else {
             this.openAside(state);
         }
+    }
+    setReport (data) {
+        this.setState(prev => ({
+            ...prev,
+            report: data
+        }));
     }
 
     //  Current  ------------------------------------------------------  Current SS  //
@@ -443,12 +448,12 @@ class Report extends Component {
     //             break;
     //     }
     // }
-    // handle_onNagivationToggle = () => {
-    //     this._toggleAside(asideTypes.NAVIGATION);
-    //     this._setAside({
-    //         overlay: this.handle_onAsideClose
-    //     });
-    // }
+    handle_onNagivationToggle = () => {
+        this.toggleAside(asideTypes.NAVIGATION);
+        this.setAside({
+            overlay: this.handle_onAsideClose
+        });
+    }
     
     //  Report  ------------------------------------------------------------  Report EH  //
     // handle_onReportChange = (target, value) => {
@@ -557,6 +562,63 @@ class Report extends Component {
             tag: this.props.select_user.tag
         });
     }
+    
+    _rollUpWeek (report) {
+        const rolled = {
+            1: {
+                seen: 0,
+                time: 0,
+            }
+        };
+        let week = 1;
+        Object.keys(report).forEach(session => {
+            if (new Date(report[session].date).getDay() ? false : true) {
+                week++;
+                rolled[week] = {
+                    seen: 0,
+                    time: 0
+                };
+            }
+            rolled[week].seen = rolled[week].seen + report[session].seen;
+            rolled[week].time = rolled[week].time + (Math.round(report[session].time / 1000) / 3600);
+        });
+        return Object.keys(rolled).map(week => {
+            return [week, rolled[week].time, rolled[week].seen];
+        });
+    }
+    _createReport (data) {
+        const cards = this.props.select_cards;
+        const report = {};
+        const filtered = [];
+        Object.keys(cards).forEach(id => {
+            let group = true;
+            let tag = data.tag.length ? false : true;
+            data.group.forEach(t => {
+                group = cards[id].group.includes(t) && group;
+            });
+            data.tag.forEach(t => {
+                tag = cards[id].tag.includes(t) || tag;
+            });
+            if (group && tag) {
+                filtered.push(cards[id]);
+            }
+        });
+        filtered.forEach(card => {
+            Object.keys(card.meta).forEach(session => {
+                if (report[session]) {
+                    report[session].time = report[session].time + card.meta[session].time;
+                    report[session].seen = report[session].seen + 1;
+                } else {
+                    report[session] = {
+                        date: card.meta[session].date,
+                        seen: 1,
+                        time: card.meta[session].time
+                    }
+                }
+            });
+        });
+        this.setReport(this._rollUpWeek(report));
+    }
     //  Action  -----------------------------------------------------------  Action  //
     handle_onActionClick = (action) => {
         this._openReportAside();
@@ -567,7 +629,7 @@ class Report extends Component {
         this.clearAndCloseAside();
     }
     handle_onReportAsideConfirm = (data) => {
-        console.log(data);
+        this._createReport(data);
         this.clearAndCloseAside();
     }
 
@@ -609,7 +671,7 @@ class Report extends Component {
                     onClick={this.handle_onMainClick}>
                     <div>
                         <Table
-                            columns={this.state.columns}
+                            columns={['week', 'study hours', 'cards seen']}
                             source={this.state.report}/>
                         <ActionButton
                             onClick={this.handle_onActionClick}

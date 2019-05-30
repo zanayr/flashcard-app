@@ -15,7 +15,7 @@ import Modal from './components/modal/Modal/Modal';
 import Out from './containers/Out/Out';
 import Profile from './containers/Profile/Profile';
 import Report from './containers/Report/Report';
-import Review from './containers/Review/Review';
+// import Review from './containers/Review/Review';
 import Study from './containers/Study/Study';
 import User from './containers/User/User';
 
@@ -60,7 +60,7 @@ class App extends Component {
           <Route path='/in' exact component={In}/>
           <Route path='/out' exact component={Out}/>
           <Route path='/report' exact component={Report}/>
-          <Route path='/review' exact component={Review}/>
+          {/* <Route path='/review' exact component={Review}/> */}
           <Route path='/study' exact component={Study}/>
           {/* If no matches, redirect to sign in */}
           <Redirect to='/auth'/>
