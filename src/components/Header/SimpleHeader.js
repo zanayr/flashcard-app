@@ -14,7 +14,7 @@ const simpleHeader = (props) => {
         }
     }
     let content = null;
-    if (props.path) {
+    if (props.navigation) {
         content = (
             <BarLink
                 path={props.navigation.path}

@@ -93,7 +93,6 @@ class InspectAside extends Component {
         }
     }
     render () {
-        console.log('aside', this.props.data.id);
         let aux = null;
         let path = '';
         if (this.props.path.length) {
