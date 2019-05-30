@@ -12,11 +12,11 @@ class InspectAside extends Component {
     state = {
         actions: this.props.actions,
         group: this.props.data.group,
-        item: this.props.data.item,
+        data: this.props.data.data,
         tag: this.props.data.tag,
         valid: {
-            primary: this.props.data.item.primary.length > 0,
-            secondary: this.props.data.item.secondary.length > 0
+            primary: this.props.data.data.primary.length > 0,
+            secondary: this.props.data.data.secondary.length > 0
         }
     }
 
@@ -26,8 +26,8 @@ class InspectAside extends Component {
         if (target === 'primary' || target === 'secondary') {
             this.setState(prev => ({
                 ...prev,
-                item: {
-                    ...prev.item,
+                data: {
+                    ...prev.data,
                     [target]: value.trim()
                 },
                 valid: {
@@ -38,8 +38,8 @@ class InspectAside extends Component {
         } else {
             this.setState(prev => ({
                 ...prev,
-                item: {
-                    ...prev.item,
+                data: {
+                    ...prev.data,
                     [target]: value
                 }
             }));
@@ -50,43 +50,43 @@ class InspectAside extends Component {
     
     //  TAGS  ---------------------------------------------------------------  TAGS  //
     handle_onTagCreate = (category, tag) => {
-        const tags = this.state.item[category];
+        const tags = this.state.data[category];
         this.setState(prev => ({
             ...prev,
-            item: {
-                ...prev.item,
-                [category]: prev.item[category].concat(tag)
+            data: {
+                ...prev.data,
+                [category]: prev.data[category].concat(tag)
             }
         }));
-        this.props.actions.change(this.state.item, {
+        this.props.actions.change(this.state.data, {
             target: category,
             value: tags.concat(tag)
         });
         this.props.actions.create(category, tag);
     }
     handle_onTagToggle = (category, tag) => {
-        const tags = this.state.item[category];
+        const tags = this.state.data[category];
         if (tags.indexOf(tag) > -1) {
             this.setState(prev => ({
                 ...prev,
-                item: {
-                    ...prev.item,
-                    [category]: prev.item[category].filter(t => t !== tag)
+                data: {
+                    ...prev.data,
+                    [category]: prev.data[category].filter(t => t !== tag)
                 }
             }));
-            this.props.actions.change(this.state.item, {
+            this.props.actions.change(this.state.data, {
                 target: category,
                 value: tags.filter(t => t !== tag)
             });
         } else {
             this.setState(prev => ({
                 ...prev,
-                item: {
-                    ...prev.item,
-                    [category]: prev.item[category].concat(tag)
+                data: {
+                    ...prev.data,
+                    [category]: prev.data[category].concat(tag)
                 }
             }));
-            this.props.actions.change(this.state.item, {
+            this.props.actions.change(this.state.data, {
                 target: category,
                 value: tags.concat(tag)
             });
@@ -95,29 +95,27 @@ class InspectAside extends Component {
     render () {
         let aux = null;
         let path = '';
-        if (this.props.path.length) {
+        if (this.props.path.length && !this.props.data.data.tag.includes('$create')) {
             switch (this.props.path) {
                 case 'create':
                     path = '/' + this.props.path;
                     break;
                 default:
-                    path = '/0/' + this.props.path + '/' + this.props.data.id;
+                    path = '/0/' + this.props.path + '/' + this.props.data.data.id;
                     break;
             }
             aux = (
                 <IconButton
                     onClick={() => {
-                        this.props.history.replace(path, {id: this.props.data.id});
-                    }}>
-                        {this.props.data.labels.aux}
-                 </IconButton>
+                        this.props.history.replace(path, {id: this.props.data.data.id});
+                    }}>{this.props.data.labels.aux}</IconButton>
             );
         }
         return (
             <aside className={[styles.Aside].join(' ')}>
                 <div>
                     <InspectForm2
-                        item={this.state.item}
+                        data={this.state.data}
                         labels={this.props.data.labels}
                         onChange={this.handle_onChange}
                         onConfirm={this.props.actions.confirm}/>

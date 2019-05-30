@@ -55,7 +55,7 @@ class App extends Component {
           <Route path='/2/user' component={User}/>
           <Route path='/auth' exact component={Auth}/>
           <Route path='/create' exact component={Create}/>
-          <Route path='/load/:store/:collection' component={Interstitial}/>
+          <Route path='/load/:store/:id' component={Interstitial}/>
           <Route path='/load/:store' component={Interstitial}/>
           <Route path='/in' exact component={In}/>
           <Route path='/out' exact component={Out}/>

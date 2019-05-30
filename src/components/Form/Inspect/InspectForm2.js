@@ -14,7 +14,7 @@ import styles from './InspectForm.module.css';
 
 class InspectForm2 extends Component {
     state = {
-        item: this.props.item,
+        item: this.props.data,
         group: this.props.select_user.group,
         reset: false,
         states: {

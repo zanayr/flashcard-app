@@ -7,36 +7,36 @@ import styles from '../Aside.module.css';
 const navigationAside2 = (props) => {
     const navigationLinks = [
         {
-            path: '/logout',
-            value: 'Sign Out'
-        },
-        {
-            path: '/load/class',
-            value: 'Classes'
-        },
-        {
-            path: '/load/user',
+            path: '/2/user',
             value: 'Users'
         },
         {
-            path: '/load/student',
-            value: 'Students'
+            path: '/out',
+            value: 'Sign Out'
         }
     ];
     switch (props.page) {
         case 'deck':
             navigationLinks.unshift({
-                path: '/load/card',
+                path: '/1/card',
                 value: 'Cards'
             });
             break;
         case 'card':
             navigationLinks.unshift({
-                path: '/load/deck',
+                path: '/0/deck',
                 value: 'Decks'
             });
             break;
         default:
+            navigationLinks.unshift({
+                path: '/1/card',
+                value: 'Cards'
+            },
+            {
+                path: '/0/deck',
+                value: 'Decks'
+            });
             break;
     }
     const navigationButtons = navigationLinks.map((link, i) => {

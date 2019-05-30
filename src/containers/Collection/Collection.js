@@ -197,13 +197,13 @@ class Collections extends Component {
         }));
     }
     _setCollectionValue (target, value) {
-        const collectionId = this.state.aside.data.item.id;
+        const id = this.state.aside.data.data.id;
         this.setState(prev => ({
             ...prev,
             collection: {
                 ...prev.collection,
-                [collectionId]: {
-                    ...prev.collection[collectionId],
+                [id]: {
+                    ...prev.collection[id],
                     [target]: value
                 }
             }
@@ -343,19 +343,18 @@ class Collections extends Component {
                 primary: 'Title',
                 secondary: 'Details'
             },
-            item: data.collection,
-            id: data.collection.id,
+            data: data.collection,
             tag: this.props.select_user.tag
         });
     }
     _setItemMembership_async (collections) {
-        const items = this.props.select_items;
+        const members = this.props.select_items;
         collections.forEach(collection => {
             if (collection.member.length) {
                 collection.member.forEach(id => {
                     this.props.update_async('card', this.props.select_authToken, {
-                        ...items[id],
-                        member: items[id].member.concat(collection.id)
+                        ...members[id],
+                        member: members[id].member.concat(collection.id)
                     });
                 });
             }
@@ -396,16 +395,16 @@ class Collections extends Component {
     }
     handle_onInspectAsideConfirm = () => {
         const original = this.state.aside.data;
-        const inspected = this.state.collection[original.item.id];
+        const inspected = this.state.collection[original.data.id];
         if (inspected.primary.length && inspected.secondary.length) {
-            if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
-                if (original.item.tag.includes('$create')) {
+            if (JSON.stringify(original.data) !== JSON.stringify(inspected)) {
+                if (original.data.tag.includes('$create')) {
                     this._addManyCollections([inspected]);
                 } else {
                     this._updateCollection_async(inspected);
                     this._setUndo({
                         action: this._undoCollectionUpdated,
-                        data: original.item
+                        data: original.data
                     });
                 }
             } else if (original.tag.includes('$create')) {
@@ -418,11 +417,11 @@ class Collections extends Component {
         switch (this.state.aside.state) {
             case asideTypes.INSPECT:
                     const original = this.state.aside.data;
-                    const inspected = this.state.collection[original.item.id];
-                    if (original.tag.includes('$create')) {
+                    const inspected = this.state.collection[original.data.id];
+                    if (original.data.tag.includes('$create')) {
                         this._removeManyCollections([inspected]);
-                    } else if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
-                        this._setManyCollections([original.item]);
+                    } else if (JSON.stringify(original.data) !== JSON.stringify(inspected)) {
+                        this._setManyCollections([original.data]);
                     }
                     this._clearAndCloseAside();
                     break;
@@ -453,13 +452,13 @@ class Collections extends Component {
         this._clearSelected();
     }
     _removeItemMembership_async (collections) {
-        const items = this.props.select_items;
+        const members = this.props.select_items;
         collections.forEach(collection => {
             if (collection.member.length) {
                 collection.member.forEach(id => {
                     this.props.update_async('card', this.props.select_authToken, {
-                        ...items[id],
-                        member: items[id].member.filter(i => i !== collection.id)
+                        ...members[id],
+                        member: members[id].member.filter(i => i !== collection.id)
                     });
                 });
             }
