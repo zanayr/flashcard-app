@@ -30,6 +30,8 @@ const rootReducer = combineReducers({
 });
 
 
+
+
 //  STORE SELECTORS  --------------------------------------------------- SELECTORS  //
 //  Authentication  ------------------------------------- Authentication Selectors  //
 export function authError (store) {

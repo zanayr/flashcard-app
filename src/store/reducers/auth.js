@@ -17,7 +17,7 @@ const authFailed = (state, action) => {
     });
 };
 const authOut = (state, action) => {
-    return undefined;
+    return initialState;
 };
 const authInitiated = (state, action) => {
     return updateObject(state, {

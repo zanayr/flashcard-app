@@ -34,7 +34,7 @@ export const authOut_async = () => {
     localStorage.removeItem('expiration');
     localStorage.removeItem('user');
     return {
-        type: actionTypes.AUTH_OUT
+        type: actionTypes.SIGN_OUT
     }
 }
 

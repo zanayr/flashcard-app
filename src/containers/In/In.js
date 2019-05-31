@@ -11,17 +11,22 @@ import Throbber from '../../components/ui/Throbber/Throbber';
 class In extends Component {
     componentDidMount() {
         this.props.get_async('user', this.props.select_authToken, this.props.select_authUser);
-    }
-
-    componentDidUpdate (prevProps, prevState) {
-        if (prevProps.select_user !== this.props.select_user) {
-            this.props.getAll_async('card', this.props.select_authToken, this.props.select_authUser);
-            this.props.getAll_async('deck', this.props.select_authToken, this.props.select_authUser);
-            if (this.props.select_user.privilage) {
-                this.props.getAllUsers_async(this.props.select_authToken);
-            }
+        this.props.getAll_async('card', this.props.select_authToken, this.props.select_authUser);
+        this.props.getAll_async('deck', this.props.select_authToken, this.props.select_authUser);
+        if (this.props.select_user.privilage) {
+            this.props.getAllUsers_async(this.props.select_authToken);
         }
     }
+
+    // componentDidUpdate (prevProps, prevState) {
+    //     if (prevProps.select_user !== this.props.select_user) {
+    //         this.props.getAll_async('card', this.props.select_authToken, this.props.select_authUser);
+    //         this.props.getAll_async('deck', this.props.select_authToken, this.props.select_authUser);
+    //         if (this.props.select_user.privilage) {
+    //             this.props.getAllUsers_async(this.props.select_authToken);
+    //         }
+    //     }
+    // }
 
     
     render() {

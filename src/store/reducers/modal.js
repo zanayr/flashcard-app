@@ -20,7 +20,7 @@ const clearModal = (state, action) => {
 };
 
 const signOut = (state, action) => {
-    return undefined;
+    return initialState;
 }
 
 //  REDUCER  -------------------------------------------------------------  REDUCER  //

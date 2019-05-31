@@ -52,7 +52,7 @@ const getAllCardsSuccess = (state, action) => {
     };
 }
 const signOut = (state, action) => {
-    return undefined;
+    return initialState;
 }
 const updateCard = (state, action) => {
     return {

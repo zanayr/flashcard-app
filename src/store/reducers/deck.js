@@ -59,7 +59,7 @@ const getAllDecksSuccess = (state, action) => {
     };
 }
 const signOut = (state, action) => {
-    return undefined;
+    return initialState;
 }
 const updateDeck = (state, action) => {
     return {
