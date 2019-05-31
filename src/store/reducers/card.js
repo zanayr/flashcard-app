@@ -51,6 +51,9 @@ const getAllCardsSuccess = (state, action) => {
         card: action.payload
     };
 }
+const signOut = (state, action) => {
+    return undefined;
+}
 const updateCard = (state, action) => {
     return {
         ...state,
@@ -76,6 +79,8 @@ const reducer = (state=initialState, action) => {
             return getAllCardsInit(state, action);
         case actionTypes.GET_ALL_CARDS_SUCCESS:
             return getAllCardsSuccess(state, action);
+        case actionTypes.SIGN_OUT:
+            return signOut(state, action);
         case actionTypes.UPDATE_CARD:
             return updateCard(state, action);
         default:

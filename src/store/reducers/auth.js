@@ -16,11 +16,8 @@ const authFailed = (state, action) => {
         isLoading: false
     });
 };
-const authEnded = (state, action) => {
-    return updateObject(state, {
-        token: null,
-        user: null
-    });
+const authOut = (state, action) => {
+    return undefined;
 };
 const authInitiated = (state, action) => {
     return updateObject(state, {
@@ -43,8 +40,8 @@ const reducer = (state=initialState, action) => {
     switch (action.type) {
         case actionTypes.AUTH_FAIL:
             return authFailed(state, action);
-        case actionTypes.AUTH_OUT:
-            return authEnded(state, action);
+        case actionTypes.SIGN_OUT:
+            return authOut(state, action);
         case actionTypes.AUTH_INIT:
             return authInitiated(state, action);
         case actionTypes.AUTH_SUCC:

@@ -1,5 +1,8 @@
 import React from 'react';
 
+import {connect} from 'react-redux';
+import * as select from '../../../store/reducers/root';
+
 import BarButton from '../../ui/button/Bar/BarButton';
 
 import styles from '../Aside.module.css';
@@ -9,16 +12,14 @@ const navigationAside2 = (props) => {
         {
             path: '/report',
             value: 'Reports'
-        },
-        {
-            path: '/2/user',
-            value: 'Users'
-        },
-        {
-            path: '/out',
-            value: 'Sign Out'
         }
     ];
+    if (props.select_user.privilage) {
+        navigationLinks.push({
+            path: '/2/user',
+            value: 'Users'
+        });
+    }
     switch (props.page) {
         case 'deck':
             navigationLinks.unshift({
@@ -59,9 +60,23 @@ const navigationAside2 = (props) => {
         <nav className={[styles.Aside, styles.Navigation].join(' ')}>
             <div>
                 {navigationButtons}
+                <div className={styles.Break}></div>
+                <BarButton
+                    key={'out'}
+                    onClick={() => {
+                        props.history.replace('/out');
+                    }}>
+                    Sign Out
+                </BarButton>
             </div>
         </nav>
     );
 }
 
-export default navigationAside2;
+
+const mapStateToProps = (state) => {
+    return {
+        select_user: select.user(state)
+    }
+}
+export default connect(mapStateToProps, null)(navigationAside2);

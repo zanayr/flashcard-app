@@ -58,6 +58,9 @@ const updateUserTag = (state, action) => {
         }
     }
 }
+const signOut = (state, action) => {
+    return undefined;
+}
 //  REDUCER  -------------------------------------------------------------  REDUCER  //
 const reducer = (state=initialState, action) => {
     switch (action.type) {
@@ -71,6 +74,8 @@ const reducer = (state=initialState, action) => {
             return getAllUsersInit(state, action);
         case actionTypes.GET_ALL_USERS_SUCCESS:
             return getAllUsersSuccess(state, action);
+        case actionTypes.SIGN_OUT:
+            return signOut(state, action);
         case actionTypes.UPDATE_USER:
             return updateUser(state, action);
         case actionTypes.UPDATE_USER_TAG:

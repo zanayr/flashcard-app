@@ -58,6 +58,9 @@ const getAllDecksSuccess = (state, action) => {
         deck: action.payload
     };
 }
+const signOut = (state, action) => {
+    return undefined;
+}
 const updateDeck = (state, action) => {
     return {
         ...state,
@@ -85,6 +88,8 @@ const reducer = (state=initialState, action) => {
             return getAllDecksInit(state, action);
         case actionTypes.GET_ALL_DECKS_SUCCESS:
             return getAllDecksSuccess(state, action);
+        case actionTypes.SIGN_OUT:
+            return signOut(state, action);
         case actionTypes.UPDATE_DECK:
             return updateDeck(state, action);
         default:

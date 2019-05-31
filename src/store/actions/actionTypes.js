@@ -2,7 +2,7 @@
 //  Authentication  //
 export const AUTH_FAIL = 'AUTH_FAIL';
 export const AUTH_INIT = 'AUTH_INIT';
-export const AUTH_OUT = 'AUTH_OUT';
+export const SIGN_OUT = 'SIGN_OUT';
 export const AUTH_SUCC = 'AUTH_SUCC';
 
 //  Data  //

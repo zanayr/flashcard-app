@@ -19,6 +19,9 @@ const clearModal = (state, action) => {
     };
 };
 
+const signOut = (state, action) => {
+    return undefined;
+}
 
 //  REDUCER  -------------------------------------------------------------  REDUCER  //
 const reducer = (state=initialState, action) => {
@@ -27,6 +30,8 @@ const reducer = (state=initialState, action) => {
             return displayModal(state, action);
         case actionTypes.CLEAR_MODAL:
             return clearModal(state, action);
+        case actionTypes.SIGN_OUT:
+            return signOut(state, action);
         default:
             return state;
     }
