@@ -194,7 +194,6 @@ export function userViewModel (id, model) {
         date: model.date || Date.now(),
         deck: deckTab,
         group: model.group || [],
-        id: id,
         info: {
             email: model.info.email,
             user: model.info.user || id
