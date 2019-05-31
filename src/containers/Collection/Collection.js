@@ -8,6 +8,7 @@ import * as create from '../../store/models/models';
 import * as select from '../../store/reducers/root';
 import * as sortTypes from '../../utility/sortTypes';
 import * as utility from '../../utility/utility';
+import * as modalTypes from '../../components/modal/Modal/modalTypes';
 
 import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside2 from '../../components/aside/Aside/Aside2';
@@ -581,7 +582,17 @@ class Collections extends Component {
                 this.state.selected.forEach(deck => {
                     cards = cards.concat(deck.member);
                 });
-                this.props.history.replace('/study', {data: cards});
+                if (cards.length) {
+                    this.props.history.replace('/study', {data: cards});
+                } else {
+                    this.props.displayModal_async(
+                        modalTypes.WARNING,
+                        'You have no cards to study.',
+                        'Ok')
+                    .then(response => {
+                        this._clearSelected();
+                    }).catch(() => {}); // Eat user cancel
+                }
                 break;
         }
     }
@@ -822,6 +833,7 @@ const mapDispatchToProps = dispatch => {
         delete_async: (store, token, model) => dispatch(actions.delete_async(store, token, model)),
         deleteMany_async: (store, token, models) => dispatch(actions.deleteMany_async(store, token, models)),
         deleteTab_async: (store, collection, token, user, tab) => dispatch(actions.deleteTab_async(store, collection, token, user, tab)),
+        displayModal_async: (type, message, confirm, cancel) => dispatch(actions.displayModal_async(type, message, confirm, cancel)),
         update_async: (store, token, model) => dispatch(actions.update_async(store, token, model))
     };
 };

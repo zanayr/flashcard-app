@@ -164,7 +164,7 @@ export function collectionViewModel (id, model) {
         primary: model.primary || '',
         secondary: model.secondary || '',
         tab: tab,
-        tag: tag
+        tag: tag,
     }
 }
 
