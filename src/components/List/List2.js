@@ -75,6 +75,7 @@ class List2 extends Component {
                 return (
                     <ListItem
                         data={item}
+                        default={this.props.default}
                         key={item.id}
                         selected={isSelected}
                         onSelect={() => this.handle_onItemSelect(item)}>

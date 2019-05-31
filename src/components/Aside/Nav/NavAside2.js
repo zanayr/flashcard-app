@@ -50,12 +50,10 @@ const navigationAside2 = (props) => {
             </BarButton>
         );
     });
-    
-    return (
-        <nav className={[styles.Aside, styles.Navigation].join(' ')}>
-            <div>
-                {navigationButtons}
-                <BarButton
+    let aux = null;
+    if (props.select_user.privilage) {
+        aux = (
+            <BarButton
                     key={'user'}
                     onClick={() => {
                         props.init('user');
@@ -63,6 +61,14 @@ const navigationAside2 = (props) => {
                     }}>
                     users
                 </BarButton>
+        );
+    }
+    
+    return (
+        <nav className={[styles.Aside, styles.Navigation].join(' ')}>
+            <div>
+                {navigationButtons}
+                {aux}
                 <div className={styles.Break}></div>
                 <BarButton
                     key={'out'}

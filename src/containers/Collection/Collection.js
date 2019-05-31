@@ -758,6 +758,7 @@ class Collections extends Component {
                     <List2
                         action={this.handle_onListClick}
                         collection={utility.sortBy(this.state.sort, this.state.collection)}
+                        default={{primary: 'Title', secondary: 'Details'}}
                         filters={this.state.filter}
                         current={this.state.current}
                         selected={this.state.selected}/>

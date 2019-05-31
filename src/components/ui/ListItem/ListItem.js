@@ -26,14 +26,22 @@ class ListItem extends Component {
                 <Tag key={tag}>{tag}</Tag>
             );
         });
+        let primary = (<h3 className={styles.Placeholder}>{this.props.default.primary}</h3>);
+        let secondary = (<p className={styles.Placeholder}>{this.props.default.secondary}</p>);
+        if (this.props.data.primary.length) {
+            primary = (<h3 className={styles.Primary}>{this.props.data.primary}</h3>);
+        }
+        if (this.props.data.secondary.length) {
+            secondary = (<h3 className={styles.Secondary}>{this.props.data.secondary}</h3>);
+        }
         return (
             <article
                 className={css.join(' ')}
                 onClick={(e) => this.onClick(e)}>
                 <div>
                     <div key={0}>
-                        <h3>{this.props.data.primary}</h3>
-                        <p>{this.props.data.secondary}</p>
+                        {primary}
+                        {secondary}
                     </div>
                     <div
                         className={styles.TagContainer}
