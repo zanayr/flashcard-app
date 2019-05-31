@@ -49,6 +49,7 @@ export const GET_USER_INIT = 'GET_USER_INIT';
 export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
 
 export const DECK_INIT = 'DECK_INIT';
+export const USER_INIT = 'USER_INIT';
 
 export const UPDATE_CARD = 'UPDATE_CARD';
 export const UPDATE_CARD_META = 'UPDATE_CARD_META';

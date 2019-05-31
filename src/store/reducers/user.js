@@ -22,6 +22,12 @@ const getUserInit = (state, action) => {
         isLoading: true
     };
 }
+const userInit = (state, action) => {
+    return {
+        ...state,
+        isLoading: true
+    };
+}
 const getUserSuccess = (state, action) => {
     return {
         ...state,
@@ -80,6 +86,8 @@ const reducer = (state=initialState, action) => {
             return updateUser(state, action);
         case actionTypes.UPDATE_USER_TAG:
             return updateUserTag(state, action);
+        case actionTypes.USER_INIT:
+            return userInit(state, action);
         default:
             return state;
     }

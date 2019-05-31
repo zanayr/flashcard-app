@@ -15,6 +15,7 @@ export {
     get_async,
     getAll_async,
     getAllUsers_async,
+    init,
     update_async,
     updateMany_async,
     updateTag_async

@@ -162,8 +162,7 @@ const mapStateToProps = state => {
         authenticated: select.authToken(state) !== null,
         select_authToken: select.authToken(state),
         select_authUser: select.authUser(state),
-        select_authLoading: select.authIsLoading(state),
-        select_error: select.authError(state)
+        select_authLoading: select.authIsLoading(state)
     };
 }
 const mapDispatchToProps = dispatch => {

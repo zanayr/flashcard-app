@@ -1,5 +1,6 @@
 import React from 'react';
 
+import * as actions from '../../../store/actions/index';
 import {connect} from 'react-redux';
 import * as select from '../../../store/reducers/root';
 
@@ -11,36 +12,30 @@ const navigationAside2 = (props) => {
     const navigationLinks = [
         {
             path: '/report',
-            value: 'Reports'
+            value: 'reports'
         }
     ];
-    if (props.select_user.privilage) {
-        navigationLinks.push({
-            path: '/2/user',
-            value: 'Users'
-        });
-    }
     switch (props.page) {
         case 'deck':
             navigationLinks.unshift({
                 path: '/1/card',
-                value: 'Cards'
+                value: 'cards'
             });
             break;
         case 'card':
             navigationLinks.unshift({
                 path: '/0/deck',
-                value: 'Decks'
+                value: 'decks'
             });
             break;
         default:
             navigationLinks.unshift({
                 path: '/1/card',
-                value: 'Cards'
+                value: 'cards'
             },
             {
                 path: '/0/deck',
-                value: 'Decks'
+                value: 'decks'
             });
             break;
     }
@@ -60,13 +55,21 @@ const navigationAside2 = (props) => {
         <nav className={[styles.Aside, styles.Navigation].join(' ')}>
             <div>
                 {navigationButtons}
+                <BarButton
+                    key={'user'}
+                    onClick={() => {
+                        props.init('user');
+                        props.history.replace('/load', {store: 'user'});
+                    }}>
+                    users
+                </BarButton>
                 <div className={styles.Break}></div>
                 <BarButton
                     key={'out'}
                     onClick={() => {
                         props.history.replace('/out');
                     }}>
-                    Sign Out
+                    sign out
                 </BarButton>
             </div>
         </nav>
@@ -79,4 +82,10 @@ const mapStateToProps = (state) => {
         select_user: select.user(state)
     }
 }
-export default connect(mapStateToProps, null)(navigationAside2);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        init: (store) => dispatch(actions.init(store))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(navigationAside2);

@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 
-import BarLink from '../../ui/link/Bar/BarLink';
+import * as actions from '../../../store/actions/index';
+import {connect} from 'react-redux';
+
 import Button from '../../ui/button/Button/Button';
 import IconButton from '../../ui/button/Icon/IconButton';
 import InspectForm2 from '../../form/Inspect/InspectForm2';
@@ -109,18 +111,24 @@ class InspectAside extends Component {
             }
             aux = (
                 <IconButton
-                    disabled={!this.state.valid.primary || !this.state.valid.secondary}
                     onClick={() => {
-                        if (this.props.path === 'deck' && this.props.data.data.tag.includes('$create')) {
+                        this.props.history.replace(path, {id: this.props.data.id});
+                    }}>{this.props.data.labels.aux}</IconButton>
+            );
+            if (this.props.path === 'deck' && this.props.data.data.tag.includes('$create')) {
+                aux = (
+                    <IconButton
+                        disabled={!this.state.valid.primary || !this.state.valid.secondary}
+                        onClick={() => {
+                            this.props.init('deck');
                             this.props.history.replace('/load', {
                                 data: this.state.data,
                                 store: 'deck'
                             });
-                        } else {
-                            this.props.history.replace(path, {id: this.props.data.id});
-                        }
-                    }}>{this.props.data.labels.aux}</IconButton>
-            );
+                        }}>{this.props.data.labels.aux}</IconButton>
+                );
+            }
+            
         }
         return (
             <aside className={[styles.Aside].join(' ')}>
@@ -147,4 +155,11 @@ class InspectAside extends Component {
     }
 }
 
-export default InspectAside;
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        init: (store) => dispatch(actions.init(store))
+    }
+}
+
+export default connect(null, mapDispatchToProps)(InspectAside);

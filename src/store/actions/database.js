@@ -222,14 +222,8 @@ export const _getAll_init = (store) => {
         case 'card':
             type = actionTypes.GET_ALL_CARDS_INIT;
             break;
-        case 'class':
-            type = actionTypes.GET_ALL_CLASSES_INIT;
-            break;
         case 'deck':
             type = actionTypes.GET_ALL_DECKS_INIT;
-            break;
-        case 'student':
-            type = actionTypes.GET_ALL_STUDENTS_INIT;
             break;
         case 'user':
             type = actionTypes.GET_ALL_USERS_INIT;
@@ -249,6 +243,24 @@ export const _getAllUsers_init = (store) => {
         payload: {}
     };
 };
+export const init = (store) => {
+    let type = null;
+    switch (store) {
+        case 'deck':
+            type = actionTypes.DECK_INIT;
+            break;
+        case 'user':
+            type = actionTypes.USER_INIT;
+            break;
+        default:
+            type = actionTypes.INIT;
+            break;
+    }
+    return {
+        type: type,
+        payload: {}
+    };
+}
 
 
 //  Update  ---------------------------------------------------------------  Update  //
@@ -451,14 +463,16 @@ export const getAll_async = (store, token, user) => {
         });
     };
 };
-export const getAllUsers_async = (token) => {
+export const getAllUsers_async = (token, user) => {
     return dispatch => {
         dispatch(_getAllUsers_init());
         axios.get('/user.json?auth=' + token)
         .then(response => {
             let models = {};
             Object.keys(response.data).forEach(id => {
-                models[id] = create.userViewModel(id, response.data[id]);
+                if (id !== user) {
+                    models[id] = create.userViewModel(id, response.data[id]);
+                }
             });
             dispatch(_getAllUsers_success(models));
         })

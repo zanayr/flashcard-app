@@ -54,6 +54,7 @@ class User extends Component {
     componentDidMount () {
         const models = this.props.select_users;
         const users = {};
+        console.log(this.props.select_users);
         Object.keys(models).forEach(id => {
             users[id] = models[id];
         });
@@ -583,6 +584,7 @@ class User extends Component {
                 content = (<Throbber/>);
                 break;
         }
+        console.log(this.props.users);
         return (
             <Aux>
                 <Header

@@ -10,24 +10,28 @@ import Throbber from '../../components/ui/Throbber/Throbber';
 
 class Load extends Component {
     state = {
-        loading: true
+        path: this.props.location.state.store === 'deck' ? '/0/deck/' + this.props.location.state.data.id : '/2/user'
     }
 
     componentDidMount () {
-        this.props.add_async('deck', this.props.select_authToken, this.props.location.state.data);
-    }
-
-    componentDidUpdate(prevProps, prevState) {
-        if (!this.props.select_isLoading) {
-            this.setState({loading: this.props.select_isLoading});
+        switch (this.props.location.state.store) {
+            case 'deck':
+                this.props.add_async('deck', this.props.select_authToken, this.props.location.state.data);
+                break;
+            case 'user':
+                this.props.getAllUsers_async(this.props.select_authToken, this.props.select_authUser);
+                break;
+            default:
+                break;
         }
+        
     }
 
     render () {
-        console.log(this.props);
+        console.log(this.props.select_decksIsLoading);
         let content = (<Throbber/>);
-        if (!this.state.loading) {
-            content = <Redirect to={'/0/deck/' + this.props.location.state.data.id}/>
+        if (this.props.location.state.store === 'deck' ? !this.props.select_decksIsLoading : !this.props.select_usersIsLoading) {
+            content = <Redirect to={this.state.path}/>
         }
         return (
             <main>
@@ -40,16 +44,19 @@ class Load extends Component {
 }
 
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
         select_authToken: select.authToken(state),
-        select_isLoading: select.decksIsLoading(state)
+        select_authUser: select.authUser(state),
+        select_decksIsLoading: select.decksIsLoading(state),
+        select_usersIsLoading: select.userIsLoading(state)
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        add_async: (store, token, items) => dispatch(actions.add_async(store, token, items))
+        add_async: (store, token, items) => dispatch(actions.add_async(store, token, items)),
+        getAllUsers_async: (token, user) => dispatch(actions.getAllUsers_async(token, user))
     };
 };
 
