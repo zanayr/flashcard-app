@@ -14,7 +14,7 @@ const tagField2 = (props) => {
                     maxLength={24}
                     minLength={3}
                     name='tag'
-                    pattern={'[a-zA-z0-9 ]+'}
+                    pattern={'[a-zA-z0-9 -]+'}
                     placeholder={props.label}
                     required
                     type='text'

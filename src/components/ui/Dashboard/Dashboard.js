@@ -3,8 +3,7 @@ import React from 'react';
 import CircleButton from '../button/Circle/CircleButton';
 import IconButton from '../button/Icon/IconButton';
 
-import AppCSS from '../../../App.module.css';
-import DashboardCSS from './Dashboard.module.css';
+import styles from './Dashboard.module.css';
 
 const dashboard = (props) => {
     const handle_onAccountClicked = () => {
@@ -15,13 +14,13 @@ const dashboard = (props) => {
 
         props.onNavigation(1);
     }
+    console.log(props.data);
     return (
-        <div className={DashboardCSS.Dashboard}>
-            <div className={[AppCSS.Inner, DashboardCSS.Inner].join(' ')}>
-                <div className={DashboardCSS.Account}>
-                    <h6 className={DashboardCSS.Account_Name}>Ryan Fickencher</h6>
+        <div className={styles.Dashboard}>
+            <div className={styles.Inner}>
+                <div className={styles.Account}>
+                    <h6 className={styles.Account_Name}>{props.data.primary} {props.data.secondary}</h6>
                 </div>
-                <CircleButton onClick={handle_onAccountClicked}>RF</CircleButton>
                 <IconButton onClick={handle_onNavigationClicked}>N</IconButton>
             </div>
         </div>

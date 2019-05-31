@@ -97,7 +97,7 @@ export const authSignUp_async = (cred) => {
         axios.post(url, data)
         .then(response => {
             const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
-            const user = create.userViewModel(response.data.localId, {info: cred});
+            const user = create.userModel(create.userViewModel(response.data.localId, {info: cred}));
             localStorage.setItem('token', response.data.idToken);
             localStorage.setItem('expiration', expirationDate);
             localStorage.setItem('user', response.data.localId);

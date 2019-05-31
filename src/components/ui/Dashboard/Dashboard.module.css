@@ -2,7 +2,7 @@
     height: 100%;
     max-width: 256px;
     margin-right: -16px;
-    width: 66vw;
+    width: auto;
 }
 .Dashboard > .Inner {
     align-items: center;
