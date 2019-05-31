@@ -37,6 +37,7 @@ class Header extends Component {
     };
 
     handle_onSelectedMerge = () => {
+        console.log('here');
         this.props.displayModal_async(
             modalTypes.RESPONSE,
             'What would you like to name the new merged deck?',
@@ -64,9 +65,7 @@ class Header extends Component {
                 aux1 = (
                     <IconButton
                         disabled={!(this.props.selected.length > 1)}
-                        onClick={this.handle_onSelectedMerge}>
-                        M
-                    </IconButton>
+                        onClick={this.handle_onSelectedMerge}>M</IconButton>
                 );
                 aux2 = (
                     <IconButton
