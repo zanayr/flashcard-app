@@ -95,10 +95,8 @@ class InspectAside extends Component {
         }
     }
     render () {
-        if (this.props.path === 'deck' && this.props.data.data.tag.includes('$create')) {
-            console.log('here');
-        }
         let aux = null;
+        let flag = null;
         let path = '';
         if (this.props.path.length) {
             switch (this.props.path) {
@@ -130,6 +128,16 @@ class InspectAside extends Component {
             }
             
         }
+        console.log(this.props.data.data.hasOwnProperty('flag'));
+        if (this.props.data.data.hasOwnProperty('flag')) {
+            flag = (
+                <div className={styles.Middle}>
+                    <div>
+                        <Button onClick={this.props.actions.flag}>Flag Card</Button>
+                    </div>
+                </div>
+            );
+        }
         return (
             <aside className={[styles.Aside].join(' ')}>
                 <div>
@@ -138,6 +146,7 @@ class InspectAside extends Component {
                         labels={this.props.data.labels}
                         onChange={this.handle_onChange}
                         onConfirm={this.props.actions.confirm}/>
+                    {flag}
                     <div className={styles.Footer}>
                         <div>
                             <Button

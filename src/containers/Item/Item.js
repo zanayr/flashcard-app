@@ -344,10 +344,10 @@ class Item extends Component {
         }, {
             group: this.props.select_user.group,
             labels: {
-                aux: 'Add More',
+                aux: 'Add Cards',
                 confirm: 'Confirm',
-                primary: 'Title',
-                secondary: 'Details'
+                primary: 'Front',
+                secondary: 'Back'
             },
             item: data.item,
             id: data.item.id,

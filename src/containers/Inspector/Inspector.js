@@ -321,6 +321,12 @@ class Inspector extends Component {
         });
         this._clearFilter();
     }
+    handle_onItemFlag = () => {
+        const item = this.state.aside.data.data;
+        item.flag = !item.flag;
+        this._setManyItems([item]);
+        this._updateItem_async(item);
+    }
     //  PRIVATE METHODS  =========================================  PRIVATE METHODS  //
     //  Aside  ----------------------------------------------------------  Aside PM  //
     _openFilterAside () {
@@ -346,14 +352,15 @@ class Inspector extends Component {
             cancel: this.handle_onAsideClose,
             change: this.handle_onItemChange,
             confirm: data.confirm,
+            flag: this.handle_onItemFlag,
             overlay: data.overlay
         }, {
             group: this.props.select_user.group,
             labels: {
-                aux: 'Add More',
+                aux: 'Add Cards',
                 confirm: 'Confirm',
-                primary: 'Title',
-                secondary: 'Details'
+                primary: 'Front',
+                secondary: 'Back'
             },
             data: data.item,
             id: this.state.collection.id,
@@ -747,6 +754,7 @@ class Inspector extends Component {
                     <List2
                         action={this.handle_onListClick}
                         collection={utility.sortBy(this.state.sort, this.state.items)}
+                        default={{primary: 'Front', secondary: 'Back'}}
                         filters={this.state.filter}
                         current={this.state.current}
                         selected={this.state.selected}

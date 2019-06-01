@@ -339,7 +339,7 @@ class Collections extends Component {
         }, {
             group: this.props.select_user.group,
             labels: {
-                aux: 'Add More',
+                aux: 'Add Cards',
                 confirm: 'Confirm',
                 primary: 'Title',
                 secondary: 'Details'
