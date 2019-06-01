@@ -790,7 +790,7 @@ class Collections extends Component {
                     state={headerTypes.COLLECTION}
                     onClick={this.handle_onDefaultClick}/>
                 <main
-                    className={styles.Main}
+                    className={styles.Collection}
                     onClick={this.handle_onDefaultClick}>
                     <div>
                         <TabBar
