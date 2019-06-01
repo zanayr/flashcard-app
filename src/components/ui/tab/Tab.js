@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import styles from './Tab.module.css';
 
 
-class QuickTab2 extends Component {
+class Tab extends Component {
     shouldComponentUpdate (nextProps, nextState) {
         return (nextProps.active !== this.props.active);
     }
@@ -18,7 +18,7 @@ class QuickTab2 extends Component {
     }
 
     render () {
-        let css = [styles.Quick];
+        let css = [styles.Tab];
         let close = null;
         if (this.props.active) {
             css.push(styles.Active);
@@ -47,4 +47,4 @@ class QuickTab2 extends Component {
 }
 
 
-export default QuickTab2;
+export default Tab;

@@ -5,7 +5,7 @@ import * as actions from '../../../store/actions/index';
 import * as select from '../../../store/reducers/root';
 
 import Aux from '../../../hoc/Aux/Aux';
-import TextField2 from '../../ui/input/Field/TextField2';
+import CountingTextField from '../../ui/input/Field/CountingTextField';
 import Textarea2 from '../../ui/input/TextArea/Textarea2';
 import Button from '../../ui/button/Button/Button';
 
@@ -60,7 +60,7 @@ class CreateForm extends Component {
                     ref={this.basicsForm}>
                     <div>
                         <h3>Basic Info</h3>
-                        <TextField2
+                        <CountingTextField
                             config={{
                                 autoComplete: 'off',
                                 label: 'First',
@@ -72,7 +72,7 @@ class CreateForm extends Component {
                             required
                             value={this.state.primary}
                             onChange={(value) => this.hanlde_onUserChange('primary', value)}/>
-                        <TextField2
+                        <CountingTextField
                             config={{
                                 autoComplete: 'off',
                                 label: 'Last',
@@ -86,7 +86,7 @@ class CreateForm extends Component {
                             onChange={(value) => this.hanlde_onUserChange('secondary', value)}/>
                         <h3>Account Info</h3>
                         {/*  Privilage Level  */}
-                        <TextField2
+                        <CountingTextField
                             config={{
                                 autoComplete: 'off',
                                 label: 'Account Email',
@@ -98,7 +98,7 @@ class CreateForm extends Component {
                             required
                             value={this.state.email}
                             onChange={(value) => this.hanlde_onUserChange('email', value)}/>
-                        <TextField2
+                        <CountingTextField
                             config={{
                                 autoComplete: 'off',
                                 label: 'User Name',

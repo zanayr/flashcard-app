@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import * as utility from '../../../utility/utility';
 
 import Aux from '../../../hoc/Aux/Aux';
-import TagField2 from '../../ui/input/Tag/TagField2';
+import CountingTextField from '../../ui/input/Field/CountingTextField';
 import TagEditor from '../../ui/input/Tag/TagEditor';
 import SelectTag from '../../ui/Tag/SelectTag';
 import Button from '../../ui/button/Button/Button';
@@ -59,7 +59,7 @@ class PinnableTagForm extends Component {
                         })}
                     </div>
                 </div>
-                <TagField2
+                <CountingTextField
                     label={'new ' + this.props.category}
                     tabIndex={-1}
                     value={this.state.value}
@@ -70,9 +70,9 @@ class PinnableTagForm extends Component {
                         onClick={this.handle_onConfirm}>
                         +
                     </Button>
-                </TagField2>
+                </CountingTextField>
             </Aux>
-        )
+        );
         let toggle = null;
         if (this.props.state) {
             content = (
@@ -96,16 +96,14 @@ class PinnableTagForm extends Component {
             )
         }
         return (
-            <Aux>
-                <form
-                    className={styles.TagForm2}
-                    ref={this.props.reference}>
-                    <div>
-                        {content}
-                        {toggle}
-                    </div>
-                </form>
-            </Aux>
+            <form
+                className={styles.TagForm2}
+                ref={this.props.reference}>
+                <div>
+                    {content}
+                    {toggle}
+                </div>
+            </form>
         );
     }
 }

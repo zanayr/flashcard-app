@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import * as utility from '../../../utility/utility';
 
-import TagField2 from '../../ui/input/Tag/TagField2';
+import CountingTextField from '../../ui/input/Field/CountingTextField';
 import SelectTag from '../../ui/Tag/SelectTag';
 import Button from '../../ui/button/Button/Button';
 
 import styles from './TagForm.module.css';
 
 
-class TagForm2 extends Component {
+class TagFormPlus extends Component {
     state = {
         state: false,
         value: ''
@@ -86,9 +86,15 @@ class TagForm2 extends Component {
                         })}
                     </div>
                 </div>
-                <TagField2
-                    label={'new ' + this.props.category}
-                    tabIndex={-1}
+                <CountingTextField
+                    config={{
+                        autoComplete: 'off',
+                        label: 'new ' + this.props.category,
+                        maxLength: 24,
+                        minLength: 3,
+                        name: 'tag',
+                        tabIndex: this.props.tabIndex
+                    }}
                     value={this.state.value}
                     onChange={this.handle_onChange}>
                     <Button
@@ -97,7 +103,7 @@ class TagForm2 extends Component {
                         onClick={this.handle_onConfirm}>
                         +
                     </Button>
-                </TagField2>
+                </CountingTextField>
                 </div>
             </form>
         );
@@ -105,4 +111,4 @@ class TagForm2 extends Component {
 }
 
 
-export default TagForm2;
+export default TagFormPlus;

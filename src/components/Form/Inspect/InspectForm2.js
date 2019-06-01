@@ -5,7 +5,7 @@ import * as actions from '../../../store/actions/index';
 import * as select from '../../../store/reducers/root';
 
 import Aux from '../../../hoc/Aux/Aux';
-import TextField2 from '../../ui/input/Field/TextField2';
+import CountingTextField from '../../ui/input/Field/CountingTextField';
 import Textarea2 from '../../ui/input/TextArea/Textarea2';
 import TagFormPlus from '../Tag/TagFormPlus';
 
@@ -220,7 +220,7 @@ class InspectForm2 extends Component {
                     className={styles.Basics}
                     ref={this.basicsForm}>
                     <div>
-                        <TextField2
+                        <CountingTextField
                             config={{
                                 autoComplete: 'off',
                                 label: this.props.labels.primary,
@@ -232,7 +232,7 @@ class InspectForm2 extends Component {
                             required
                             value={this.state.item.primary}
                             onChange={(value) => this.handle_onCardChange('primary', value)}/>
-                        <TextField2
+                        <CountingTextField
                             config={{
                                 autoComplete: 'off',
                                 label: this.props.labels.secondary,

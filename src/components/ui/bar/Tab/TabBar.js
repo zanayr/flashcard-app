@@ -3,7 +3,7 @@ import React from 'react';
 import * as sortTypes from '../../../../utility/sortTypes';
 import * as utility from '../../../../utility/utility';
 
-import QuickTab2 from '../../tab/QuickTab2';
+import Tab from '../../tab/Tab';
 
 import styles from '../Bar.module.css';
 
@@ -28,19 +28,19 @@ const tabBar = (props) => {
     let all = null;
     tabs = utility.sortBy(sortTypes.DATE_DSC, props.collection).map(tab => {
         return (
-            <QuickTab2
+            <Tab
                 active={props.active === tab.id}
                 delete
                 key={tab.id}
                 onClick={() => handle_onSelect(tab)}
                 onClose={() => handle_onDelete(tab)}>
                 {tab.name}
-            </QuickTab2>
+            </Tab>
         );
     });
     if (tabs.length) {
         all = (
-            <QuickTab2
+            <Tab
                 active={props.active === 'all'}
                 key={'all'}
                 onClick={() => handle_onSelect({
@@ -49,7 +49,7 @@ const tabBar = (props) => {
                     tag: []
                 })}>
                 All
-            </QuickTab2>
+            </Tab>
         );
     }
 

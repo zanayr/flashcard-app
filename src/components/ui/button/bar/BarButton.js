@@ -10,6 +10,7 @@ const barButton = (props) => {
     return (
         <button
             className={[style.Bar, props.className].join(' ')}
+            disabled={props.disabled}
             onClick={(e) => {handle_onClick(e)}}>
             {props.children}
         </button>

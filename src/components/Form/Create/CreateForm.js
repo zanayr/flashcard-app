@@ -7,7 +7,7 @@ import * as select from '../../../store/reducers/root';
 import * as utility from '../../../utility/utility';
 
 import Aux from '../../../hoc/Aux/Aux';
-import TextField2 from '../../ui/input/Field/TextField2';
+import CountingTextField from '../../ui/input/Field/CountingTextField';
 import Textarea2 from '../../ui/input/TextArea/Textarea2';
 import Button from '../../ui/button/Button/Button';
 import PinnableTagForm from '../Tag/PinnableTagForm';
@@ -297,7 +297,7 @@ class CreateForm extends Component {
                     className={styles.Basics}
                     ref={this.basicsForm}>
                     <div>
-                        <TextField2
+                        <CountingTextField
                             config={{
                                 autoComplete: 'off',
                                 label: 'Front',
@@ -309,7 +309,7 @@ class CreateForm extends Component {
                             required
                             value={this.state.card.primary}
                             onChange={(value) => this.handle_onCardChange('primary', value)}/>
-                        <TextField2
+                        <CountingTextField
                             config={{
                                 autoComplete: 'off',
                                 label: 'Back',

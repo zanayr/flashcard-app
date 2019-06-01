@@ -1,9 +1,10 @@
 .Collection {
-    background-color: var(--gray);
+    background-color: var(--white);
     height: 100%;
     z-index: 0;
 }
 .Collection > div {
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    padding-top: 64px;
 }

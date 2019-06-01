@@ -1,3 +1,53 @@
+/* Field */
+.Field {
+    margin-bottom: 8px;
+    width: 100%;
+}
+.Field > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.Field label {
+    left: 0px;
+    position: absolute;
+    top: 0px;
+    visibility: hidden;
+    z-index: -1;
+}
+/* Field Input */
+.Field input {
+    color: var(--primary);
+    display: block;
+    flex-grow: 1;
+    font-size: 15px;
+    height: 24px;
+}
+.Field input::placeholder {
+    color: var(--primary);
+    text-transform: capitalize;
+}
+.Field input:focus {
+    outline: none;
+}
+/* Field Counter */
+.Counter {
+    align-items: center;
+    background-color: var(--white);
+    display: flex;
+    flex-direction: column;
+    height: 24px;
+    justify-content: center;
+    margin-left: 8px;
+    width: 24px;
+}
+.Counter p {
+    color: var(--primary);
+    font-size: 7px;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+} 
+
 /* Search */
 .Search {
     background-color: var(--white);

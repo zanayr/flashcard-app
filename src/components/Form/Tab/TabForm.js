@@ -6,8 +6,8 @@ import * as create from '../../../store/models/models';
 import * as select from '../../../store/reducers/root';
 import * as utility from '../../../utility/utility';
 
-import TextField2 from '../../ui/input/Field/TextField2';
-import Button from '../../ui/button/Button/Button';
+import CountingTextField from '../../ui/input/Field/CountingTextField';
+import BarButton from '../../ui/button/Bar/BarButton';
 import TagFormPlus from '../../form/Tag/TagFormPlus';
 
 import styles from './TabForm.module.css';
@@ -112,6 +112,7 @@ class TabForm extends Component {
     }
 
     render () {
+        console.log(this.state.valid);
         return (
             <div
                 className={styles.TabForm}
@@ -119,10 +120,10 @@ class TabForm extends Component {
                 <div>
                     <form ref={this.nameForm}>
                         <div>
-                        <TextField2
+                        <CountingTextField
                             config={{
                                 autoComplete: 'off',
-                                label: 'Name',
+                                label: 'name',
                                 maxLength: 24,
                                 minLength: 3,
                                 name: 'name',
@@ -137,7 +138,7 @@ class TabForm extends Component {
                         category={'tag'}
                         collection={this.props.tag}
                         selected={this.state.tag}
-                        tabIndex={4}
+                        tabIndex={2}
                         reference={this.tagForm}
                         onConfirm={(tag) => this.handle_onTagCreate('tag', tag)}
                         onSelect={this.handle_onTagToggle}
@@ -146,17 +147,18 @@ class TabForm extends Component {
                         category={'group'}
                         collection={this.props.group}
                         selected={this.state.group}
-                        tabIndex={5}
+                        tabIndex={3}
                         reference={this.groupForm}
                         onConfirm={(group) => this.handle_onTagCreate('group', group)}
                         onSelect={this.handle_onTagToggle}
                         onToggle={() => this.handle_onStateToggle('group')}/>
-                    <Button
+                    <BarButton
+                        className={styles.Add}
                         disabled={!this.state.valid.name || !this.state.valid.tag}
-                        tabIndex={6}
+                        tabIndex={4}
                         onClick={this.handle_onFormConfirm}>
                         Add
-                    </Button>
+                    </BarButton>
                 </div>
             </div>
         );
