@@ -1,29 +1,43 @@
-.QuickTab {
-    background-color: indigo;
-    height: 32px;
+.Quick {
+    background-color: var(--gray);
+    border: solid 1px var(--darkgray);
+    border-bottom: none;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
     cursor: pointer;
+    height: 32px;
     max-width: 128px;
     min-width: 64px;
     padding: 4px;
 }
-.QuickTab.Active {
-    background-color: green;
+.Quick.Active {
+    background-color: var(--white);
+    border: none;
 }
-.QuickTab > div {
+.Quick > div {
     align-items: center;
     display: flex;
     flex-direction: row;
     height: 100%;
     justify-content: center;
 }
+.Quick p span {
+    color: var(--black);
+    font-size: 13px;
+    text-align: center;
+}
+.Quick.Active p span {
+    color: var(--primary);
+}
 
 
-.QuickTab:hover button.RemoveButton {
+
+.Quick:hover button.Remove {
     display: block;
 }
-button.RemoveButton {
+button.Remove {
     background-color: transparent;
-    color: white;
+    color: var(--primary);
     display: none;
     position: absolute;
     right: 0px;
@@ -33,5 +47,5 @@ button.RemoveButton {
 }
 
 .WithRemove p {
-    padding-right: 24px;
+    padding: 0px 24px 0px 16px;
 }

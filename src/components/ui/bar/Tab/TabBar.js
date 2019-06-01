@@ -60,12 +60,12 @@ const tabBar = (props) => {
             <div>
                 {all}
                 {tabs}
-                <div className={[styles.QuickTab, styles.AddTab].join(' ')}>
+                <div className={styles.Add}>
                     <div>
                         <button
                             disabled={Object.keys(props.collection).length >= 12}
                             onClick={(e) => handle_onAdd(e)}>
-                            Add
+                            +
                         </button>
                     </div>
                 </div>

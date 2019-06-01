@@ -18,7 +18,7 @@ class QuickTab2 extends Component {
     }
 
     render () {
-        let css = [styles.QuickTab];
+        let css = [styles.Quick];
         let close = null;
         if (this.props.active) {
             css.push(styles.Active);
@@ -27,7 +27,7 @@ class QuickTab2 extends Component {
             css.push(styles.WithRemove);
             close = (
                 <button
-                    className={styles.RemoveButton}
+                    className={styles.Remove}
                     onClick={(e) => this.handle_onTabClose(e)}>
                     x
                 </button>
