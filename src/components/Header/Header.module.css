@@ -17,3 +17,10 @@
     margin: 0px -4px;
     padding: 0px 16px;
 }
+.Toolbar {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: space-between;
+}

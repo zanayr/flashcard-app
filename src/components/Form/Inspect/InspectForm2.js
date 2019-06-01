@@ -7,7 +7,7 @@ import * as select from '../../../store/reducers/root';
 import Aux from '../../../hoc/Aux/Aux';
 import TextField2 from '../../ui/input/Field/TextField2';
 import Textarea2 from '../../ui/input/TextArea/Textarea2';
-import TagForm2 from '../Tag/TagForm2';
+import TagFormPlus from '../Tag/TagFormPlus';
 
 import styles from './InspectForm.module.css';
 
@@ -192,7 +192,7 @@ class InspectForm2 extends Component {
         
         if (!this.state.reset) {
             tagForm = (
-                <TagForm2
+                <TagFormPlus
                     category={'tag'}
                     collection={this.state.tag}
                     selected={this.state.item.tag}
@@ -203,7 +203,7 @@ class InspectForm2 extends Component {
                     onToggle={() => this.handle_onStateToggle('tag')}/>
             );
             groupForm = (
-                <TagForm2
+                <TagFormPlus
                     category={'group'}
                     collection={this.state.group}
                     selected={this.state.item.group}

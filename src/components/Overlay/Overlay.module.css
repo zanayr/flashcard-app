@@ -1,8 +1,8 @@
-.Overlay {
-    background-color: rgba(0, 0, 255, 0.25);
+/* Aside */
+.AsideOverlay {
+    background-color: transparent;
     bottom: 0px;
     left: 0px;
-    opacity: 0.66;
     position: fixed;
     right: 0px;
     top: 0px;

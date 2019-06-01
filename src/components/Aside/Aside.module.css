@@ -1,12 +1,12 @@
+/* Component */
 .Aside {
-    background-color: gold;
+    background-color: var(--white);
     bottom: 0px;
     left: auto;
-    max-width: 256px;
+    max-width: 252px;
     position: fixed;
     right: 0px;
     top: 64px;
-    transition: right 0.666s ease;
     width: 66vw;
     z-index: 97;
 }
@@ -14,19 +14,48 @@
     height: 100%;
 }
 
-.Aside .Footer {
+/* Aside Footer */
+.Footer {
     bottom: 0px;
     left: 0px;
     position: absolute;
     width: 100%;
 }
-.Aside .Footer > div {
+.Footer > div {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
 }
-.Aside .Footer > div button:first-of-type {
+.Footer .Confirm {
     flex-grow: 1;
+}
+.Footer .Cancel {
+    background-color: var(--accent);
+    border-radius: 0;
+    color: var(--black);
+}
+
+/* Filter Aside */
+.FilterHeader {
+    background-color: red;
+    height: 32px;
+}
+.FilterHeader > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 100%;
+}
+.FilterHeader button {
+    background-color: var(--gray);
+    color: var(--black);
+    font-size: 11px;
+    flex-grow: 1;
+    height: 100%;
+}
+.FilterHeader button.Active {
+    background-color: var(--primary);
+    color: var(--white);
 }
 
 

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import * as utility from '../../../utility/utility';
 
 import TagField2 from '../../ui/input/Tag/TagField2';
-import Tag2 from '../../ui/Tag/Tag2';
+import SelectTag from '../../ui/Tag/SelectTag';
 import Button from '../../ui/button/Button/Button';
 
 import styles from './TagForm.module.css';
@@ -76,12 +76,12 @@ class TagForm2 extends Component {
                     <div>
                         {utility.sortByAlpha_asc(this.props.collection).map((tag, i) => {
                             return (
-                                <Tag2
+                                <SelectTag
                                     key={utility.createHashId(i)}
                                     selected={this.props.selected.includes(tag)}
                                     onToggle={(tag) => this.props.onSelect(this.props.category, tag)}>
                                     {tag}
-                                </Tag2>
+                                </SelectTag>
                             )
                         })}
                     </div>

@@ -11,7 +11,7 @@ const iconButton = (props) => {
     return (
         <button
             disabled={props.disabled}
-            className={styles.Icon}
+            className={[styles.Icon].concat(props.className).join(' ')}
             onClick={(e) => handle_onClicked(e)}>
             {props.children}
         </button>

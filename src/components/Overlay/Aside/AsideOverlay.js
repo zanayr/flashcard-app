@@ -1,9 +1,8 @@
 import React from 'react';
 
-import AppCSS from '../../../App.module.css';
-import overlayCSS from '../Overlay.module.css';
+import styles from '../Overlay.module.css';
 
-const overlay = (props) => {
+const asideOverlay = (props) => {
     const handle_onClick = (e) => {
         e.stopPropagation();
         props.action();
@@ -14,7 +13,7 @@ const overlay = (props) => {
     }
     return (
         <div
-            className={overlayCSS.Overlay}
+            className={styles.AsideOverlay}
             onClick={(e) => handle_onClick(e)}>
             <div>
             </div>
@@ -22,4 +21,4 @@ const overlay = (props) => {
     );
 }
 
-export default overlay;
+export default asideOverlay;

@@ -29,7 +29,7 @@ class QuickTab2 extends Component {
                 <button
                     className={styles.Remove}
                     onClick={(e) => this.handle_onTabClose(e)}>
-                    x
+                    ⨯
                 </button>
             );
         }

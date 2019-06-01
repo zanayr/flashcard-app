@@ -6,7 +6,7 @@ import * as asideTypes from './asideTypes';
 import AsideOverlay from '../../Overlay/Aside/AsideOverlay';
 import AssignAside from '../Assign/AssignAside';
 import Aux from '../../../hoc/Aux/Aux';
-import FilterAside2 from '../Filter/FilterAside2';
+import FilterAside from '../Filter/FilterAside';
 import InspectAside2 from '../Inspect/InspectAside2';
 import NavigationAside2 from '../Nav/NavAside2';
 import ReportAside from '../Report/ReportAside';
@@ -27,7 +27,7 @@ const aside2 = (props) => {
             break;
         case asideTypes.FILTER:
             aside = (
-                <FilterAside2
+                <FilterAside
                     actions={props.actions}
                     data={props.data}/>
             );

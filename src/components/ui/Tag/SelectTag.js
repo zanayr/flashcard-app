@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './Tag.module.css';
 
 
-const tag2 = (props) => {
+const selectTag = (props) => {
     const handle_onClick = (e) => {
         e.stopPropagation();
         props.onToggle(props.children);
@@ -15,7 +15,7 @@ const tag2 = (props) => {
         css.push(styles.Selected);
     }
     return (
-        <div className={styles.Tag2}>
+        <div className={styles.SelectTag}>
             <span
                 className={css.join(' ')}
                 onClick={(e) => handle_onClick(e)}><p>{props.children.replace('_', ' ')}</p></span>
@@ -24,4 +24,4 @@ const tag2 = (props) => {
 }
 
 
-export default tag2;
+export default selectTag;

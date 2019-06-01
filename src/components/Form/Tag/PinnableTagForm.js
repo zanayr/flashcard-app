@@ -4,7 +4,7 @@ import * as utility from '../../../utility/utility';
 import Aux from '../../../hoc/Aux/Aux';
 import TagField2 from '../../ui/input/Tag/TagField2';
 import TagEditor from '../../ui/input/Tag/TagEditor';
-import Tag2 from '../../ui/Tag/Tag2';
+import SelectTag from '../../ui/Tag/SelectTag';
 import Button from '../../ui/button/Button/Button';
 
 import styles from './TagForm.module.css';
@@ -48,13 +48,13 @@ class PinnableTagForm extends Component {
                     <div>
                         {utility.sortByAlpha_asc(this.props.collection).map((tag, i) => {
                             return (
-                                <Tag2
+                                <SelectTag
                                     key={utility.createHashId(i)}
                                     pinned={this.props.pinned.includes(tag)}
                                     selected={this.props.selected.includes(tag)}
                                     onToggle={(tag) => this.props.onSelect(this.props.category, tag)}>
                                     {tag}
-                                </Tag2>
+                                </SelectTag>
                             )
                         })}
                     </div>

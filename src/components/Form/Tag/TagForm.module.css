@@ -1,16 +1,22 @@
-.TagForm2 {
+.TagFormPlus {
     height: 43px;
 }
 
-.TagForm2 > div {
+.TagFormPlus > div {
     height: 100%;
 }
-.TagForm,
-.TagBar {
+
+/* Tag Form */
+.TagForm {
     width: 100%;
 }
-.TagForm > div,
-.TagBar > div {
+.TagForm > div {
+    padding: 16px;
+}
+.Container {
+    width: 100%;
+}
+.Container > div {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;

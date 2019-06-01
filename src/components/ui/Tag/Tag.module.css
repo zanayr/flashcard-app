@@ -1,23 +1,3 @@
-/* .Tag {
-    background-color: lightslategray;
-    cursor: pointer;
-    display: inline-block;
-    height: 28px;
-    margin: 4px;
-    width: auto;
-}
-.Tag.Active {
-    background-color: darkslategray;
-    color: white;
-}
-.Tag > div {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding: 4px;
-} */
-
 .Tag {
     min-width: 32px;
     padding-bottom: 4px;
@@ -41,66 +21,39 @@
 }
 
 
-/* Button */
-/* .Tab > div button {
-    display: none;
-    height: 28px;
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    width: 28px;
-}
-.Tab:hover > div button {
-    display: block;
-} */
-
-
-.Tag2 {
+/* Select Tag */
+.SelectTag {
+    display: inline-block;
     padding-bottom: 4px;
     padding-right: 4px;
 }
-.Tag2 span {
+.SelectTag span {
     align-items: center;
-    background-color: lightslategray;
+    background-color: var(--white);
+    border: solid 1px var(--primary);
     border-radius: 12px;
     cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: center;
+    display: inline-block;
     padding: 4px 8px;
-    width: 100%;
+    text-align: center;
 }
-.Tag2 span p {
-    font-size: 9px;
+.SelectTag span p {
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 0.06em;
     text-transform: capitalize;
     user-select: none;
 }
-
-.Tag2 span.Selected {
-    background-color: darkslategray;
-    color: white;
+.SelectTag span.Selected {
+    background-color: var(--primary);
 }
-.Tag2 span.Pinned {
-    background-color: coral;
-    color: white;
+.SelectTag span.Selected p {
+    color: var(--white);
 }
-
-/*  DISPLAY TAG  */
-/* .DisplayTag {
-    padding-bottom: 4px;
-    padding-right: 4px;
+.SelectTag span.Pinned {
+    background-color: var(--accent);
 }
-.DisplayTag span {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: center;
-    width: 100%;
+.SelectTag span.Pinned p {
+    color: var(--black);
 }
-.DisplayTag span p {
-    color: coral;
-    font-size: 9px;
-    user-select: none;
-} */

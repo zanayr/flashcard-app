@@ -8,7 +8,7 @@ import * as utility from '../../../utility/utility';
 
 import TextField2 from '../../ui/input/Field/TextField2';
 import Button from '../../ui/button/Button/Button';
-import TagForm2 from '../../form/Tag/TagForm2';
+import TagFormPlus from '../../form/Tag/TagFormPlus';
 
 import styles from './TabForm.module.css';
 
@@ -133,7 +133,7 @@ class TabForm extends Component {
                             onChange={(value) => this.handle_onNameChange(value)}/>
                         </div>
                     </form>
-                    <TagForm2
+                    <TagFormPlus
                         category={'tag'}
                         collection={this.props.tag}
                         selected={this.state.tag}
@@ -142,7 +142,7 @@ class TabForm extends Component {
                         onConfirm={(tag) => this.handle_onTagCreate('tag', tag)}
                         onSelect={this.handle_onTagToggle}
                         onToggle={() => this.handle_onStateToggle('tag')}/>
-                    <TagForm2
+                    <TagFormPlus
                         category={'group'}
                         collection={this.props.group}
                         selected={this.state.group}

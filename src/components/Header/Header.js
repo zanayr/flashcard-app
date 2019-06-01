@@ -90,19 +90,21 @@ class Header extends Component {
                 onClick={(e) => this.handle_onClick(e)}>
                 <div>
                     <ReturnLink/>
-                    <Search onChange={this.props.actions.search}/>
-                        <Toolbar>
-                            <IconButton onClick={this.props.actions.filter}>F</IconButton>
-                            <IconButton
-                                disabled={!this.props.selected.length}
-                                onClick={this.handle_onSelectedDelete}>D</IconButton>
-                            {aux1}
-                            {aux2}
-                            <IconButton onClick={() => this.props.actions.sort(0)}>AA</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(1)}>AD</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(2)}>DA</IconButton>
-                            <IconButton onClick={() => this.props.actions.sort(3)}>DD</IconButton>
-                        </Toolbar>
+                        <div className={styles.Toolbar}>
+                            <Search onChange={this.props.actions.search}/>
+                            <Toolbar>
+                                <IconButton onClick={this.props.actions.filter}>F</IconButton>
+                                <IconButton
+                                    disabled={!this.props.selected.length}
+                                    onClick={this.handle_onSelectedDelete}>D</IconButton>
+                                {aux1}
+                                {aux2}
+                                <IconButton onClick={() => this.props.actions.sort(0)}>AA</IconButton>
+                                <IconButton onClick={() => this.props.actions.sort(1)}>AD</IconButton>
+                                <IconButton onClick={() => this.props.actions.sort(2)}>DA</IconButton>
+                                <IconButton onClick={() => this.props.actions.sort(3)}>DD</IconButton>
+                            </Toolbar>
+                        </div>
                     <Dashboard
                         data={this.props.select_user}
                         onNavigation={this.props.actions.navigation}/>
