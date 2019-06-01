@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import Button from '../../button/Button/Button';
 
-import styles from './Search.module.css';
+import styles from '../Input.module.css';
 
 class SearchBar extends Component {
     state = {
@@ -22,14 +22,13 @@ class SearchBar extends Component {
             clear = (
                 <Button
                     className={styles.Clear}
-                    onClick={() => this.handle_onChange('')}>x</Button>
+                    onClick={() => this.handle_onChange('')}>⨯</Button>
             );
         }
         return (
             <div className={styles.Search}>
                 <div>
                     <input
-                        className={styles.Search_Bar}
                         type="text"
                         placeholder="Search"
                         value={this.state.value}

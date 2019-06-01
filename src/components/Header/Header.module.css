@@ -1,5 +1,6 @@
+/* Component */
 .Header {
-    background-color: blue;
+    background-color: var(--white);
     left: 0px;
     height: 64px;
     position: fixed;
@@ -7,13 +8,12 @@
     width: 100%;
     z-index: 97;
 }
-
 .Header > div {
     align-items: center;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 0px -4px;
     height: 100%;
+    margin: 0px -4px;
     padding: 0px 16px;
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import iconButtonCSS from './IconButton.module.css';
+import styles from '../Button.module.css';
 
 const iconButton = (props) => {
     const handle_onClicked = (e) => {
@@ -11,7 +11,7 @@ const iconButton = (props) => {
     return (
         <button
             disabled={props.disabled}
-            className={iconButtonCSS.Icon_Button}
+            className={styles.Icon}
             onClick={(e) => handle_onClicked(e)}>
             {props.children}
         </button>

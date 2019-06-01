@@ -6,3 +6,19 @@
     height: 40px;
     width: 40px;
 }
+
+/* Icon Button */
+.Icon {
+    border-radius: 4px;
+    height: 32px;
+    width: 32px;
+}
+.Icon:enabled {
+    background-color: var(--primary);
+    color: var(--white);
+}
+.Icon:disabled {
+    background-color: var(--white);
+    border: solid 1px var(--secondary);
+    color: var(--secondary);
+}

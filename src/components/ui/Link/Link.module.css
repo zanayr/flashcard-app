@@ -1,11 +1,12 @@
-.Return_Link {
+/* Component */
+.Return {
     margin-left: -16px;
 }
 .Inner {
     padding-left: 16px;
 }
-.Return_Link span {
-    background-color: turquoise;
+.Return span {
+    background-color: var(--white);
     display: block;
     height: 64px;
     margin: 0px 4px;

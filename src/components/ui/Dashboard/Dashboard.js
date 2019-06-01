@@ -6,22 +6,17 @@ import IconButton from '../button/Icon/IconButton';
 import styles from './Dashboard.module.css';
 
 const dashboard = (props) => {
-    const handle_onAccountClicked = () => {
-        //  Go to Account Page
-        console.log("Routing to account page...");
-    }
     const handle_onNavigationClicked = () => {
 
         props.onNavigation(1);
     }
-    console.log(props.data);
     return (
         <div className={styles.Dashboard}>
-            <div className={styles.Inner}>
+            <div>
                 <div className={styles.Account}>
-                    <h6 className={styles.Account_Name}>{props.data.primary} {props.data.secondary}</h6>
+                    <h6 className={styles.Name}>{props.data.primary} {props.data.secondary}</h6>
                 </div>
-                <IconButton onClick={handle_onNavigationClicked}>N</IconButton>
+                <IconButton onClick={handle_onNavigationClicked}>☰</IconButton>
             </div>
         </div>
     );
