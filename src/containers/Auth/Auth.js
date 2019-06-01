@@ -2,10 +2,8 @@ import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
-import * as create from '../../store/models/models';
 import * as select from '../../store/reducers/root';
 
-import Aux from '../../hoc/Aux/Aux';
 import Button from '../../components/ui/button/Button/Button';
 import SignUpForm from '../../components/form/Auth/SignUpForm';
 import SignInForm from '../../components/form/Auth/SignInForm';

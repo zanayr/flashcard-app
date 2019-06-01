@@ -1,0 +1,17 @@
+/* Page */
+.In {
+    background-color: var(--primary);
+    height: 100%;
+}
+.In > div {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+}
+
+/* Throbber */
+.Throbber {
+    color: var(--white);
+}

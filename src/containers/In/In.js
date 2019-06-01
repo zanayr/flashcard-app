@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import {Redirect} from 'react-router-dom';
+
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
 import * as select from '../../store/reducers/root';
 
-import Aux from '../../hoc/Aux/Aux';
+import {Redirect} from 'react-router-dom';
 import Throbber from '../../components/ui/Throbber/Throbber';
+
+import styles from './In.module.css';
 
 
 class In extends Component {
@@ -15,19 +17,9 @@ class In extends Component {
         this.props.getAll_async('deck', this.props.select_authToken, this.props.select_authUser);
     }
 
-    // componentDidUpdate (prevProps, prevState) {
-    //     if (prevProps.select_user !== this.props.select_user) {
-    //         this.props.getAll_async('card', this.props.select_authToken, this.props.select_authUser);
-    //         this.props.getAll_async('deck', this.props.select_authToken, this.props.select_authUser);
-    //         if (this.props.select_user.privilage) {
-    //             this.props.getAllUsers_async(this.props.select_authToken);
-    //         }
-    //     }
-    // }
-
     
     render() {
-        let content = (<Throbber/>);
+        let content = (<Throbber className={styles.Throbber}/>);
         if (!this.props.select_decksIsLoading && !this.props.select_cardsIsLoading && !this.props.select_userIsLoading) {
             if (this.props.select_user.suspend) {
                 content = <Redirect to={{
@@ -42,9 +34,11 @@ class In extends Component {
         }
 
         return (
-            <Aux>
-                {content}
-            </Aux>
+            <main className={styles.In}>
+                <div>
+                    {content}
+                </div>
+            </main>
         )
     }
 }
