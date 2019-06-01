@@ -20,7 +20,7 @@ import Report from './containers/Report/Report';
 import Study from './containers/Study/Study';
 import User from './containers/User/User';
 
-import AppCSS from './App.module.css';
+import styles from './App.module.css';
 
 
 
@@ -68,7 +68,7 @@ class App extends Component {
       );
     }
     return (
-      <div className={AppCSS.App}>
+      <div className={styles.App}>
           {routes}
           {modals}
       </div>

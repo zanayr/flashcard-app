@@ -1,10 +1,91 @@
-main.Auth {
-    background-color: white;
+/* Page */
+.Auth {
+    background-color: var(--primary);
+    height: 100%;
 }
-main.Auth > div {
+.Auth > div {
     align-items: center;
     display: flex;
     flex-direction: column;
     height: 100%;
     justify-content: center;
+}
+
+/* Form */
+.Form {
+    background-color: var(--white);
+    border-radius: 4px;
+    height: auto;
+    min-height: 256px;
+    width: 256px;
+}
+.Form > div {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    padding: 16px;
+}
+
+/* Greeting Message */
+.Form p {
+    border-radius: 4px;
+    color: var(--primary);
+    font-size: 11px;
+    margin-bottom: 32px;
+    padding: 4px;
+}
+p.Error {
+    background-color: var(--accent);
+    color: var(--black);
+}
+
+/* Form Inputs */
+.Form input {
+    border-bottom: solid 1px var(--primary);
+    color: var(--black);
+    font-size: 13px;
+    height: 32px;
+    letter-spacing: 0.04em;
+    margin-bottom: 16px;
+}
+.Form input::placeholder {
+    color: var(--secondary);
+    text-transform: capitalize;
+}
+.Form input:invalid {
+    border-bottom: solid 1px var(--secondary);
+}
+
+/* Form Interface */
+.Interface {
+    height: 32px;
+    margin-top: 32px;
+}
+.Interface > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.Interface button {
+    border-radius: 4px;
+    height: 32px;
+    padding: 8px;
+}
+.Interface button:first-of-type:enabled {
+    background-color: var(--primary);
+    color: var(--white);
+}
+.Interface button:last-of-type {
+    border: 1px solid var(--primary);
+    color: var(--primary);
+}
+.Interface button:first-of-type:disabled{
+    border: 1px solid var(--secondary);
+    color: var(--secondary);
+}
+
+/* Throbber */
+p.Throbber {
+    color: var(--white);
 }

@@ -35,7 +35,9 @@ class Auth extends Component {
                 ...prev.form,
                 [target]: value
             }
-        }));
+        }), () => {
+            this.setValid(this._checkValidity());
+        });
     }
     setValid (valid) {
         this.setState(prev => ({
@@ -52,7 +54,6 @@ class Auth extends Component {
 
 
     _checkValidity () {
-        const email = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         let valid = true;
         if (this.state.state) {
             if (!this.state.form.first.length && valid) {
@@ -61,19 +62,20 @@ class Auth extends Component {
             if (!this.state.form.last.length && valid) {
                 valid = false;
             }
-            if (!this.state.form.email.length && this.state.form.email.match(email) && valid) {
+            if (!this.state.form.email.length && valid) {
                 valid = false;
             }
-            if (!this.state.form.password.length && valid) {
+            if (this.state.form.password.length < 6 && valid) {
                 valid = false;
-            } else if (!this.state.form.password === this.state.form.repeat && valid) {
+            }
+            if (this.state.form.repeat.length < 6 && !(this.state.form.repeat === this.state.form.password) && valid) {
                 valid = false;
             }
         } else {
-            if (!this.state.form.email.length && this.state.form.email.match(email) && valid) {
+            if (!this.state.form.email.length && valid) {
                 valid = false;
             }
-            if (!this.state.form.password.length && valid) {
+            if (this.state.form.password.length < 6 && valid) {
                 valid = false;
             }
         }
@@ -83,7 +85,6 @@ class Auth extends Component {
 
     handle_onChange = (target, value) => {
         this.changeFormValue(target, value);
-        this.setValid(this._checkValidity());
     }
     handle_onConfirmClick = () => {
         if (this.form.current.reportValidity() && this.state.valid) {
@@ -104,6 +105,9 @@ class Auth extends Component {
     render() {
         let form = (null);
         let content = (null);
+        let labels = ['Log In', 'Confirm'];
+        let greeting = 'Please log in or sign up!';
+        let greetingCSS = '';
         if (this.state.state) {
             form = (
                 <SignUpForm
@@ -128,21 +132,38 @@ class Auth extends Component {
                     onChange={this.handle_onChange}/>
             );
         }
+        if (this.props.select_error) {
+            switch (this.props.select_error.code) {
+                case 404:
+                    greeting = 'Opps, bad connection, please try again.';
+                    break;
+                case 400:
+                    greeting = 'Opps, something wasn\'t correct, please try again.';
+                    break;
+                default:
+                    greeting = 'Opps, something went wrong, please try again.';
+                    break;
+            }
+            greetingCSS = styles.Error;
+        }
         content = (
-            <Aux>
-                {form}
+            <div className={styles.Form}>
                 <div>
-                    <div>
-                        <Button
-                            disabled={!this.state.valid}
-                            onClick={this.handle_onConfirmClick}>Confirm</Button>
-                        <Button onClick={this.handle_onFormToggle}>{this.state.toggle[this.state.state]}</Button>
+                    <p className={greetingCSS}>{greeting}</p>
+                    {form}
+                    <div className={styles.Interface}>
+                        <div>
+                            <Button
+                                disabled={!this.state.valid}
+                                onClick={this.handle_onConfirmClick}>{labels[this.state.state]}</Button>
+                            <Button onClick={this.handle_onFormToggle}>{this.state.toggle[this.state.state]}</Button>
+                        </div>
                     </div>
                 </div>
-            </Aux>
+            </div>
         );
         if (this.props.select_authLoading) {
-            content = (<Throbber/>);
+            content = (<Throbber className={styles.Throbber}/>);
         }
         if (this.props.authenticated) {
             content = (<Redirect to="/in"/>);
@@ -162,7 +183,8 @@ const mapStateToProps = state => {
         authenticated: select.authToken(state) !== null,
         select_authToken: select.authToken(state),
         select_authUser: select.authUser(state),
-        select_authLoading: select.authIsLoading(state)
+        select_authLoading: select.authIsLoading(state),
+        select_error: select.authError(state)
     };
 }
 const mapDispatchToProps = dispatch => {

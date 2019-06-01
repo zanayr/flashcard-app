@@ -26,6 +26,7 @@ const signInForm = (props) => {
                     config={{
                         autoComplete: 'off',
                         label: 'password',
+                        minLength: 6,
                         name: 'password',
                         tabIndex: 2,
                         type: 'password'

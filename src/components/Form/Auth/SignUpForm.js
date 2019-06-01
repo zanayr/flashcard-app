@@ -54,7 +54,7 @@ const signUpForm = (props) => {
                         minLength: 6,
                         name: 'password',
                         tabIndex: 2,
-                        type: 'text'
+                        type: 'password'
                     }}
                     key={'password'}
                     required
@@ -67,7 +67,7 @@ const signUpForm = (props) => {
                         minLength: 6,
                         name: 'repeat',
                         tabIndex: 2,
-                        type: 'text'
+                        type: 'password'
                     }}
                     key={'repeat'}
                     required
