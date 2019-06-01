@@ -72,7 +72,7 @@ class TagForm2 extends Component {
                 className={styles.TagForm2}
                 ref={this.props.reference}>
                 <div>
-                <div className={styles.TagBar}>
+                <div className={styles.Container}>
                     <div>
                         {utility.sortByAlpha_asc(this.props.collection).map((tag, i) => {
                             return (

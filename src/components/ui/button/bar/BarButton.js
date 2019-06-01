@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BarButtonCSS from './BarButton.module.css';
+import style from '../Button.module.css';
 
 const barButton = (props) => {
     const handle_onClick = (e) => {
@@ -9,7 +9,7 @@ const barButton = (props) => {
     }
     return (
         <button
-            className={[BarButtonCSS.Bar_Button, BarButtonCSS[props.just]].join(' ')}
+            className={[style.Bar, props.className].join(' ')}
             onClick={(e) => {handle_onClick(e)}}>
             {props.children}
         </button>

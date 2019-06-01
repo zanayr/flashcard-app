@@ -8,8 +8,8 @@ import BarButton from '../../ui/button/Bar/BarButton';
 
 import styles from '../Aside.module.css';
 
-const navigationAside2 = (props) => {
-    const navigationLinks = [
+const navigationAside = (props) => {
+    const links = [
         {
             path: '/report',
             value: 'reports'
@@ -17,19 +17,19 @@ const navigationAside2 = (props) => {
     ];
     switch (props.page) {
         case 'deck':
-            navigationLinks.unshift({
+            links.unshift({
                 path: '/1/card',
                 value: 'cards'
             });
             break;
         case 'card':
-            navigationLinks.unshift({
+            links.unshift({
                 path: '/0/deck',
                 value: 'decks'
             });
             break;
         default:
-            navigationLinks.unshift({
+            links.unshift({
                 path: '/1/card',
                 value: 'cards'
             },
@@ -39,14 +39,15 @@ const navigationAside2 = (props) => {
             });
             break;
     }
-    const navigationButtons = navigationLinks.map((link, i) => {
+    const navigation = links.map((link, i) => {
         return (
             <BarButton
                 key={i}
+                className={styles.Link}
                 onClick={() => {
-                    props.history.replace(navigationLinks[i].path);
+                    props.history.replace(links[i].path);
                 }}>
-                {navigationLinks[i].value}
+                {links[i].value}
             </BarButton>
         );
     });
@@ -54,24 +55,26 @@ const navigationAside2 = (props) => {
     if (props.select_user.privilage) {
         aux = (
             <BarButton
-                    key={'user'}
-                    onClick={() => {
-                        props.init('user');
-                        props.history.replace('/load', {store: 'user'});
-                    }}>
-                    users
-                </BarButton>
+                key={'user'}
+                className={styles.Link}
+                onClick={() => {
+                    props.init('user');
+                    props.history.replace('/load', {store: 'user'});
+                }}>
+                users
+            </BarButton>
         );
     }
     
     return (
-        <nav className={[styles.Aside, styles.Navigation].join(' ')}>
+        <nav className={styles.Navigation}>
             <div>
-                {navigationButtons}
+                {navigation}
                 {aux}
                 <div className={styles.Break}></div>
                 <BarButton
                     key={'out'}
+                    className={styles.Link}
                     onClick={() => {
                         props.history.replace('/out');
                     }}>
@@ -94,4 +97,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(navigationAside2);
+export default connect(mapStateToProps, mapDispatchToProps)(navigationAside);

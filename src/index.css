@@ -12,6 +12,8 @@ html:root {
 html, body, div, header, main, nav, aside, footer,
 input, textarea, button, img, ul, ol,
 h1, h2, h3, h4, h5, h6, label, span, p, a, li {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
   color: var(--black);
   font-family: "Montserrat", "Arial", sans-serif;

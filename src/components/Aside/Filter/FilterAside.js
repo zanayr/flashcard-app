@@ -49,55 +49,16 @@ class FilterAside2 extends Component {
     handle_onTagToggle = (tag) => {
         this.props.actions.toggle(this.state.filter, this.state.dictionary[tag]);
     }
-    // handle_onSelect = (tag) => {
-        
-    //     this.props.actions.toggle(this.state.filter, tag);
-    // }
-    
 
     render () {
         let tagTabCSS = '';
         let groupTabCSS = '';
-        // const dict = {};
-        // this.props.data.all[this.state.filter].forEach(tag => {
-        //     dict[tag.replace('$', '')] = tag;
-        // });
-        // const tagButtons = utility.sortByAlpha_asc(Object.keys(dict)).map((key, i) => {
-        //     let css = [styles.FilterButton];
-        //     let tag = dict[key];
-        //     let name = key.charAt(0).toUpperCase() + key.slice(1).toLowerCase();
-        //     if (this.props.data.filter[this.state.filter].includes(tag)) {
-        //         css.push(styles.Active);
-        //     } else if (this.props.data.tab[this.state.filter].includes(tag)) {
-        //         css.push(styles.Static);
-        //         return (
-        //             <div
-        //                 className={css.join(' ')}
-        //                 key={i + 1}>
-        //                 <div>
-        //                     <p>{name}</p>
-        //                 </div>
-        //             </div>
-        //         );
-        //     }
-        //     return (
-        //         <div
-        //             className={css.join(' ')}
-        //             key={i + 1}
-        //             onClick={() => this.handle_onSelect(tag)}>
-        //             <div>
-        //                 <p>{name}</p>
-        //             </div>
-        //         </div>
-        //     );
-        // });
-
         if (this.state.filter === 'tag') {
             tagTabCSS = styles.Active;
         } else {
             groupTabCSS = styles.Active;
         }
-        
+
         return (
             <aside className={styles.Aside}>
                 <div>
@@ -116,19 +77,11 @@ class FilterAside2 extends Component {
                         disabled={this.props.data.tab[this.state.filter]}
                         selected={this.props.data.filter[this.state.filter]}
                         onToggle={this.handle_onTagToggle}/>
-                    {/* <div className={styles.Content}>
-                        <div>
-                            {tagButtons}
-                        </div>
-                    </div> */}
                     <div className={styles.Footer}>
                         <div>
                             <Button
                                 className={styles.Confirm}
                                 onClick={this.props.actions.confirm}>{this.props.data.labels.confirm}</Button>
-                            <IconButton
-                                className={styles.Cancel}
-                                onClick={this.props.actions.cancel}>⨯</IconButton>
                         </div>
                     </div>
                 </div>

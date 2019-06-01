@@ -8,7 +8,7 @@ import AssignAside from '../Assign/AssignAside';
 import Aux from '../../../hoc/Aux/Aux';
 import FilterAside from '../Filter/FilterAside';
 import InspectAside2 from '../Inspect/InspectAside2';
-import NavigationAside2 from '../Nav/NavAside2';
+import NavigationAside from '../Navigation/NavigationAside';
 import ReportAside from '../Report/ReportAside';
 
 
@@ -49,7 +49,7 @@ const aside2 = (props) => {
         case asideTypes.NAVIGATION:
             aside = (
                 <Aux>
-                    <NavigationAside2
+                    <NavigationAside
                         data={props.data}
                         history={props.history}
                         page={props.page}/>

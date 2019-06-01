@@ -1,5 +1,5 @@
 /* Action */
-Button.Action {
+.Action {
     background-color: var(--accent);
     bottom: 16px;
     color: var(--black);
@@ -7,6 +7,12 @@ Button.Action {
     position: fixed;
     right: 16px;
     z-index: 96;
+}
+
+/* Bar Button */
+.Bar {
+    height: 32px;
+    width: 100%;
 }
 
 /* Icon Button */

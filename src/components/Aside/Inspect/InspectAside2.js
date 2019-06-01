@@ -150,12 +150,15 @@ class InspectAside extends Component {
                     <div className={styles.Footer}>
                         <div>
                             <Button
+                                className={styles.Confirm}
                                 disabled={!this.state.valid.primary || !this.state.valid.secondary}
                                 onClick={this.props.actions.confirm}>
                                 {this.props.data.labels.confirm}
                             </Button>
                             {aux}
-                            <IconButton onClick={this.props.actions.cancel}>x</IconButton>
+                            <IconButton
+                                className={styles.Cancel}
+                                onClick={this.props.actions.cancel}>⨯</IconButton>
                         </div>
                     </div>
                 </div>
