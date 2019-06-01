@@ -1,10 +1,12 @@
-
-.QuickButton {
-    background-color: blue;
-    color: white;
-    border-radius: 20px;
-    height: 40px;
-    width: 40px;
+/* Action */
+Button.Action {
+    background-color: var(--accent);
+    bottom: 16px;
+    color: var(--black);
+    font-size: 13px;
+    position: fixed;
+    right: 16px;
+    z-index: 96;
 }
 
 /* Icon Button */
@@ -21,4 +23,13 @@
     background-color: var(--white);
     border: solid 1px var(--secondary);
     color: var(--secondary);
+}
+
+/* Quick Button */
+.QuickButton {
+    background-color: blue;
+    color: white;
+    border-radius: 20px;
+    height: 40px;
+    width: 40px;
 }

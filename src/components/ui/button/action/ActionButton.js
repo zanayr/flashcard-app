@@ -2,7 +2,7 @@ import React from 'react';
 
 import PillButton from '../Pill/PillButton';
 
-import ActionButtonCSS from './ActionButton.module.css';
+import style from '../Button.module.css';
 
 const actionButton = (props) => {
     let value = props.values[0];
@@ -16,7 +16,7 @@ const actionButton = (props) => {
 
     return (
         <PillButton
-            className={ActionButtonCSS.Action_Button}
+            className={style.Action}
             onClick={handle_onClick}>
             {value}
         </PillButton>

@@ -1,6 +1,6 @@
 /* Search */
 .Search {
-    background-color: white;
+    background-color: var(--white);
     flex-grow: 1;
     height: 64px;
 }
@@ -13,13 +13,14 @@
 }
 .Search input {
     flex-grow: 1;
-    font-size: 15px;
+    font-size: 11px;
+    color: var(--primary);
     height: 32px;
     margin: 0px 4px;
     width: 100%;
 }
 .Search input::placeholder {
-    color: var(--secondary);
+    color: var(--primary);
 }
 .Search input:focus {
     outline: none;
@@ -27,7 +28,7 @@
 
 /* Search Clear Button */
 .Search .Clear {
-    background-color: (--white);
+    background-color: var(--white);
     border-radius: 4px;
     color: var(--primary);
     height: 24px;
