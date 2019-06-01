@@ -1,3 +1,4 @@
+/* Tab */
 .Tab {
     background-color: var(--gray);
     border-bottom: none;
@@ -9,9 +10,8 @@
     min-width: 64px;
     padding: 4px;
 }
-.Tab.Active {
-    background-color: var(--primary);
-    border: none;
+.Tab:hover button.Remove {
+    display: block;
 }
 .Tab > div {
     align-items: center;
@@ -26,15 +26,21 @@
     text-align: center;
     user-select: none;
 }
+/* Active */
+.Tab.Active {
+    background-color: var(--primary);
+    border: none;
+}
 .Tab.Active p span {
     color: var(--white);
 }
-.Tab:hover button.Remove {
-    display: block;
+.Tab.Active button.Remove {
+    color: var(--white);
 }
+/* Remove Button */
 button.Remove {
     background-color: transparent;
-    color: var(--white);
+    color: var(--black);
     display: none;
     position: absolute;
     right: 0px;
@@ -42,7 +48,6 @@ button.Remove {
     width: 24px;
     height: 100%;
 }
-
 .WithRemove p {
     padding: 0px 24px 0px 16px;
 }
