@@ -345,7 +345,8 @@ class Collections extends Component {
                 secondary: 'Details'
             },
             data: data.collection,
-            tag: this.props.select_user.tag
+            tag: this.props.select_user.tag,
+            task: data.task
         });
     }
     _setItemMembership_async (collections) {
@@ -399,7 +400,7 @@ class Collections extends Component {
         const inspected = this.state.collection[original.data.id];
         if (inspected.primary.length && inspected.secondary.length) {
             if (JSON.stringify(original.data) !== JSON.stringify(inspected)) {
-                if (original.data.tag.includes('$create')) {
+                if (original.task === 'CREATE_DECK') {
                     this._addManyCollections([inspected]);
                 } else {
                     this._updateCollection_async(inspected);
@@ -408,7 +409,7 @@ class Collections extends Component {
                         data: original.data
                     });
                 }
-            } else if (original.tag.includes('$create')) {
+            } else if (original.task === 'CREATE_DECK') {
                 this._removeManyCollections([inspected]);
             }
             this._clearAndCloseAside();
@@ -419,7 +420,7 @@ class Collections extends Component {
             case asideTypes.INSPECT:
                     const original = this.state.aside.data;
                     const inspected = this.state.collection[original.data.id];
-                    if (original.data.tag.includes('$create')) {
+                    if (original.task === 'CREATE_DECK') {
                         this._removeManyCollections([inspected]);
                     } else if (JSON.stringify(original.data) !== JSON.stringify(inspected)) {
                         this._setManyCollections([original.data]);
@@ -444,10 +445,8 @@ class Collections extends Component {
         this._openInspectAside({
             confirm: this.handle_onInspectAsideConfirm,
             overlay: this.handle_onInspectAsideConfirm,
-            collection: {
-                ...collection,
-                tag: ['$create']
-            },
+            collection: collection,
+            task: 'CREATE_DECK',
             type: asideTypes.INSPECT
         });
         this._clearSelected();
@@ -484,6 +483,7 @@ class Collections extends Component {
             confirm: this.handle_onInspectAsideConfirm,
             overlay: this.handle_onInspectAsideConfirm,
             collection: collection,
+            task: 'INSPECT_DECK',
             type: asideTypes.INSPECT
         });
         this._clearQuick('s');

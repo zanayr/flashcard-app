@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600&display=swap');
+
 /* Colors */
 html:root {
   --accent: #ffb600;
@@ -5,7 +7,7 @@ html:root {
   --gray: #f7f7f7;
   --darkgray: #e8e8e8;
   --primary: #0076ff;
-  --secondary: #a3c6ef;
+  --secondary: #6aa4ff;
   --white: #ffffff;
 }
 
@@ -15,8 +17,7 @@ h1, h2, h3, h4, h5, h6, label, span, p, a, li {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
-  color: var(--black);
-  font-family: "Montserrat", "Arial", sans-serif;
+  font-family: "Montserrat", sans-serif;
   margin: 0px;
   padding: 0px;
   position: relative;

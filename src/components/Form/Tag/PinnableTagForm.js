@@ -44,11 +44,12 @@ class PinnableTagForm extends Component {
     render () {
         let content = (
             <Aux>
-                <div className={styles.TagBar}>
+                <div className={styles.Container}>
                     <div>
                         {utility.sortByAlpha_asc(this.props.collection).map((tag, i) => {
                             return (
                                 <SelectTag
+                                    className={this.props.styles}
                                     key={utility.createHashId(i)}
                                     pinned={this.props.pinned.includes(tag)}
                                     selected={this.props.selected.includes(tag)}
@@ -65,7 +66,7 @@ class PinnableTagForm extends Component {
                     value={this.state.value}
                     onChange={this.handle_onChange}>
                     <Button
-                        className={styles.AddButton}
+                        className={[styles.Add, this.props.styles.add].join(' ')}
                         tabIndex={-1}
                         onClick={this.handle_onConfirm}>
                         +
@@ -84,7 +85,7 @@ class PinnableTagForm extends Component {
             );
         }
         if (this.props.onToggle) {
-            let css = [styles.ToggleButton];
+            let css = [styles.Toggle, this.props.styles.toggle];
             if (this.props.state) {
                 css.push(styles.Second);
             }
@@ -97,7 +98,7 @@ class PinnableTagForm extends Component {
         }
         return (
             <form
-                className={styles.TagForm2}
+                className={styles.PinnableTagForm}
                 ref={this.props.reference}>
                 <div>
                     {content}

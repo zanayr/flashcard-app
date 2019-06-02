@@ -7,12 +7,6 @@
 }
 
 /* Tag Form */
-.TagForm {
-    width: 100%;
-}
-.TagForm > div {
-    padding: 16px;
-}
 .Container {
     width: 100%;
 }
@@ -24,10 +18,8 @@
 }
 
 /*  Add Button  */
-.AddButton {
-    background-color: var(--primary);
+.Add {
     border-radius: 4px;
-    color: var(--white);
     font-size: 19px;
     height: 24px;
     margin-left: 8px;
@@ -35,8 +27,7 @@
 }
 
 /*  TOgGLE BUTTON  */
-.ToggleButton {
-    background-color: pink;
+.Toggle {
     bottom: 0px;
     display: none;
     height: 16px;
@@ -44,11 +35,11 @@
     right: 48px;
     width: 16px;
 }
-.ToggleButton.Second {
+.Toggle.Second {
     bottom: auto;
     right: 24px;
     top: 0px;
 }
-.TagForm2:hover .ToggleButton {
+.PinnableTagForm:hover .ToggleButton {
     display: block;
 }

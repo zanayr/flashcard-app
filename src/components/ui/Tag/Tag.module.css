@@ -29,8 +29,8 @@
 }
 .SelectTag span {
     align-items: center;
-    background-color: var(--white);
-    border: solid 1px var(--primary);
+    /* background-color: var(--white);
+    border: solid 1px var(--primary); */
     border-radius: 12px;
     cursor: pointer;
     display: inline-block;
@@ -38,14 +38,14 @@
     text-align: center;
 }
 .SelectTag span p {
-    color: var(--primary);
+    /* color: var(--primary); */
     font-size: 9px;
     font-weight: bold;
     letter-spacing: 0.1em;
     text-transform: capitalize;
     user-select: none;
 }
-.SelectTag span.Selected {
+/* .SelectTag span.Selected {
     background-color: var(--primary);
 }
 .SelectTag span.Selected p {
@@ -56,4 +56,4 @@
 }
 .SelectTag span.Pinned p {
     color: var(--black);
-}
+} */

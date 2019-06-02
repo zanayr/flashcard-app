@@ -8,11 +8,36 @@
     right: 16px;
     z-index: 96;
 }
+.Action:enabled {
+    cursor: pointer;
+}
+.BActionar:disabled {
+    cursor: default;
+}
+
 
 /* Bar Button */
 .Bar {
     height: 32px;
     width: 100%;
+}
+.Bar:enabled {
+    cursor: pointer;
+}
+.Bar:disabled {
+    cursor: default;
+}
+
+/* Button */
+.Button {
+    background-color: transparent;
+    border: none;
+}
+.Button:enabled {
+    cursor: pointer;
+}
+.Button:disabled {
+    cursor: default;
 }
 
 /* Icon Button */
@@ -24,11 +49,13 @@
 .Icon:enabled {
     background-color: var(--primary);
     color: var(--white);
+    cursor: pointer;
 }
 .Icon:disabled {
     background-color: var(--white);
     border: solid 1px var(--secondary);
     color: var(--secondary);
+    cursor: default;
 }
 
 /* Quick Button */

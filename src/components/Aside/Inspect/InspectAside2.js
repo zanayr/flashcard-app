@@ -98,24 +98,18 @@ class InspectAside extends Component {
         let aux = null;
         let flag = null;
         let path = '';
-        if (this.props.path.length) {
-            switch (this.props.path) {
-                case 'create':
-                    path = '/create';
-                    break;
-                default:
-                    path = '/0/deck/' + this.props.data.data.id;
-                    break;
-            }
-            aux = (
-                <IconButton
-                    onClick={() => {
-                        this.props.history.replace(path, {id: this.props.data.id});
-                    }}>{this.props.data.labels.aux}</IconButton>
-            );
-            if (this.props.path === 'deck' && this.props.data.data.tag.includes('$create')) {
+        let header = '';
+        const formCSS = {
+            add: styles.Inspect_Add,
+            selected: styles.Inspect_Selected,
+            tag: styles.Inspect_Tag,
+        };
+        switch (this.props.data.task) {
+            case 'CREATE_DECK':
+                header = 'Create a new deck below, don\'t forget to add a title.';
                 aux = (
                     <IconButton
+                        className={styles.InspectAux}
                         disabled={!this.state.valid.primary || !this.state.valid.secondary}
                         onClick={() => {
                             this.props.init('deck');
@@ -123,27 +117,64 @@ class InspectAside extends Component {
                                 data: this.state.data,
                                 store: 'deck'
                             });
-                        }}>{this.props.data.labels.aux}</IconButton>
+                        }}>Add</IconButton>
                 );
-            }
+                break;
+            default:
+                break;
+        }
+        // if (this.props.path.length) {
+        //     switch (this.props.path) {
+        //         case 'create':
+        //             path = '/create';
+        //             break;
+        //         default:
+        //             path = '/0/deck/' + this.props.data.data.id;
+        //             break;
+        //     }
+        //     aux = (
+        //         <IconButton
+        //             onClick={() => {
+        //                 this.props.history.replace(path, {id: this.props.data.id});
+        //             }}>{this.props.data.labels.aux}</IconButton>
+        //     );
+        //     if (this.props.path === 'deck' && this.props.data.data.tag.includes('$create')) {
+        //         aux = (
+        //             <IconButton
+        //                 disabled={!this.state.valid.primary || !this.state.valid.secondary}
+        //                 onClick={() => {
+        //                     this.props.init('deck');
+        //                     this.props.history.replace('/load', {
+        //                         data: this.state.data,
+        //                         store: 'deck'
+        //                     });
+        //                 }}>{this.props.data.labels.aux}</IconButton>
+        //         );
+        //         header = 'Create a new deck below, don\'t forget to add a title.';
+        //     }
             
-        }
-        console.log(this.props.data.data.hasOwnProperty('flag'));
-        if (this.props.data.data.hasOwnProperty('flag')) {
-            flag = (
-                <div className={styles.Middle}>
-                    <div>
-                        <Button onClick={this.props.actions.flag}>Flag Card</Button>
-                    </div>
-                </div>
-            );
-        }
+        // }
+        // if (this.props.data.data.hasOwnProperty('flag')) {
+        //     flag = (
+        //         <div className={styles.Middle}>
+        //             <div>
+        //                 <Button onClick={this.props.actions.flag}>Flag Card</Button>
+        //             </div>
+        //         </div>
+        //     );
+        // }
         return (
-            <aside className={[styles.Aside].join(' ')}>
+            <aside className={styles.Aside}>
                 <div>
+                    <div className={styles.InspectHeader}>
+                        <div>
+                            <p>{header}</p>
+                        </div>
+                    </div>
                     <InspectForm2
                         data={this.state.data}
                         labels={this.props.data.labels}
+                        styles={formCSS}
                         onChange={this.handle_onChange}
                         onConfirm={this.props.actions.confirm}/>
                     {flag}

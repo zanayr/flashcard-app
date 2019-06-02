@@ -4,6 +4,11 @@ import styles from '../Input.module.css';
 
 
 const countingTextField = (props) => {
+    const remaining = props.config.maxLength - props.value.length;
+    let counterCSS = [styles.Counter];
+    if (remaining < 4) {
+        counterCSS.push(styles.Low);
+    }
     return (
         <div className={styles.Field}>
             <div>
@@ -19,7 +24,7 @@ const countingTextField = (props) => {
                     value={props.value}
                     onChange={(e) => props.onChange(e.target.value)}/>
                 {props.children}
-                <span className={styles.Counter}><p>{props.config.maxLength - props.value.length}</p></span>
+                <span className={counterCSS.join(' ')}><p>{remaining}</p></span>
             </div>
         </div>
     );

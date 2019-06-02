@@ -67,6 +67,7 @@ class TagFormPlus extends Component {
 
     //  RENDER METHOD  ----------------------------------------------------  RENDER  //
     render () {
+        console.log(this.props.styles);
         return (
             <form
                 className={styles.TagForm2}
@@ -77,6 +78,7 @@ class TagFormPlus extends Component {
                         {utility.sortByAlpha_asc(this.props.collection).map((tag, i) => {
                             return (
                                 <SelectTag
+                                    className={this.props.styles}
                                     key={utility.createHashId(i)}
                                     selected={this.props.selected.includes(tag)}
                                     onToggle={(tag) => this.props.onSelect(this.props.category, tag)}>
@@ -98,7 +100,8 @@ class TagFormPlus extends Component {
                     value={this.state.value}
                     onChange={this.handle_onChange}>
                     <Button
-                        className={styles.AddButton}
+                        disabled={!(this.state.value.length > 2)}
+                        className={[styles.Add, this.props.styles.add].join(' ')}
                         tabIndex={-1}
                         onClick={this.handle_onConfirm}>
                         +

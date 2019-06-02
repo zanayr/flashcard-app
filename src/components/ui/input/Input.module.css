@@ -16,36 +16,54 @@
     z-index: -1;
 }
 /* Field Input */
-.Field input {
-    color: var(--primary);
+.Field input,
+.Field textarea {
+    border-bottom: 1px solid transparent;
+    color: var(--black);
     display: block;
     flex-grow: 1;
-    font-size: 15px;
+    font-size: 11px;
     height: 24px;
+    transition: border-bottom-color 0.1667s ease;
 }
-.Field input::placeholder {
+.Field textarea {
+    height: 4em;
+    resize: none;
+}
+.Field input::placeholder,
+.Field textarea::placeholder {
     color: var(--primary);
     text-transform: capitalize;
 }
-.Field input:focus {
+.Field input:focus,
+.Field textarea:focus {
     outline: none;
 }
 /* Field Counter */
 .Counter {
     align-items: center;
-    background-color: var(--white);
+    background-color: transparent;
+    border-radius: 4px;
     display: flex;
     flex-direction: column;
     height: 24px;
     justify-content: center;
     margin-left: 8px;
+    transition: background-color 0.1667s ease;
     width: 24px;
 }
 .Counter p {
     color: var(--primary);
-    font-size: 7px;
+    font-size: 5px;
     font-weight: bold;
     letter-spacing: 0.1em;
+}
+/* Low Counter */
+.Counter.Low {
+    background-color: var(--accent);
+}
+.Counter.Low p {
+    color: var(--black);
 } 
 
 /* Search */

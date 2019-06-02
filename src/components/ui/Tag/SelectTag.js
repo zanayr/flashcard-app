@@ -8,11 +8,11 @@ const selectTag = (props) => {
         e.stopPropagation();
         props.onToggle(props.children);
     }
-    let css = [];
+    let css = [props.className.tag];
     if (props.pinned) {
-        css.push(styles.Pinned);
+        css.push(props.className.pinned);
     } else if (props.selected) {
-        css.push(styles.Selected);
+        css.push(props.className.selected);
     }
     return (
         <div className={styles.SelectTag}>

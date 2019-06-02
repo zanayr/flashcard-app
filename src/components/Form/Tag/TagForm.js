@@ -11,6 +11,7 @@ const tagForm = (props) => {
     let tags = utility.sortByAlpha_asc(props.collection).map((tag, i) => {
         return (
             <SelectTag
+                className={props.styles}
                 key={i}
                 selected={props.selected.includes(tag)}
                 onToggle={(tag) => props.onToggle(tag)}>
@@ -20,7 +21,7 @@ const tagForm = (props) => {
     });
 
     return (
-        <div className={styles.TagForm}>
+        <div className={styles.Container}>
             <div>
                 {tags}
             </div>

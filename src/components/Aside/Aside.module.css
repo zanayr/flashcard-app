@@ -1,6 +1,6 @@
 /* Component */
 .Aside {
-    background-color: var(--white);
+    background-color: var(--primary);
     bottom: 0px;
     left: auto;
     position: fixed;
@@ -26,15 +26,22 @@
     flex-direction: row;
     height: 100%;
     justify-content: flex-end;
+    
 }
 .Footer .Confirm {
     flex-grow: 1;
     height: 100%;
 }
+.Confirm:disabled {
+    color: var(--secondary);
+}
+.Confirm:enabled {
+    color: var(--white);
+}
 .Footer .Cancel {
-    background-color: var(--accent);
+    background-color: var(--primary);
     border-radius: 0;
-    color: var(--black);
+    color: var(--white);
 }
 
 /* Filter Aside */
@@ -48,15 +55,78 @@
     height: 100%;
 }
 .FilterHeader button {
-    background-color: var(--gray);
+    background-color: var(--darkgray);
     color: var(--black);
     font-size: 11px;
     flex-grow: 1;
     height: 100%;
 }
 .FilterHeader button.Active {
+    background-color: var(--gray);
+    color: var(--black);
+}
+
+/* Inspect Aside */
+.Aside form {
+    padding: 8px;
+}
+.InspectHeader > div {
+    padding: 8px;
+}
+.InspectHeader p {
+    color: var(--white);
+    font-size: 11px;
+}
+.Aside input,
+.Aside textarea {
     background-color: var(--primary);
     color: var(--white);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+}
+.Aside input:focus,
+.Aside textarea:focus {
+    border-bottom-color: var(--white);
+}
+.Aside input::placeholder,
+.Aside textarea::placeholder {
+    color: var(--white);
+    font-weight: 400;
+}
+/* Counters */
+.Aside form > div > div > div > span > p {
+    color: var(--white);
+}
+/* Add buttons */
+.Inspect_Add:enabled {
+    color: var(--white);
+}
+.Inspect_Add:disabled {
+    color: var(--secondary);
+}
+/* Tags */
+.Inspect_Tag {
+    background-color: var(--primary);
+    border: 1px solid var(--white);
+    color: var(--white);
+}
+.Inspect_Tag.Inspect_Selected {
+    background-color: var(--white);
+    color: var(--primary);
+}
+/* Inspect Aux */
+.InspectAux {
+    border-radius: 0;
+}
+.InspectAux:enabled {
+    background-color: var(--primary);
+    border: none;
+    color: var(--white);
+}
+.InspectAux:disabled {
+    background-color: var(--primary);
+    border: none;
+    color: var(--secondary);
 }
 
 /* Navigation */

@@ -196,6 +196,7 @@ class InspectForm2 extends Component {
                     category={'tag'}
                     collection={this.state.tag}
                     selected={this.state.item.tag}
+                    styles={this.props.styles}
                     tabIndex={4}
                     reference={this.tagForm}
                     onConfirm={(tag) => this.handle_onTagCreate('tag', tag)}
@@ -207,6 +208,7 @@ class InspectForm2 extends Component {
                     category={'group'}
                     collection={this.state.group}
                     selected={this.state.item.group}
+                    styles={this.props.styles}
                     tabIndex={5}
                     reference={this.groupForm}
                     onConfirm={(group) => this.handle_onTagCreate('group', group)}

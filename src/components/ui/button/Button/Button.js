@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './Button.module.css';
+import styles from '../Button.module.css';
 
 const button = (props) => {
     const handle_onClicked = (e) => {
@@ -9,27 +9,10 @@ const button = (props) => {
 
         props.onClick();
     }
-    let css = [];
-
-    switch (props.type) {
-        case ('submit'):
-            css.push(styles.Submit);
-            break;
-        case ('round-icon'):
-            css.push(styles.Round);
-            break;
-        case ('bar'):
-            css.push(styles.Bar);
-            break;
-        default:
-            css.push(styles.Button);
-            break;
-    }
-    css.push(props.className);
     return (
         <button
             {...props}
-            className={css.join(' ')}
+            className={[styles.Button, props.className].join(' ')}
             onClick={(e) => handle_onClicked(e)}>
             {props.children}
         </button>
