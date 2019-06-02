@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 
 import ListItem from '../ui/ListItem/ListItem';
-import ContextAction2 from '../ui/button/Context/ContextAction2';
+import ContextAction from '../ui/button/Context/ContextAction';
 
-import listStyles from './List.module.css';
+import styles from './List.module.css';
 
-class List2 extends Component {
+class List extends Component {
     _checkGroups (item) {
         const groups = this.props.current.group.concat(this.props.filters.group);
         if (groups.length) {
@@ -60,14 +60,14 @@ class List2 extends Component {
             let contextPosition = 1;
             if (this.props.aux) {
                 removeContext = (
-                    <ContextAction2
+                    <ContextAction
                         action={() => this.props.action(2, item)}
                         active={isActive}
                         confirm
                         key={'aux'}
                         position={1}>
                         {this.props.aux.charAt(0).toUpperCase() + this.props.aux.slice(1).toLowerCase()}
-                    </ContextAction2>
+                    </ContextAction>
                 );
                 contextPosition++;
             }
@@ -79,15 +79,15 @@ class List2 extends Component {
                         key={item.id}
                         selected={isSelected}
                         onSelect={() => this.handle_onItemSelect(item)}>
-                        <ContextAction2
+                        <ContextAction
                             action={() => this.props.action(1, item)}
                             active={isActive}
                             key={'inspect'}
                             position={contextPosition}>
                             Inspect
-                        </ContextAction2>
+                        </ContextAction>
                         {removeContext}
-                        <ContextAction2
+                        <ContextAction
                             action={() => this.props.action(3, item)}
                             active={isActive}
                             confirm
@@ -95,7 +95,7 @@ class List2 extends Component {
                             key={'delete'}
                             position={0}>
                             Delete
-                        </ContextAction2>
+                        </ContextAction>
                     </ListItem>
                 );
             } else {
@@ -103,7 +103,7 @@ class List2 extends Component {
             }
         });
         return (
-            <section className={listStyles.List}>
+            <section className={styles.List}>
                 <div>
                     {listItems}
                 </div>
@@ -113,4 +113,4 @@ class List2 extends Component {
 }
 
 
-export default List2;
+export default List;

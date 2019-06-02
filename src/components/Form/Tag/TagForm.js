@@ -9,6 +9,17 @@ import styles from './TagForm.module.css';
 
 const tagForm = (props) => {
     let tags = utility.sortByAlpha_asc(props.collection).map((tag, i) => {
+        if (props.disabled.includes(tag)) {
+            return (
+                <SelectTag
+                    className={props.styles}
+                    key={i}
+                    disabled
+                    selected={props.selected.includes(tag)}>
+                    {tag}
+                </SelectTag>
+            )
+        }
         return (
             <SelectTag
                 className={props.styles}

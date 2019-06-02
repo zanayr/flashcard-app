@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 
 import styles from './Context.module.css';
 
-class ContextAction2 extends Component {
+class ContextAction extends Component {
     state = {
         selected: false
     }
@@ -36,13 +36,12 @@ class ContextAction2 extends Component {
 
     render () {
         let content = null;
-        let css = [styles.ContextAction2];
+        let css = [styles.ContextAction];
         if (this.props.destructive) {
-            css.push(styles.Destructive2);
+            css.push(styles.Destructive);
         }
         
         if (this.props.active) {
-            css.push(styles.Active2);
             content = (
                 <div
                     className={css.join(' ')}
@@ -60,4 +59,4 @@ class ContextAction2 extends Component {
     }
 }
 
-export default ContextAction2;
+export default ContextAction;

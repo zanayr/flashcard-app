@@ -14,6 +14,14 @@ const selectTag = (props) => {
     } else if (props.selected) {
         css.push(props.className.selected);
     }
+    if (props.disabled) {
+        css.push(props.className.disabled, styles.Disabled);
+        return (
+            <div className={styles.SelectTag}>
+                <span className={css.join(' ')}><p>{props.children.replace('_', ' ')}</p></span>
+            </div>
+        );
+    }
     return (
         <div className={styles.SelectTag}>
             <span

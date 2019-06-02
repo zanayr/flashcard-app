@@ -11,7 +11,7 @@ import * as utility from '../../utility/utility';
 import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
-import List2 from '../../components/List/List2';
+import List from '../../components/List/List';
 import QuickBar from '../../components/ui/bar/Quick/QuickBar';
 import TabBar from '../../components/ui/bar/Tab/TabBar';
 import TabForm from '../../components/form/Tab/TabForm';
@@ -562,7 +562,7 @@ class User extends Component {
         switch (this.state.main) {
             case 'LIST_VIEW':
                 content = (
-                    <List2
+                    <List
                         action={this.handle_onListClick}
                         collection={utility.sortBy(this.state.sort, this.state.users)}
                         filters={this.state.filter}

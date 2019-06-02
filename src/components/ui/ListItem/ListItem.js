@@ -21,8 +21,8 @@ class ListItem extends Component {
         if (this.props.data.flag) {
             css = css.concat(styles.Flagged)
         }
-        let primary = (<h3 className={styles.Placeholder}>{this.props.default.primary}</h3>);
-        let secondary = (<p className={styles.Placeholder}>{this.props.default.secondary}</p>);
+        let primary = (<h3 className={styles.Primary}>{this.props.default.primary}</h3>);
+        let secondary = (<p className={styles.Secondary}>{this.props.default.secondary}</p>);
         if (this.props.data.primary.length) {
             primary = (<h3 className={styles.Primary}>{this.props.data.primary}</h3>);
         }
@@ -59,7 +59,9 @@ class ListItem extends Component {
                 className={css.join(' ')}
                 onClick={(e) => this.onClick(e)}>
                 <div>
-                    <div key={0}>
+                    <div
+                        className={styles.DataContainer}
+                        key={0}>
                         {primary}
                         {secondary}
                         {meta}

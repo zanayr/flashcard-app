@@ -75,6 +75,10 @@
     background-color: var(--white);
     color: var(--primary);
 }
+.Filter_Tag.Filter_Disabled {
+    border-color: var(--secondary);
+    color: var(--secondary);
+}
 
 /* Inspect Aside */
 .Aside form {

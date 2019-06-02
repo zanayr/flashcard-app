@@ -4,8 +4,6 @@
     padding-right: 4px;
 }
 .Tag span {
-    border: solid 1px blue;
-    border-radius: 8px;
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -14,7 +12,7 @@
     width: 100%;
 }
 .Tag span p {
-    color: blue;
+    color: var(--primary);
     font-size: 9px;
     text-transform: capitalize;
     user-select: none;
@@ -29,31 +27,21 @@
 }
 .SelectTag span {
     align-items: center;
-    /* background-color: var(--white);
-    border: solid 1px var(--primary); */
     border-radius: 12px;
     cursor: pointer;
     display: inline-block;
     padding: 3px 6px;
     text-align: center;
+    transition: background-color 0.1667s ease, border-color 0.1667s ease;
+}
+.SelectTag span.Disabled {
+    cursor: default;
 }
 .SelectTag span p {
-    /* color: var(--primary); */
     font-size: 9px;
     font-weight: bold;
     letter-spacing: 0.1em;
     text-transform: capitalize;
+    transition: color 0.1667s ease;
     user-select: none;
 }
-/* .SelectTag span.Selected {
-    background-color: var(--primary);
-}
-.SelectTag span.Selected p {
-    color: var(--white);
-}
-.SelectTag span.Pinned {
-    background-color: var(--accent);
-}
-.SelectTag span.Pinned p {
-    color: var(--black);
-} */

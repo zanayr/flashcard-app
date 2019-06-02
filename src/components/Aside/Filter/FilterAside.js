@@ -11,7 +11,11 @@ import styles from '../Aside.module.css';
 class FilterAside2 extends Component {
     state = {
         dictionary: {},
-        filter: 'tag'
+        filter: 'tag',
+        selected: {
+            group: [],
+            tag: []
+        }
     }
 
     componentDidMount () {
@@ -41,12 +45,34 @@ class FilterAside2 extends Component {
             filter: tag
         }));
     }
+    setSelected (tag) {
+        const selected = this.state.selected[this.state.filter].slice();
+        if (selected.includes(tag)) {
+            this.setState(prev=> ({
+                ...prev,
+                selected: {
+                    ...prev.selected,
+                    [this.state.filter]: selected.filter(t => t !== tag)
+                }
+            }));
+        } else {
+            this.setState(prev=> ({
+                ...prev,
+                selected: {
+                    ...prev.selected,
+                    [this.state.filter]: selected.concat(tag)
+                }
+            }));
+        }
+    }
 
     handle_onFilterSelect = (tag) => {
         this.setFilter(tag);
         this.setDictionary(tag);
     }
     handle_onTagToggle = (tag) => {
+        console.log(tag);
+        this.setSelected(tag);
         this.props.actions.toggle(this.state.filter, this.state.dictionary[tag]);
     }
 
@@ -54,6 +80,7 @@ class FilterAside2 extends Component {
         let tagTabCSS = '';
         let groupTabCSS = '';
         let formCSS = {
+            disabled: styles.Filter_Disabled,
             selected: styles.Filter_Selected,
             tag: styles.Filter_Tag
         }
@@ -79,7 +106,7 @@ class FilterAside2 extends Component {
                     <TagForm
                         collection={utility.sortByAlpha_asc(Object.keys(this.state.dictionary)).map((tag => {return tag}))}
                         disabled={this.props.data.tab[this.state.filter]}
-                        selected={this.props.data.filter[this.state.filter]}
+                        selected={this.state.selected[this.state.filter]}
                         styles={formCSS}
                         onToggle={this.handle_onTagToggle}/>
                     <div className={styles.Footer}>
