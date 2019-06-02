@@ -418,15 +418,14 @@ class Collections extends Component {
     handle_onAsideClose = () => {
         switch (this.state.aside.state) {
             case asideTypes.INSPECT:
-                    const original = this.state.aside.data;
-                    const inspected = this.state.collection[original.data.id];
-                    if (original.task === 'CREATE_DECK') {
-                        this._removeManyCollections([inspected]);
-                    } else if (JSON.stringify(original.data) !== JSON.stringify(inspected)) {
-                        this._setManyCollections([original.data]);
-                    }
-                    this._clearAndCloseAside();
-                    break;
+                const original = this.state.aside.data;
+                const inspected = this.state.collection[original.data.id];
+                if (original.task === 'CREATE_DECK') {
+                    this._removeManyCollections([original.data]);
+                } else if (JSON.stringify(original.data) !== JSON.stringify(inspected)) {
+                    this._setManyCollections([original.data]);
+                }
+                break;
             default:
                 break;
         }
@@ -683,7 +682,7 @@ class Collections extends Component {
 
     // //  Main  -----------------------------------------------------------  Main EHs  //
     handle_onDefaultClick = () => {
-        this.handle_onAsideClose();
+        // this.handle_onAsideClose();
         this._clearSelected();
         this._clearFilter();
     }

@@ -67,7 +67,6 @@ class TagFormPlus extends Component {
 
     //  RENDER METHOD  ----------------------------------------------------  RENDER  //
     render () {
-        console.log(this.props.styles);
         return (
             <form
                 className={styles.TagForm2}

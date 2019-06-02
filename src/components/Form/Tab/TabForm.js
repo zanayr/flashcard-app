@@ -112,7 +112,11 @@ class TabForm extends Component {
     }
 
     render () {
-        console.log(this.state.valid);
+        let formCSS = {
+            add: styles.TabForm_Add,
+            selected: styles.TabForm_Selected,
+            tag: styles.TabForm_Tag
+        }
         return (
             <div
                 className={styles.TabForm}
@@ -138,6 +142,7 @@ class TabForm extends Component {
                         category={'tag'}
                         collection={this.props.tag}
                         selected={this.state.tag}
+                        styles={formCSS}
                         tabIndex={2}
                         reference={this.tagForm}
                         onConfirm={(tag) => this.handle_onTagCreate('tag', tag)}
@@ -147,6 +152,7 @@ class TabForm extends Component {
                         category={'group'}
                         collection={this.props.group}
                         selected={this.state.group}
+                        styles={formCSS}
                         tabIndex={3}
                         reference={this.groupForm}
                         onConfirm={(group) => this.handle_onTagCreate('group', group)}

@@ -21,11 +21,15 @@ const tagForm = (props) => {
     });
 
     return (
-        <div className={styles.Container}>
+        <form>
             <div>
-                {tags}
+                <div className={styles.Container}>
+                    <div>
+                        {tags}
+                    </div>
+                </div>
             </div>
-        </div>
+        </form>
     );
 }
 

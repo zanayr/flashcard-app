@@ -53,6 +53,10 @@ class FilterAside2 extends Component {
     render () {
         let tagTabCSS = '';
         let groupTabCSS = '';
+        let formCSS = {
+            selected: styles.Filter_Selected,
+            tag: styles.Filter_Tag
+        }
         if (this.state.filter === 'tag') {
             tagTabCSS = styles.Active;
         } else {
@@ -76,12 +80,16 @@ class FilterAside2 extends Component {
                         collection={utility.sortByAlpha_asc(Object.keys(this.state.dictionary)).map((tag => {return tag}))}
                         disabled={this.props.data.tab[this.state.filter]}
                         selected={this.props.data.filter[this.state.filter]}
+                        styles={formCSS}
                         onToggle={this.handle_onTagToggle}/>
                     <div className={styles.Footer}>
                         <div>
                             <Button
                                 className={styles.Confirm}
                                 onClick={this.props.actions.confirm}>{this.props.data.labels.confirm}</Button>
+                            <IconButton
+                                className={styles.Cancel}
+                                onClick={this.props.actions.cancel}>⨯</IconButton>
                         </div>
                     </div>
                 </div>

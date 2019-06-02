@@ -55,15 +55,25 @@
     height: 100%;
 }
 .FilterHeader button {
-    background-color: var(--darkgray);
-    color: var(--black);
+    background-color: var(--white);
+    color: var(--primary);
     font-size: 11px;
     flex-grow: 1;
     height: 100%;
 }
 .FilterHeader button.Active {
-    background-color: var(--gray);
-    color: var(--black);
+    background-color: var(--blue);
+    color: var(--white);
+}
+/* Filter Aside Tags */
+.Filter_Tag {
+    background-color: var(--primary);
+    border: 1px solid var(--white);
+    color: var(--white);
+}
+.Filter_Tag.Filter_Selected {
+    background-color: var(--white);
+    color: var(--primary);
 }
 
 /* Inspect Aside */

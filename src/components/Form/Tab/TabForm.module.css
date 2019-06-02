@@ -15,6 +15,14 @@
 .TabForm > div > * {
     margin-bottom: 32px;
 }
+.TabForm input {
+    color: var(--primary);
+    font-weight: 600;
+}
+.TabForm input::placeholder {
+    color: var(--secondary);
+    font-weight: 400;
+}
 
 /* Add Button */
 .Add {
@@ -28,4 +36,23 @@
     border: 1px solid var(--secondary);
     border-radius: 4px;
     color: var(--secondary);
+}
+
+/* Tag Forms */
+/* Add buttons */
+.TabForm_Add:enabled {
+    color: var(--primary);
+}
+.TabForm_Add:disabled {
+    color: var(--secondary);
+}
+/* Tags */
+.TabForm_Tag {
+    background-color: var(--white);
+    border: 1px solid var(--primary);
+    color: var(--primary);
+}
+.TabForm_Tag.TabForm_Selected {
+    background-color: var(--primary);
+    color: var(--white);
 }
