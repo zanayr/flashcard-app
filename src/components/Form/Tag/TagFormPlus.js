@@ -72,40 +72,40 @@ class TagFormPlus extends Component {
                 className={styles.TagForm2}
                 ref={this.props.reference}>
                 <div>
-                <div className={styles.Container}>
-                    <div>
-                        {utility.sortByAlpha_asc(this.props.collection).map((tag, i) => {
-                            return (
-                                <SelectTag
-                                    className={this.props.styles}
-                                    key={utility.createHashId(i)}
-                                    selected={this.props.selected.includes(tag)}
-                                    onToggle={(tag) => this.props.onSelect(this.props.category, tag)}>
-                                    {tag}
-                                </SelectTag>
-                            )
-                        })}
+                    <div className={styles.Container}>
+                        <div>
+                            {utility.sortByAlpha_asc(this.props.collection).map((tag, i) => {
+                                return (
+                                    <SelectTag
+                                        className={this.props.styles}
+                                        key={utility.createHashId(i)}
+                                        selected={this.props.selected.includes(tag)}
+                                        onToggle={(tag) => this.props.onSelect(this.props.category, tag)}>
+                                        {tag}
+                                    </SelectTag>
+                                )
+                            })}
+                        </div>
                     </div>
-                </div>
-                <CountingTextField
-                    config={{
-                        autoComplete: 'off',
-                        label: 'new ' + this.props.category,
-                        maxLength: 24,
-                        minLength: 3,
-                        name: 'tag',
-                        tabIndex: this.props.tabIndex
-                    }}
-                    value={this.state.value}
-                    onChange={this.handle_onChange}>
-                    <Button
-                        disabled={!(this.state.value.length > 2)}
-                        className={[styles.Add, this.props.styles.add].join(' ')}
-                        tabIndex={-1}
-                        onClick={this.handle_onConfirm}>
-                        +
-                    </Button>
-                </CountingTextField>
+                    <CountingTextField
+                        config={{
+                            autoComplete: 'off',
+                            label: 'new ' + this.props.category,
+                            maxLength: 24,
+                            minLength: 3,
+                            name: 'tag',
+                            tabIndex: this.props.tabIndex
+                        }}
+                        value={this.state.value}
+                        onChange={this.handle_onChange}>
+                        <Button
+                            disabled={!(this.state.value.length > 2)}
+                            className={[styles.Add, this.props.styles.add].join(' ')}
+                            tabIndex={-1}
+                            onClick={this.handle_onConfirm}>
+                            +
+                        </Button>
+                    </CountingTextField>
                 </div>
             </form>
         );

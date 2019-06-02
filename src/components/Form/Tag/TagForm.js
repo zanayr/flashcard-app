@@ -14,8 +14,7 @@ const tagForm = (props) => {
                 <SelectTag
                     className={props.styles}
                     key={i}
-                    disabled
-                    selected={props.selected.includes(tag)}>
+                    disabled>
                     {tag}
                 </SelectTag>
             )
