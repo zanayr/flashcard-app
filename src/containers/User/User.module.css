@@ -1,9 +1,0 @@
-.Main {
-    background-color: pink;
-    height: 100%;
-    z-index: 0;
-}
-.Main > div {
-    height: 100%;
-    padding: 64px 16px 0px 16px;
-}

@@ -10,7 +10,7 @@ import Aux from '../../hoc/Aux/Aux';
 import SimpleHeader from '../../components/Header/SimpleHeader';
 import Table from '../../components/Table/Table';
 
-import styles from './Report.module.css';
+import styles from '../Container.module.css';
 
 
 class Report extends Component {
@@ -180,7 +180,7 @@ class Report extends Component {
                         path: '0/deck/'
                     }}/>
                 <main
-                    className={styles.Main}
+                    className={styles.List}
                     onClick={this.handle_onMainClick}>
                     <div>
                         <Table

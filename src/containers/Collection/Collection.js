@@ -20,7 +20,7 @@ import TabBar from '../../components/ui/bar/Tab/TabBar';
 import TabForm from '../../components/form/Tab/TabForm';
 import Throbber from '../../components/ui/Throbber/Throbber';
 
-import styles from './Collection.module.css';
+import styles from '../Container.module.css';
 
 class Collections extends Component {
     state = {
@@ -791,7 +791,7 @@ class Collections extends Component {
                     state={headerTypes.COLLECTION}
                     onClick={this.handle_onDefaultClick}/>
                 <main
-                    className={styles.Collection}
+                    className={styles.List}
                     onClick={this.handle_onDefaultClick}>
                     <div>
                         <TabBar

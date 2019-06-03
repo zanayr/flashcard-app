@@ -19,7 +19,7 @@ import TabBar from '../../components/ui/bar/Tab/TabBar';
 import TabForm from '../../components/form/Tab/TabForm';
 import Throbber from '../../components/ui/Throbber/Throbber';
 
-import styles from './Inspector.module.css';
+import styles from '../Container.module.css';
 
 class Inspector extends Component {
     state = {
@@ -773,6 +773,7 @@ class Inspector extends Component {
                 content = (<Throbber/>);
                 break;
         }
+        console.log(this.props);
         return (
             <Aux>
                 <Header
@@ -787,7 +788,7 @@ class Inspector extends Component {
                     state={headerTypes.ITEM}
                     onClick={this.handle_onAsideClose}/>
                 <main
-                    className={styles.Main}
+                    className={styles.List}
                     onClick={this.handle_onMainClick}>
                     <div>
                         <TabBar

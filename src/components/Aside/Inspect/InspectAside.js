@@ -122,11 +122,12 @@ class InspectAside extends Component {
                 break;
             case 'INSPECT_DECK':
                 header = 'Edit a the deck below, don\'t forget it requires a title.';
+                console.log(this.props);
                 aux = (
                     <IconButton
                         className={styles.InspectAux}
                         disabled={!this.state.valid.primary || !this.state.valid.secondary}
-                        onClick={() => {this.props.history.replace('/0/deck', {id: this.props.data.id});}}>
+                        onClick={() => {this.props.history.replace('/0/deck/' + this.props.data.data.id, {id: this.props.data.data.id})}}>
                         Add
                     </IconButton>
                 );

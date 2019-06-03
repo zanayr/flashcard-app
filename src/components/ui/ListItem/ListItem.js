@@ -29,7 +29,6 @@ class ListItem extends Component {
         if (this.props.data.secondary.length) {
             secondary = (<h3 className={styles.Secondary}>{this.props.data.secondary}</h3>);
         }
-        console.log(this.props.data);
         let tags = utility.sortByAlpha_asc(this.props.data.tag).map(tag => {
             return tag.match(/^\$[a-zA-Z0-9]*/) ? null : (
                 <Tag key={tag}>{tag}</Tag>

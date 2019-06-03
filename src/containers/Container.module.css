@@ -1,9 +1,9 @@
-.Collection {
+.List {
     background-color: var(--white);
     height: 100%;
     z-index: 0;
 }
-.Collection > div {
+.List > div {
     display: flex;
     flex-direction: column;
     height: 100%;

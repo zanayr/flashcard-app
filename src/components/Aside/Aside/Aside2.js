@@ -7,12 +7,12 @@ import AsideOverlay from '../../Overlay/Aside/AsideOverlay';
 import AssignAside from '../Assign/AssignAside';
 import Aux from '../../../hoc/Aux/Aux';
 import FilterAside from '../Filter/FilterAside';
-import InspectAside2 from '../Inspect/InspectAside2';
+import InspectAside from '../Inspect/InspectAside';
 import NavigationAside from '../Navigation/NavigationAside';
 import ReportAside from '../Report/ReportAside';
 
 
-const aside2 = (props) => {
+const aside = (props) => {
     let aside = null;
     switch (props.state) {
         case asideTypes.ASSIGN:
@@ -35,7 +35,7 @@ const aside2 = (props) => {
         case asideTypes.INSPECT:
             aside = (
                 <Aux>
-                    <InspectAside2
+                    <InspectAside
                         actions={props.actions}
                         data={props.data}
                         history={props.history}
@@ -80,4 +80,4 @@ const aside2 = (props) => {
     return aside;
 }
 
-export default withRouter(aside2);
+export default withRouter(aside);

@@ -19,7 +19,7 @@ import TabBar from '../../components/ui/bar/Tab/TabBar';
 import TabForm from '../../components/form/Tab/TabForm';
 import Throbber from '../../components/ui/Throbber/Throbber';
 
-import styles from './Item.module.css';
+import styles from '../Container.module.css';
 
 class Item extends Component {
     state = {
@@ -818,7 +818,7 @@ class Item extends Component {
                     state={headerTypes.ITEM}
                     onClick={this.handle_onAsideClose}/>
                 <main
-                    className={styles.Main}
+                    className={styles.List}
                     onClick={this.handle_onMainClick}>
                     <div>
                         <TabBar

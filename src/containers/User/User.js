@@ -17,7 +17,7 @@ import TabBar from '../../components/ui/bar/Tab/TabBar';
 import TabForm from '../../components/form/Tab/TabForm';
 import Throbber from '../../components/ui/Throbber/Throbber';
 
-import styles from './User.module.css';
+import styles from '../Container.module.css';
 
 class User extends Component {
     state = {
@@ -597,7 +597,7 @@ class User extends Component {
                     state={headerTypes.USER}
                     onClick={this.handle_onAsideClose}/>
                 <main
-                    className={styles.Main}
+                    className={styles.List}
                     onClick={this.handle_onMainClick}>
                     <div>
                         <TabBar
