@@ -6,9 +6,10 @@ import styles from './Tag.module.css';
 const selectTag = (props) => {
     const handle_onClick = (e) => {
         e.stopPropagation();
-        props.onToggle(props.children);
+        props.onToggle();
     }
     let css = [props.className.tag];
+    let tag = props.children.replace('_', ' ').replace('$', '');
     if (props.pinned) {
         css.push(props.className.pinned);
     } else if (props.selected) {
@@ -18,7 +19,7 @@ const selectTag = (props) => {
         css.push(props.className.disabled, styles.Disabled);
         return (
             <div className={styles.SelectTag}>
-                <span className={css.join(' ')}><p>{props.children.replace('_', ' ')}</p></span>
+                <span className={css.join(' ')}><p>{tag}</p></span>
             </div>
         );
     }
@@ -26,7 +27,7 @@ const selectTag = (props) => {
         <div className={styles.SelectTag}>
             <span
                 className={css.join(' ')}
-                onClick={(e) => handle_onClick(e)}><p>{props.children.replace('_', ' ')}</p></span>
+                onClick={(e) => handle_onClick(e)}><p>{tag}</p></span>
         </div>
     );
 }

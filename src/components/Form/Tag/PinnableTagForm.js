@@ -53,7 +53,7 @@ class PinnableTagForm extends Component {
                                     key={utility.createHashId(i)}
                                     pinned={this.props.pinned.includes(tag)}
                                     selected={this.props.selected.includes(tag)}
-                                    onToggle={(tag) => this.props.onSelect(this.props.category, tag)}>
+                                    onToggle={() => this.props.onSelect(this.props.category, tag)}>
                                     {tag}
                                 </SelectTag>
                             )

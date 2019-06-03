@@ -44,15 +44,17 @@
     margin-top: 2px;
 }
 .TagContainer {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
-    max-width: 256px;
+    justify-content: center;
+    max-width: 500px;
 }
 .TagContainer > div {
     align-items: center;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    height: 100%;
     padding-left: 8px;
 }
 .ListItem.Selected .TagContainer span {

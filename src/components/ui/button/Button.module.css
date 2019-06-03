@@ -4,6 +4,7 @@
     bottom: 16px;
     color: var(--black);
     font-size: 13px;
+    font-weight: 500;
     position: fixed;
     right: 16px;
     z-index: 96;
@@ -60,9 +61,16 @@
 
 /* Quick Button */
 .QuickButton {
-    background-color: blue;
-    color: white;
+    background-color: var(--primary);
     border-radius: 20px;
+    color: var(--white);
+    font-size: 15px;
+    font-weight: 600;
     height: 40px;
+    margin-right: 8px;
     width: 40px;
+}
+.QuickButton.QuickUndo {
+    background-color: var(--accent);
+    color: var(--black);
 }

@@ -8,74 +8,21 @@ import TagForm from '../../form/Tag/TagForm';
 
 import styles from '../Aside.module.css';
 
-class FilterAside2 extends Component {
+class FilterAside extends Component {
     state = {
-        dictionary: {},
-        filter: 'tag',
-        selected: {
-            group: [],
-            tag: []
-        }
-    }
-
-    componentDidMount () {
-        const dictionary = {};
-        this.props.data.all[this.state.filter].forEach(tag => {
-            dictionary[tag.replace('$', '')] = tag;
-        });
-        this.setState(prev => ({
-            ...prev,
-            dictionary: dictionary
-        }));
-    }
-
-    setDictionary (tag) {
-        const dictionary = {};
-        this.props.data.all[tag].forEach(tag => {
-            dictionary[tag.replace('$', '')] = tag;
-        });
-        this.setState(prev => ({
-            ...prev,
-            dictionary: dictionary
-        }));
+        filter: 'tag'
     }
     setFilter (tag) {
-        this.setState(prev => ({
-            ...prev,
-            filter: tag
-        }));
-    }
-    setSelected (tag) {
-        const selected = this.state.selected[this.state.filter].slice();
-        if (selected.includes(tag)) {
-            this.setState(prev=> ({
-                ...prev,
-                selected: {
-                    ...prev.selected,
-                    [this.state.filter]: selected.filter(t => t !== tag)
-                }
-            }));
-        } else {
-            this.setState(prev=> ({
-                ...prev,
-                selected: {
-                    ...prev.selected,
-                    [this.state.filter]: selected.concat(tag)
-                }
-            }));
-        }
+        this.setState({filter: tag});
     }
 
     handle_onFilterSelect = (tag) => {
         this.setFilter(tag);
-        this.setDictionary(tag);
     }
     handle_onTagToggle = (tag) => {
-        console.log(tag);
-        this.setSelected(tag);
-        this.props.actions.toggle(this.state.filter, this.state.dictionary[tag]);
+        this.props.actions.toggle(this.state.filter, tag);
     }
-
+    
     render () {
         let tagTabCSS = '';
         let groupTabCSS = '';
@@ -89,7 +36,6 @@ class FilterAside2 extends Component {
         } else {
             groupTabCSS = styles.Active;
         }
-
         return (
             <aside className={styles.Aside}>
                 <div>
@@ -104,9 +50,9 @@ class FilterAside2 extends Component {
                         </div>
                     </div>
                     <TagForm
-                        collection={utility.sortByAlpha_asc(Object.keys(this.state.dictionary)).map((tag => {return tag}))}
+                        collection={utility.sortByAlpha_asc(this.props.data.all[this.state.filter])}
                         disabled={this.props.data.tab[this.state.filter]}
-                        selected={this.state.selected[this.state.filter]}
+                        selected={this.props.data.filter[this.state.filter]}
                         styles={formCSS}
                         onToggle={this.handle_onTagToggle}/>
                     <div className={styles.Footer}>
@@ -125,4 +71,4 @@ class FilterAside2 extends Component {
     }
 }
 
-export default FilterAside2;
+export default FilterAside;

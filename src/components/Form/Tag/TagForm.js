@@ -24,7 +24,7 @@ const tagForm = (props) => {
                 className={props.styles}
                 key={i}
                 selected={props.selected.includes(tag)}
-                onToggle={(tag) => props.onToggle(tag)}>
+                onToggle={() => props.onToggle(tag)}>
                 {tag}
             </SelectTag>
         );

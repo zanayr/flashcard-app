@@ -80,7 +80,7 @@ class TagFormPlus extends Component {
                                         className={this.props.styles}
                                         key={utility.createHashId(i)}
                                         selected={this.props.selected.includes(tag)}
-                                        onToggle={(tag) => this.props.onSelect(this.props.category, tag)}>
+                                        onToggle={() => this.props.onSelect(this.props.category, tag)}>
                                         {tag}
                                     </SelectTag>
                                 )

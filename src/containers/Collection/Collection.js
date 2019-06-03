@@ -250,13 +250,14 @@ class Collections extends Component {
         }));
     }
     _setQuick (value) {
+        console.log(this.state.quick);
         if (!this.state.quick.includes(value)) {
             if (value === 'u') {
                 clearTimeout(this.undoTimeout);
                 this.undoTimeout = setTimeout(() => {
                     this._clearQuick('u');
                     this._clearUndo();
-                }, 60000);
+                }, 10000);
             }
             this.setState(prev => ({
                 ...prev,
@@ -605,6 +606,7 @@ class Collections extends Component {
         } else {
             filter[category] = filter[category].concat(tag);
         }
+        console.log(tag);
         this._updateAsideData('filter', filter);
         this._setFilter(filter);
     }
