@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import styles from '../Input/Input.module.css';
+import styles from '../Input.module.css';
 
 
 class StatefulTextField extends Component {

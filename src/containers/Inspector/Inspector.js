@@ -677,8 +677,7 @@ class Inspector extends Component {
     }
 
     // //  Main  -----------------------------------------------------------  Main EHs  //
-    handle_onMainClick = () => {
-        this.handle_onAsideClose();
+    handle_onDefaultClick = () => {
         this._clearSelected();
         this._clearFilter();
     }
@@ -790,7 +789,7 @@ class Inspector extends Component {
                     onClick={this.handle_onAsideClose}/>
                 <main
                     className={styles.List}
-                    onClick={this.handle_onMainClick}>
+                    onClick={this.handle_onDefaultClick}>
                     <div>
                         <TabBar
                             action={this.handle_onTabToggle}

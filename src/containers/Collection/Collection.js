@@ -250,7 +250,6 @@ class Collections extends Component {
         }));
     }
     _setQuick (value) {
-        console.log(this.state.quick);
         if (!this.state.quick.includes(value)) {
             if (value === 'u') {
                 clearTimeout(this.undoTimeout);
@@ -606,7 +605,6 @@ class Collections extends Component {
         } else {
             filter[category] = filter[category].concat(tag);
         }
-        console.log(tag);
         this._updateAsideData('filter', filter);
         this._setFilter(filter);
     }
@@ -684,7 +682,6 @@ class Collections extends Component {
 
     // //  Main  -----------------------------------------------------------  Main EHs  //
     handle_onDefaultClick = () => {
-        // this.handle_onAsideClose();
         this._clearSelected();
         this._clearFilter();
     }

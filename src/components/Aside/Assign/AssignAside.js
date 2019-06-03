@@ -48,14 +48,13 @@ class AssignAside extends Component {
                 </div>
             );
         });
-        
         return (
             <Aux>
                 <aside className={[styles.Aside].join(' ')}>
                     <div>
                         <div className={styles.Header}>
                             <div>
-                                <p className={styles.Message}>Assign a card to one or many decks by selecting them below.</p>
+                                <p className={styles.Message}>Assign or unassign a card to one or many decks by selecting them below. A card is not required to belong to a deck, but will be marked as unassigned.</p>
                             </div>
                         </div>
                         <div className={styles.AssignAside}>
@@ -66,7 +65,7 @@ class AssignAside extends Component {
                         <div className={styles.Footer}>
                             <div>
                                 <Button onClick={() => this.props.actions.confirm(this.state.selected.slice())}>{this.props.data.labels.confirm}</Button>
-                                <IconButton onClick={this.props.actions.cancel}>x</IconButton>
+                                <IconButton onClick={this.props.actions.cancel}>⨯</IconButton>
                             </div>
                         </div>
                     </div>

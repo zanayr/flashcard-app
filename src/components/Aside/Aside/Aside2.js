@@ -16,15 +16,11 @@ const aside = (props) => {
     let aside = null;
     switch (props.state) {
         case asideTypes.ASSIGN:
+            //  !! Assign aside's overlay is inisde the aside object.
             aside = (
-                <Aux>
-                    <AssignAside
+                <AssignAside
                     actions={props.actions}
                     data={props.data}/>
-                    <AsideOverlay
-                        action={props.actions.overlay}
-                        active={true}/>
-                </Aux>
             );
             break;
         case asideTypes.CLOSED:

@@ -182,6 +182,30 @@ class Item extends Component {
             this._clearQuick('f');
         }
     }
+    //  Internal  ----------------------------------------------------  Internal SS  //
+    _updateInteral () {
+        let $new;
+        let $unassigned;
+        const internal = [];
+        Object.keys(this.state.items).forEach(id => {
+            if (this.state.items[id].tag.includes('$new')) {
+                $new = true;
+            }
+            if (this.state.items[id].tag.includes('$unassigned')) {
+                $unassigned = true;
+            }
+        });
+        if ($new) {
+            internal.push('$new');
+        }
+        if ($unassigned) {
+            internal.push('$unassigned');
+        }
+        this.setState(prev => ({
+            ...prev,
+            internal: internal
+        }));
+    }
 
     //  Items  ----------------------------------------------------------  Items SS  //
     _removeManyItems (items) {
@@ -202,10 +226,12 @@ class Item extends Component {
         this.setState(prev => ({
             ...prev,
             items: i
-        }));
+        }), () => {
+            this._updateInteral();
+        });
     }
     _setItemValue (target, value) {
-        const id = this.state.aside.data.item.id;
+        const id = this.state.aside.data.data.id;
         this.setState(prev => ({
             ...prev,
             items: {
@@ -349,9 +375,10 @@ class Item extends Component {
                 primary: 'Front',
                 secondary: 'Back'
             },
-            item: data.item,
+            data: data.item,
             id: data.item.id,
-            tag: this.props.select_user.tag
+            tag: this.props.select_user.tag,
+            task: data.task
         });
     }
     _setCollectionMembership_async (items) {
@@ -404,18 +431,19 @@ class Item extends Component {
     }
     handle_onInspectAsideConfirm = () => {
         const original = this.state.aside.data;
-        const inspected = this.state.items[original.item.id];
+        const inspected = this.state.items[original.data.id];
         if (inspected.primary.length && inspected.secondary.length) {
-            if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
+            if (JSON.stringify(original.data) !== JSON.stringify(inspected)) {
                 if (original.task === 'CREATE_CARD') {
                     this._addManyItems_async([inspected]);
                 } else {
                     this._updateItem_async(inspected);
                     this._setUndo({
                         action: this._undoItemUpdated,
-                        data: original.item
+                        data: original.data
                     });
                 }
+                this._updateInteral();
             } else if (original.task === 'CREATE_CARD') {
                 this._removeManyItems([inspected]);
             }
@@ -426,11 +454,11 @@ class Item extends Component {
         switch (this.state.aside.state) {
             case asideTypes.INSPECT:
                     const original = this.state.aside.data;
-                    const inspected = this.state.item[original.item.id];
+                    const inspected = this.state.items[original.data.id];
                     if (original.task === 'CREATE_CARD') {
                         this._removeManyItems([inspected]);
-                    } else if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
-                        this._setManyItems([original.item]);
+                    } else if (JSON.stringify(original.data) !== JSON.stringify(inspected)) {
+                        this._setManyItems([original.data]);
                     }
                     break;
             default:
@@ -499,38 +527,38 @@ class Item extends Component {
         this._clearQuick('s');
     }
     handle_onAssignAsideConfirm = (member) => {
-        let item = this.state.aside.data.item;
+        let item = this.state.aside.data.data;
         let tag = item.tag;
-        if (member) {
-            if (member.length && tag.includes('$unassigned')) {
-                tag = tag.filter(t => t !== '$unassigned');
-            } else if (!tag.includes('$unassigned')) {
-                tag = tag.concat(['$unassigned']);
-            }
-            item = {
-                ...item,
-                member: member,
-                tag: tag
-            }
-            this.props.update_async('card', this.props.select_authToken, item);
-            this._setManyItems([item]);
-            this._setUndo({
-                action: this._undoItemUpdated,
-                data: this.state.aside.data.item
-            });
+        if (member.length && tag.includes('$unassigned')) {
+            tag = tag.filter(t => t !== '$unassigned');
+        } else if (!tag.includes('$unassigned')) {
+            tag = tag.concat(['$unassigned']);
         }
+        
+        item = {
+            ...item,
+            member: member,
+            tag: tag
+        }
+        this.props.update_async('card', this.props.select_authToken, item);
+        this._setManyItems([item]);
+        this._setUndo({
+            action: this._undoItemUpdated,
+            data: this.state.aside.data.data
+        });
+        this._clearSelected();
         this._clearAndCloseAside();
     }
     _openAssignAside (data) {
         const collections = this.props.select_collections;
         this._toggleAside(data.type);
         this._setAside({
-            cancel: this.handle_asideCancel,
+            cancel: this.handle_onAsideClose,
             confirm: data.confirm,
             overlay: data.overlay
         }, {
             all: Object.keys(collections).map(id => {return {...collections[id]}}),
-            item: data.item,
+            data: data.item,
             labels: {
                 confirm: 'Confirm'
             },
@@ -556,7 +584,7 @@ class Item extends Component {
         this._setSelected(selected);
     }
     _updateItem = () => {
-        const original = this.state.aside.data.item;
+        const original = this.state.aside.data.data;
         const item = this.state.items[original.id];
         if (JSON.stringify(item) !== JSON.stringify(original)) {
             this.props.update_async(this.props.match.params.item, this.props.select_authToken, item);
@@ -712,8 +740,7 @@ class Item extends Component {
     }
 
     // //  Main  -----------------------------------------------------------  Main EHs  //
-    handle_onMainClick = () => {
-        this.handle_onAsideClose();
+    handle_onDefaultClick = () => {
         this._clearSelected();
         this._clearFilter();
     }
@@ -821,7 +848,7 @@ class Item extends Component {
                     onClick={this.handle_onAsideClose}/>
                 <main
                     className={styles.List}
-                    onClick={this.handle_onMainClick}>
+                    onClick={this.handle_onDefaultClick}>
                     <div>
                         <TabBar
                             action={this.handle_onTabToggle}
