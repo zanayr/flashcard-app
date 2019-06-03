@@ -407,7 +407,7 @@ class Item extends Component {
         const inspected = this.state.items[original.item.id];
         if (inspected.primary.length && inspected.secondary.length) {
             if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
-                if (original.item.tag.includes('$create')) {
+                if (original.task === 'CREATE_CARD') {
                     this._addManyItems_async([inspected]);
                 } else {
                     this._updateItem_async(inspected);
@@ -416,7 +416,7 @@ class Item extends Component {
                         data: original.item
                     });
                 }
-            } else if (original.tag.includes('$create')) {
+            } else if (original.task === 'CREATE_CARD') {
                 this._removeManyItems([inspected]);
             }
             this._clearAndCloseAside();
@@ -427,7 +427,7 @@ class Item extends Component {
             case asideTypes.INSPECT:
                     const original = this.state.aside.data;
                     const inspected = this.state.item[original.item.id];
-                    if (original.tag.includes('$create')) {
+                    if (original.task === 'CREATE_CARD') {
                         this._removeManyItems([inspected]);
                     } else if (JSON.stringify(original.item) !== JSON.stringify(inspected)) {
                         this._setManyItems([original.item]);
@@ -449,11 +449,9 @@ class Item extends Component {
         this._openInspectAside({
             confirm: this.handle_onInspectAsideConfirm,
             overlay: this.handle_onInspectAsideConfirm,
-            item: {
-                ...item,
-                tag: ['$create']
-            },
-            type: asideTypes.INSPECT
+            item: item,
+            type: asideTypes.INSPECT,
+            task: 'CREATE_CARD'
         });
         this._clearSelected();
     }
@@ -495,29 +493,32 @@ class Item extends Component {
             confirm: this.handle_onInspectAsideConfirm,
             overlay: this.handle_onInspectAsideConfirm,
             item: item,
-            type: asideTypes.INSPECT
+            type: asideTypes.INSPECT,
+            task: 'INSPECT_CARD'
         });
         this._clearQuick('s');
     }
     handle_onAssignAsideConfirm = (member) => {
         let item = this.state.aside.data.item;
         let tag = item.tag;
-        if (member.length && tag.includes('$unassigned')) {
-            tag = tag.filter(t => t !== '$unassigned');
-        } else if (!tag.includes('$unassigned')) {
-            tag = tag.concat(['$unassigned']);
+        if (member) {
+            if (member.length && tag.includes('$unassigned')) {
+                tag = tag.filter(t => t !== '$unassigned');
+            } else if (!tag.includes('$unassigned')) {
+                tag = tag.concat(['$unassigned']);
+            }
+            item = {
+                ...item,
+                member: member,
+                tag: tag
+            }
+            this.props.update_async('card', this.props.select_authToken, item);
+            this._setManyItems([item]);
+            this._setUndo({
+                action: this._undoItemUpdated,
+                data: this.state.aside.data.item
+            });
         }
-        item = {
-            ...item,
-            member: member,
-            tag: tag
-        }
-        this.props.update_async('card', this.props.select_authToken, item);
-        this._setManyItems([item]);
-        this._setUndo({
-            action: this._undoItemUpdated,
-            data: this.state.aside.data.item
-        });
         this._clearAndCloseAside();
     }
     _openAssignAside (data) {
@@ -786,6 +787,7 @@ class Item extends Component {
                     <List
                         action={this.handle_onListClick}
                         collection={utility.sortBy(this.state.sort, this.state.items)}
+                        default={{primary: 'Front', secondary: 'Back'}}
                         filters={this.state.filter}
                         current={this.state.current}
                         selected={this.state.selected}

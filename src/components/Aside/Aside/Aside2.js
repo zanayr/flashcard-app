@@ -17,9 +17,14 @@ const aside = (props) => {
     switch (props.state) {
         case asideTypes.ASSIGN:
             aside = (
-                <AssignAside
+                <Aux>
+                    <AssignAside
                     actions={props.actions}
                     data={props.data}/>
+                    <AsideOverlay
+                        action={props.actions.overlay}
+                        active={true}/>
+                </Aux>
             );
             break;
         case asideTypes.CLOSED:

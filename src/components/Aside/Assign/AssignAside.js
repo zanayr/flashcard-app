@@ -29,9 +29,10 @@ class AssignAside extends Component {
     }
 
     render () {
-        const collectionButtons = this.props.data.all.map((collection, i) => {
+        const collections = this.props.data.all.map((collection, i) => {
             let css = [styles.AssignButton];
-            let name = collection.primary;
+            let title = collection.primary;
+            let details = collection.secondary;
             if (this.state.selected.includes(collection.id)) {
                 css.push(styles.Active);
             }
@@ -41,7 +42,8 @@ class AssignAside extends Component {
                     key={i + 1}
                     onClick={() => this.handle_onSelect(collection.id)}>
                     <div>
-                        <p>{name}</p>
+                        <h3 className={styles.Title}>{title}</h3>
+                        <p className={styles.Details}>{details}</p>
                     </div>
                 </div>
             );
@@ -51,11 +53,14 @@ class AssignAside extends Component {
             <Aux>
                 <aside className={[styles.Aside].join(' ')}>
                     <div>
-                        <h3>Assign</h3>
-                        <p>Instructions on how to assign here.</p>
+                        <div className={styles.Header}>
+                            <div>
+                                <p className={styles.Message}>Assign a card to one or many decks by selecting them below.</p>
+                            </div>
+                        </div>
                         <div className={styles.AssignAside}>
                             <div>
-                                {collectionButtons}
+                                {collections}
                             </div>
                         </div>
                         <div className={styles.Footer}>
