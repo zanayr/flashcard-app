@@ -314,7 +314,6 @@ export const _updateTag = (store, collection, data) => {
 //  Add  ---------------------------------------------------------------  Add Async  //
 export const add_async = (store, token, viewModel) => {
     return dispatch => {
-        console.log(store);
         dispatch(_init(store));
         let model = {};
         switch (store) {

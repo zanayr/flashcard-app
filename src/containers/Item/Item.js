@@ -381,23 +381,30 @@ class Item extends Component {
             task: data.task
         });
     }
-    _setCollectionMembership_async (items) {
+    _addMembership_async(item, members) {
         const collections = this.props.select_collections;
-        const membership = {};
-        items.forEach(item => {
-            item.member.forEach(member => {
-                if (membership[member]) {
-                    membership[member] = membership[member].concat(item.id);
-                } else {
-                    membership[member] = [item.id];
-                }
-            });
+        const member = {};
+        members.forEach(id => {
+            member[id] = collections[id].member.concat(item.id);
         });
-        Object.keys(membership).forEach(id => {
+        Object.keys(member).forEach(id => {
             this.props.update_async('deck', this.props.select_authToken, {
                 ...collections[id],
-                member: collections[id].member.concat(membership[id])
-            });
+                member: member[id]
+            })
+        });
+    }
+    _removeMembership_async (item, members) {
+        const collections = this.props.select_collections;
+        const member = {};
+        members.forEach(id => {
+            member[id] = collections[id].member.filter(i => i !== item.id);
+        });
+        Object.keys(member).forEach(id => {
+            this.props.update_async('deck', this.props.select_authToken, {
+                ...collections[id],
+                member: member[id]
+            })
         });
     }
     //  Items  ----------------------------------------------------------  Items PM  //
@@ -405,8 +412,7 @@ class Item extends Component {
         this.props.update_async('card', this.props.select_authToken, item);
     }
     _addManyItems_async (items) {
-        this.props.addMany_async(this.props.match.params.item, this.props.select_authToken, items);
-        this._setCollectionMembership_async(items);
+        this.props.addMany_async('card', this.props.select_authToken, items);
     }
     _cloneManyItems () {
         const cloned = [];
@@ -435,6 +441,7 @@ class Item extends Component {
         if (inspected.primary.length && inspected.secondary.length) {
             if (JSON.stringify(original.data) !== JSON.stringify(inspected)) {
                 if (original.task === 'CREATE_CARD') {
+                    console.log('here');
                     this._addManyItems_async([inspected]);
                 } else {
                     this._updateItem_async(inspected);
@@ -485,8 +492,8 @@ class Item extends Component {
     }
     _deleteManyItems () {
         const selected = this.state.selected.slice();
-        this.props.deleteMany_async(this.props.match.params.item, this.props.select_authToken, selected);
-        this._removeCollectionMembership_async(selected);
+        this.props.deleteMany_async('card', this.props.select_authToken, selected);
+        this._removeManyMembership(selected);
         this._removeManyItems(selected);
         this._setUndo({
             action: this._undoManyItemsDeleted,
@@ -494,23 +501,14 @@ class Item extends Component {
         });
         this._clearSelected();
     }
-    _removeCollectionMembership_async (items) {
-        const collections = this.props.select_collections;
-        const membership = {};
+    _addManyMembership (items) {
         items.forEach(item => {
-            item.member.forEach(member => {
-                if (membership[member]) {
-                    membership[member] = membership[member].concat(item.id);
-                } else {
-                    membership[member] = [item.id];
-                }
-            });
+            this._addMembership_async(item, item.member);
         });
-        Object.keys(membership).forEach(id => {
-            this.props.update_async('deck', this.props.select_authToken, {
-                ...collections[id],
-                member: collections[id].member.filter(i => !membership[id].includes(i))
-            });
+    }
+    _removeManyMembership (items) {
+        items.forEach(item => {
+            this._removeMembership_async(item, item.member);
         });
     }
     _deleteItem = (item) => {
@@ -526,21 +524,24 @@ class Item extends Component {
         });
         this._clearQuick('s');
     }
-    handle_onAssignAsideConfirm = (member) => {
+    handle_onAssignAsideConfirm = (members) => {
         let item = this.state.aside.data.data;
         let tag = item.tag;
-        if (member.length && tag.includes('$unassigned')) {
+        const add = members.filter(id => !item.member.includes(id));
+        const remove = item.member.filter(id => !members.includes(id));
+        if (members.length && tag.includes('$unassigned')) {
             tag = tag.filter(t => t !== '$unassigned');
         } else if (!tag.includes('$unassigned')) {
             tag = tag.concat(['$unassigned']);
         }
-        
         item = {
             ...item,
-            member: member,
+            member: members,
             tag: tag
         }
-        this.props.update_async('card', this.props.select_authToken, item);
+        this._addMembership_async(item, add);
+        this._removeMembership_async(item, remove);
+        this._updateItem_async(item);
         this._setManyItems([item]);
         this._setUndo({
             action: this._undoItemUpdated,
@@ -626,6 +627,7 @@ class Item extends Component {
     _undoManyItemsDeleted = () => {
         const items = this.state.undo.data.slice();
         this._addManyItems_async(items);
+        this._addManyMembership(items);
         this._setManyItems(items);
     }
     _undoManyItemsRemoved = () => {
@@ -635,7 +637,6 @@ class Item extends Component {
     }
     _undoItemUpdated = () => {
         const item = this.state.undo.data;
-        console.log(item);
         this.props.update_async('card', this.props.select_authToken, item);
         this._setManyItems([item]);
     }
