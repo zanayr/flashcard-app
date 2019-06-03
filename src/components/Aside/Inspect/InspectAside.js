@@ -105,6 +105,14 @@ class InspectAside extends Component {
             tag: styles.Inspect_Tag,
         };
         switch (this.props.data.task) {
+            case 'CREATE_CARD':
+                header = 'Create a new card below, don\'t forget to add a front and a back.';
+                aux = (
+                    <IconButton
+                        className={styles.InspectAux}
+                        onClick={() => {this.props.history.replace('/create', {id: this.state.data.id})}}>Add</IconButton>
+                );
+                break;
             case 'CREATE_DECK':
                 header = 'Create a new deck below, don\'t forget to add a title.';
                 aux = (
@@ -120,9 +128,16 @@ class InspectAside extends Component {
                         }}>Add</IconButton>
                 );
                 break;
+            case 'INSPECT_CARD':
+                header = 'Edit a card below, don\'t forget it requires a front and back.';
+                aux = (
+                    <IconButton
+                        className={styles.InspectAux}
+                        onClick={() => {this.props.history.replace('/create', {id: this.state.data.id})}}>Add</IconButton>
+                );
+                break;
             case 'INSPECT_DECK':
-                header = 'Edit a the deck below, don\'t forget it requires a title.';
-                console.log(this.props);
+                header = 'Edit a deck below, don\'t forget it requires a title.';
                 aux = (
                     <IconButton
                         className={styles.InspectAux}

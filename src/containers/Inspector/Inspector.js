@@ -364,7 +364,8 @@ class Inspector extends Component {
             },
             data: data.item,
             id: this.state.collection.id,
-            tag: this.props.select_user.tag
+            tag: this.props.select_user.tag,
+            task: data.task
         });
     }
 
@@ -413,7 +414,7 @@ class Inspector extends Component {
         const inspected = this.state.items[original.data.id];
         if (inspected.primary.length && inspected.secondary.length) {
             if (JSON.stringify(original.data) !== JSON.stringify(inspected)) {
-                if (original.data.tag.includes('$create')) {
+                if (original.task === 'CREATE_CARD') {
                     this._addManyItems([inspected]);
                 } else {
                     this._updateItem_async(inspected);
@@ -422,7 +423,7 @@ class Inspector extends Component {
                         data: original.data
                     });
                 }
-            } else if (original.data.tag.includes('$create')) {
+            } else if (original.task === 'CREATE_CARD') {
                 this._removeManyItems([inspected]);
             }
             this._clearAndCloseAside();
@@ -433,7 +434,7 @@ class Inspector extends Component {
             case asideTypes.INSPECT:
                     const original = this.state.aside.data;
                     const inspected = this.state.items[original.data.id];
-                    if (original.data.tag.includes('$create')) {
+                    if (original.task === 'CREATE_CARD') {
                         this._removeManyItems([inspected]);
                     } else if (JSON.stringify(original.data) !== JSON.stringify(inspected)) {
                         this._setManyItems([original.data]);
@@ -459,10 +460,8 @@ class Inspector extends Component {
         this._openInspectAside({
             confirm: this.handle_onInspectAsideConfirm,
             overlay: this.handle_onInspectAsideConfirm,
-            item: {
-                ...item,
-                tag: ['$create']
-            },
+            item: item,
+            task: 'CREATE_CARD',
             type: asideTypes.INSPECT
         });
         this._clearSelected();
@@ -489,6 +488,7 @@ class Inspector extends Component {
             confirm: this.handle_onInspectAsideConfirm,
             overlay: this.handle_onInspectAsideConfirm,
             item: item,
+            task: 'INSPECT_CARD',
             type: asideTypes.INSPECT
         });
         this._clearQuick('s');
