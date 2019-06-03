@@ -135,13 +135,32 @@ class Collections extends Component {
             this._openAside(state);
         }
     }
+    //  Internal  ----------------------------------------------------  Internal SS  //
+    _updateInteral () {
+        let $new = false;
+        const internal = [];
+        Object.keys(this.state.items).forEach(id => {
+            if (this.state.items[id].tag.includes('$new')) {
+                $new = true;
+            }
+        });
+        if ($new) {
+            internal.push('$new');
+        }
+        this.setState(prev => ({
+            ...prev,
+            internal: internal
+        }));
+    }
 
     //  Collection  ------------------------------------------------  Collection SS  //
     _setCollection (collection) {
         this.setState(prev => ({
             ...prev,
             collection: collection
-        }));
+        }) , () => {
+            this._updateInteral();
+        });
     }
 
     //  Current  ------------------------------------------------------  Current SS  //
@@ -409,6 +428,7 @@ class Collections extends Component {
                         data: original.data
                     });
                 }
+                this._updateInteral();
             } else if (original.task === 'CREATE_DECK') {
                 this._removeManyCollections([inspected]);
             }

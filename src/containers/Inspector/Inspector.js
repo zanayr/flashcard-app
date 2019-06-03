@@ -57,14 +57,21 @@ class Inspector extends Component {
     componentDidMount () {
         const items = {};
         const collection = {...this.props.select_collection};
+        let $flagged = false;
         let $new = false;
         const internal = [];
         Object.keys(this.props.select_items).filter(id => collection.member.includes(id)).forEach(id => {
+            if (this.props.select_items[id].tag.includes('&flagged')) {
+                $flagged = true;
+            }
             if (this.props.select_items[id].tag.includes('$new')) {
                 $new = true;
             }
             items[id] = this.props.select_items[id];
         });
+        if ($flagged) {
+            internal.push('&flagged');
+        }
         if ($new) {
             internal.push('$new');
         }
@@ -171,6 +178,38 @@ class Inspector extends Component {
         }
     }
 
+    //  Internal  ----------------------------------------------------  Internal SS  //
+    _updateInteral () {
+        let $flagged = false;
+        let $new = false;
+        let $unassigned = false;
+        const internal = [];
+        Object.keys(this.state.items).forEach(id => {
+            if (this.state.items[id].tag.includes('&flagged')) {
+                $flagged = true;
+            }
+            if (this.state.items[id].tag.includes('$new')) {
+                $new = true;
+            }
+            if (this.state.items[id].tag.includes('$unassigned')) {
+                $unassigned = true;
+            }
+        });
+        if ($flagged) {
+            internal.push('&flagged');
+        }
+        if ($new) {
+            internal.push('$new');
+        }
+        if ($unassigned) {
+            internal.push('$unassigned');
+        }
+        this.setState(prev => ({
+            ...prev,
+            internal: internal
+        }));
+    }
+
     //  Items  ----------------------------------------------------------  Items SS  //
     _removeManyItems (items) {
         const i = this.state.items;
@@ -195,7 +234,9 @@ class Inspector extends Component {
         this.setState(prev => ({
             ...prev,
             items: i
-        }));
+        }), () => {
+            this._updateInteral();
+        });
     }
     _setManyMembers (items) {
         this.setState(prev => ({
@@ -423,6 +464,7 @@ class Inspector extends Component {
                         data: original.data
                     });
                 }
+                this._updateInteral();
             } else if (original.task === 'CREATE_CARD') {
                 this._removeManyItems([inspected]);
             }

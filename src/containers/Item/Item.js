@@ -189,11 +189,12 @@ class Item extends Component {
             this._clearQuick('f');
         }
     }
+    
     //  Internal  ----------------------------------------------------  Internal SS  //
     _updateInteral () {
         let $flagged = false;
-        let $new = false;;
-        let $unassigned = false;;
+        let $new = false;
+        let $unassigned = false;
         const internal = [];
         Object.keys(this.state.items).forEach(id => {
             if (this.state.items[id].tag.includes('&flagged')) {
@@ -466,7 +467,6 @@ class Item extends Component {
         if (inspected.primary.length && inspected.secondary.length) {
             if (JSON.stringify(original.data) !== JSON.stringify(inspected)) {
                 if (original.task === 'CREATE_CARD') {
-                    console.log('here');
                     this._addManyItems_async([inspected]);
                 } else {
                     this._updateItem_async(inspected);
