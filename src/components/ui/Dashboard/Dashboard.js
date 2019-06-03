@@ -1,6 +1,7 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import * as select from '../../../store/reducers/root';
 
-import CircleButton from '../button/Circle/CircleButton';
 import IconButton from '../button/Icon/IconButton';
 
 import styles from './Dashboard.module.css';
@@ -14,7 +15,7 @@ const dashboard = (props) => {
         <div className={styles.Dashboard}>
             <div>
                 <div className={styles.Account}>
-                    <h6 className={styles.Name}>{props.data.primary} {props.data.secondary}</h6>
+                    <h6 className={styles.Name}>{props.select_user.primary} {props.select_user.secondary}</h6>
                 </div>
                 <IconButton onClick={handle_onNavigationClicked}>☰</IconButton>
             </div>
@@ -22,4 +23,11 @@ const dashboard = (props) => {
     );
 };
 
-export default dashboard;
+
+const mapStateToProps = (state) => {
+    return {
+        select_user: select.user(state)
+    }
+}
+
+export default connect(mapStateToProps, null)(dashboard);

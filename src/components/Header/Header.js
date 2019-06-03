@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
 import * as headerTypes from '../Header/types';
 import * as modalTypes from '../modal/Modal/modalTypes';
-import * as select from '../../store/reducers/root';
 
 import ReturnLink from '../ui/link/Return/ReturnLink';
 import Search from '../ui/input/Search/Search';
@@ -105,18 +104,10 @@ class Header extends Component {
                                 <IconButton onClick={() => this.props.actions.sort(3)}>DD</IconButton>
                             </Toolbar>
                         </div>
-                    <Dashboard
-                        data={this.props.select_user}
-                        onNavigation={this.props.actions.navigation}/>
+                    <Dashboard onNavigation={this.props.actions.navigation}/>
                 </div>
             </header>
         );
-    }
-}
-
-const mapStateToProps = (state) => {
-    return {
-        select_user: select.user(state)
     }
 }
 
@@ -128,4 +119,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(null, mapDispatchToProps)(Header);
