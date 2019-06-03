@@ -117,6 +117,7 @@ class Create extends Component {
 
     //  RENDER METHOD  ----------------------------------------------------  RENDER  //
     render () {
+        console.log(this.props);
         return (
             <Aux>
                 <main
@@ -133,7 +134,7 @@ class Create extends Component {
                             }}/>
                         <section className={styles.Editor}>
                             <div>
-                                <div className={styles.Wrapper}>
+                                <div className={styles.Left}>
                                     <CreateForm
                                         deck={this.props.location.state.id}
                                         onCreate={this.handle_onCardCreate}/>
@@ -142,7 +143,7 @@ class Create extends Component {
                         </section>
                         <section className={styles.Board}>
                             <div>
-                                <div className={styles.Wrapper}>
+                                <div className={styles.Right}>
                                     <CardStack
                                         collection={this.state.cards}
                                         max={21}

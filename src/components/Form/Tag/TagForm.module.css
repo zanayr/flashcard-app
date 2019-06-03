@@ -20,26 +20,27 @@
 /*  Add Button  */
 .Add {
     border-radius: 4px;
-    font-size: 19px;
+    font-size: 11px;
     height: 24px;
     margin-left: 8px;
     width: 24px;
 }
 
-/*  TOgGLE BUTTON  */
+/*  Toggle  */
 .Toggle {
-    bottom: 0px;
+    border-radius: 4px;
+    bottom: 4px;
     display: none;
     height: 16px;
     position: absolute;
-    right: 48px;
+    right: 64px;
     width: 16px;
 }
 .Toggle.Second {
     bottom: auto;
-    right: 24px;
+    right: 32px;
     top: 0px;
 }
-.PinnableTagForm:hover .ToggleButton {
+.PinnableTagForm:hover .Toggle {
     display: block;
 }

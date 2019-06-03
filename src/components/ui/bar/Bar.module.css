@@ -8,7 +8,6 @@
 /* Tab Bar */
 .TabBar {
     background-color: var(--white);
-    height: 32px;
     padding-top: 96px;
 }
 .TabBar > div {

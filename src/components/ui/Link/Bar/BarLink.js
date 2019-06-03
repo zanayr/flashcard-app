@@ -1,16 +1,15 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import BarLinkCSS from './BarLink.module.css';
+import style from '../Link.module.css';
 
 const barLink = (props) => {
     return (
-        <div className={BarLinkCSS.Bar_Link}>
+        <div className={[style.Bar, props.className].join(' ')}>
             <Link to={{
                 pathname: props.path,
                 state: props.state
-            }}>
-                <span>{props.children}</span>
+            }}><span>{props.children}</span>
             </Link>
         </div>
     );

@@ -9,13 +9,13 @@ const card = (props) => {
     let css = [styles.Card];
     let display = (
         <div>
-            <p>{props.data.primary}</p>
+            <p className={styles.Display}>{props.data.primary}</p>
         </div>
     );
     if (props.data.flipped) {
         display = (
             <div>
-                <p>{props.data.secondary}</p>
+                <p className={styles.Display}>{props.data.secondary}</p>
                 {props.children}
                 <div className={styles.TagList}>
                     <div>

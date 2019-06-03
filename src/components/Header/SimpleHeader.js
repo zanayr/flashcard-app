@@ -17,6 +17,7 @@ const simpleHeader = (props) => {
     if (props.navigation) {
         content = (
             <BarLink
+                className={styles.Back}
                 path={props.navigation.path}
                 state={{}}>
                 {props.navigation.label}
@@ -28,8 +29,10 @@ const simpleHeader = (props) => {
             className={styles.Header}
             onClick={(e) => handle_onClick(e)}>
             <div>
-                <ReturnLink/>
-                {content}
+                <div className={styles.Left}>
+                    <ReturnLink/>
+                    {content}
+                </div>
                 <Dashboard onNavigation={props.actions.navigation}/>
             </div>
         </header>

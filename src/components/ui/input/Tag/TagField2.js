@@ -22,7 +22,7 @@ const tagField2 = (props) => {
                     value={props.value}
                     onChange={(e) => props.onChange(e.target.value)}/>
                 {props.children}
-                <span><p>{24 - props.value.length}</p></span>
+                <span className={styles.Counter}><p>{24 - props.value.length}</p></span>
             </div>
         </div>
     );

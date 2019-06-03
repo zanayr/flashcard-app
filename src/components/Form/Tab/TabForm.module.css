@@ -17,7 +17,7 @@
 }
 .TabForm input {
     color: var(--primary);
-    font-weight: 600;
+    font-weight: 500;
 }
 .TabForm input::placeholder {
     color: var(--secondary);

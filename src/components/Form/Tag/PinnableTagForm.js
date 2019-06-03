@@ -61,11 +61,19 @@ class PinnableTagForm extends Component {
                     </div>
                 </div>
                 <CountingTextField
-                    label={'new ' + this.props.category}
-                    tabIndex={-1}
+                    className={this.props.styles.input}
+                    config={{
+                        autoComplete: 'off',
+                        label: 'new ' + this.props.category,
+                        maxLength: 24,
+                        minLength: 3,
+                        name: 'tag',
+                        tabIndex: this.props.tabIndex
+                    }}
                     value={this.state.value}
                     onChange={this.handle_onChange}>
                     <Button
+                        disabled={!(this.state.value.length > 2)}
                         className={[styles.Add, this.props.styles.add].join(' ')}
                         tabIndex={-1}
                         onClick={this.handle_onConfirm}>
@@ -75,27 +83,28 @@ class PinnableTagForm extends Component {
             </Aux>
         );
         let toggle = null;
+        let toggleCSS = [styles.Toggle, this.props.styles.toggle];
         if (this.props.state) {
             content = (
                 <TagEditor
+                    className={this.props.styles.input}
                     label={this.props.category}
                     tabIndex={this.props.tabIndex}
                     value={this.props.pinned.join(', ')}
                     onChange={this.handle_onChange}/>
             );
         }
-        if (this.props.onToggle) {
-            let css = [styles.Toggle, this.props.styles.toggle];
-            if (this.props.state) {
-                css.push(styles.Second);
-            }
-            toggle = (
-                <Button
-                    className={css.join(' ')}
-                    tabIndex={-1}
-                    onClick={this.props.onToggle}>T</Button>
-            )
+        if (this.props.state) {
+            toggleCSS.push(styles.Second);
         }
+        toggle = (
+            <Button
+                className={toggleCSS.join(' ')}
+                tabIndex={-1}
+                onClick={this.props.onToggle}>+</Button>
+        );
+
+
         return (
             <form
                 className={styles.PinnableTagForm}

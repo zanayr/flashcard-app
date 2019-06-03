@@ -1,11 +1,11 @@
 .Card {
-    background-color: white;
+    background-color: var(--white);
     border-radius: 8px;
-    border: 1px solid blue;
+    box-shadow: 1px 1px 5px 1px var(--darkgray);
     cursor: pointer;
-    height: 192px;
+    height: 150px;
     position: absolute;
-    width: 256px;
+    width: 200px;
 }
 .Card > div {
     display: flex;
@@ -21,24 +21,23 @@
 .Card.Pulled {
     left: -24px;
 }
-
-.Card p {
-    color: coral;
-    font-size: 17px;
-    font-weight: bold;
+/* Display Text */
+.Display {
+    color: var(--black);
+    font-size: 15px;
+    font-weight: 600;
     text-align: center;
     user-select: none;
     width: 100%;
     word-break: break-all;
 }
-.Card.Under > div > p {
-    color: blue;
+/* When a card is below another */
+.Card.Under .Display {
+    color: var(--black);
     font-size: 11px;
+    font-weight: 400;
 }
-.Card.Flagged {
-    border: 1px solid red;
-}
-
+/* Tag List */
 .TagList {
     position: absolute;
     left: 0px;
@@ -51,8 +50,11 @@
     flex-wrap: wrap;
     padding: 16px;
 }
-.TagList > div > p {
-    color: cadetblue;
-    font-size: 9px;
-    text-align: left;
+.TagList span p {
+    color: var(--black);
+}
+
+/* For later */
+.Card.Flagged {
+    border: 1px solid red;
 }

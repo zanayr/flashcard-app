@@ -1,22 +1,26 @@
-/*  TOOGLE BUTTON  */
-.ToggleButton {
-    background-color: pink;
-    display: none;
-    height: 16px;
-    position: absolute;
-    right: 24px;
-    top: 0px;
-    width: 16px;
+.Message {
+    color: var(--primary);
+    font-size: 11px;
+    margin-bottom: 16px;
 }
-.Basics:hover .ToggleButton {
-    display: block;
+
+/* Fields */
+.Basics input,
+.Basics textarea,
+.Create_Input {
+    color: var(--primary);
+    font-weight: 500;
 }
-.ToggleButton.Second {
-    display: block;
-    margin-left: 8px;
-    position: relative;
-    right: auto;
-    top: auto;
+.Basics input::placeholder,
+.Basics textarea::placeholder,
+.Create_Input::placeholder {
+    color: var(--primary);
+    font-weight: 400;
+}
+.Basics input:focus,
+.Basics textarea:focus,
+.Create_Input:focus {
+    border-bottom-color: var(--primary);
 }
 
 .NotesField {
@@ -26,4 +30,86 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+}
+
+/* Tags */
+.Create_Add {
+    border-radius: 4px;
+}
+.Create_Add:enabled {
+    background-color: var(--primary);
+    border: 1px solid var(--primary);
+    color: var(--white);
+}
+.Create_Add:disabled {
+    background-color: var(--white);
+    border: 1px solid var(--secondary);
+    color: var(--secondary);
+}
+.Create_Tag {
+    background-color: var(--white);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+.Create_Tag.Create_Pinned {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: var(--black);
+}
+.Create_Tag.Create_Selected {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
+
+/*  Toggle  */
+.Toggle {
+    background-color: var(--primary);
+    border-radius: 4px;
+    color: var(--white);
+    display: none;
+    height: 16px;
+    position: absolute;
+    right: 24px;
+    top: 0px;
+    width: 16px;
+}
+.Basics:hover .Toggle {
+    display: block;
+}
+.Toggle.Second {
+    background-color: var(--white);
+    color: var(--primary);
+    display: block;
+    margin-left: 8px;
+    position: relative;
+    right: auto;
+    top: auto;
+}
+.Create_Toggle {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+/* Interface */
+.Interface > div {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    justify-content: space-between;
+}
+.Interface > div button:disabled {
+    background-color: var(--white);
+    border-color: var(--secondary);
+    color: var(--secondary);
+}
+.Interface > div button:enabled {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
+.Interface > div button:last-of-type {
+    background-color: var(--white);
+    border-color: var(--primary);
+    color: var(--primary);
 }

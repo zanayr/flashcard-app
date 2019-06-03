@@ -265,7 +265,7 @@ class Inspector extends Component {
                 this.undoTimeout = setTimeout(() => {
                     this._clearQuick('u');
                     this._clearUndo();
-                }, 5000);
+                }, 10000);
             }
             this.setState(prev => ({
                 ...prev,
@@ -460,6 +460,7 @@ class Inspector extends Component {
         this._openInspectAside({
             confirm: this.handle_onInspectAsideConfirm,
             overlay: this.handle_onInspectAsideConfirm,
+            id: this.state.collection.id,
             item: item,
             task: 'CREATE_CARD',
             type: asideTypes.INSPECT
@@ -487,6 +488,7 @@ class Inspector extends Component {
         this._openInspectAside({
             confirm: this.handle_onInspectAsideConfirm,
             overlay: this.handle_onInspectAsideConfirm,
+            id: this.state.collection.id,
             item: item,
             task: 'INSPECT_CARD',
             type: asideTypes.INSPECT
@@ -773,7 +775,6 @@ class Inspector extends Component {
                 content = (<Throbber/>);
                 break;
         }
-        console.log(this.props);
         return (
             <Aux>
                 <Header

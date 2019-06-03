@@ -14,7 +14,7 @@ const countingTextField = (props) => {
             <div>
                 <label>{props.config.label}</label>
                 <input
-                    className={styles.Input}
+                    className={props.className}
                     {...props.config}
                     name={props.config.name || props.target}
                     placeholder={props.config.placeholder || props.config.label}

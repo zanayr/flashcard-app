@@ -32,7 +32,11 @@
 /* Button */
 .Button {
     background-color: transparent;
-    border: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 11px;
+    padding: 4px;
+    transition: background-color 0.1667s ease, border-color 0.1667s ease;
 }
 .Button:enabled {
     cursor: pointer;

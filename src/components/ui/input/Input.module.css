@@ -19,7 +19,6 @@
 .Field input,
 .Field textarea {
     border-bottom: 1px solid transparent;
-    color: var(--black);
     display: block;
     flex-grow: 1;
     font-size: 11px;
@@ -32,7 +31,6 @@
 }
 .Field input::placeholder,
 .Field textarea::placeholder {
-    color: var(--primary);
     text-transform: capitalize;
 }
 .Field input:focus,

@@ -1,4 +1,21 @@
-/* Component */
+/* Bar Link */
+.Bar {
+    height: 64px;
+    padding: 0px 8px;
+    width: 100%;
+}
+
+.Bar > a {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+}
+
+/* Link */
 .Return {
     margin-left: -16px;
 }
@@ -6,7 +23,7 @@
     padding-left: 16px;
 }
 .Return span {
-    background-color: var(--white);
+    background-color: transparent;
     display: block;
     height: 64px;
     margin: 0px 4px;

@@ -1,17 +1,17 @@
 .Stack {
     margin: 0px auto;
-    width: 256px;
+    width: 150px;
 }
 
 .ActionButton {
-    background-color: blue;
-    color: white;
+    background-color: var(--accent);
+    color: var(--black);
     display: none;
-    height: 16px;
+    height: 24px;
     position: absolute;
     right: 12px;
     top: 12px;
-    width: 16px;
+    width: 24px;
 }
 
 .Stack article:hover .ActionButton {

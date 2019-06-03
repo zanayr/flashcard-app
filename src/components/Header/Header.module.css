@@ -24,3 +24,21 @@
     flex-grow: 1;
     justify-content: space-between;
 }
+
+/* Simple Header */
+.Left {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    justify-content: space-between;
+}
+/* Back Link */
+.Back {
+    width: 64px;
+}
+.Back > a {
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 500;
+}

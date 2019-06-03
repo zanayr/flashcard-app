@@ -153,6 +153,11 @@ class CreateForm extends Component {
     handle_onCardChange = (target, value) => {
         this._updateCard(target, value);
     }
+    handle_onCardClear = () => {
+        this._resetTagForms();
+        this._resetCard();
+        this.basicsForm.current.primary.focus();
+    }
     handle_onCardCreate = () => {
         if (this.basicsForm.current.reportValidity()) {
             //  Retrieve all tags for the new card
@@ -175,7 +180,6 @@ class CreateForm extends Component {
             } else {
                 groups = this.state.card.group.filter(group => !this.state.pinned.group.includes(group)).concat(this.state.pinned.group);
             }
-            console.log(tags, groups);
             //  Build the new card
             const card = create.itemViewModel(utility.createHashId(0), {
                 group: groups,
@@ -230,6 +234,14 @@ class CreateForm extends Component {
         let note;
         let tagForm = null;
         let groupForm = null;
+        let formCSS = {
+            add: styles.Create_Add,
+            input: styles.Create_Input,
+            pinned: styles.Create_Pinned,
+            selected: styles.Create_Selected,
+            tag: styles.Create_Tag,
+            toggle: styles.Create_Toggle
+        };
         if (this.state.states.note) {
             note = (
                 <Textarea2
@@ -244,18 +256,18 @@ class CreateForm extends Component {
                     value={this.state.card.note}
                     onChange={(value) => this.handle_onCardChange('note', value)}>
                     <Button
-                        className={styles.ToggleButton}
-                        onClick={() => this.handle_onStateToggle('note')}>T</Button>
+                        className={styles.Toggle}
+                        onClick={() => this.handle_onStateToggle('note')}>-</Button>
                 </Textarea2>
             );
         } else {
             note = (
                 <div className={styles.NotesField}>
                     <div>
-                        <p>Add Notes</p>
+                        <p className={styles.Message}>Add Notes</p>
                         <Button
-                            className={[styles.ToggleButton, styles.Second].join(' ')}
-                            onClick={() => this.handle_onStateToggle('note')}>T</Button>
+                            className={[styles.Toggle, styles.Second].join(' ')}
+                            onClick={() => this.handle_onStateToggle('note')}>+</Button>
                     </div>
                 </div>
             );
@@ -268,6 +280,7 @@ class CreateForm extends Component {
                     pinned={this.state.pinned.tag}
                     selected={this.state.card.tag}
                     state={this.state.states.tag}
+                    styles={formCSS}
                     tabIndex={4}
                     reference={this.tagForm}
                     onConfirm={(tag) => this.handle_onTagCreate('tag', tag)}
@@ -283,6 +296,7 @@ class CreateForm extends Component {
                     pinned={this.state.pinned.group}
                     selected={this.state.card.group}
                     state={this.state.states.group}
+                    styles={formCSS}
                     tabIndex={5}
                     reference={this.groupForm}
                     onConfirm={(tag) => this.handle_onTagCreate('group', tag)}
@@ -297,6 +311,7 @@ class CreateForm extends Component {
                     className={styles.Basics}
                     ref={this.basicsForm}>
                     <div>
+                        <p className={styles.Message}>Add cards quickly below, don't forget that they require a front and back.</p>
                         <CountingTextField
                             config={{
                                 autoComplete: 'off',
@@ -326,11 +341,21 @@ class CreateForm extends Component {
                 </form>
                 {tagForm}
                 {groupForm}
-                <Button
-                    tabIndex={6}
-                    onClick={this.handle_onCardCreate}>
-                    Create
-                </Button>
+                <div className={styles.Interface}>
+                    <div>
+                    <Button
+                        disabled={!this.state.card.primary.length || !this.state.card.secondary.length}
+                        tabIndex={6}
+                        onClick={this.handle_onCardCreate}>
+                        Create
+                    </Button>
+                    <Button
+                        tabIndex={-1}
+                        onClick={this.handle_onCardClear}>
+                        Clear
+                    </Button>
+                    </div>
+                </div>
             </Aux>
         )
     }

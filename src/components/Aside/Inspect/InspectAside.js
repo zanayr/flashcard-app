@@ -110,7 +110,7 @@ class InspectAside extends Component {
                 aux = (
                     <IconButton
                         className={styles.InspectAux}
-                        onClick={() => {this.props.history.replace('/create', {id: this.state.data.id})}}>Add</IconButton>
+                        onClick={() => {this.props.history.replace('/create', {id: this.props.data.id})}}>Add</IconButton>
                 );
                 break;
             case 'CREATE_DECK':
@@ -133,7 +133,7 @@ class InspectAside extends Component {
                 aux = (
                     <IconButton
                         className={styles.InspectAux}
-                        onClick={() => {this.props.history.replace('/create', {id: this.state.data.id})}}>Add</IconButton>
+                        onClick={() => {this.props.history.replace('/create', {id: this.props.data.id})}}>Add</IconButton>
                 );
                 break;
             case 'INSPECT_DECK':
