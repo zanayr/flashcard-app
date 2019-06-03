@@ -181,15 +181,15 @@ class InspectAside extends Component {
         //     }
             
         // }
-        // if (this.props.data.data.hasOwnProperty('flag')) {
-        //     flag = (
-        //         <div className={styles.Middle}>
-        //             <div>
-        //                 <Button onClick={this.props.actions.flag}>Flag Card</Button>
-        //             </div>
-        //         </div>
-        //     );
-        // }
+        if (this.props.data.data.hasOwnProperty('flag')) {
+            flag = (
+                <div className={styles.Middle}>
+                    <div>
+                        <Button onClick={this.props.actions.flag}>flag card</Button>
+                    </div>
+                </div>
+            );
+        }
         return (
             <aside className={styles.Aside}>
                 <div>

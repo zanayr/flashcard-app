@@ -9,7 +9,7 @@ const selectTag = (props) => {
         props.onToggle();
     }
     let css = [props.className.tag];
-    let tag = props.children.replace('_', ' ').replace('$', '');
+    let tag = props.children.replace('_', ' ').replace(/^\$|&/, '');
     if (props.pinned) {
         css.push(props.className.pinned);
     } else if (props.selected) {

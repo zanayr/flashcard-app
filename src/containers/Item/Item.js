@@ -56,9 +56,13 @@ class Item extends Component {
     componentDidMount () {
         const internal = [];
         const items = {};
+        let $flagged = false;
         let $new = false;
         let $unassigned = false;
         Object.keys(this.props.select_items).forEach(id => {
+            if (this.props.select_items[id].tag.includes('&flagged')) {
+                $flagged = true;
+            }
             if (this.props.select_items[id].tag.includes('$new')) {
                 $new = true;
             }
@@ -67,6 +71,9 @@ class Item extends Component {
             }
             items[id] = this.props.select_items[id];
         });
+        if ($flagged) {
+            internal.push('&flagged');
+        }
         if ($new) {
             internal.push('$new');
         }
@@ -184,10 +191,14 @@ class Item extends Component {
     }
     //  Internal  ----------------------------------------------------  Internal SS  //
     _updateInteral () {
-        let $new;
-        let $unassigned;
+        let $flagged = false;
+        let $new = false;;
+        let $unassigned = false;;
         const internal = [];
         Object.keys(this.state.items).forEach(id => {
+            if (this.state.items[id].tag.includes('&flagged')) {
+                $flagged = true;
+            }
             if (this.state.items[id].tag.includes('$new')) {
                 $new = true;
             }
@@ -195,6 +206,9 @@ class Item extends Component {
                 $unassigned = true;
             }
         });
+        if ($flagged) {
+            internal.push('&flagged');
+        }
         if ($new) {
             internal.push('$new');
         }
@@ -343,6 +357,16 @@ class Item extends Component {
 
     //  PRIVATE METHODS  =========================================  PRIVATE METHODS  //
     //  Aside  ----------------------------------------------------------  Aside PM  //
+    handle_onItemFlag = () => {
+        const item = this.state.aside.data.data;
+        if (item.tag.includes('&flagged')) {
+            item.tag = item.tag.filter(tag => tag !== '&flagged');
+        } else {
+            item.tag = item.tag.concat('&flagged');
+        }
+        this._setManyItems([item]);
+        this._updateItem_async(item);
+    }
     _openFilterAside () {
         this._setAside({
             cancel: this.handle_onFilterClear,
@@ -366,6 +390,7 @@ class Item extends Component {
             cancel: this.handle_onAsideClose,
             change: this.handle_onItemChange,
             confirm: data.confirm,
+            flag: this.handle_onItemFlag,
             overlay: data.overlay
         }, {
             group: this.props.select_user.group,

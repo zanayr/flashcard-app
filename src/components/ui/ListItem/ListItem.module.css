@@ -72,5 +72,8 @@
 }
 
 .ListItem.Flagged {
-    border-left: 3px solid var(--accent);
+    border-left: 4px solid var(--accent);
+}
+.ListItem.Flagged > div {
+    padding-left: 12px;
 }

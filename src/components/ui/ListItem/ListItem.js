@@ -14,28 +14,25 @@ class ListItem extends Component {
     }
 
     render () {
-        let css = [styles.ListItem];
-        if (this.props.selected) {
-            css = css.concat(styles.Selected);
-        }
-        if (this.props.data.flag) {
-            css = css.concat(styles.Flagged)
-        }
+        const css = [styles.ListItem];
+        let count = this.props.data.member.length;
+        const date = new Date(this.props.data.date).getMonth() + 1 + '/' + new Date(this.props.data.date).getDate() + '/' + new Date(this.props.data.date).getFullYear();
+        let flagged = false;
+        let meta = (<p className={styles.Meta}>{date}</p>);
         let primary = (<h3 className={styles.Primary}>{this.props.default.primary}</h3>);
         let secondary = (<p className={styles.Secondary}>{this.props.default.secondary}</p>);
-        if (this.props.data.primary.length) {
-            primary = (<h3 className={styles.Primary}>{this.props.data.primary}</h3>);
-        }
-        if (this.props.data.secondary.length) {
-            secondary = (<h3 className={styles.Secondary}>{this.props.data.secondary}</h3>);
-        }
-        let tags = utility.sortByAlpha_asc(this.props.data.tag).map(tag => {
-            return tag.match(/^\$[a-zA-Z0-9]*/) ? null : (
-                <Tag key={tag}>{tag}</Tag>
-            );
+        const tags = utility.sortByAlpha_asc(this.props.data.tag).map(tag => {
+            if (tag[0] === '$') {
+                return null;
+            } else if (tag[0] === '&') {
+                flagged = true;
+                return null;
+            } else {
+                return (<Tag key={tag}>{tag}</Tag>);
+            }
         });
-        const date = new Date(this.props.data.date).getMonth() + 1 + '/' + new Date(this.props.data.date).getDate() + '/' + new Date(this.props.data.date).getFullYear();
-        let count = this.props.data.member.length;
+
+        //  Conditional States  //
         if (count) {
             if (this.props.data.hasOwnProperty('flag')) {
                 if (count > 1) {
@@ -50,10 +47,20 @@ class ListItem extends Component {
                     count = count + ' card';
                 }
             }
-        } else {
-            count = null;
+            meta = (<p className={styles.Meta}>{date} {count}</p>);
         }
-        let meta = (<p className={styles.Meta}>{date} {count}</p>);
+        if (flagged) {
+            css.push(styles.Flagged)
+        }
+        if (this.props.data.primary.length) {
+            primary = (<h3 className={styles.Primary}>{this.props.data.primary}</h3>);
+        }
+        if (this.props.data.secondary.length) {
+            secondary = (<h3 className={styles.Secondary}>{this.props.data.secondary}</h3>);
+        }
+        if (this.props.selected) {
+            css.push(styles.Selected);
+        }
         return (
             <article
                 className={css.join(' ')}
