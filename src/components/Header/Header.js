@@ -58,10 +58,12 @@ class Header extends Component {
     };
 
     render () {
+        let filter = null;
         let aux1 = null;
         let aux2 = null;
         switch (this.props.state) {
             case headerTypes.COLLECTION:
+                filter = (<IconButton onClick={this.props.actions.filter}>F</IconButton>);
                 aux1 = (
                     <IconButton
                         disabled={!(this.props.selected.length > 1)}
@@ -74,6 +76,7 @@ class Header extends Component {
                 );
                 break;
             case headerTypes.ITEM:
+                filter = (<IconButton onClick={this.props.actions.filter}>F</IconButton>);
                 aux1 = (
                     <IconButton
                         disabled={!this.props.selected.length}
@@ -92,7 +95,7 @@ class Header extends Component {
                         <div className={styles.Toolbar}>
                             <Search onChange={this.props.actions.search}/>
                             <Toolbar>
-                                <IconButton onClick={this.props.actions.filter}>F</IconButton>
+                                {filter}
                                 <IconButton
                                     disabled={!this.props.selected.length}
                                     onClick={this.handle_onSelectedDelete}>D</IconButton>

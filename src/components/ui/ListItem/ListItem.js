@@ -15,7 +15,7 @@ class ListItem extends Component {
 
     render () {
         const css = [styles.ListItem];
-        let count = this.props.data.member.length;
+        let count;
         const date = new Date(this.props.data.date).getMonth() + 1 + '/' + new Date(this.props.data.date).getDate() + '/' + new Date(this.props.data.date).getFullYear();
         let flagged = false;
         let meta = (<p className={styles.Meta}>{date}</p>);
@@ -33,6 +33,9 @@ class ListItem extends Component {
         });
 
         //  Conditional States  //
+        if (this.props.data.member) {
+            count = this.props.data.member.length;
+        }
         if (count) {
             if (this.props.data.hasOwnProperty('flag')) {
                 if (count > 1) {

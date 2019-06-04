@@ -128,44 +128,6 @@ class User extends Component {
         }
     }
 
-    //  Current  ------------------------------------------------------  Current SS  //
-    _setCurrent (tab) {
-        this.setState(prev => ({
-            ...prev,
-            current: {...tab}
-        }));
-    }
-
-    //  Filter  --------------------------------------------------------  Filter SS  //
-    _clearFilter () {
-        this.setState(prev => ({
-            ...prev,
-            filter: {
-                ...prev.filter,
-                group: [],
-                tag: []
-            }
-        }));
-        this._clearQuick('f');
-    }
-    _setAssigned (assigned) {
-        this.setState(prev => ({
-            ...prev,
-            assigned: assigned
-        }));
-    }
-    _setFilter (filter) {
-        this.setState(prev => ({
-            ...prev,
-            filter: filter
-        }));
-        if (filter.tag.length || filter.group.length) {
-            this._setQuick('f');
-        } else {
-            this._clearQuick('f');
-        }
-    }
-
     //  Users  ----------------------------------------------------------  Users SS  //
     _removeManyUsers (users) {
         const u = this.state.users;
@@ -187,19 +149,6 @@ class User extends Component {
             users: u
         }));
     }
-    _setUserValue (target, value) {
-        const id = this.state.aside.data.data.id;
-        this.setState(prev => ({
-            ...prev,
-            users: {
-                ...prev.users,
-                [id]: {
-                    ...prev.users[id],
-                    [target]: value
-                }
-            }
-        }));
-    }
 
     //  Selected  ----------------------------------------------------  Selected SS  //
     _clearSelected () {
@@ -219,14 +168,6 @@ class User extends Component {
         } else {
             this._clearQuick('s');
         }
-    }
-
-    //  Main  ------------------------------------------------------------  Main SS  //
-    _setMainState (state) {
-        this.setState(prev => ({
-            ...prev,
-            main: state
-        }));
     }
 
     //  Quick  ----------------------------------------------------------  Quick SS  //
@@ -253,14 +194,6 @@ class User extends Component {
                 quick: prev.quick.concat(value)
             }));
         }
-    }
-
-    //  Tab  --------------------------------------------------------------  Tab SS  //
-    _setTab (tabs) {
-        this.setState(prev => ({
-            ...prev,
-            tab: tabs
-        }));
     }
 
     //  Sort  ------------------------------------------------------------  Sort SS  //
@@ -290,34 +223,9 @@ class User extends Component {
         this._setQuick('u');
     }
 
-    handle_onFilterClear = () => {
-        this._updateAsideData('filter', {
-            group: [],
-            search: this.state.filter.search,
-            tag: []
-        });
-        this._clearFilter();
-    }
-
     //  PRIVATE METHODS  =========================================  PRIVATE METHODS  //
     //  Aside  ----------------------------------------------------------  Aside PM  //
-    _openFilterAside () {
-        this._setAside({
-            cancel: this.handle_onFilterClear,
-            confirm: this.handle_onAsideClose,
-            toggle: (filter, tag) => this.handle_onAsideFilterToggle(filter, tag)
-        }, {
-            all: {
-                group: this.props.select_user.group.slice(),
-                tag: this.props.select_user.tag.concat(this.state.internal)
-            },
-            labels: {
-                confirm: 'Close'
-            },
-            filter: {...this.state.filter},
-            tab: {...this.state.current}
-        });
-    }
+    
 
     //  Users  ----------------------------------------------------------  Users PM  //
     _addManyUsers = (users) => {
@@ -326,16 +234,6 @@ class User extends Component {
     }
     _addManyUsers_async (users) {
         this.props.addMany_async('user', this.props.select_authToken, users);
-    }
-    _checkUser (user) {
-        let valid = true;
-        if (!user.primary.length > 0 && valid) {
-            valid = false;
-        }
-        if (!user.secondary.length && valid) {
-            valid = false
-        }
-        return valid;
     }
     handle_onAsideClose = () => {
         switch (this.state.aside.state) {
@@ -371,30 +269,6 @@ class User extends Component {
     }
 
     //  Tab  ------------------------------------------------------------------ Tab  //
-    _deleteTab (tab) {
-        let tabs = {...this.state.tab};
-        delete tabs[tab.id];
-        this.props.deleteTab_async('user', 'user', this.props.select_authToken, this.props.select_authUser, tab);
-        this._setTab(tabs);
-        if (this.state.current.id === tab.id) {
-            this._setCurrent({
-                group: [],
-                id: 'all',
-                tag: []
-            });
-        }
-    }
-    _selectTab (tab) {
-        this._setCurrent(tab);
-        this._clearSelected();
-        if (this.state.main === 'ADD_TAB') {
-            this._setMainState('LIST_VIEW');
-        }
-        if (this.state.aside.state !== asideTypes.CLOSED) {
-            this._clearFilter();
-            this._clearAndCloseAside();
-        }
-    }
 
     //  Undo  -----------------------------------------------------------  Undo  PM  //
     _undoManyUsersDeleted = () => {
@@ -406,16 +280,6 @@ class User extends Component {
 
     //  EVENT HANDLERS  ===========================================  EVENT HANDLERS  //
     //  Aside  ----------------------------------------------------------  Aside EH  //
-    handle_onAsideFilterToggle = (category, tag) => {
-        let filter = {...this.state.filter};
-        if (filter[category].includes(tag)) {
-            filter[category] = filter[category].filter(t => t !== tag);
-        } else {
-            filter[category] = filter[category].concat(tag);
-        }
-        this._updateAsideData('filter', filter);
-        this._setFilter(filter);
-    }
     
 
     //  Header  --------------------------------------------------------  Header EH  //
@@ -427,10 +291,6 @@ class User extends Component {
             default:
                 break;
         }
-    }
-    handle_onFilterToggle = (filter) => {
-        this._openFilterAside();
-        this._toggleAside(asideTypes.FILTER);
     }
     handle_onSortToggle = (sort) => {
         switch (sort) {
@@ -455,11 +315,6 @@ class User extends Component {
         this._setAside({
             overlay: this.handle_onAsideClose
         });
-    }
-    
-    //  User  ------------------------------------------------------------  User EH  //
-    handle_onUserChange = (target, value) => {
-        this._setUserValue(target, value);
     }
 
     //  List  ------------------------------------------------------------  List EH  //
@@ -490,10 +345,8 @@ class User extends Component {
     }
 
     // //  Main  -----------------------------------------------------------  Main EHs  //
-    handle_onMainClick = () => {
-        this.handle_onAsideClose();
+    handle_onDefaultClick = () => {
         this._clearSelected();
-        this._clearFilter();
     }
 
     //  Quicks  ----------------------------------------------------------  Quicks EH  //
@@ -519,31 +372,6 @@ class User extends Component {
         }
     }
 
-    // Tab  ---------------------------------------------------------------  Tab EH  //
-    handle_onTabToggle = (tab, data) => {
-        switch (tab) {
-            case 0:
-                this._setMainState('ADD_TAB');
-                break;
-            case 1:
-                this._selectTab(data);
-                break;
-            case 2:
-                this._deleteTab(data);
-                break;
-            default:
-                break;
-        }
-    }
-    handle_onTabCreate = (tab) => {
-        const tabs = {...this.state.tab};
-        tabs[tab.id] = tab;
-        this.props.addTab_async('user', 'user', this.props.select_authToken, this.props.select_authUser, tab);
-        this._setTab(tabs);
-        this._setCurrent(tab);
-        this._setMainState('LIST_VIEW');
-    }
-
     setSearch (value) {
         this.setState(prev => ({
             ...prev,
@@ -565,18 +393,11 @@ class User extends Component {
                     <List
                         action={this.handle_onListClick}
                         collection={utility.sortBy(this.state.sort, this.state.users)}
+                        default={{primary: 'First Name', secondary: 'Last Name'}}
                         filters={this.state.filter}
                         current={this.state.current}
                         selected={this.state.selected}
                         aux={'suspend'}/>
-                );
-                break;
-            case 'ADD_TAB':
-                content = (
-                    <TabForm
-                        tag={this.state.tag}
-                        group={this.state.group}
-                        onConfirm={this.handle_onTabCreate}/>
                 );
                 break;
             default:
@@ -588,7 +409,6 @@ class User extends Component {
                 <Header
                     actions={{
                         action: this.handle_onActionToggle,
-                        filter: this.handle_onFilterToggle,
                         search: this.handle_onSearchChange,
                         sort: this.handle_onSortToggle,
                         navigation: this.handle_onNagivationToggle
@@ -597,14 +417,9 @@ class User extends Component {
                     state={headerTypes.USER}
                     onClick={this.handle_onAsideClose}/>
                 <main
-                    className={styles.List}
-                    onClick={this.handle_onMainClick}>
+                    className={[styles.List, styles.NoTab].join(' ')}
+                    onClick={this.handle_onDefaultClick}>
                     <div>
-                        <TabBar
-                            action={this.handle_onTabToggle}
-                            active={this.state.current.id}
-                            collection={this.state.tab}
-                            onClick={this.handle_onAsideClose}/>
                         {content}
                         <QuickBar
                             action={this.handle_onQuickClick}

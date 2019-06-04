@@ -8,3 +8,7 @@
     flex-direction: column;
     height: 100%;
 }
+
+.NoTab > div > section:first-of-type {
+    padding-top: 64px;
+}
