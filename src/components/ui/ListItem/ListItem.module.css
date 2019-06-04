@@ -1,8 +1,9 @@
 .ListItem {
     background-color: var(--white);
+    border-left: 0px solid var(--accent);
     height: 64px;
     overflow: hidden;
-    transition: background-color 0.1667s ease, border-left 0.1667s ease;
+    transition: background-color 0.1667s ease, border-left-width 0.1667s ease;
     width: 100%;
 }
 .ListItem:hover {
@@ -14,6 +15,7 @@
     height: 100%;
     justify-content: flex-start;
     padding: 0px 16px;
+    transition: padding-left 0.1667s ease;
 }
 .DataContainer {
     display: flex;
@@ -72,7 +74,7 @@
 }
 
 .ListItem.Flagged {
-    border-left: 4px solid var(--accent);
+    border-left-width: 4px;
 }
 .ListItem.Flagged > div {
     padding-left: 12px;

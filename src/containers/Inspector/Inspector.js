@@ -364,7 +364,11 @@ class Inspector extends Component {
     }
     handle_onItemFlag = () => {
         const item = this.state.aside.data.data;
-        item.flag = !item.flag;
+        if (item.tag.includes('&flagged')) {
+            item.tag = item.tag.filter(tag => tag !== '&flagged');
+        } else {
+            item.tag = item.tag.concat('&flagged');
+        }
         this._setManyItems([item]);
         this._updateItem_async(item);
     }
@@ -427,6 +431,16 @@ class Inspector extends Component {
                 return item.id;
             }))
         });
+    }
+    handle_onItemFlag = () => {
+        const item = this.state.aside.data.data;
+        if (item.tag.includes('&flagged')) {
+            item.tag = item.tag.filter(tag => tag !== '&flagged');
+        } else {
+            item.tag = item.tag.concat('&flagged');
+        }
+        this._setManyItems([item]);
+        this._updateItem_async(item);
     }
     _cloneManyItems () {
         const cloned = [];

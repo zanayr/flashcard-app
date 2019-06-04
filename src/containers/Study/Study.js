@@ -12,7 +12,7 @@ import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
 import BarButton from '../../components/ui/button/Bar/BarButton';
-import CardStack from '../../components/Stack/CardStack';
+import FlashcardStack from '../../components/Stack/FlashcardStack';
 import SimpleHeader from '../../components/Header/SimpleHeader';
 
 import styles from './Study.module.css';
@@ -181,7 +181,27 @@ class Study extends Component {
     }
 
     //  Cards  --------------------------------------------------------------  Cards //
-    handle_onCardClick = () => {
+    handle_onNextClick = () => {
+        if (!this.state.action - 1 && !this.updated) {
+            const card = this.state.all[this.state.display[this.state.current].id];
+            this.updated = true;
+            card.meta = {
+                ...card.meta,
+                [this.state.session]: {
+                    date: Date.now(),
+                    time: Date.now() - this.state.timestamp
+                }
+            };
+            this.setCard(card);
+            this.updateCard_async(card);
+            if (this.state.current + 1 < this.state.total) {
+                this.setNextCard();
+            } else {
+                this.finish();
+            }
+        }
+    }
+    handle_onPrevClick = () => {
         if (!this.state.action - 1 && !this.updated) {
             const card = this.state.all[this.state.display[this.state.current].id];
             this.updated = true;
@@ -222,11 +242,9 @@ class Study extends Component {
                     <section className={styles.Board}>
                             <div>
                                 <div className={styles.Wrapper}>
-                                    <CardStack
-                                        collection={this.state.display}
-                                        max={1}
-                                        onAction={this.handle_onCardFlag}
-                                        onClick={this.handle_onCardClick}/>
+                                    <FlashcardStack
+                                        collection={this.state.shuffled}
+                                        onAction={this.handle_onCardFlag}/>
                                 </div>
                             </div>
                         </section>
@@ -255,7 +273,7 @@ class Study extends Component {
         return (
             <Aux>
                 <main
-                    className={styles.Study}
+                    className={styles.Main}
                     onClick={this.handle_onAsideClose}>
                     <div>
                         <SimpleHeader
