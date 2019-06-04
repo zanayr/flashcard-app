@@ -11,11 +11,13 @@
     display: flex;
     flex-direction: row;
     height: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 .TableHead p {
-    color: coral;
-    font-weight: bold;
+    color: var(--black);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: capitalize;
 }
 
 .TableRow {
@@ -23,18 +25,21 @@
 }
 .TableRow > div {
     align-items: center;
+    border-top: 1px solid var(--darkgray);
     display: flex;
     flex-direction: row;
     height: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 .TableRow p {
-    color: cadetblue;
+    color: var(--black);
+    font-size: 11px;
+    font-weight: 400;
 }
 
 .TableCell {
-    flex-grow: 1;
     height: 100%;
+    overflow: hidden;
 }
 .TableCell > div {
     align-items: center;
@@ -42,7 +47,4 @@
     flex-direction: row;
     height: 100%;
     justify-content: center;
-}
-.TableCell p {
-    font-size: 11px;
 }

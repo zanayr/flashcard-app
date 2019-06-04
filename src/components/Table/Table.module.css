@@ -1,6 +1,6 @@
 .Table {
-    background-color: white;
-    margin: 0px -16px;
+    background-color: var(--white);
     overflow-x: hidden;
     overflow-y: scroll;
+    padding-top: 96px;
 }

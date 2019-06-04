@@ -5,7 +5,9 @@ import styles from './Table.module.css';
 
 const cell = (props) => {
     return (
-        <div className={styles.TableCell}>
+        <div
+            className={styles.TableCell}
+            style={{width: props.width + '%'}}>
             <div>
                 <p>{props.data}</p>
             </div>

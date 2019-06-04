@@ -7,7 +7,7 @@ import styles from './Table.module.css';
 
 const row = (props) => {
     const cells = props.data.map((cell, i) => {
-        return (<Cell key={i} data={cell}/>);
+        return (<Cell key={i} data={cell} width={100 / props.data.length}/>);
     });
     return (
         <div className={styles.TableRow}>

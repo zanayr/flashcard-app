@@ -23,6 +23,31 @@
     color: var(--white);
     font-size: 11px;
 }
+
+/*  Aside Interface  */
+.Interface {
+    margin: -8px -8px 8px -8px;
+}
+.Interface > div {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    justify-content: space-between;
+}
+.Interface button {
+    background-color: var(--white);
+    border-color: var(--white);
+    border-radius: 0;
+    color: var(--primary);
+    font-size: 11px;
+    flex-grow: 1;
+    height: 32px;
+}
+.Interface button.Active {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
 /*  Aside Footer  */
 .Footer {
     bottom: 0px;
@@ -79,9 +104,6 @@
 .AssignButton.Active {
     background-color: var(--secondary);
 }
-/* .AssignButton.Static {
-    background-color: var(--secondary);
-} */
 .AssignButton > div {
     display: flex;
     flex-direction: column;
@@ -249,49 +271,14 @@
     width: 100%;
 }
 
-
-
-
-
-/* .Active {
-    display: block;
-    right: 0px;
+/*  Report Aside  */
+.Report_Tag {
+    background-color: var(--primary);
+    border-color: var(--white);
+    color: var(--white);
 }
-.Aside_Button {
-    height: 64px;
-    width: 100%;
+.Report_Selected {
+    background-color: var(--white);
+    border-color: var(--white);
+    color: var(--primary);
 }
-.Aside_Button > div {
-    padding: 8px;
-} */
-
-
-
-/* .FilterAside > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-.FilterButton {
-    background-color: lightcoral;
-    width: 100%;
-    height: 28px;
-    padding: 4px;
-}
-.FilterButton.Active {
-    background-color: coral;
-}
-.FilterButton.Static {
-    background-color: gray;
-}
-
-.QuickInspect_Aside {
-    height: 100%;
-}
-.QuickInspect_Aside > div {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-} */

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import * as utility from '../../../utility/utility';
+
 import Button from '../../ui/button/Button/Button';
 import IconButton from '../../ui/button/Icon/IconButton';
 import TagForm from '../../form/Tag/TagForm';
@@ -9,55 +11,73 @@ import styles from '../Aside.module.css';
 
 class ReportAside extends Component {
     state = {
+        filter: 'tag',
         group: [],
         tag: []
     }
-
-    deselect (category, tag) {
+    setFilter (tag) {
+        this.setState(prev => ({
+            ...prev,
+            filter: tag
+        }));
+    }
+    deselectTag (category, tag) {
         this.setState(prev => ({
             ...prev,
             [category]: prev[category].filter(t => t !== tag)
         }));
     }
-    select (category, tag) {
+    selectTag (category, tag) {
         this.setState(prev => ({
             ...prev,
             [category]: prev[category].concat(tag)
         }));
     }
     
-    //  TAGS  ---------------------------------------------------------------  TAGS  //
+    handle_onFilterSelect = (tag) => {
+        this.setFilter(tag);
+    }
     handle_onTagSelected = (category, tag) => {
         const tags = this.state[category].slice();
         if (tags.includes(tag)) {
-            this.deselect(category, tag);
+            this.deselectTag(category, tag);
         } else {
-            this.select(category, tag);
+            this.selectTag(category, tag);
         }
     }
 
 
     render () {
+        let tagTabCSS = '';
+        let groupTabCSS = '';
         const formCSS = {
-            add: '',
-            selected: '',
-            tag: ''
+            selected: styles.Report_Selected,
+            tag: styles.Report_Tag
         };
+        if (this.state.filter === 'tag') {
+            tagTabCSS = styles.Active;
+        } else {
+            groupTabCSS = styles.Active;
+        }
         return (
             <aside className={[styles.Aside].join(' ')}>
                 <div>
+                    <div className={styles.Interface}>
+                        <div>
+                            <Button
+                                className={tagTabCSS}
+                                onClick={() => this.handle_onFilterSelect('tag')}>Tags</Button>
+                            <Button
+                                className={groupTabCSS}
+                                onClick={() => this.handle_onFilterSelect('group')}>Groups</Button>
+                        </div>
+                    </div>
                     <TagForm
-                        collection={this.props.data.tag}
+                        collection={utility.sortByAlpha_asc(this.props.data[this.state.filter])}
                         disabled={[]}
-                        selected={this.state.tag}
+                        selected={this.state[this.state.filter]}
                         styles={formCSS}
                         onToggle={(tag) => this.handle_onTagSelected('tag', tag)}/>
-                    <TagForm
-                        collection={this.props.data.group}
-                        disabled={[]}
-                        selected={this.state.group}
-                        styles={formCSS}
-                        onToggle={(tag) => this.handle_onTagSelected('group', tag)}/>
                     <div className={styles.Footer}>
                         <div>
                             <Button
@@ -65,7 +85,7 @@ class ReportAside extends Component {
                                 onClick={() => this.props.actions.confirm({...this.state})}>
                                 Create
                             </Button>
-                            <IconButton onClick={this.props.actions.cancel}>x</IconButton>
+                            <IconButton onClick={this.props.actions.cancel}>⨯</IconButton>
                         </div>
                     </div>
                 </div>

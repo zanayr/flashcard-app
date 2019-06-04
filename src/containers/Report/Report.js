@@ -102,23 +102,34 @@ class Report extends Component {
         const rolled = {
             1: {
                 seen: 0,
+                session: 0,
                 time: 0,
             }
         };
         let week = 1;
+        function getHours(time) {
+            const t = time / 3600;
+            if (t < 0.5) {
+                return '<30m';
+            } else {
+                return Math.floor(t) + 'h ' + (Math.round(10*(t * 60))/10) % 60 + 'm';
+            }
+        }
         Object.keys(report).forEach(session => {
             if (new Date(report[session].date).getDay() ? false : true) {
                 week++;
                 rolled[week] = {
                     seen: 0,
+                    session: 0,
                     time: 0
                 };
             }
             rolled[week].seen = rolled[week].seen + report[session].seen;
-            rolled[week].time = rolled[week].time + (Math.round(report[session].time / 1000) / 3600);
+            rolled[week].session = rolled[week].session + 1;
+            rolled[week].time = rolled[week].time + Math.round(report[session].time / 1000);
         });
         return Object.keys(rolled).map(week => {
-            return [week, rolled[week].time, rolled[week].seen];
+            return [week, getHours(rolled[week].time), rolled[week].seen, rolled[week].session];
         });
     }
     _createReport (data) {
@@ -184,7 +195,7 @@ class Report extends Component {
                     onClick={this.handle_onMainClick}>
                     <div>
                         <Table
-                            columns={['week', 'study hours', 'cards seen']}
+                            columns={['week', 'study hours', 'cards seen', 'total sessions']}
                             source={this.state.report}/>
                         <ActionButton
                             onClick={this.handle_onActionClick}

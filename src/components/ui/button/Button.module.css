@@ -12,7 +12,7 @@
 .Action:enabled {
     cursor: pointer;
 }
-.BActionar:disabled {
+.Action:disabled {
     cursor: default;
 }
 
@@ -36,7 +36,7 @@
     border-radius: 4px;
     font-size: 11px;
     padding: 4px;
-    transition: background-color 0.1667s ease, border-color 0.1667s ease;
+    transition: background-color 0.1667s ease, border-color 0.1667s ease, color 0.1667s ease;
 }
 .Button:enabled {
     cursor: pointer;

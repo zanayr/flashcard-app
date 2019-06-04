@@ -150,6 +150,7 @@ class Study extends Component {
     //  RENDER METHOD  ----------------------------------------------------  RENDER  //
     render () {
         let content;
+        let navigation = null;
         if (this.state.state) {
             content = (
                 <Aux>
@@ -184,6 +185,7 @@ class Study extends Component {
                     </div>
                 </section>
             );
+            navigation = {label: 'Back',path: '0/deck/'};
         }
         return (
             <Aux>
@@ -194,7 +196,8 @@ class Study extends Component {
                         <SimpleHeader
                             actions={{
                                 navigation: this.handle_onNagivationToggle
-                            }}/>
+                            }}
+                            navigation={navigation}/>
                         {content}
                     </div>
                 </main>
