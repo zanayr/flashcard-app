@@ -6,7 +6,7 @@ import * as select from '../../../store/reducers/root';
 
 import Aux from '../../../hoc/Aux/Aux';
 import CountingTextField from '../../ui/input/Field/CountingTextField';
-import Textarea2 from '../../ui/input/TextArea/Textarea2';
+import Textarea from '../../ui/input/TextArea/Textarea';
 import TagFormPlus from '../Tag/TagFormPlus';
 
 import styles from './InspectForm.module.css';
@@ -246,7 +246,7 @@ class InspectForm2 extends Component {
                             required
                             value={this.state.item.secondary}
                             onChange={(value) => this.handle_onCardChange('secondary', value)}/>
-                        <Textarea2
+                        <Textarea
                             config={{
                                 autoComplete: 'off',
                                 label: 'Notes',

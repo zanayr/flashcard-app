@@ -6,7 +6,7 @@ import * as select from '../../../store/reducers/root';
 
 import Aux from '../../../hoc/Aux/Aux';
 import CountingTextField from '../../ui/input/Field/CountingTextField';
-import Textarea2 from '../../ui/input/TextArea/Textarea2';
+import Textarea from '../../ui/input/TextArea/Textarea';
 import Button from '../../ui/button/Button/Button';
 
 import styles from './ProfileForm.module.css';
@@ -112,7 +112,7 @@ class CreateForm extends Component {
                             onChange={(value) => this.hanlde_onUserChange('user', value)}/>
                         <Button onClick={this.handle_onPasswordReset}>Password Reset</Button>
                         <h3>User Notes</h3>
-                        <Textarea2
+                        <Textarea
                             config={{
                                 autoComplete: 'off',
                                 label: 'Notes',
@@ -122,8 +122,7 @@ class CreateForm extends Component {
                             }}
                             key='note'
                             value={this.state.note}
-                            onChange={(value) => this.hanlde_onUserChange('note', value)}>
-                        </Textarea2>
+                            onChange={(value) => this.hanlde_onUserChange('note', value)}/>
                     </div>
                 </form>
                 <Button

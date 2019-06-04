@@ -32,7 +32,7 @@ class TagEditor extends Component {
                         maxLength={128}
                         minLength={3}
                         name='tag'
-                        pattern={'[a-zA-Z0-9 -,]+'}
+                        pattern={'[a-zA-Z0-9 -,.]+'}
                         placeholder={this.props.label}
                         tabIndex={this.props.tabIndex || -1}
                         value={this.state.value}

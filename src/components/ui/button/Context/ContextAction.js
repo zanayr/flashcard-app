@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import styles from './Context.module.css';
+import styles from '../Button.module.css';
 
 class ContextAction extends Component {
     state = {

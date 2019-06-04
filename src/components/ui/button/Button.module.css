@@ -45,6 +45,32 @@
     cursor: default;
 }
 
+/*  Context Button  */
+.ContextAction {
+    background-color: var(--primary);
+    height: 64px;
+    position: absolute;
+    top: 0px;
+    transition: right 0.333s ease;
+    width: 64px;
+    z-index: 1;
+}
+.ContextAction > div {
+    height: 100%;
+}
+.ContextAction button {
+    background-color: transparent;
+    color: var(--white);
+    height: 100%;
+    width: 100%;
+}
+.ContextAction.Destructive {
+    background-color: var(--accent);
+}
+.ContextAction.Destructive button {
+    color: var(--black);
+}
+
 /* Icon Button */
 .Icon {
     border-radius: 4px;

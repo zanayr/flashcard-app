@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 
 import Button from '../../ui/button/Button/Button';
 import IconButton from '../../ui/button/Icon/IconButton';
-import InspectForm2 from '../../form/Inspect/InspectForm2';
+import InspectForm from '../../form/Inspect/InspectForm';
 
 import styles from '../Aside.module.css';
 
@@ -150,37 +150,6 @@ class InspectAside extends Component {
             default:
                 break;
         }
-        // if (this.props.path.length) {
-        //     switch (this.props.path) {
-        //         case 'create':
-        //             path = '/create';
-        //             break;
-        //         default:
-        //             path = '/0/deck/' + this.props.data.data.id;
-        //             break;
-        //     }
-        //     aux = (
-        //         <IconButton
-        //             onClick={() => {
-        //                 this.props.history.replace(path, {id: this.props.data.id});
-        //             }}>{this.props.data.labels.aux}</IconButton>
-        //     );
-        //     if (this.props.path === 'deck' && this.props.data.data.tag.includes('$create')) {
-        //         aux = (
-        //             <IconButton
-        //                 disabled={!this.state.valid.primary || !this.state.valid.secondary}
-        //                 onClick={() => {
-        //                     this.props.init('deck');
-        //                     this.props.history.replace('/load', {
-        //                         data: this.state.data,
-        //                         store: 'deck'
-        //                     });
-        //                 }}>{this.props.data.labels.aux}</IconButton>
-        //         );
-        //         header = 'Create a new deck below, don\'t forget to add a title.';
-        //     }
-            
-        // }
         if (this.props.data.data.hasOwnProperty('flag')) {
             flag = (
                 <div className={styles.Middle}>
@@ -198,7 +167,7 @@ class InspectAside extends Component {
                             <p>{header}</p>
                         </div>
                     </div>
-                    <InspectForm2
+                    <InspectForm
                         data={this.state.data}
                         labels={this.props.data.labels}
                         styles={formCSS}

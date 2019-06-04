@@ -8,7 +8,7 @@ import * as utility from '../../../utility/utility';
 
 import Aux from '../../../hoc/Aux/Aux';
 import CountingTextField from '../../ui/input/Field/CountingTextField';
-import Textarea2 from '../../ui/input/TextArea/Textarea2';
+import Textarea from '../../ui/input/TextArea/Textarea';
 import Button from '../../ui/button/Button/Button';
 import PinnableTagForm from '../Tag/PinnableTagForm';
 
@@ -244,7 +244,7 @@ class CreateForm extends Component {
         };
         if (this.state.states.note) {
             note = (
-                <Textarea2
+                <Textarea
                     config={{
                         autoComplete: 'off',
                         label: 'Notes',
@@ -258,7 +258,7 @@ class CreateForm extends Component {
                     <Button
                         className={styles.Toggle}
                         onClick={() => this.handle_onStateToggle('note')}>-</Button>
-                </Textarea2>
+                </Textarea>
             );
         } else {
             note = (
