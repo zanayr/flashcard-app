@@ -38,16 +38,25 @@ class ReportAside extends Component {
 
 
     render () {
+        const formCSS = {
+            add: '',
+            selected: '',
+            tag: ''
+        };
         return (
             <aside className={[styles.Aside].join(' ')}>
                 <div>
                     <TagForm
                         collection={this.props.data.tag}
+                        disabled={[]}
                         selected={this.state.tag}
+                        styles={formCSS}
                         onToggle={(tag) => this.handle_onTagSelected('tag', tag)}/>
                     <TagForm
                         collection={this.props.data.group}
+                        disabled={[]}
                         selected={this.state.group}
+                        styles={formCSS}
                         onToggle={(tag) => this.handle_onTagSelected('group', tag)}/>
                     <div className={styles.Footer}>
                         <div>
