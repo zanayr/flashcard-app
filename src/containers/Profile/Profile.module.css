@@ -1,5 +1,6 @@
+/*  Profile Page  */
 .Profile {
-    background-color: cadetblue;
+    background-color: var(--gray);
     height: 100%;
 }
 .Profile > div {
@@ -7,12 +8,13 @@
     flex-direction: row;
     height: 100%;
     justify-content: space-between;
+    padding-top: 64px;
 } 
 
 .Editor {
-    width: 50%;
+    width: 100%;
 }
-.Profile section > div {
+.Editor > div {
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -20,16 +22,12 @@
     justify-content: center;
 }
 .Wrapper {
-    background-color: gold;
+    background-color: var(--white);
+    border-radius: 4px;
     height: auto;
     padding: 16px;
-    width: 66%;
+    width: 33%;
 }
 .Editor form {
     margin-bottom: 32px;
-}
-
-
-.Board {
-    width: 50%;
 }

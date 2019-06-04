@@ -187,7 +187,7 @@ class User extends Component {
                 this.undoTimeout = setTimeout(() => {
                     this._clearQuick('u');
                     this._clearUndo();
-                }, 5000);
+                }, 10000);
             }
             this.setState(prev => ({
                 ...prev,

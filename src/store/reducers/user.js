@@ -51,7 +51,10 @@ const getAllUsersSuccess = (state, action) => {
 const updateUser = (state, action) => {
     return {
         ...state,
-        user: action.payload,
+        users: {
+            ...state.users,
+            [action.payload.id]: action.payload
+        },
         error: null
     }
 }

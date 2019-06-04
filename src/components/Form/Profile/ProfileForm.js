@@ -22,7 +22,16 @@ class CreateForm extends Component {
     }
     form = React.createRef();
 
-
+    _resetUser () {
+        this.setState(prev => ({
+            email: this.props.user.info.email,
+            note: this.props.user.note,
+            primary: this.props.user.primary,
+            privialige: this.props.user.privialige,
+            secondary: this.props.user.secondary,
+            user: this.props.user.info.user
+        }));
+    }
     _updateUser (target, value) {
         this.setState(prev => ({
             ...prev,
@@ -33,6 +42,10 @@ class CreateForm extends Component {
 
     hanlde_onUserChange = (target, value) => {
         this._updateUser(target, value);
+    }
+    handle_onFormReset = () => {
+        this._resetUser();
+        this.form.current.primary.focus();
     }
     handle_onFormConfirm = () => {
         this.props.onConfirm({
@@ -57,7 +70,7 @@ class CreateForm extends Component {
             <Aux>
                 <form
                     className={styles.Basics}
-                    ref={this.basicsForm}>
+                    ref={this.form}>
                     <div>
                         <h3>Basic Info</h3>
                         <CountingTextField
@@ -110,7 +123,7 @@ class CreateForm extends Component {
                             required
                             value={this.state.user}
                             onChange={(value) => this.hanlde_onUserChange('user', value)}/>
-                        <Button onClick={this.handle_onPasswordReset}>Password Reset</Button>
+                        {/* <Button onClick={this.handle_onPasswordReset}>Password Reset</Button> */}
                         <h3>User Notes</h3>
                         <Textarea
                             config={{
@@ -125,11 +138,20 @@ class CreateForm extends Component {
                             onChange={(value) => this.hanlde_onUserChange('note', value)}/>
                     </div>
                 </form>
-                <Button
-                    tabIndex={6}
-                    onClick={this.handle_onFormConfirm}>
-                    Save
-                </Button>
+                <div className={styles.Interface}>
+                    <div>
+                    <Button
+                        tabIndex={6}
+                        onClick={this.handle_onFormConfirm}>
+                        Save
+                    </Button>
+                    <Button
+                        tabIndex={-1}
+                        onClick={this.handle_onFormReset}>
+                        Reset
+                    </Button>
+                    </div>
+                </div>
             </Aux>
         )
     }

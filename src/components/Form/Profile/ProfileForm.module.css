@@ -1,29 +1,46 @@
-/*  TOOGLE BUTTON  */
-.ToggleButton {
-    background-color: pink;
-    display: none;
-    height: 16px;
-    position: absolute;
-    right: 24px;
-    top: 0px;
-    width: 16px;
+.Basics h3 {
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 600;
+    margin: 32px 0px 8px 0px;
 }
-.Basics:hover .ToggleButton {
-    display: block;
+.Basics h3:first-of-type {
+    margin-top: 0px;
 }
-.ToggleButton.Second {
-    display: block;
-    margin-left: 8px;
-    position: relative;
-    right: auto;
-    top: auto;
+.Basics input,
+.Basics textarea {
+    color: var(--primary);
+    font-weight: 400;
+}
+.Basics input::placeholder,
+.Basics textarea::placeholder {
+    color: var(--primary);
+    font-weight: 400;
+}
+.Basics input:focus,
+.Basics textarea:focus {
+    border-bottom-color: var(--primary);
 }
 
-.NotesField {
-    height: 43px;
-}
-.NotesField > div {
+/* Interface */
+.Interface > div {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    height: 100%;
+    justify-content: space-between;
+}
+.Interface > div button:disabled {
+    background-color: var(--white);
+    border-color: var(--secondary);
+    color: var(--secondary);
+}
+.Interface > div button:enabled {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
+.Interface > div button:last-of-type {
+    background-color: var(--white);
+    border-color: var(--primary);
+    color: var(--primary);
 }

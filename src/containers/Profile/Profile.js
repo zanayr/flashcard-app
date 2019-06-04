@@ -89,7 +89,7 @@ class Profile extends Component {
                             }}
                             navigation={{
                                 label: 'Back',
-                                path: '2/user'
+                                path: '/0/deck'
                             }}/>
                         <section className={styles.Editor}>
                             <div>
