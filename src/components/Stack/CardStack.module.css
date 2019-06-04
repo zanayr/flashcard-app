@@ -12,8 +12,5 @@
     right: 12px;
     top: 12px;
     width: 24px;
-}
-
-.Stack article:hover .ActionButton {
-    display: block;
+    z-index: 98;
 }

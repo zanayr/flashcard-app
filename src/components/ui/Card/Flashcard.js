@@ -50,6 +50,7 @@ const flashcard = (props) => {
     return (
         <article className={styles.Card}>
             {display}
+            {flag}
             <span
                 className={styles.Prev}
                 onClick={handle_onPrevClick}></span>

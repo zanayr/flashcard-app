@@ -54,12 +54,24 @@
     color: var(--black);
 }
 
-/* For later */
-.Card.Flagged {
-    border: 1px solid red;
+/* Action Button */
+.Card:hover button {
+    display: block;
 }
 
 /*  Flashcard  */
+.Flag {
+    border-top-left-radius: 8px;
+    border-bottom:17px solid transparent;
+    border-left:17px solid var(--accent);
+    border-right:17px solid transparent;
+    border-top:17px solid var(--accent);
+    height: 0px;
+    left: 0px;
+    position: absolute;
+    top: 0px;
+    width: 0px;
+}
 .Next {
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
@@ -70,6 +82,7 @@
     position: absolute;
     top: 0px;
     width: 50%;
+    z-index: 97;
 }
 .Prev {
     border-top-right-radius: 8px;
@@ -81,4 +94,5 @@
     position: absolute;
     top: 0px;
     width: 50%;
+    z-index: 97;
 }

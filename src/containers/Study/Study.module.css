@@ -11,7 +11,12 @@
 .Board {
     width: 100%;
 }
-.Board > div{
+.Greeting {
+    background-color: var(--primary);
+    width: 100%;
+}
+.Board > div,
+.Greeting > div {
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -26,4 +31,37 @@
 }
 .Board .Wrapper article {
     position: relative;
+}
+
+/*  Greeting  */
+.Greeting {
+    background-color: var(--primary);
+    width: 100%;
+}
+.Greeting > div {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    padding-top: 64px;
+}
+.Greeting .Wrapper {
+    width: 25%;
+}
+.Greeting h3 {
+    color: var(--white);
+    font-size: 19px;
+    margin-bottom: 8px;
+}
+.Greeting p {
+    color: var(--white);
+    font-size: 11px;
+    margin-bottom: 32px;
+}
+.Greeting button {
+    background-color: var(--white);
+    border: 1px solid var(--white);
+    color: var(--primary);
+    font-weight: 500;
 }

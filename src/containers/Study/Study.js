@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
 import * as actions from '../../store/actions/index';
-import * as create from '../../store/models/models';
 import * as select from '../../store/reducers/root';
 import * as asideTypes from '../../components/aside/Aside/asideTypes';
 import * as modalTypes from '../../components/modal/Modal/modalTypes';
@@ -11,7 +10,7 @@ import * as utility from '../../utility/utility';
 import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside2 from '../../components/aside/Aside/Aside2';
 import Aux from '../../hoc/Aux/Aux';
-import BarButton from '../../components/ui/button/Bar/BarButton';
+import Button from '../../components/ui/button/Button/Button';
 import FlashcardStack from '../../components/Stack/FlashcardStack';
 import SimpleHeader from '../../components/Header/SimpleHeader';
 
@@ -20,19 +19,13 @@ import styles from './Study.module.css';
 class Study extends Component {
     state = {
         action: 0,
-        all: {},
         aside: {
             state: asideTypes.CLOSED,
             actions: {}
         },
-        card: {},
-        current: 0,
-        display: [],
-        meta: {},
-        session: utility.createHashId(0),
+        sesson: utility.createHashId(0),
         shuffled: [],
-        timestamp: 0,
-        total: 0,
+        state: 0
     }
     updated = false;
 
@@ -41,18 +34,20 @@ class Study extends Component {
         const shuffled = utility.shuffle(Object.keys(cards).map(id => {return cards[id]}));
         this.setState(prev => ({
             ...prev,
-            all: this.props.select_cards,
-            card: cards,
-            display: [shuffled[this.state.current]],
             shuffled: shuffled,
-            timestamp: Date.now(),
-            total: shuffled.length
         }));
     }
 
     //  STATE SETTERS  ---------------------------------------------------  SETTERS  //
+    //  Action  -----------------------------------------------------------  Action  //
+    setAction (action) {
+        this.setState(prev => ({
+            ...prev,
+            action: action
+        }));
+    }
     //  Aside  --------------------------------------------------------------  Aside // 
-    _closeAside () {
+    closeAside () {
         this.setState(prev => ({
             ...prev,
             aside: {
@@ -61,7 +56,7 @@ class Study extends Component {
             }
         }));
     }
-    _openAside (state) {
+    openAside (state) {
         this.setState(prev => ({
             ...prev,
             aside: {
@@ -79,74 +74,28 @@ class Study extends Component {
             }
         }));
     }
-    _toggleAside (state) {
+    toggleAside (state) {
         if (this.state.aside.state !== asideTypes.CLOSED) {
             if (this.state.aside.state !== state) {
-                this._openAside(state);
+                this.openAside(state);
             } else {
-                this._closeAside();
+                this.closeAside();
             }
         } else {
-            this._openAside(state);
+            this.openAside(state);
         }
     }
-
-    //  Cards  --------------------------------------------------------------  Cards //
-    flagCard (value) {
-        const display = this.state.display;
-        display[this.state.current].meta = {
-            flagged: value
-        }
-        this.setState(prev => ({
-            ...prev,
-            display: display
-        }));
-    }
-    // setDisplayCard (card) {
-    //     const display = this.state.display.slice();
-    //     display[card.id] = card;
-    //     this.setState(prev => ({
-    //         ...prev,
-    //         display: display
-    //     }));
-    // }
-    setNextCard () {
-        const current = this.state.current + 1;
-        this.setState(prev => ({
-            ...prev,
-            current: current,
-            display: prev.display.concat(this.state.shuffled[current]),
-            timestamp: Date.now()
-        }), () => {
-            this.updated = false;
-        });
-    }
-    updateCard_async (card) {
-        this.props.update_async('card', this.props.select_authToken, card);
-    }
-    //  Meta  ---------------------------------------------------------------  Meta  //
-    setCard (card) {
-        this.setState(prev => ({
-            ...prev,
-            all: {
-                ...prev.card,
-                [card.id]: card
-            }
-        }));
-    }
-
     //  State  -------------------------------------------------------------  State  //
-    begin () {
+    toggleState () {
         this.setState(prev => ({
             ...prev,
-            action: 1
+            state: 1 - prev.state
         }));
     }
-    finish () {
-        this.setState(prev => ({
-            ...prev,
-            action: 2
-        }));
+
+
+    _updateCard_async (card) {
+        this.props.update_async('card', this.props.select_authToken, card);
     }
 
 
@@ -160,7 +109,7 @@ class Study extends Component {
                     'Are you sure you wish to leave this study session?',
                     'Leave', 'Cancel')
                 .then(response => {
-                    this.props.history.replace('/deck');
+                    this.props.history.replace('/0/deck');
                 })
                 .catch(() => {}); // Eat cancel
                 break;
@@ -171,101 +120,67 @@ class Study extends Component {
     }
     //  Aside  --------------------------------------------------------------  Aside //
     handle_onNagivationToggle = () => {
-        this._toggleAside(asideTypes.NAVIGATION);
+        this.toggleAside(asideTypes.NAVIGATION);
         this.setAside({
             overlay: this.handle_onAsideClose
         });
     }
     handle_onAsideClose = () => {
-        this._closeAside();
+        this.closeAside();
     }
 
     //  Cards  --------------------------------------------------------------  Cards //
-    handle_onNextClick = () => {
-        if (!this.state.action - 1 && !this.updated) {
-            const card = this.state.all[this.state.display[this.state.current].id];
-            this.updated = true;
-            card.meta = {
-                ...card.meta,
-                [this.state.session]: {
-                    date: Date.now(),
-                    time: Date.now() - this.state.timestamp
-                }
-            };
-            this.setCard(card);
-            this.updateCard_async(card);
-            if (this.state.current + 1 < this.state.total) {
-                this.setNextCard();
-            } else {
-                this.finish();
-            }
-        }
-    }
-    handle_onPrevClick = () => {
-        if (!this.state.action - 1 && !this.updated) {
-            const card = this.state.all[this.state.display[this.state.current].id];
-            this.updated = true;
-            card.meta = {
-                ...card.meta,
-                [this.state.session]: {
-                    date: Date.now(),
-                    time: Date.now() - this.state.timestamp
-                }
-            };
-            this.setCard(card);
-            this.updateCard_async(card);
-            if (this.state.current + 1 < this.state.total) {
-                this.setNextCard();
-            } else {
-                this.finish();
-            }
-        }
-    }
-
     handle_onCardFlag = (flagged) => {
-        const card = {...this.state.all[flagged.id]};
-        card.flag = !card.flag;
-        this.setCard(card);
-        this.updateCard_async(card);
+        this._updateCard_async(flagged);
     }
-
+    handle_onComplete = (complete) => {
+        this.setAction(complete);
+    }
+    handle_onMetaUpdate = (card, meta) => {
+        card.meta = {
+            ...card.meta,
+            [this.state.sesson]: meta
+        }
+        this._updateCard_async(card);
+    }
     handle_onStartClick = () => {
-        this.begin();
+        this.toggleState();
     }
 
     //  RENDER METHOD  ----------------------------------------------------  RENDER  //
     render () {
         let content;
-        if (this.state.action) {
+        if (this.state.state) {
             content = (
                 <Aux>
                     <section className={styles.Board}>
                             <div>
                                 <div className={styles.Wrapper}>
                                     <FlashcardStack
-                                        collection={this.state.shuffled}
-                                        onAction={this.handle_onCardFlag}/>
+                                        actions={{
+                                            change: this.handle_onComplete,
+                                            flag: this.handle_onCardFlag,
+                                            update: this.handle_onMetaUpdate
+                                        }}
+                                        collection={this.state.shuffled}/>
                                 </div>
                             </div>
                         </section>
                         <ActionButton
                             onClick={this.handle_onActionClick}
-                            state={this.state.action - 1}
+                            state={this.state.action}
                             values={['Exit', 'Finish']}/>
                 </Aux>
             );
         } else {
-            const cards = this.state.card;
-            let total = 0;
-            Object.keys(cards).forEach(id => {
-                total++;
-            });
             content = (
-                <section className={styles.Board}>
+                <section className={styles.Greeting}>
                     <div>
-                        <h1>Get Ready!</h1>
-                        <p>{'You will be studying ' + total + ' cards. Good luck!'}</p>
-                        <BarButton onClick={this.handle_onStartClick}>Start</BarButton>
+                        <div className={styles.Wrapper}>
+                            <h3>Get Ready!</h3>
+                            <p>{'You will be studying ' + this.state.shuffled.length + ' cards. Good luck!'}</p>
+                            <Button onClick={this.handle_onStartClick}>Start</Button>
+                        </div>
                     </div>
                 </section>
             );
