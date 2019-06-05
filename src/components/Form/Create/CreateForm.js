@@ -8,7 +8,7 @@ import * as utility from '../../../utility/utility';
 
 import Aux from '../../../hoc/Aux/Aux';
 import CountingTextField from '../../ui/input/Field/CountingTextField';
-import Textarea from '../../ui/input/TextArea/Textarea';
+import Textarea from '../../ui/input/TextArea/TextArea';
 import Button from '../../ui/button/Button/Button';
 import PinnableTagForm from '../Tag/PinnableTagForm';
 
