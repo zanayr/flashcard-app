@@ -1,5 +1,5 @@
 /* Aside */
-.AsideOverlay {
+.Aside {
     background-color: transparent;
     bottom: 0px;
     left: 0px;
@@ -7,4 +7,13 @@
     right: 0px;
     top: 0px;
     z-index: 96;
+}
+.Modal {
+    background-color: transparent;
+    bottom: 0px;
+    left: 0px;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    z-index: 98;
 }

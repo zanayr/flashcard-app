@@ -1,7 +1,7 @@
 .Modal {
     background-color: white;
     border-radius: 4px;
-    box-shadow: 2px 2px 8px 2px rgba(24,24,24,0.125); 
+    box-shadow: 2px 2px 8px 2px var(--darkgray); 
     left: 50%;
     max-width: 256px;
     position: fixed;
@@ -13,32 +13,65 @@
     padding: 16px;
 }
 
-
-.Modal span {
+/*  Header  */
+.Header {
+    margin-bottom: 12px;
+}
+.Header > div {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: auto;
+    justify-content: flex-start;
+}
+/*  Icon  */
+.Header span {
+    border-radius: 4px;
     height: 32px;
+    margin-right: 16px;
     width: 32px;
 }
-.Modal span.DefaultIcon {
-    background-color: blue;
+.Header span.DefaultIcon {
+    background-color: var(--primary);
 }
-.Modal span.WarningIcon {
-    background-color: coral;
+.Header span.WarningIcon {
+    background-color: var(--accent);
 }
-
-
-.Modal h3 {
+/*  Title  */
+.Header h3 {
+    color: var(--black);
     font-size: 15px;
-    margin: 16px 0px 16px 16px;
+    font-weight: 600;
 }
-.Modal p {
+
+/*  Message  */
+.Message {
+    color: var(--black);
     font-size: 11px;
+    font-weight: 400;
     margin-bottom: 8px;
 }
-.Modal ul {
-    list-style: none;
+
+/*  Input  */
+.Modal input {
+    color: var(--primary);
 }
-.Modal ul li {
-    font-size: 11px;
-    font-weight: bold;
-    margin-bottom: 16px;
+.Modal input::placeholder {
+    color: var(--primary);
+}
+.Modal input:focus {
+    border-color: var(--primary);
+}
+
+/*  Interface  */
+.Interface > div {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+.Interface .Between {
+    justify-content: space-between;
+}
+.Interface .Center {
+    justify-content: center;
 }

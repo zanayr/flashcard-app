@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import AsideOverlay from '../../Overlay/Aside/AsideOverlay';
+import AsideOverlay from '../../Overlay/AsideOverlay';
 import Aux from '../../../hoc/Aux/Aux';
 import Button from '../../ui/button/Button/Button';
 import IconButton from '../../ui/button/Icon/IconButton';

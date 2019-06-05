@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom';
 
 import * as asideTypes from './asideTypes';
 
-import AsideOverlay from '../../Overlay/Aside/AsideOverlay';
+import AsideOverlay from '../../Overlay/AsideOverlay';
 import AssignAside from '../Assign/AssignAside';
 import Aux from '../../../hoc/Aux/Aux';
 import FilterAside from '../Filter/FilterAside';

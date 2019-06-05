@@ -18,6 +18,11 @@ class StatefulTextField extends Component {
 
 
     render() {
+        const remaining = this.props.config.maxLength - this.state.value.length;
+        let counterCSS = [styles.Counter];
+        if (remaining < 4) {
+            counterCSS.push(styles.Low);
+        }
         return (
             <div className={styles.Field}>
                 <div>
@@ -32,7 +37,7 @@ class StatefulTextField extends Component {
                         value={this.state.value}
                         onChange={(e) => this.handle_onChange(e.target.value)}/>
                     {this.props.children}
-                    <span><p>{this.props.config.maxLength - this.state.value.length}</p></span>
+                    <span className={counterCSS.join(' ')}><p>{remaining}</p></span>
                 </div>
             </div>
         );

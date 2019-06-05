@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from '../Overlay.module.css';
+import styles from './Overlay.module.css';
 
 const asideOverlay = (props) => {
     const handle_onClick = (e) => {
@@ -13,7 +13,7 @@ const asideOverlay = (props) => {
     }
     return (
         <div
-            className={styles.AsideOverlay}
+            className={styles.Aside}
             onClick={(e) => handle_onClick(e)}>
             <div>
             </div>

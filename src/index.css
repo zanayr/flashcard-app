@@ -48,7 +48,7 @@ input:focus, textarea:focus {
 }
 
 /* Text Reset */
-h1, h2, h3, h4, h5, h6, label, span, p, a, li {
+h1, h2, h3, h4, h5, h6, label, span, p, a, li, button, input, textarea {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: "Montserrat", sans-serif;

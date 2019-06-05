@@ -6,11 +6,10 @@ import * as modalTypes from './modalTypes';
 
 import Aux from '../../../hoc/Aux/Aux';
 import Button from '../../ui/button/Button/Button';
-import Overlay from '../Overlay/Overlay';
-import Row from '../../../hoc/Row/Row';
+import ModalOverlay from '../../Overlay/ModalOverlay';
 
 import AppCSS from '../../../App.module.css';
-import ModalCSS from './Modal.module.css';
+import styles from './Modal.module.css';
 import StatefulTextField from '../../ui/input/Field/StatefulTextField';
 
 
@@ -37,19 +36,19 @@ const modal = (props) => {
 
     switch (props.type) {
         case modalTypes.DEFAULT:
-            icon = (<span className={ModalCSS.DefaultIcon}></span>);
+            icon = (<span className={styles.DefaultIcon}></span>);
             title= ('Hello');
             break;
         case modalTypes.RESPONSE:
-            icon = (<span className={ModalCSS.DefaultIcon}></span>);
+            icon = (<span className={styles.DefaultIcon}></span>);
             title= ('Hello');
             break;
         case modalTypes.WARNING:
-            icon = (<span className={ModalCSS.WarningIcon}></span>);
+            icon = (<span className={styles.WarningIcon}></span>);
             title= ('Warning!');
             break;
         default:
-            icon = (<span className={ModalCSS.DefaultIcon}></span>);
+            icon = (<span className={styles.DefaultIcon}></span>);
             title= (props.data.type);
             break;
     }
@@ -74,22 +73,26 @@ const modal = (props) => {
     
     return (
         <Aux>
-            <Overlay active={true}/>
-            <div className={ModalCSS.Modal}
+            <div className={styles.Modal}
                 key={props.uniqueId}>
                 <div className={AppCSS.Inner}>
-                    <Row just='Start' align='Center'>
-                        {icon}
-                        <h3>{title}</h3>
-                    </Row>
-                    <p>{props.data.message}</p>
+                    <div className={styles.Header}>
+                        <div>
+                            {icon}
+                            <h3>{title}</h3>
+                        </div>
+                    </div>
+                    <p className={styles.Message}>{props.data.message}</p>
                     {form}
-                    <Row just={props.data.cancel ? 'Between' : 'Center'}>
+                    <div className={styles.Interface}>
+                        <div className={props.data.cancel ? styles.Between : styles.Center}>
                         {props.data.cancel ? <Button onClick={handle_onCancel}>{props.data.cancel}</Button> : null}
                         <Button onClick={handle_onConfirm}>{props.data.confirm}</Button>
-                    </Row>
+                        </div>
                     </div>
+                </div>
             </div>
+            <ModalOverlay active={true}/>
         </Aux>
     );
 }
