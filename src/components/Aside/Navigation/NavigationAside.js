@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 import * as actions from '../../../store/actions/index';
 import {connect} from 'react-redux';
@@ -8,81 +8,83 @@ import BarButton from '../../ui/button/Bar/BarButton';
 
 import styles from '../Aside.module.css';
 
-const navigationAside = (props) => {
-    const links = [
-        {
-            path: '/report',
-            value: 'reports'
-        }
-    ];
-    switch (props.page) {
-        case 'deck':
-            links.unshift({
-                path: '/1/card',
-                value: 'cards'
-            });
-            break;
-        case 'card':
-            links.unshift({
-                path: '/0/deck',
-                value: 'decks'
-            });
-            break;
-        default:
-            links.unshift({
-                path: '/1/card',
-                value: 'cards'
-            },
+export class NavigationAside extends Component {
+    render () {
+        const links = [
             {
-                path: '/0/deck',
-                value: 'decks'
-            });
-            break;
-    }
-    const navigation = links.map((link, i) => {
-        return (
-            <BarButton
-                key={i}
-                className={styles.Link}
-                onClick={() => {
-                    props.history.replace(links[i].path);
-                }}>
-                {links[i].value}
-            </BarButton>
-        );
-    });
-    let aux = null;
-    if (props.select_user.privilage) {
-        aux = (
-            <BarButton
-                key={'user'}
-                className={styles.Link}
-                onClick={() => {
-                    props.init('user');
-                    props.history.replace('/load', {store: 'user'});
-                }}>
-                users
-            </BarButton>
-        );
-    }
-    
-    return (
-        <nav className={styles.Navigation}>
-            <div>
-                {navigation}
-                {aux}
-                <div className={styles.Break}></div>
+                path: '/report',
+                value: 'reports'
+            }
+        ];
+        switch (this.props.page) {
+            case 'deck':
+                links.unshift({
+                    path: '/1/card',
+                    value: 'cards'
+                });
+                break;
+            case 'card':
+                links.unshift({
+                    path: '/0/deck',
+                    value: 'decks'
+                });
+                break;
+            default:
+                links.unshift({
+                    path: '/1/card',
+                    value: 'cards'
+                },
+                {
+                    path: '/0/deck',
+                    value: 'decks'
+                });
+                break;
+        }
+        const navigation = links.map((link, i) => {
+            return (
                 <BarButton
-                    key={'out'}
+                    key={i}
                     className={styles.Link}
                     onClick={() => {
-                        props.history.replace('/out');
+                        this.props.history.replace(links[i].path);
                     }}>
-                    sign out
+                    {links[i].value}
                 </BarButton>
-            </div>
-        </nav>
-    );
+            );
+        });
+        let aux = null;
+        if (this.props.select_user.privilage) {
+            aux = (
+                <BarButton
+                    key={'user'}
+                    className={styles.Link}
+                    onClick={() => {
+                        this.props.init('user');
+                        this.props.history.replace('/load', {store: 'user'});
+                    }}>
+                    users
+                </BarButton>
+            );
+        }
+        
+        return (
+            <nav className={styles.Navigation}>
+                <div>
+                    {navigation}
+                    {aux}
+                    <div className={styles.Break}></div>
+                    <BarButton
+                        key={'out'}
+                        className={styles.Link}
+                        onClick={() => {
+                            this.props.history.replace('/out');
+                        }}>
+                        sign out
+                    </BarButton>
+                </div>
+            </nav>
+        );
+    }
 }
 
 
@@ -97,4 +99,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(navigationAside);
+export default connect(mapStateToProps, mapDispatchToProps)(NavigationAside);

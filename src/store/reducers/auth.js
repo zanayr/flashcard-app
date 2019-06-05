@@ -4,7 +4,6 @@ import {updateObject} from '../utility';
 const initialState = {
     error: null,
     isLoading: false,
-    refesh: null,
     token: null,
     user: null,
 };

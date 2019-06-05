@@ -8,7 +8,7 @@ import Flashcard from '../ui/Card/Flashcard';
 import styles from './CardStack.module.css';
 
 
-class FlashcardStack extends Component {
+export class FlashcardStack extends Component {
     state = {
         cards: this.props.collection.map(card => {
             card.seen = false;
