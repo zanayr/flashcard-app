@@ -9,20 +9,13 @@ export const failure = (store, error) => {
         case 'card':
             type = actionTypes.CARD_FAILURE;
             break;
-        case 'class':
-            type = actionTypes.CLASS_FAILURE;
-            break;
         case 'deck':
             type = actionTypes.DECK_FAILURE;
-            break;
-        case 'student':
-            type = actionTypes.STUDENT_FAILURE;
             break;
         case 'user':
             type = actionTypes.USER_FAILURE;
             break;
         default:
-            type = actionTypes.FAILURE;
             break;
     }
     return {
@@ -39,20 +32,13 @@ export const _add = (store, data) => {
         case 'card':
             type = actionTypes.ADD_CARD;
             break;
-        case 'class':
-            type = actionTypes.ADD_CLASS;
-            break;
         case 'deck':
             type = actionTypes.ADD_DECK;
-            break;
-        case 'student':
-            type = actionTypes.ADD_STUDENT;
             break;
         case 'user':
             type = actionTypes.ADD_USER;
             break;
         default:
-            type = actionTypes.SUCCESS;
             break;
     }
     return {
@@ -66,9 +52,6 @@ export const _add = (store, data) => {
 export const _addTab = (store, collection, data) => {
     let type = null;
     switch (store) {
-        case 'class':
-            type = actionTypes.ADD_CLASS_TAB;
-            break;
         case 'deck':
             type = actionTypes.ADD_DECK_TAB;
             break;
@@ -76,7 +59,6 @@ export const _addTab = (store, collection, data) => {
             type = actionTypes.ADD_USER_TAB;
             break;
         default:
-            type = actionTypes.SUCCESS;
             break;
     }
     return {
@@ -96,20 +78,13 @@ export const _delete = (store, data) => {
         case 'card':
             type = actionTypes.DELETE_CARD;
             break;
-        case 'class':
-            type = actionTypes.DELETE_CLASS;
-            break;
         case 'deck':
             type = actionTypes.DELETE_DECK;
-            break;
-        case 'student':
-            type = actionTypes.DELETE_STUDENT;
             break;
         case 'user':
             type = actionTypes.DELETE_USER;
             break;
         default:
-            type = actionTypes.SUCCESS;
             break;
     }
     return {
@@ -123,9 +98,6 @@ export const _delete = (store, data) => {
 export const _deleteTab = (store, collection, data) => {
     let type = null;
     switch (store) {
-        case 'class':
-            type = actionTypes.DELETE_CLASS_TAB;
-            break;
         case 'deck':
             type = actionTypes.DELETE_DECK_TAB;
             break;
@@ -133,7 +105,6 @@ export const _deleteTab = (store, collection, data) => {
             type = actionTypes.DELETE_USER_TAB;
             break;
         default:
-            type = actionTypes.SUCCESS;
             break;
     }
     return {
@@ -189,20 +160,13 @@ export const _getAll_success = (store, data) => {
         case 'card':
             type = actionTypes.GET_ALL_CARDS_SUCCESS;
             break;
-        case 'class':
-            type = actionTypes.GET_ALL_CLASSES_SUCCESS;
-            break;
         case 'deck':
             type = actionTypes.GET_ALL_DECKS_SUCCESS;
-            break;
-        case 'student':
-            type = actionTypes.GET_ALL_STUDENTS_SUCCESS;
             break;
         case 'user':
             type = actionTypes.GET_ALL_USERS_SUCCESS;
             break;
         default:
-            type = actionTypes.SUCCESS;
             break;
     }
     return {
@@ -229,7 +193,6 @@ export const _getAll_init = (store) => {
             type = actionTypes.GET_ALL_USERS_INIT;
             break;
         default:
-            type = actionTypes.INIT;
             break;
     }
     return {
@@ -253,7 +216,6 @@ export const init = (store) => {
             type = actionTypes.USER_INIT;
             break;
         default:
-            type = actionTypes.INIT;
             break;
     }
     return {
@@ -277,7 +239,6 @@ export const _update = (store, data) => {
             type = actionTypes.UPDATE_USER;
             break;
         default:
-            type = actionTypes.SUCCESS;
             break;
     }
     return {
@@ -298,7 +259,6 @@ export const _updateTag = (store, collection, data) => {
             type = actionTypes.UPDATE_USER_TAG;
             break;
         default:
-            type = actionTypes.SUCCESS;
             break;
     }
     return {
