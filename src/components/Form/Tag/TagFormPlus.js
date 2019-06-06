@@ -10,28 +10,15 @@ import styles from './TagForm.module.css';
 
 class TagFormPlus extends Component {
     state = {
-        state: false,
         value: ''
     }
-
-    
-    //  STATE SETTERS  ---------------------------------------------------  SETTERS  //
-    //  Value  -------------------------------------------------------------  Value  //
-    _resetValue () {
-        this.setState({value: ''});
-    }
-
-    //  State  -------------------------------------------------------------  State  //
-    _toggleState () {
-        this.setState(prev => ({
-            ...prev,
-            state: !prev.state
-        }));
+    //  Set Value
+    setValue (value) {
+        this.setState({value: value});
     }
 
 
-    //  PRIVATE METHODS  -----------------------------------------  PRIVATE METHODS  //
-    //  Tags  ---------------------------------------------------------------  Tags  //
+    //  Check tags for new tags
     _checkTags (tags) {
         const newTags = tags.filter(tag => !this.props.collection.includes(tag));
         if (newTags.length) {
@@ -39,33 +26,34 @@ class TagFormPlus extends Component {
         }
         return [];
     }
-
-
-    //  EVENT HANDLERS  -------------------------------------------  EVENT HANDLERS  //
-    //  On Value Change  -----------------------------------------------  On Change  //
-    handle_onChange = (value) => {
-        this.setState({value: value});
+    _checkValidity () {
+        let valid = true;
+        if (this.state.value.length < 3 && valid) {
+            valid = false;
+        }
+        if (!/^[a-zA-Z0-9-. ]+$/.test(this.state.value) && valid) {
+            valid = false;
+        }
+        return valid;
     }
 
-    //  On Form Confirm -----------------------------------------------  On Confirm  //
+    //  Handle input value change
+    handle_onChange = (value) => {
+        this.setValue(value);
+    }
+
+    //  Handle confirmation button click
     handle_onConfirm = () => {
         const tags = this.props.reference.current.tag.value.split(', ');
         if (this.props.reference.current.reportValidity()) {
             this.props.onConfirm(this._checkTags(tags.map(t => {
-                return t.replace(' ', '_').toLowerCase();
+                return t.trim().replace(/\s\s+/, '_').toLowerCase();
             })));
-            this._resetValue();
+            this.setValue('');
         }
     }
 
-    //  On Form Toggle  ------------------------------------------------  On Toggle  //
-    handle_onToggle = () => {
-        this._toggleState();
-        this.props.onToggle();
-    }
-
-
-    //  RENDER METHOD  ----------------------------------------------------  RENDER  //
+    //  Render method
     render () {
         return (
             <form
@@ -94,13 +82,13 @@ class TagFormPlus extends Component {
                             maxLength: 24,
                             minLength: 3,
                             name: 'tag',
-                            pattern: '[a-zA-z0-9 -.]+',
+                            pattern: '^[a-zA-Z0-9-. ]+$',
                             tabIndex: this.props.tabIndex
                         }}
                         value={this.state.value}
                         onChange={this.handle_onChange}>
                         <Button
-                            disabled={!(this.state.value.length > 2)}
+                            disabled={!this._checkValidity()}
                             className={[styles.Add, this.props.styles.add].join(' ')}
                             tabIndex={-1}
                             onClick={this.handle_onConfirm}>

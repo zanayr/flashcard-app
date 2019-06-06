@@ -66,7 +66,10 @@ class Auth extends Component {
             if (this.state.form.password.length < 6 && valid) {
                 valid = false;
             }
-            if (this.state.form.repeat.length < 6 && !(this.state.form.repeat === this.state.form.password) && valid) {
+            if (this.state.form.repeat.length < 6 && valid) {
+                valid = false;
+            }
+            if (this.state.form.repeat !== this.state.form.password && valid) {
                 valid = false;
             }
         } else {

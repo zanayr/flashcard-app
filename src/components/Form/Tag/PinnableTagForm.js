@@ -4,6 +4,7 @@ import * as utility from '../../../utility/utility';
 import Aux from '../../../hoc/Aux/Aux';
 import CountingTextField from '../../ui/input/Field/CountingTextField';
 import TagEditor from '../../ui/input/Tag/TagEditor';
+import TagFormPlus from './TagFormPlus';
 import SelectTag from '../../ui/Tag/SelectTag';
 import Button from '../../ui/button/Button/Button';
 
@@ -19,13 +20,21 @@ class PinnableTagForm extends Component {
         this.setState({value: ''});
     }
     _checkTags (tags) {
-        //  Check for new tags that are not included in the user defined tags
         const newTags = tags.filter(tag => !this.props.collection.includes(tag));
         if (newTags.length) {
-            //  Send new tags to the redux store and database
             return newTags;
         }
         return [];
+    }
+    _checkValidity () {
+        let valid = true;
+        if (this.state.value.length < 3 && valid) {
+            valid = false;
+        }
+        if (!/^[a-zA-Z0-9-. ]+$/.test(this.state.value) && valid) {
+            valid = false;
+        }
+        return valid;
     }
 
     handle_onChange = (value) => {
@@ -35,7 +44,7 @@ class PinnableTagForm extends Component {
         const tags = this.props.reference.current.tag.value.split(', ');
         if (this.props.reference.current.reportValidity()) {
             this.props.onConfirm(this._checkTags(tags.map(t => {
-                return t.replace(' ', '_').toLowerCase();
+                return t.trim().replace(/\s\s+/, '_').toLowerCase();
             })));
             this._resetValue();
         }
@@ -68,13 +77,13 @@ class PinnableTagForm extends Component {
                         maxLength: 24,
                         minLength: 3,
                         name: 'tag',
-                        pattern: '[a-zA-z0-9 -.]+',
+                        pattern: '/^[a-zA-Z0-9-. ]+$',
                         tabIndex: this.props.tabIndex
                     }}
                     value={this.state.value}
                     onChange={this.handle_onChange}>
                     <Button
-                        disabled={!(this.state.value.length > 2)}
+                        disabled={!this._checkValidity()}
                         className={[styles.Add, this.props.styles.add].join(' ')}
                         tabIndex={-1}
                         onClick={this.handle_onConfirm}>
@@ -90,6 +99,7 @@ class PinnableTagForm extends Component {
                 <TagEditor
                     className={this.props.styles.input}
                     label={this.props.category}
+                    pattern={'/^[a-zA-Z0-9-., ]+$'}
                     tabIndex={this.props.tabIndex}
                     value={this.props.pinned.join(', ')}
                     onChange={this.handle_onChange}/>

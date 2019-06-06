@@ -17,6 +17,7 @@ const countingTextField = (props) => {
                     className={props.className}
                     {...props.config}
                     name={props.config.name || props.target}
+                    pattern={props.config.pattern}
                     placeholder={props.config.placeholder || props.config.label}
                     required={props.required ? true : false}
                     type={props.config.type || 'text'}
