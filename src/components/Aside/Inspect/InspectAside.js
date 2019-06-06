@@ -97,7 +97,6 @@ class InspectAside extends Component {
     render () {
         let aux = null;
         let flag = null;
-        let path = '';
         let header = '';
         const formCSS = {
             add: styles.Inspect_Add,

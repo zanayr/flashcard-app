@@ -139,8 +139,8 @@ class Collections extends Component {
     _updateInteral () {
         let $new = false;
         const internal = [];
-        Object.keys(this.state.items).forEach(id => {
-            if (this.state.items[id].tag.includes('$new')) {
+        Object.keys(this.state.collection).forEach(id => {
+            if (this.state.collection[id].tag.includes('$new')) {
                 $new = true;
             }
         });

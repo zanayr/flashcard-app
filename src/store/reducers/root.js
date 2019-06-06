@@ -73,7 +73,6 @@ export function isLoading (store, collection) {
             return FromDeck.selectDecksIsLoading(store[DECK]);
         case 'user':
             return FromUser.selectUserIsLoading(store[USER]);
-            break;
         default:
             break;
     }

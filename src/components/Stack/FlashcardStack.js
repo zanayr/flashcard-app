@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 
-import * as create from '../../store/models/models';
-
 import Button from '../ui/button/Button/Button';
 import Flashcard from '../ui/Card/Flashcard';
 

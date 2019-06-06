@@ -13,8 +13,6 @@ import Aux from '../../hoc/Aux/Aux';
 import Header from '../../components/Header/Header';
 import List from '../../components/List/List';
 import QuickBar from '../../components/ui/bar/Quick/QuickBar';
-import TabBar from '../../components/ui/bar/Tab/TabBar';
-import TabForm from '../../components/form/Tab/TabForm';
 import Throbber from '../../components/ui/Throbber/Throbber';
 
 import styles from '../Container.module.css';
