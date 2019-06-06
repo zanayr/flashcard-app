@@ -7,7 +7,6 @@ import Flashcard from '../ui/Card/Flashcard';
 
 import styles from './CardStack.module.css';
 
-
 export class FlashcardStack extends Component {
     state = {
         cards: this.props.collection.map(card => {
@@ -107,6 +106,9 @@ export class FlashcardStack extends Component {
     }
 
     render () {
+        if (!this.state.cards.length) {
+            throw new Error('No Cards to Study!');
+        }
         return (
             <div className={styles.FlashcardStack}>
                 <Flashcard
