@@ -53,7 +53,7 @@ export class NavigationAside extends Component {
             );
         });
         let aux = null;
-        if (this.props.select_user.privilage) {
+        if (parseInt(this.props.select_user.privilage, 10) === 1) {
             aux = (
                 <BarButton
                     key={'user'}
