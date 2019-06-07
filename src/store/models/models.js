@@ -15,11 +15,10 @@ export function tabModel (model) {
 //  Item  -------------------------------------------------------------  Item Model  //
 //  Item models are used for all "item" database entities; these inlcude cards,
 //  students, reports and sessions.
-export function itemModel (model) {
+export function cardModel (model) {
     const internal = /^\$[a-zA-Z0-9]*/;
     return {
         date: model.date,
-        flag: model.flag,
         group: model.group.filter(tag => !tag.match(internal)),
         member: model.member,
         meta: model.meta,
@@ -58,7 +57,6 @@ export function collectionModel (model) {
 
 //  Student  -------------------------------------------------------  Student Model  //
 export function userModel (model) {
-    console.log(model);
     return {
         card: model.card,
         class: model.class,
@@ -112,7 +110,7 @@ export function flashcardViewModel (model) {
 //  Item View Model  ---------------------------------------------------  ITEM  //
 //  Item view models require an ID and owner (a collection); they have an array of
 //  member IDs (collection IDs)
-export function itemViewModel (id, model) {
+export function cardViewModel (id, model) {
     const date = model.date || Date.now();
     const member = model.member || [];
     let tag = model.tag || [];
@@ -124,7 +122,6 @@ export function itemViewModel (id, model) {
     }
     return {
         date: date,
-        flag: model.flag || false,
         group: model.group || [],
         id: id,
         member: member,
@@ -170,29 +167,22 @@ export function collectionViewModel (id, model) {
 
 //  User View Model  ---------------------------------------------  User V.M.  //
 export function userViewModel (id, model) {
-    const cardTab = {};
-    const classTab = {};
-    const deckTab = {};
+    const card = {};
+    const deck = {};
     if (model.card) {
         Object.keys(model.card).forEach(id => {
-            cardTab[id] = tabViewModel(id, model.card[id]);
-        });
-    }
-    if (model.class) {
-        Object.keys(model.class).forEach(id => {
-            classTab[id] = tabViewModel(id, model.class[id]);
+            card[id] = tabViewModel(id, model.card[id]);
         });
     }
     if (model.deck) {
         Object.keys(model.deck).forEach(id => {
-            deckTab[id] = tabViewModel(id, model.deck[id]);
+            deck[id] = tabViewModel(id, model.deck[id]);
         });
     }
     return {
-        card: cardTab,
-        class: classTab,
+        card: card,
         date: model.date || Date.now(),
-        deck: deckTab,
+        deck: deck,
         group: model.group || [],
         id: id,
         info: {

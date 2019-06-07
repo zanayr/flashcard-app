@@ -452,7 +452,7 @@ class Inspector extends Component {
             } else {
                 primary = 'Copy of ' + item.primary.substr(0, 21) + '...';
             }
-            cloned.push(create.itemViewModel(utility.createHashId(i), {
+            cloned.push(create.cardViewModel(utility.createHashId(i), {
                 ...item,
                 date: Date.now(),
                 primary: primary
@@ -504,7 +504,7 @@ class Inspector extends Component {
     }
 
     _createItem () {
-        const item = create.itemViewModel(utility.createHashId(0), {
+        const item = create.cardViewModel(utility.createHashId(0), {
             member: [this.state.collection.id],
             owner: this.props.select_authUser,
             primary: '',

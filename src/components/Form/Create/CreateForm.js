@@ -181,7 +181,7 @@ class CreateForm extends Component {
                 groups = this.state.card.group.filter(group => !this.state.pinned.group.includes(group)).concat(this.state.pinned.group);
             }
             //  Build the new card
-            const card = create.itemViewModel(utility.createHashId(0), {
+            const card = create.cardViewModel(utility.createHashId(0), {
                 group: groups,
                 member: [this.props.deck],
                 note: this.state.card.note,

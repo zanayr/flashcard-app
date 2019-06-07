@@ -450,7 +450,7 @@ class Item extends Component {
             } else {
                 primary = 'Copy of ' + item.primary.substr(0, 21) + '...';
             }
-            cloned.push(create.itemViewModel(utility.createHashId(i), {
+            cloned.push(create.cardViewModel(utility.createHashId(i), {
                 ...item,
                 date: Date.now(),
                 primary: primary
@@ -499,7 +499,7 @@ class Item extends Component {
         this._clearAndCloseAside();
     }
     _createItem () {
-        const item = create.itemViewModel(utility.createHashId(0), {
+        const item = create.cardViewModel(utility.createHashId(0), {
             owner: this.props.select_authUser,
             primary: '',
             secondary: '',

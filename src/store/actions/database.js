@@ -278,7 +278,7 @@ export const add_async = (store, token, viewModel) => {
         let model = {};
         switch (store) {
             case 'card':
-                model = create.itemModel(viewModel);
+                model = create.cardModel(viewModel);
                 break;
             case 'deck':
                 model = create.collectionModel(viewModel);
@@ -389,7 +389,7 @@ export const getAll_async = (store, token, user) => {
             switch (store) {
                 case 'card':
                     Object.keys(response.data).forEach(id => {
-                        models[id] = create.itemViewModel(id, response.data[id]);
+                        models[id] = create.cardViewModel(id, response.data[id]);
                     });
                     break;
                 case 'class':
@@ -404,7 +404,7 @@ export const getAll_async = (store, token, user) => {
                     break;
                 case 'student':
                     Object.keys(response.data).forEach(id => {
-                        models[id] = create.itemViewModel(id, response.data[id]);
+                        models[id] = create.cardViewModel(id, response.data[id]);
                     });
                     break;
                 case 'user':
@@ -447,7 +447,7 @@ export const update_async = (store, token, viewModel) => {
         let model = {};
         switch (store) {
             case 'card':
-                model = create.itemModel(viewModel);
+                model = create.cardModel(viewModel);
                 break;
             case 'deck':
                 model = create.collectionModel(viewModel);
