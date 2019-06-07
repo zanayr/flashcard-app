@@ -32,3 +32,10 @@ h6.Name {
     text-align: right;
     text-transform: capitalize;
 }
+
+/*  Navigation  */
+.Dashboard button {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}

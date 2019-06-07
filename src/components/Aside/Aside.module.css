@@ -77,6 +77,7 @@
 }
 .Footer .Cancel {
     background-color: var(--primary);
+    border-color: var(--primary);
     border-radius: 0;
     color: var(--white);
 }
@@ -201,6 +202,23 @@
 }
 .Inspect_Tag.Inspect_Selected {
     background-color: var(--white);
+    color: var(--primary);
+}
+/*  Flag Toggle */
+.Flag > div {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 8px;
+}
+.Flag button {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
+.Flag.Active button {
+    background-color: var(--white);
+    border-color: var(--white);
     color: var(--primary);
 }
 /* Inspect Aux */

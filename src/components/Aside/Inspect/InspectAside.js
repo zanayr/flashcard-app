@@ -13,6 +13,7 @@ import styles from '../Aside.module.css';
 class InspectAside extends Component {
     state = {
         actions: this.props.actions,
+        flagged: false,
         group: this.props.data.group,
         data: this.props.data.data,
         tag: this.props.data.tag,
@@ -20,6 +21,22 @@ class InspectAside extends Component {
             primary: this.props.data.data.primary.length > 0,
             secondary: this.props.data.data.secondary.length > 0
         }
+    }
+
+    componentDidMount () {
+        if (this.state.data.tag.includes('&flagged')) {
+            this.setState(prev => ({
+                ...prev,
+                flagged: true
+            }));
+        }
+    }
+
+    toggleFlagged () {
+        this.setState(prev => ({
+            ...prev,
+            flagged: !prev.flagged
+        }));
     }
 
 
@@ -48,7 +65,10 @@ class InspectAside extends Component {
         }
         this.props.actions.change(target, value);
     }
-
+    handle_onFlagClick = () => {
+        this.toggleFlagged();
+        this.props.actions.flag();
+    }
     
     //  TAGS  ---------------------------------------------------------------  TAGS  //
     handle_onTagCreate = (category, tag) => {
@@ -97,6 +117,7 @@ class InspectAside extends Component {
     render () {
         let aux = null;
         let flag = null;
+        let flagCSS = [styles.Flag];
         let header = '';
         const formCSS = {
             add: styles.Inspect_Add,
@@ -149,11 +170,14 @@ class InspectAside extends Component {
             default:
                 break;
         }
-        if (this.props.data.data.hasOwnProperty('flag')) {
+        if (!this.props.data.data.hasOwnProperty('tab')) {
+            if (this.state.flagged) {
+                flagCSS.push(styles.Active);
+            }
             flag = (
-                <div className={styles.Middle}>
+                <div className={flagCSS.join(' ')}>
                     <div>
-                        <Button onClick={this.props.actions.flag}>flag card</Button>
+                        <IconButton onClick={this.handle_onFlagClick}>⚑</IconButton>
                     </div>
                 </div>
             );

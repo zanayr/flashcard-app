@@ -7,6 +7,8 @@ import * as select from '../../store/reducers/root';
 import {Redirect} from 'react-router-dom';
 import Throbber from '../../components/ui/Throbber/Throbber';
 
+import styles from '../Container.module.css';
+
 
 class Load extends Component {
     state = {
@@ -28,13 +30,12 @@ class Load extends Component {
     }
 
     render () {
-        console.log(this.props.select_decksIsLoading);
         let content = (<Throbber/>);
         if (this.props.location.state.store === 'deck' ? !this.props.select_decksIsLoading : !this.props.select_usersIsLoading) {
             content = <Redirect to={this.state.path}/>
         }
         return (
-            <main>
+            <main className={styles.Alt}>
                 <div>
                     {content}
                 </div>

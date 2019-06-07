@@ -61,3 +61,14 @@
 .Toolbar > div > * {
     margin: 0px 4px;
 }
+/*  Buttons  */
+.Toolbar button:enabled {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--white);
+}
+.Toolbar button:disabled {
+    background-color: var(--white);
+    border-color: var(--secondary);
+    color: var(--secondary);
+}
