@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 
 import * as asideTypes from '../../components/aside/Aside/asideTypes';
 import * as select from '../../store/reducers/root';
+import * as utility from '../../utility/utility';
 
 import ActionButton from '../../components/ui/button/Action/ActionButton';
 import Aside2 from '../../components/aside/Aside/Aside2';
@@ -99,6 +100,9 @@ class Report extends Component {
     }
     
     _rollUpWeek (report) {
+        const data = Object.keys(report).map(session => {return report[session]});
+        let date = this.props.select_user.date;
+        let compareDate = new Date(new Date(date).getFullYear(), new Date(date).getMonth(), new Date(date).getDate() + 7).getTime();
         const rolled = {
             1: {
                 seen: 0,
@@ -112,11 +116,16 @@ class Report extends Component {
             if (t < 0.5) {
                 return '<30m';
             } else {
-                return Math.floor(t) + 'h ' + (Math.round(10*(t * 60))/10) % 60 + 'm';
+                return Math.floor(t) + 'h ' + Math.floor((Math.round(10*(t * 60))/10) % 60) + 'm';
             }
         }
-        Object.keys(report).forEach(session => {
-            if (new Date(report[session].date).getDay() ? false : true) {
+        utility.sortBy('DATE_DSC', data).forEach(session => {
+            if (session.date < compareDate) {
+                rolled[week].seen = rolled[week].seen + session.seen;
+                rolled[week].session = rolled[week].session + 1;
+                rolled[week].time = rolled[week].time + Math.round(session.time / 1000);
+            } else {
+                compareDate = new Date(new Date(compareDate).getFullYear(), new Date(compareDate).getMonth(), new Date(compareDate).getDate() + 7).getTime();
                 week++;
                 rolled[week] = {
                     seen: 0,
@@ -124,9 +133,6 @@ class Report extends Component {
                     time: 0
                 };
             }
-            rolled[week].seen = rolled[week].seen + report[session].seen;
-            rolled[week].session = rolled[week].session + 1;
-            rolled[week].time = rolled[week].time + Math.round(report[session].time / 1000);
         });
         return Object.keys(rolled).map(week => {
             return [week, getHours(rolled[week].time), rolled[week].seen, rolled[week].session];

@@ -1,10 +1,12 @@
 .TableHead {
-    background-color: white;
+    background-color: var(--white);
+    border-bottom: 1px solid var(--darkgray);
     height: 32px;
     left: 0px;
     position: fixed;
     top: 64px;
     width: 100%;
+    z-index: 96;
 }
 .TableHead > div {
     align-items: center;
@@ -21,11 +23,11 @@
 }
 
 .TableRow {
+    border-top: 1px solid var(--darkgray);
     height: 32px;
 }
 .TableRow > div {
     align-items: center;
-    border-top: 1px solid var(--darkgray);
     display: flex;
     flex-direction: row;
     height: 100%;
