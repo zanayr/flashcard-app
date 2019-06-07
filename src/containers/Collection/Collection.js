@@ -475,9 +475,16 @@ class Collections extends Component {
         collections.forEach(collection => {
             if (collection.member.length) {
                 collection.member.forEach(id => {
+                    const member = members[id].member.filter(i => i !== collection.id);
+                    let tag = members[id].tag.slice();
+                    if (!(member.length)) {
+                        tag.push('$unassigned');
+                    }
+                    console.log(tag);
                     this.props.update_async('card', this.props.select_authToken, {
                         ...members[id],
-                        member: members[id].member.filter(i => i !== collection.id)
+                        member: member,
+                        tag: tag
                     });
                 });
             }

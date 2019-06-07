@@ -63,7 +63,7 @@ class List extends Component {
                     <ContextAction
                         action={() => this.props.action(2, item)}
                         active={isActive}
-                        confirm={!this.props.aux === 'assign'}
+                        confirm={!(this.props.aux === 'assign')}
                         key={'aux'}
                         position={1}>
                         {this.props.aux}

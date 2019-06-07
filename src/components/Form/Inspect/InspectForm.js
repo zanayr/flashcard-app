@@ -22,6 +22,12 @@ class InspectForm extends Component {
         tag: this.props.select_user.tag
     }
 
+    componentDidMount () {
+        if (this.basicsForm.current) {
+            this.basicsForm.current.primary.focus();
+        }
+    }
+
     //  FORM REFERENCES  -----------------------------------------  FORM REFERENCES  //
     basicsForm = React.createRef();
     groupForm = React.createRef();
