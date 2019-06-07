@@ -77,7 +77,7 @@ class ReportAside extends Component {
                         disabled={[]}
                         selected={this.state[this.state.filter]}
                         styles={formCSS}
-                        onToggle={(tag) => this.handle_onTagSelected('tag', tag)}/>
+                        onToggle={(tag) => this.handle_onTagSelected(this.state.filter, tag)}/>
                     <div className={styles.Footer}>
                         <div>
                             <Button
