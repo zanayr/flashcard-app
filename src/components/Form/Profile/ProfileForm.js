@@ -22,6 +22,12 @@ class CreateForm extends Component {
     }
     form = React.createRef();
 
+    componentDidMount () {
+        if (this.form.current) {
+            this.form.current.primary.focus();
+        }
+    }
+
     _resetUser () {
         this.setState(prev => ({
             email: this.props.user.info.email,

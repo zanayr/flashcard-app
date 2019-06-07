@@ -50,11 +50,13 @@
 }
 /*  Aside Footer  */
 .Footer {
+    background-color: var(--primary);
     bottom: 0px;
     height: 32px;
-    left: 0px;
-    position: absolute;
-    width: 100%;
+    right: 0px;
+    position: fixed;
+    width: 252px;
+    z-index: 99;
 }
 .Footer > div {
     display: flex;
@@ -101,9 +103,6 @@
 .AssignButton.Active {
     background-color: var(--secondary);
 }
-.AssignButton.Active {
-    background-color: var(--secondary);
-}
 .AssignButton > div {
     display: flex;
     flex-direction: column;
@@ -144,27 +143,6 @@
 }
 
 /* Filter Aside */
-.FilterHeader {
-    height: 32px;
-}
-.FilterHeader > div {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    height: 100%;
-}
-.FilterHeader button {
-    background-color: var(--white);
-    color: var(--primary);
-    font-size: 11px;
-    flex-grow: 1;
-    height: 100%;
-}
-.FilterHeader button.Active {
-    background-color: var(--blue);
-    color: var(--white);
-}
-/* Filter Aside Tags */
 .Filter_Tag {
     background-color: var(--primary);
     border: 1px solid var(--white);
@@ -203,7 +181,6 @@
 .Aside input::placeholder,
 .Aside textarea::placeholder {
     color: var(--white);
-    font-weight: 400;
 }
 /* Counters */
 .Aside form > div > div > div > span > p {

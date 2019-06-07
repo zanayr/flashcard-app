@@ -50,7 +50,7 @@ class AssignAside extends Component {
         });
         return (
             <Aux>
-                <aside className={[styles.Aside].join(' ')}>
+                <aside className={styles.Aside}>
                     <div>
                         <div className={styles.Header}>
                             <div>
@@ -64,8 +64,14 @@ class AssignAside extends Component {
                         </div>
                         <div className={styles.Footer}>
                             <div>
-                                <Button onClick={() => this.props.actions.confirm(this.state.selected.slice())}>{this.props.data.labels.confirm}</Button>
-                                <IconButton onClick={this.props.actions.cancel}>⨯</IconButton>
+                                <Button
+                                    className={styles.Confirm}
+                                    onClick={() => this.props.actions.confirm(this.state.selected.slice())}>
+                                    {this.props.data.labels.confirm}
+                                </Button>
+                                <IconButton
+                                    className={styles.Cancel}
+                                    onClick={this.props.actions.cancel}>⨯</IconButton>
                             </div>
                         </div>
                     </div>

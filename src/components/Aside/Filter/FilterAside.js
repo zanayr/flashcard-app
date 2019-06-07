@@ -39,7 +39,7 @@ class FilterAside extends Component {
         return (
             <aside className={styles.Aside}>
                 <div>
-                    <div className={styles.FilterHeader}>
+                    <div className={styles.Interface}>
                         <div>
                             <Button
                                 className={tagTabCSS}

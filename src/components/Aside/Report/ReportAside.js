@@ -60,7 +60,7 @@ class ReportAside extends Component {
             groupTabCSS = styles.Active;
         }
         return (
-            <aside className={[styles.Aside].join(' ')}>
+            <aside className={styles.Aside}>
                 <div>
                     <div className={styles.Interface}>
                         <div>
@@ -81,11 +81,14 @@ class ReportAside extends Component {
                     <div className={styles.Footer}>
                         <div>
                             <Button
+                                className={styles.Confirm}
                                 disabled={this.state.valid}
                                 onClick={() => this.props.actions.confirm({...this.state})}>
                                 Create
                             </Button>
-                            <IconButton onClick={this.props.actions.cancel}>⨯</IconButton>
+                            <IconButton
+                                className={styles.Cancel}
+                                onClick={this.props.actions.cancel}>⨯</IconButton>
                         </div>
                     </div>
                 </div>

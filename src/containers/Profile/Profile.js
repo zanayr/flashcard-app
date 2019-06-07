@@ -61,9 +61,6 @@ class Profile extends Component {
     //  Aside  --------------------------------------------------------------  Aside //
     handle_onNagivationToggle = () => {
         this._toggleAside(asideTypes.NAVIGATION);
-        this._setAside({
-            cancel: this.handle_onAsideClose
-        });
     }
     handle_onAsideClose = () => {
         this._closeAside();
@@ -79,18 +76,18 @@ class Profile extends Component {
     render () {
         return (
             <Aux>
+                <SimpleHeader
+                    actions={{
+                        navigation: this.handle_onNagivationToggle
+                    }}
+                    navigation={{
+                        label: 'Back',
+                        path: '/0/deck'
+                    }}/>
                 <main
                     className={styles.Profile}
                     onClick={this.handle_onAsideClose}>
                     <div>
-                        <SimpleHeader
-                            actions={{
-                                navigation: this.handle_onNagivationToggle
-                            }}
-                            navigation={{
-                                label: 'Back',
-                                path: '/0/deck'
-                            }}/>
                         <section className={styles.Editor}>
                             <div>
                                 <div className={styles.Wrapper}>
