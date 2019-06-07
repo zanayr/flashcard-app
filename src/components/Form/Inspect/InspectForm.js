@@ -9,9 +9,8 @@ import CountingTextField from '../../ui/input/Field/CountingTextField';
 import Textarea from '../../ui/input/TextArea/TextArea';
 import TagFormPlus from '../Tag/TagFormPlus';
 
-import styles from './InspectForm.module.css';
 
-class InspectForm2 extends Component {
+class InspectForm extends Component {
     state = {
         item: this.props.data,
         group: this.props.select_user.group,
@@ -218,9 +217,7 @@ class InspectForm2 extends Component {
         }
         return (
             <Aux>
-                <form
-                    className={styles.Basics}
-                    ref={this.basicsForm}>
+                <form ref={this.basicsForm}>
                     <div>
                         <CountingTextField
                             config={{
@@ -281,4 +278,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(InspectForm2);
+export default connect(mapStateToProps, mapDispatchToProps)(InspectForm);

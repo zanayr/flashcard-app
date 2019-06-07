@@ -194,7 +194,6 @@
 .Aside textarea {
     background-color: var(--primary);
     color: var(--white);
-    font-weight: 600;
     letter-spacing: 0.06em;
 }
 .Aside input:focus,

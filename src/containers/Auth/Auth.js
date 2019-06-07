@@ -27,7 +27,9 @@ class Auth extends Component {
     form = React.createRef();
 
     componentDidMount () {
-        this.form.current.email.focus();
+        if (this.form.current) {
+            this.form.current.email.focus();
+        }
     }
 
     componentDidUpdate (prevProps, prevState) {
