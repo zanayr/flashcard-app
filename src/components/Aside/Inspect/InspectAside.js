@@ -128,15 +128,15 @@ class InspectAside extends Component {
             case 'CREATE_CARD':
                 header = 'Create a new card below, don\'t forget to add a front and a back.';
                 aux = (
-                    <IconButton
+                    <Button
                         className={styles.InspectAux}
-                        onClick={() => {this.props.history.replace('/create', {id: this.props.data.id})}}>Add</IconButton>
+                        onClick={() => {this.props.history.replace('/create', {id: this.props.data.id})}}>Add</Button>
                 );
                 break;
             case 'CREATE_DECK':
                 header = 'Create a new deck below, don\'t forget to add a title.';
                 aux = (
-                    <IconButton
+                    <Button
                         className={styles.InspectAux}
                         disabled={!this.state.valid.primary || !this.state.valid.secondary}
                         onClick={() => {
@@ -145,26 +145,26 @@ class InspectAside extends Component {
                                 data: this.state.data,
                                 store: 'deck'
                             });
-                        }}>Add</IconButton>
+                        }}>Add</Button>
                 );
                 break;
             case 'INSPECT_CARD':
                 header = 'Edit a card below, don\'t forget it requires a front and back.';
                 aux = (
-                    <IconButton
+                    <Button
                         className={styles.InspectAux}
-                        onClick={() => {this.props.history.replace('/create', {id: this.props.data.id})}}>Add</IconButton>
+                        onClick={() => {this.props.history.replace('/create', {id: this.props.data.id})}}>Inspect</Button>
                 );
                 break;
             case 'INSPECT_DECK':
                 header = 'Edit a deck below, don\'t forget it requires a title.';
                 aux = (
-                    <IconButton
+                    <Button
                         className={styles.InspectAux}
                         disabled={!this.state.valid.primary || !this.state.valid.secondary}
                         onClick={() => {this.props.history.replace('/0/deck/' + this.props.data.data.id, {id: this.props.data.data.id})}}>
-                        Add
-                    </IconButton>
+                        Inspect
+                    </Button>
                 );
                 break;
             default:

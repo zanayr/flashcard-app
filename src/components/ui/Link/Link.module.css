@@ -17,15 +17,20 @@
 
 /* Link */
 .Return {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 64px;
+    justify-content: center;
     margin-left: -16px;
-}
-.Inner {
-    padding-left: 16px;
+    margin-right: 4px;
+    text-align: center;
+    text-decoration: none;
+    width: 64px;
 }
 .Return span {
     background-color: transparent;
     display: block;
-    height: 64px;
-    margin: 0px 4px;
-    width: 64px;
+    height: 32px;
+    width: 32px;
 }

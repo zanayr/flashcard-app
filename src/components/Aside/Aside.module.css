@@ -13,7 +13,7 @@
     height: 100%;
     overflow: hidden;
     overflow-y: scroll;
-    padding: 8px;
+    padding: 8px 8px 32px 8px;
 }
 /*  Aside Header  */
 .Header {

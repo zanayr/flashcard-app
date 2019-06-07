@@ -103,7 +103,6 @@ export const authSignUp_async = (cred) => {
             localStorage.setItem('user', response.data.localId);
             axios.patch('https://egghead-ffc87.firebaseio.com/user/' + response.data.localId + '.json?auth=' + response.data.idToken, user)
             .then(secondResponse => {
-                console.log(user);
                 dispatch(auth_addUser(user));
                 dispatch(auth_success(response.data.idToken, response.data.localId));
                 dispatch(authCheckTimeout_async(response.data.expiresIn));
@@ -118,30 +117,3 @@ export const authSignUp_async = (cred) => {
         });
     }
 }
-// export const auth_async = (email, password, isSignUp) => {
-//     return dispatch => {
-//         dispatch(auth_init());
-//         const data = {
-//             email: email,
-//             password: password,
-//             returnSecureToken: true
-//         }
-//         let url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyBCvVDv6Ia39hsDQkArR1Wo1f7i2Hj9QRM';
-//         if (!isSignUp) {
-//             url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyBCvVDv6Ia39hsDQkArR1Wo1f7i2Hj9QRM';
-//         }
-
-//         axios.post(url, data)
-//         .then(response => {
-//             const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
-//             localStorage.setItem('token', response.data.idToken);
-//             localStorage.setItem('expiration', expirationDate);
-//             localStorage.setItem('user', response.data.localId);
-//             dispatch(auth_success(response.data.idToken, response.data.localId));
-//             dispatch(authCheckTimeout_async(response.data.expiresIn));
-//         })
-//         .catch(error => {
-//             dispatch(auth_fail(error));
-//         });
-//     }
-// }
