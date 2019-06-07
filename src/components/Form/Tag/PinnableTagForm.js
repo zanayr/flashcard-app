@@ -76,7 +76,7 @@ class PinnableTagForm extends Component {
                         maxLength: 24,
                         minLength: 3,
                         name: 'tag',
-                        pattern: '/^[a-zA-Z0-9-. ]+$',
+                        pattern: '^[a-zA-Z0-9-. ]+$',
                         tabIndex: this.props.tabIndex
                     }}
                     value={this.state.value}

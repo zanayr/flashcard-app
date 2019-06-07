@@ -37,17 +37,17 @@ class ListItem extends Component {
             count = this.props.data.member.length;
         }
         if (count) {
-            if (this.props.data.hasOwnProperty('flag')) {
-                if (count > 1) {
-                    count = count + ' decks';
-                } else {
-                    count = count + ' deck';
-                }
-            } else {
+            if (this.props.data.hasOwnProperty('tab')) {
                 if (count > 1) {
                     count = count + ' cards';
                 } else {
                     count = count + ' card';
+                }
+            } else {
+                if (count > 1) {
+                    count = count + ' decks';
+                } else {
+                    count = count + ' deck';
                 }
             }
             meta = (<p className={styles.Meta}>{date} {count}</p>);
