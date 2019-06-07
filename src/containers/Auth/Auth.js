@@ -26,6 +26,20 @@ class Auth extends Component {
     }
     form = React.createRef();
 
+    componentDidMount () {
+        this.form.current.email.focus();
+    }
+
+    componentDidUpdate (prevProps, prevState) {
+        if (prevState.state !== this.state.state) {
+            if (this.state.state) {
+                this.form.current.first.focus();
+            } else {
+                this.form.current.email.focus();
+            }
+        }
+    }
+
     changeFormValue (target, value) {
         this.setState(prev => ({
             ...prev,
@@ -106,8 +120,8 @@ class Auth extends Component {
     render() {
         let form = (null);
         let content = (null);
-        let labels = ['Log In', 'Confirm'];
-        let greeting = 'Please log in or sign up!';
+        let labels = ['Login', 'Sign Up'];
+        let greeting = this.state.state ? 'Welcome, create an account below' : 'Please, sign in';
         let greetingCSS = '';
         if (this.state.state) {
             form = (

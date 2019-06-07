@@ -4,7 +4,6 @@ import * as utility from '../../../utility/utility';
 import Aux from '../../../hoc/Aux/Aux';
 import CountingTextField from '../../ui/input/Field/CountingTextField';
 import TagEditor from '../../ui/input/Tag/TagEditor';
-import TagFormPlus from './TagFormPlus';
 import SelectTag from '../../ui/Tag/SelectTag';
 import Button from '../../ui/button/Button/Button';
 

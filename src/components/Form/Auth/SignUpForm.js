@@ -27,7 +27,7 @@ const signUpForm = (props) => {
                         autoComplete: 'off',
                         label: 'last',
                         name: 'last',
-                        tabIndex: 1,
+                        tabIndex: 2,
                         type: 'text'
                     }}
                     key={'last'}
@@ -39,7 +39,7 @@ const signUpForm = (props) => {
                         autoComplete: 'off',
                         label: 'email',
                         name: 'email',
-                        tabIndex: 1,
+                        tabIndex: 3,
                         type: 'email'
                     }}
                     key={'email'}
@@ -53,7 +53,7 @@ const signUpForm = (props) => {
                         label: 'password',
                         minLength: 6,
                         name: 'password',
-                        tabIndex: 2,
+                        tabIndex: 4,
                         type: 'password'
                     }}
                     key={'password'}
@@ -66,7 +66,7 @@ const signUpForm = (props) => {
                         label: 'repeat password',
                         minLength: 6,
                         name: 'repeat',
-                        tabIndex: 2,
+                        tabIndex: 5,
                         type: 'password'
                     }}
                     key={'repeat'}
