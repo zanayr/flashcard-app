@@ -19,7 +19,7 @@ const store = createStore(rootReducer, composeEnhancers(
 
 const app = (
     <Provider store={store}>
-        <BrowserRouter basename={'/wgu/c868/'}>
+        <BrowserRouter basename="/">
             <App/>
         </BrowserRouter>
     </Provider>
